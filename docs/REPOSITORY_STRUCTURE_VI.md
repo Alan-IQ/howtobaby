@@ -122,3 +122,16 @@ Repo baseline đạt khi mỗi loại artifact có owner rõ, medical prose khô
 ## Third-party / purchased themes — v0.6.0
 
 `packages/themes` chứa Theme Contract + adapters + first-party themes. Theme React mua ngoài phải đi qua adapter; app/domain component không import vendor trực tiếp. Commercial source/assets đặt ở `vendor-themes/` hoặc private package/submodule phù hợp license; public repo chỉ giữ code/metadata được phép redistribution. Chi tiết: `THEME_SYSTEM.md`.
+
+
+## Repository/storage health — v0.7.0
+
+Git là audit trail cho **authored knowledge/provenance/code/docs**, không phải object storage.
+
+**Được lưu normal Git:** YAML/Markdown/JSON canonical, translation, source metadata/locator/fingerprint/review record, schema/code/test/docs, first-party theme và adapter được phép theo license.
+
+**Mặc định không lưu normal Git:** `knowledge.sqlite`, generated index/bundle/build output, `evidence/cache/**`, full HTML/PDF/source snapshot tải để diff, parser scratch, bulk audio/video/image, dependency/vendor cache.
+
+Fixture binary nhỏ có thể giữ nếu thực sự cần cho development/test và pass budget. Media library lớn phải dùng object storage/CDN. Git LFS chỉ là exception cho binary có lý do rõ ràng, không dùng cho canonical YAML/Markdown/JSON.
+
+Budget và CI gate chi tiết: `REPOSITORY_HEALTH.md`.

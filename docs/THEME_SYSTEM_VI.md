@@ -137,3 +137,8 @@ Không ship tất cả theme cho mọi user. Theme không mặc định phải �
 ## Definition of done
 
 Theme mới chỉ done khi manifest/license có đủ, vendor code không leak vào domain, QA đầy đủ, proprietary source lưu đúng license, và quay về Baby Modern Glass không cần migrate content/business logic.
+
+
+## Repository health — v0.7.0
+
+Theme package/assets lớn hoặc bị hạn chế redistribution không được đẩy vào normal public Git chỉ vì tiện. Dùng private package/repository/artifact/object storage phù hợp license và `REPOSITORY_HEALTH.md`; Baby Modern Glass first-party vẫn phải đủ để build/test repo độc lập.

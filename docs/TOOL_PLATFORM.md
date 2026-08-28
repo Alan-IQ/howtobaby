@@ -221,3 +221,8 @@ A paid tool may be acceptable later if it sells convenience/functionality. A use
 ## Theme independence — v0.6.0
 
 Tool surfaces consume HowToBaby UI primitives and the Theme Contract. Individual tools must not import purchased/third-party theme packages directly. A theme adapter may change presentation, but must not change Tool semantics, safety classification, guidance dependencies, or evidence provenance.
+
+
+## Media storage boundary — v0.7.0
+
+Tool definitions and audio metadata are canonical Git data; a growing audio/video asset library is not. Tiny license-compatible fixtures may live under the web/tool package for development or an MVP, but production media collections should move to object storage/CDN once they become material in size. Git LFS is not the default media architecture. Asset metadata should preserve stable IDs, source/license/attribution where relevant, and deployment URLs independent from canonical guidance. Repository limits follow `REPOSITORY_HEALTH.md`.

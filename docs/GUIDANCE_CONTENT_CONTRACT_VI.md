@@ -122,3 +122,8 @@ Update English + verify source/scope/status + giữ qualifier/uncertainty/contra
 ## Storage invariant — v0.6.0
 
 Guidance/provenance canonical vẫn nằm trong YAML/structured text được Git track theo `REPOSITORY_STRUCTURE.md`. SQLite/JSON index chỉ là projection để validate/query/render, phải rebuild được và không được trở thành nguồn edit độc lập.
+
+
+## Repository storage — v0.7.0
+
+Claim/provenance canonical vẫn là authored Git text; generated SQLite/index và full third-party source body không phải canonical và tuân theo `REPOSITORY_HEALTH.md`.

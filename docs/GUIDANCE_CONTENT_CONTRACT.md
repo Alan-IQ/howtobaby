@@ -1,6 +1,6 @@
 # GUIDANCE_CONTENT_CONTRACT — HowToBaby
 
-> Canonical detailed contract for evidence-backed guidance domains. Product-level invariants live in `PROJECT_PROFILE_v0.6.0.md`; this document owns age logic, domain stages, content structure, evidence classes, and safety behavior.
+> Canonical detailed contract for evidence-backed guidance domains. Product-level invariants live in `PROJECT_PROFILE_v0.7.0.md`; this document owns age logic, domain stages, content structure, evidence classes, and safety behavior.
 
 ## 1. Evidence-to-action model
 
@@ -346,3 +346,8 @@ A health-content change is not done until:
 ## Storage invariant — v0.6.0
 
 Canonical provenance/guidance authoring remains in Git-tracked YAML/structured text as defined by `REPOSITORY_STRUCTURE.md`. Generated SQLite/JSON indexes may be used to validate, query, and render this model, but they are disposable projections and must not become an independent editing source of truth.
+
+
+## Repository storage note — v0.7.0
+
+Canonical claims/provenance remain compact authored Git data. Generated SQLite/indexes and full fetched third-party source bodies are not canonical content and follow `REPOSITORY_HEALTH.md`.

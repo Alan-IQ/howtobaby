@@ -120,14 +120,16 @@ howtobaby/
 │  ├─ validate-provenance.ts
 │  ├─ validate-translations.ts
 │  ├─ build-knowledge-index.ts
+│  ├─ check-repo-health.ts
 │  ├─ build-evidence-index.ts
 │  ├─ generate-public-pages.ts
 │  └─ evidence-watch.ts
 │
 ├─ docs/
-│  ├─ PROJECT_PROFILE_v0.6.0.md
+│  ├─ PROJECT_PROFILE_v0.7.0.md
 │  ├─ DOCS_INDEX.md
 │  ├─ REPOSITORY_STRUCTURE.md
+│  ├─ REPOSITORY_HEALTH.md
 │  ├─ GUIDANCE_CONTENT_CONTRACT.md
 │  ├─ EVIDENCE_PROVENANCE.md
 │  ├─ SYSTEM_ARCHITECTURE.md
@@ -146,12 +148,14 @@ howtobaby/
 ├─ .github/
 │  └─ workflows/
 │     ├─ ci.yml
+│     ├─ repo-health.yml            # Optional dedicated health workflow
 │     ├─ deploy.yml
 │     └─ evidence-watch.yml
 │
 ├─ package.json
 ├─ pnpm-workspace.yaml
 ├─ tsconfig.json
+├─ CLAUDE.md                      # AI instruction entry point; routes to canonical docs
 └─ README.md
 ```
 
@@ -465,3 +469,25 @@ The repository baseline is acceptable when:
 - theme vendor code is isolated behind adapters and license boundaries;
 - no canonical knowledge exists only in SQLite/PostgreSQL/generated outputs;
 - docs in `DOCS_INDEX.md` agree on ownership.
+
+## Repository storage/health boundary — v0.7.0
+
+Git is the permanent audit trail for **authored** knowledge, provenance, code, schemas, review metadata, and documentation. It is not an object store.
+
+Keep in normal Git:
+
+- YAML/Markdown/JSON source knowledge and translations;
+- source metadata, locators, fingerprints, and review records;
+- schemas, code, tests, first-party theme code, permitted adapters, and documentation.
+
+Keep out of normal Git by default:
+
+- `knowledge.sqlite` and other generated databases/indexes;
+- `evidence/cache/**`, downloaded HTML/PDF/source bodies, parser scratch, and screenshots used only for monitoring;
+- generated route bundles/build output;
+- large audio/video/image libraries;
+- dependency/vendor caches and redistributable third-party packages that belong in package/object storage.
+
+Small development fixtures may remain in Git when they are genuinely useful, license-compatible, and comfortably inside `REPOSITORY_HEALTH.md` limits. Bulk media must move to object storage/CDN. Git LFS is an exception path for justified binary collaboration, not a solution for canonical text knowledge.
+
+Detailed budgets, CI gates, and future split-repo criteria: `REPOSITORY_HEALTH.md`.

@@ -285,7 +285,8 @@ Rules:
 - keep restricted code/assets in `vendor-themes/`, a private registry, private submodule/repository, or deployment secret/artifact channel as appropriate;
 - `.gitignore` restricted source in a public repo unless the license explicitly permits publication;
 - CI must be able to fail clearly if a required private theme package is unavailable;
-- retain a first-party baseline theme so development/tests do not become impossible when proprietary assets are absent.
+- retain a first-party baseline theme so development/tests do not become impossible when proprietary assets are absent;
+- keep large proprietary/theme media packages outside normal Git when size or license makes repository storage inappropriate, following `REPOSITORY_HEALTH.md`.
 
 Conceptual record:
 

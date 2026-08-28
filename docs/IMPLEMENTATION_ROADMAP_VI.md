@@ -4,7 +4,7 @@
 
 ## Phase 0 — Docs/repo baseline
 
-Chốt bộ docs v0.6.0, repo structure, CI skeleton, deployment decision.
+Chốt bộ docs v0.7.0, repo structure, CI skeleton, deployment decision.
 
 ## Phase 1 — App shell + Theme Engine
 
@@ -83,3 +83,12 @@ Cross-phase: không maintain References riêng ở page, không copy medical pro
 - **Phase 2:** triển khai SQLite sớm vì lúc này schema/provenance đã đủ ổn định; dùng cho validation, joins, dependency graph, report/Evidence Watch và build-time bundles.
 - Full static export chỉ là deployment profile nếu host cần; canonical Next.js app vẫn server-capable.
 - Backend tương lai chỉ giữ user/runtime state; knowledge canonical không chuyển vào database.
+
+
+## Bổ sung roadmap v0.7.0 — repository health
+
+**Phase 0:** thêm `.gitignore`/guard cho `knowledge.sqlite`, generated artifacts, `evidence/cache`, bulk media; CI chạy repository-health check, chặn large blob ngoài allowlist và report repo size/object health.
+
+**Phase 2:** SQLite vẫn build sớm nhưng chỉ là derived artifact, build local/CI; không commit binary DB.
+
+**Mọi phase:** không dùng GitHub như object storage cho audio/video/source snapshots. Khi media library tăng, chuyển sang object storage/CDN và chỉ giữ metadata trong Git.

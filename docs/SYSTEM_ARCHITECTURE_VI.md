@@ -95,3 +95,8 @@ Chỉ thêm user-facing backend khi thực sự cần sync/account/notifications
 ### SQLite projection gợi ý
 
 Có thể normalize thành `sources`, `claims`, `claim_source_refs`, `source_locators`, `guidance_blocks`, `translations`, `applicability_rules`, `route_claims`, `tool_claims`, `content_release_metadata`. Stable string ID từ canonical source mới là durable ID; SQLite row ID không trở thành canonical/public ID. Build DB trong transaction và chỉ replace DB cũ sau khi validation pass.
+
+
+## Repository/object-storage boundary — v0.7.0
+
+YAML/Git vẫn canonical, nhưng Git chỉ giữ authored/auditable state. `knowledge.sqlite`, generated indexes, crawler cache/full source bodies và bulk media không thuộc permanent Git history. Media lớn dùng object storage/CDN; repo chỉ giữ metadata/asset ID/URL/license. Evidence Watch có thể dùng temporary CI/workspace/cache storage để fetch/diff. Budget và CI policy nằm ở `REPOSITORY_HEALTH.md`.

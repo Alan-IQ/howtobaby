@@ -422,3 +422,8 @@ A new health/safety claim is not release-ready until:
 ## Storage invariant — v0.6.0
 
 Canonical provenance/guidance authoring remains in Git-tracked YAML/structured text as defined by `REPOSITORY_STRUCTURE.md`. Generated SQLite/JSON indexes may be used to validate, query, and render this model, but they are disposable projections and must not become an independent editing source of truth.
+
+
+## Repository storage note — v0.7.0
+
+Canonical claims/provenance remain compact authored Git data. Generated SQLite/indexes and full fetched third-party source bodies are not canonical content and follow `REPOSITORY_HEALTH.md`.

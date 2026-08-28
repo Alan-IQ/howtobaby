@@ -6,6 +6,7 @@
 
 - Keep the public product static-first and privacy-preserving without permanently disabling server capabilities.
 - Keep reviewed knowledge canonical in Git-tracked YAML/structured text regardless of future backend adoption.
+- Keep Git focused on authored/auditable state; generated databases, monitoring source bodies, caches, and bulk media use derived or external storage.
 - Compile canonical knowledge into rebuildable SQLite/index artifacts for efficient validation, joins, dependency analysis, and build-time lookup.
 - Make guidance, tools, themes, translations, and source provenance schema-driven.
 - Allow source monitoring to run independently of user traffic.
@@ -312,6 +313,12 @@ Derived/rebuildable state may include:
 - caches.
 
 A production database may cache or project knowledge for query performance, but a database-only edit is not a canonical content change and must not be treated as publishable reviewed guidance.
+
+### 10.1 Repository/object-storage boundary
+
+`knowledge.sqlite`, generated indexes, crawler/download caches, and bulk media are intentionally outside the permanent canonical Git history. Large user-facing audio/video/image libraries use object storage/CDN; the repository stores stable metadata/asset identifiers/URLs and license information. Temporary source bodies required for Evidence Watch may live in CI/workspace/cache storage with retention appropriate to the source license and monitoring need.
+
+Repository budgets and CI enforcement are defined by `REPOSITORY_HEALTH.md`.
 
 ## 11. Content versions and release artifacts
 

@@ -63,3 +63,8 @@ Nếu source/claim vào trạng thái `changed-review-required`, safety-sensitiv
 ## Theme independence — v0.6.0
 
 Tool UI dùng HowToBaby primitives/Theme Contract như phần còn lại của app. Tool không import trực tiếp theme vendor; theme mua ngoài chỉ thay presentation qua adapter và không được đổi Tool semantics/safety/evidence.
+
+
+## Media storage — v0.7.0
+
+Tool definition/audio metadata lưu Git; media library lớn thì không. Fixture nhỏ có license rõ ràng có thể nằm trong repo khi dev/MVP, nhưng production audio/video collection nên chuyển sang object storage/CDN khi bắt đầu đáng kể về dung lượng. Git LFS không phải kiến trúc media mặc định. Theo budget trong `REPOSITORY_HEALTH.md`.

@@ -8,9 +8,10 @@
 
 Deliverables:
 
-- adopt v0.6.0 documentation set;
+- adopt v0.7.0 documentation set;
 - implement logical/physical repo baseline from `REPOSITORY_STRUCTURE.md`;
 - add gitignore/cache policy for fetched third-party evidence material;
+- implement `REPOSITORY_HEALTH.md` baseline: large-blob guard, generated SQLite/cache/media exclusions, repository-size reporting, and allowlist/exception mechanism;
 - coding/PR conventions;
 - CI skeleton;
 - decisions recorded for static-first deployment target without permanently forcing full static export;
@@ -21,6 +22,8 @@ Gate:
 - docs have no unresolved architecture contradictions;
 - every top-level package/artifact has one canonical owner;
 - external-source cache cannot be committed accidentally;
+- `knowledge.sqlite`, generated build artifacts, and bulk media cannot enter normal Git accidentally;
+- repository health check runs in CI and reports current Git/object-size health;
 - `PROJECT_PROFILE` references current specialist docs.
 
 ## Phase 1 — App shell + theme engine
@@ -64,7 +67,7 @@ Deliverables:
 - source ID/relationship/locator/original-link validation;
 - canonical YAML/Git authoring baseline for sources/claims/guidance/translations;
 - `KnowledgeRepository` read-model interface;
-- generated `knowledge.sqlite` derived index;
+- generated `knowledge.sqlite` derived index (gitignored; built locally/CI and optionally cached as an artifact);
 - generated `claim-evidence`, `source-claim`, `route-evidence`, and `tool-evidence` indexes;
 - SourceChip, EvidenceDrawer, and ReferenceList primitives;
 - coverage matrix framework;
@@ -302,6 +305,7 @@ Candidate work, not required for launch:
 - Do not commit fetched third-party source documents as routine evidence state; use metadata/hash/locator + temporary cache by default.
 - Do not implement AI-assisted evidence rewriting before deterministic monitoring/provenance exists.
 - Do not add a user backend merely to run Evidence Watch or because knowledge-file count grows.
+- Do not use Git/GitHub as bulk media, crawler-cache, downloaded-source, or generated-database storage; enforce `REPOSITORY_HEALTH.md` continuously.
 - Git/YAML remains canonical knowledge in every phase; SQLite/PostgreSQL/generated stores are disposable projections.
 - Do not couple domain components directly to purchased/third-party theme packages; integrate through `THEME_SYSTEM.md`.
 - Every phase must leave production code cleaner than the prototype architecture it replaces.
