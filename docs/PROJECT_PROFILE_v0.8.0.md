@@ -5,7 +5,7 @@
 | Field | Value |
 |---|---|
 | Document status | Canonical product contract |
-| Profile version | 0.7.0 |
+| Profile version | 0.8.0 |
 | Last updated | 2026-08-26 |
 | Product name | HowToBaby |
 | Primary domain | `howtobaby.com` |
@@ -23,6 +23,9 @@
 | Preferred web implementation | Next.js + TypeScript; static-first and server-capable |
 | Canonical knowledge store | Git-tracked YAML/structured text; remains canonical even after a backend is introduced |
 | Derived knowledge indexes | Rebuildable SQLite + generated JSON/manifests; never canonical |
+| Software license | `AGPL-3.0-only` for original software |
+| Original knowledge/docs license | `CC-BY-NC-SA-4.0` where HowToBaby has licensing rights |
+| Brand/trademark | Reserved; no trademark license granted by repository licenses |
 | Detailed contracts | See `DOCS_INDEX.md` |
 
 ---
@@ -476,6 +479,23 @@ Those belong to their specialist documents so the product contract stays stable 
 | Repo splitting is a future escape hatch, not a v1 requirement | Accepted in v0.7.0 | A single repo remains simpler until size, access control, or operational scale proves separation is valuable. |
 
 Detailed storage budgets and CI gates belong to `REPOSITORY_HEALTH.md`.
+
+---
+
+
+## 18.2 Decision log additions — v0.8.0
+
+| Decision | Status | Rationale |
+|---|---|---|
+| Original HowToBaby software uses `AGPL-3.0-only` | Accepted in v0.8.0 | Keeps software genuinely open while requiring source availability for modified covered network services. |
+| Original HowToBaby knowledge and documentation use `CC-BY-NC-SA-4.0` | Accepted in v0.8.0 | Allows attributed noncommercial reuse and adaptation while reserving commercial reuse for separate permission. |
+| Authoritative third-party source material is never relicensed by HowToBaby by default | Accepted in v0.8.0 | Provenance/citation does not transfer copyright or reuse rights. |
+| HowToBaby brand/trademark rights remain outside code/content licenses | Accepted in v0.8.0 | Open-source/content permissions must not imply permission to impersonate or rebrand as HowToBaby. |
+| Vendor themes, media, fonts, icons, and other third-party assets remain license-specific | Accepted in v0.8.0 | Prevents repository licenses from overriding commercial/restricted asset terms. |
+| External canonical knowledge contributions remain closed by default until contribution-rights/CLA policy is deliberate | Accepted in v0.8.0 | Preserves future commercial/relicensing flexibility and avoids fragmented rights in the canonical knowledge base. |
+| License scope changes require explicit maintainer approval | Accepted in v0.8.0 | Licensing is a product/legal decision, not an implementation convenience. |
+
+Detailed rights boundaries belong to `LICENSING_POLICY.md`.
 
 ---
 

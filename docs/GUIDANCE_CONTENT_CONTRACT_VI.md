@@ -127,3 +127,7 @@ Guidance/provenance canonical vẫn nằm trong YAML/structured text được Gi
 ## Repository storage — v0.7.0
 
 Claim/provenance canonical vẫn là authored Git text; generated SQLite/index và full third-party source body không phải canonical và tuân theo `REPOSITORY_HEALTH.md`.
+
+## Licensing boundary — v0.8.0
+
+Canonical claim do HowToBaby tự viết có thể dùng `CC-BY-NC-SA-4.0`, nhưng provenance phải giữ quyền upstream tách biệt. Không copy wording của nguồn chính thức vào canonical content chỉ để citation dễ hơn. Chi tiết: `LICENSING_POLICY.md`.

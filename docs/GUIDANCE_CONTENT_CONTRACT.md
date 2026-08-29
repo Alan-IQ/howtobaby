@@ -1,6 +1,6 @@
 # GUIDANCE_CONTENT_CONTRACT — HowToBaby
 
-> Canonical detailed contract for evidence-backed guidance domains. Product-level invariants live in `PROJECT_PROFILE_v0.7.0.md`; this document owns age logic, domain stages, content structure, evidence classes, and safety behavior.
+> Canonical detailed contract for evidence-backed guidance domains. Product-level invariants live in `PROJECT_PROFILE_v0.8.0.md`; this document owns age logic, domain stages, content structure, evidence classes, and safety behavior.
 
 ## 1. Evidence-to-action model
 
@@ -351,3 +351,7 @@ Canonical provenance/guidance authoring remains in Git-tracked YAML/structured t
 ## Repository storage note — v0.7.0
 
 Canonical claims/provenance remain compact authored Git data. Generated SQLite/indexes and full fetched third-party source bodies are not canonical content and follow `REPOSITORY_HEALTH.md`.
+
+## Licensing boundary — v0.8.0
+
+Canonical claim text authored by HowToBaby may be licensed under `CC-BY-NC-SA-4.0`, but claim provenance must keep upstream source rights distinct. Do not copy authoritative source wording into canonical content merely to make citation easier. Interpretation, quotation, syndication, and copied source material have different rights implications. Canonical details: `LICENSING_POLICY.md`.

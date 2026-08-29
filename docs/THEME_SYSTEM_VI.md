@@ -142,3 +142,8 @@ Theme mới chỉ done khi manifest/license có đủ, vendor code không leak v
 ## Repository health — v0.7.0
 
 Theme package/assets lớn hoặc bị hạn chế redistribution không được đẩy vào normal public Git chỉ vì tiện. Dùng private package/repository/artifact/object storage phù hợp license và `REPOSITORY_HEALTH.md`; Baby Modern Glass first-party vẫn phải đủ để build/test repo độc lập.
+
+
+## Licensing cross-reference — v0.8.0
+
+Theme integration phải theo `LICENSING_POLICY.md`. Adapter public có thể dùng AGPL nhưng theme/vendor asset mua ngoài vẫn có thể private/restricted; không được mặc định vendor source/font/icon/demo asset là redistributable.

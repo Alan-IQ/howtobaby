@@ -226,3 +226,8 @@ Tool surfaces consume HowToBaby UI primitives and the Theme Contract. Individual
 ## Media storage boundary — v0.7.0
 
 Tool definitions and audio metadata are canonical Git data; a growing audio/video asset library is not. Tiny license-compatible fixtures may live under the web/tool package for development or an MVP, but production media collections should move to object storage/CDN once they become material in size. Git LFS is not the default media architecture. Asset metadata should preserve stable IDs, source/license/attribution where relevant, and deployment URLs independent from canonical guidance. Repository limits follow `REPOSITORY_HEALTH.md`.
+
+
+## Asset licensing cross-reference — v0.8.0
+
+Tool code may be AGPL-licensed while audio/images/fonts/other media remain asset-specific. Every production media asset must carry explicit rights metadata and comply with `LICENSING_POLICY.md`; public availability is not proof of redistribution or commercial-use permission.

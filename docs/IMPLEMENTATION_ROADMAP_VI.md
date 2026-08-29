@@ -4,7 +4,7 @@
 
 ## Phase 0 — Docs/repo baseline
 
-Chốt bộ docs v0.7.0, repo structure, CI skeleton, deployment decision.
+Chốt bộ docs v0.8.0, repo structure, CI skeleton, deployment decision, multi-license baseline (`AGPL-3.0-only` cho software; `CC-BY-NC-SA-4.0` cho original knowledge/docs), third-party notice và license guard.
 
 ## Phase 1 — App shell + Theme Engine
 

@@ -85,3 +85,8 @@ Print cũng lấy References từ cùng provenance graph và nên mang content v
 ## Theme mua/third-party — v0.6.0
 
 HowToBaby cho phép dùng theme React mua ngoài nếu chất lượng tốt, nhưng UI/domain component chỉ dùng Theme Contract và HowToBaby primitives. Vendor theme có thể cung cấp token, primitive implementation hoặc shell/layout adapter; không được thay đổi route semantics, age logic, evidence/safety hay canonical content. License/redistribution phải được kiểm tra trước khi commit code/assets. Chi tiết: `THEME_SYSTEM.md`.
+
+
+## Bổ sung v0.8.0 — legal/source footer
+
+Production UI phải có global footer/surface truy cập được tới Sources/Methodology, Medical Disclaimer, Privacy, License, Source Code khi cần theo AGPL, và Changelog/Corrections. Vendor theme không được làm mất các link pháp lý/trust bắt buộc này. Chi tiết license: `LICENSING_POLICY.md`.

@@ -387,3 +387,8 @@ A new theme is done only when:
 - print fallback passes;
 - proprietary source is stored in a license-compliant location;
 - switching back to Baby Modern Glass requires no content/domain migration.
+
+
+## Licensing cross-reference — v0.8.0
+
+Theme integration must comply with `LICENSING_POLICY.md`. A public adapter can be AGPL-licensed while the underlying purchased theme remains private/restricted. Do not assume vendor source, fonts, icons, illustrations, or demo assets are redistributable merely because the adapter is.

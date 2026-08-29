@@ -68,3 +68,8 @@ Tool UI dùng HowToBaby primitives/Theme Contract như phần còn lại của a
 ## Media storage — v0.7.0
 
 Tool definition/audio metadata lưu Git; media library lớn thì không. Fixture nhỏ có license rõ ràng có thể nằm trong repo khi dev/MVP, nhưng production audio/video collection nên chuyển sang object storage/CDN khi bắt đầu đáng kể về dung lượng. Git LFS không phải kiến trúc media mặc định. Theo budget trong `REPOSITORY_HEALTH.md`.
+
+
+## Asset licensing — v0.8.0
+
+Code của Tool có thể AGPL nhưng audio/image/font/media vẫn theo license riêng. Production asset phải có rights metadata rõ ràng và tuân thủ `LICENSING_POLICY.md`; public/free download không đồng nghĩa được redistribute hoặc commercial use.

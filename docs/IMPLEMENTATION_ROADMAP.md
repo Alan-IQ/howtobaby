@@ -8,7 +8,7 @@
 
 Deliverables:
 
-- adopt v0.7.0 documentation set;
+- adopt v0.8.0 documentation set;
 - implement logical/physical repo baseline from `REPOSITORY_STRUCTURE.md`;
 - add gitignore/cache policy for fetched third-party evidence material;
 - implement `REPOSITORY_HEALTH.md` baseline: large-blob guard, generated SQLite/cache/media exclusions, repository-size reporting, and allowlist/exception mechanism;
@@ -16,6 +16,8 @@ Deliverables:
 - CI skeleton;
 - decisions recorded for static-first deployment target without permanently forcing full static export;
 - Theme System contract and third-party license-isolation policy established.
+- root multi-license files established (`LICENSE.md`, `LICENSES/*`, `THIRD_PARTY_NOTICES.md`, `CONTRIBUTING.md`) and `LICENSING_POLICY.md` adopted;
+- dependency/asset license-reporting approach defined for implementation;
 
 Gate:
 
@@ -25,6 +27,7 @@ Gate:
 - `knowledge.sqlite`, generated build artifacts, and bulk media cannot enter normal Git accidentally;
 - repository health check runs in CI and reports current Git/object-size health;
 - `PROJECT_PROFILE` references current specialist docs.
+- license scope/path mapping is unambiguous and restricted third-party material cannot silently inherit repository licenses.
 
 ## Phase 1 — App shell + theme engine
 

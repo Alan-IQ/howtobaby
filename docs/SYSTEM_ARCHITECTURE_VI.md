@@ -100,3 +100,8 @@ Có thể normalize thành `sources`, `claims`, `claim_source_refs`, `source_loc
 ## Repository/object-storage boundary — v0.7.0
 
 YAML/Git vẫn canonical, nhưng Git chỉ giữ authored/auditable state. `knowledge.sqlite`, generated indexes, crawler cache/full source bodies và bulk media không thuộc permanent Git history. Media lớn dùng object storage/CDN; repo chỉ giữ metadata/asset ID/URL/license. Evidence Watch có thể dùng temporary CI/workspace/cache storage để fetch/diff. Budget và CI policy nằm ở `REPOSITORY_HEALTH.md`.
+
+
+## Licensing boundary — v0.8.0
+
+Software gốc dùng `AGPL-3.0-only`; original knowledge/docs dùng `CC-BY-NC-SA-4.0`; source body authoritative và vendor/media asset giữ quyền/license riêng. Generated DB/index không làm thay đổi quyền của source material. Production cần có route/footer tới License/Source Code phù hợp. Chi tiết: `LICENSING_POLICY.md`.

@@ -1,16 +1,13 @@
-<div>
+# :baby: HowToBaby - Know what your child needs. Right now.
 
-# HowToBaby
+> **Evidence-to-action guidance and practical tools for parents — organized around the child's current stage.**
 
-### Know what your child needs. Right now.
+:us_outlying_islands: English-first canonical content • :globe_with_meridians: Multi-language support
+:bust_in_silhouette: Local-first personalization • :eye_speech_bubble: Traceable sources
 
-**Evidence-to-action guidance and practical tools for parents — organized around the child's current stage.**
+---
 
-English-first canonical content · Vietnamese support · Local-first personalization · Traceable sources
-
-</div>
-
-## About HowToBaby
+## About [HowToBaby](https://howtobaby.com)
 
 HowToBaby is being built to make trusted child-development and parenting guidance easier to use in everyday life.
 
@@ -25,7 +22,7 @@ The product has two equal pillars:
 
 ## Current status
 
-**Architecture/documentation baseline: v0.7.0 — implementation has not started yet.**
+**Architecture/documentation baseline: v0.8.0 — implementation has not started yet.**
 
 The current repository contract intentionally defines product behavior, evidence governance, repository ownership, theme integration, storage boundaries, and implementation phases before production code is scaffolded.
 
@@ -211,13 +208,14 @@ English documentation is canonical for implementation. Vietnamese companion docu
 
 | Document | Purpose |
 |---|---|
-| [`PROJECT_PROFILE_v0.7.0.md`](docs/PROJECT_PROFILE_v0.7.0.md) | Product mission, scope and non-negotiable decisions |
+| [`PROJECT_PROFILE_v0.8.0.md`](docs/PROJECT_PROFILE_v0.8.0.md) | Product mission, scope and non-negotiable decisions |
 | [`DOCS_INDEX.md`](docs/DOCS_INDEX.md) | Documentation ownership and conflict resolution |
 | [`GUIDANCE_CONTENT_CONTRACT.md`](docs/GUIDANCE_CONTENT_CONTRACT.md) | Age/domain/content/safety rules |
 | [`EVIDENCE_PROVENANCE.md`](docs/EVIDENCE_PROVENANCE.md) | Claim-to-source traceability and public evidence |
 | [`SYSTEM_ARCHITECTURE.md`](docs/SYSTEM_ARCHITECTURE.md) | Runtime/build/evidence architecture |
 | [`REPOSITORY_STRUCTURE.md`](docs/REPOSITORY_STRUCTURE.md) | Repo/package ownership and boundaries |
 | [`REPOSITORY_HEALTH.md`](docs/REPOSITORY_HEALTH.md) | Git/storage budgets and CI safeguards |
+| [`LICENSING_POLICY.md`](docs/LICENSING_POLICY.md) | Software/content licensing and third-party rights boundaries |
 | [`GUI_DESIGN.md`](docs/GUI_DESIGN.md) | Product UI behavior, accessibility and evidence UX |
 | [`THEME_SYSTEM.md`](docs/THEME_SYSTEM.md) | First/third-party theme integration contract |
 | [`TOOL_PLATFORM.md`](docs/TOOL_PLATFORM.md) | Utility/tool architecture |
@@ -259,10 +257,21 @@ Do not copy unverified placeholder commands into CI or contributor instructions.
 - Safety-critical claims require explicit provenance and review status.
 - Source updates may be detected automatically; semantic medical changes are not silently auto-published.
 
-## License
+## 🔑 License
 
-Project licensing has not yet been finalized. Do not assume repository content, third-party source material, purchased themes, audio assets, or upstream medical/public-health material share the same license.
+HowToBaby uses a **multi-license model** so software, knowledge, documentation, branding, authoritative source material, and third-party assets are not incorrectly treated as one legal category.
+
+| Material | License / treatment |
+|---|---|
+| Original HowToBaby software | **AGPL-3.0-only** |
+| Original HowToBaby knowledge, editorial content, translations, and documentation | **CC-BY-NC-SA-4.0** |
+| HowToBaby name, logo, and brand identity | **Reserved; no trademark license granted** |
+| CDC/AAP/FDA/WHO/other authoritative source material | **Original source rights/terms; not relicensed by HowToBaby** |
+| Purchased themes, audio, fonts, icons, images, and other third-party assets | **Asset/vendor-specific license** |
+
+The AGPL still permits commercial use of the software, but modified covered software offered as a network service must comply with the AGPL source-availability requirements. The CC BY-NC-SA license allows attributed noncommercial reuse/adaptation of original HowToBaby content while reserving commercial reuse for separate permission.
+
+See [`LICENSE.md`](LICENSE.md) and [`docs/LICENSING_POLICY.md`](docs/LICENSING_POLICY.md) for the exact scope, exclusions, contribution-rights policy, and third-party boundaries.
 
 ---
-
-**HowToBaby** — trusted guidance, practical action, transparent evidence.
+**[HowToBaby.com](https://howtobaby.com)** — trusted guidance, practical action, transparent evidence.

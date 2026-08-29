@@ -14,6 +14,7 @@ The repository structure must make these boundaries obvious:
 - first-party or purchased/third-party themes can change without rewriting product/domain components;
 - SQLite, generated indexes, route bundles, and future database projections can always be rebuilt from authored sources;
 - copyrighted/restricted source material is not casually committed to the public repository.
+- license scope is path-explicit so code, knowledge, docs, brand, vendor assets, media, and authoritative source material do not inherit the wrong terms.
 
 A single repository is preferred for v1. Separate repositories or services should be introduced only when operational scale or access-control requirements justify them.
 
@@ -126,10 +127,11 @@ howtobaby/
 │  └─ evidence-watch.ts
 │
 ├─ docs/
-│  ├─ PROJECT_PROFILE_v0.7.0.md
+│  ├─ PROJECT_PROFILE_v0.8.0.md
 │  ├─ DOCS_INDEX.md
 │  ├─ REPOSITORY_STRUCTURE.md
 │  ├─ REPOSITORY_HEALTH.md
+│  ├─ LICENSING_POLICY.md
 │  ├─ GUIDANCE_CONTENT_CONTRACT.md
 │  ├─ EVIDENCE_PROVENANCE.md
 │  ├─ SYSTEM_ARCHITECTURE.md
@@ -152,12 +154,34 @@ howtobaby/
 │     ├─ deploy.yml
 │     └─ evidence-watch.yml
 │
+├─ LICENSE.md                     # Multi-license scope map
+├─ LICENSES/                      # Full standard license texts
+│  ├─ AGPL-3.0-only.txt
+│  └─ CC-BY-NC-SA-4.0.txt
+├─ THIRD_PARTY_NOTICES.md
+├─ CONTRIBUTING.md
 ├─ package.json
 ├─ pnpm-workspace.yaml
 ├─ tsconfig.json
 ├─ CLAUDE.md                      # AI instruction entry point; routes to canonical docs
 └─ README.md
 ```
+
+## 2.1 License boundaries in the tree
+
+Path placement does not override explicit file notices, but the default mapping is:
+
+```text
+software code                     -> AGPL-3.0-only
+original knowledge/docs           -> CC-BY-NC-SA-4.0
+authoritative source bodies       -> upstream rights; not relicensed
+vendor themes/media/fonts/icons   -> vendor/asset-specific rights
+brand/trademark                   -> reserved outside repo licenses
+```
+
+Canonical details: `LICENSING_POLICY.md`.
+
+The repository must not solve a licensing conflict by moving a restricted file into an otherwise open directory and assuming the directory license now controls it.
 
 ## 3. Canonical ownership
 

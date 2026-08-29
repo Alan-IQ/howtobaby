@@ -135,3 +135,18 @@ Git là audit trail cho **authored knowledge/provenance/code/docs**, không ph�
 Fixture binary nhỏ có thể giữ nếu thực sự cần cho development/test và pass budget. Media library lớn phải dùng object storage/CDN. Git LFS chỉ là exception cho binary có lý do rõ ràng, không dùng cho canonical YAML/Markdown/JSON.
 
 Budget và CI gate chi tiết: `REPOSITORY_HEALTH.md`.
+
+## Bổ sung v0.8.0 — license boundaries
+
+Root repo cần có:
+
+```text
+LICENSE.md
+LICENSES/AGPL-3.0-only.txt
+LICENSES/CC-BY-NC-SA-4.0.txt
+THIRD_PARTY_NOTICES.md
+CONTRIBUTING.md
+docs/LICENSING_POLICY.md
+```
+
+Mapping mặc định: software gốc → `AGPL-3.0-only`; original knowledge/docs → `CC-BY-NC-SA-4.0`; source body authoritative → quyền upstream; vendor theme/media/font/icon → license riêng; brand/trademark → reserved. Di chuyển file sang folder khác không làm biến mất restriction/license gốc.

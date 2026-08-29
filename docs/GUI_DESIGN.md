@@ -30,6 +30,21 @@ Trust destinations are globally accessible but need not occupy primary navigatio
 - Editorial Policy
 - Medical Disclaimer
 - Changelog / Corrections
+- License / Source Code
+
+
+## 2.1 Global legal/source footer
+
+Every production deployment should provide a compact globally reachable footer or equivalent legal/help surface containing at least:
+
+- Sources / Methodology;
+- Medical Disclaimer;
+- Privacy;
+- License;
+- Source Code when the deployment is covered by AGPL source-availability obligations;
+- Changelog / Corrections.
+
+This surface must remain usable across themes and must not be removed by a vendor shell. Brand/trademark notices remain distinct from software/content licenses. Detailed legal scope: `LICENSING_POLICY.md`.
 
 ## 3. Theme behavior
 

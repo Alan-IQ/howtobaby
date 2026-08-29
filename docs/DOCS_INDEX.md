@@ -4,8 +4,9 @@
 
 | Document | Role | Owns | Must not duplicate in detail |
 |---|---|---|---|
-| `PROJECT_PROFILE_v0.7.0.md` | Canonical product contract | mission, scope, product pillars, non-negotiable invariants, trust/monetization/AI boundaries | component specs, repo tree, crawler selectors, detailed claim schemas |
+| `PROJECT_PROFILE_v0.8.0.md` | Canonical product contract | mission, scope, product pillars, non-negotiable invariants, trust/monetization/AI boundaries | component specs, repo tree, crawler selectors, detailed claim schemas |
 | `REPOSITORY_STRUCTURE.md` | Canonical repo/ownership contract | folders/packages, dependency direction, authored/generated/cache boundaries, workflow ownership | medical rules, UI appearance |
+| `LICENSING_POLICY.md` | Canonical licensing/rights contract | software/content license map, third-party exclusions, contribution rights, trademark/vendor/media boundaries, SPDX/change-control policy | detailed AGPL/CC legal text, medical policy, theme implementation |
 | `REPOSITORY_HEALTH.md` | Canonical Git/repository storage-health contract | repository budgets, large-file policy, generated/cache/media exclusions, CI health gates, split-repo trigger | domain medical rules, UI behavior, crawler semantics |
 | `GUIDANCE_CONTENT_CONTRACT.md` | Canonical guidance/domain contract | age logic, stage maps, feeding/play/sleep/safety behavior, claim classes, content release rules | page styling, crawler implementation |
 | `EVIDENCE_PROVENANCE.md` | Canonical evidence traceability contract | SourceRecord↔Claim relationships, locators, public citations, Evidence Drawer, page references, evidence routes, source-link/reuse policy, audit history | source-fetch implementation, domain medical wording |
@@ -20,8 +21,8 @@
 
 When documents conflict:
 
-1. `PROJECT_PROFILE_v0.7.0.md` wins for product-level non-negotiable decisions.
-2. The specialist owner in the table above wins for its domain.
+1. `PROJECT_PROFILE_v0.8.0.md` wins for product-level non-negotiable decisions.
+2. The specialist owner in the table above wins for its domain. Licensing scope is owned by `LICENSING_POLICY.md`.
 3. Specialist contracts such as `THEME_SYSTEM.md` control their owned technical domain.
 4. `IMPLEMENTATION_ROADMAP.md` controls sequence only and never overrides a permanent contract.
 
@@ -35,6 +36,7 @@ A product-invariant change updates Project Profile + Decision Log first. Impleme
 - `GUI_DESIGN.md` defines **how provenance is exposed to the parent**.
 - `REPOSITORY_STRUCTURE.md` defines **where all of those artifacts live**.
 - `REPOSITORY_HEALTH.md` defines **what is allowed to remain in Git and how repository growth is guarded**.
+- `LICENSING_POLICY.md` defines **which rights apply to code, knowledge, documentation, brand, sources, vendor themes, media, and contributions**.
 - `THEME_SYSTEM.md` defines **how first-party and purchased/third-party visual systems plug into the product without owning it**.
 
 ## Canonical language
@@ -43,4 +45,4 @@ English documents are canonical for implementation. Vietnamese companion documen
 
 ## Repository entry points
 
-`README.md` and `CLAUDE.md` are root-level entry points. They summarize or route to canonical contracts; they must not silently redefine product/domain rules owned by the documents above.
+`README.md` and `CLAUDE.md` are root-level product/AI entry points. `LICENSE.md`, `THIRD_PARTY_NOTICES.md`, and `CONTRIBUTING.md` are root legal/contribution entry points. They summarize or route to canonical contracts; they must not silently redefine product/domain rules owned by the documents above.

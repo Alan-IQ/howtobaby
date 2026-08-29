@@ -1,6 +1,6 @@
 # PROJECT_PROFILE — HowToBaby — Bản tiếng Việt
 
-> Bản tiếng Việt dùng để đọc/review. **Bản English `PROJECT_PROFILE_v0.7.0.md` là canonical cho implementation.** HowToBaby được định nghĩa là nền tảng **evidence-to-action + parent utilities**, không chỉ là trang kiến thức.
+> Bản tiếng Việt dùng để đọc/review. **Bản English `PROJECT_PROFILE_v0.8.0.md` là canonical cho implementation.** HowToBaby được định nghĩa là nền tảng **evidence-to-action + parent utilities**, không chỉ là trang kiến thức.
 
 ## 1. Sứ mệnh
 
@@ -264,3 +264,18 @@ Xem `DOCS_INDEX.md`. Project Profile chỉ giữ product-level contract; detaile
 - Source change không auto-publish semantic medical change.
 - 432 Hz/audio được phép tồn tại dưới dạng utility nhưng không therapeutic claim.
 - Tách specialist docs để tránh Project Profile phình và lặp.
+
+
+## Bổ sung v0.8.0 — licensing
+
+- Software gốc của HowToBaby dùng `AGPL-3.0-only`.
+- Knowledge/docs/bản dịch do HowToBaby tự tạo và có quyền cấp phép dùng `CC-BY-NC-SA-4.0`.
+- Tài liệu gốc CDC/AAP/FDA/WHO/... không bị HowToBaby relicensing chỉ vì được cite/provenance.
+- Tên/logo/brand HowToBaby không nằm trong license của code/content.
+- Theme mua ngoài, audio, font, icon và asset third-party theo license riêng.
+- Chưa nhận substantial external canonical knowledge contribution cho đến khi có contribution-rights/CLA rõ ràng.
+- AI/contributor không được tự thay đổi phạm vi license.
+
+Chi tiết canonical: `LICENSING_POLICY.md`.
+
+---

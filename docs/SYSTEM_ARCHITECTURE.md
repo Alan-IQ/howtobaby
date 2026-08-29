@@ -427,3 +427,16 @@ Do not introduce a backend solely because evidence monitoring needs scheduled co
 | Public provenance | generated from canonical claim-source graph |
 | Full third-party source storage | temporary/minimized by default; not canonical repo content |
 | AI dependency | none required for core architecture |
+
+
+## Licensing boundary — v0.8.0
+
+Architecture boundaries also preserve legal boundaries:
+
+- software planes/packages authored by HowToBaby default to `AGPL-3.0-only`;
+- canonical original knowledge/docs default to `CC-BY-NC-SA-4.0`;
+- authoritative source bodies remain upstream material and are not transformed into project-owned licensed content merely by ingestion;
+- vendor themes/media/assets remain outside open project licensing unless their own terms permit redistribution;
+- generated projections inherit underlying rights constraints and are not a licensing escape hatch.
+
+The runtime/build system should expose a stable License/Source Code route or footer target without coupling domain logic to legal-page presentation. Canonical details: `LICENSING_POLICY.md`.

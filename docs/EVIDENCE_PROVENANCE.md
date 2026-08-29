@@ -427,3 +427,8 @@ Canonical provenance/guidance authoring remains in Git-tracked YAML/structured t
 ## Repository storage note — v0.7.0
 
 Canonical claims/provenance remain compact authored Git data. Generated SQLite/indexes and full fetched third-party source bodies are not canonical content and follow `REPOSITORY_HEALTH.md`.
+
+
+## Licensing boundary — v0.8.0
+
+Provenance records attribution and support; it does not transfer copyright. Original HowToBaby interpretation may be CC-BY-NC-SA-4.0 while the cited source body remains governed by its upstream rights. Store enough metadata to verify and link to the source without assuming the right to republish it. See `LICENSING_POLICY.md`.
