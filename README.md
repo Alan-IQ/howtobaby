@@ -1,11 +1,10 @@
-# :baby: HowToBaby - Know what your child needs. Right now.
+# HowToBaby
 
-> **Evidence-to-action guidance and practical tools for parents — organized around the child's current stage.**
+> Know what your child needs. Right now.
 
-:us_outlying_islands: English-first canonical content • :globe_with_meridians: Multi-language support
-:bust_in_silhouette: Local-first personalization • :eye_speech_bubble: Traceable sources
+**Evidence-to-action guidance and practical tools for parents — organized around the child's current stage.**
 
----
+🫆 Traceable sources • 🔒 Local-first personalization • :globe_with_meridians: Multi-language support
 
 ## About [HowToBaby](https://howtobaby.com)
 
