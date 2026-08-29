@@ -1,4 +1,4 @@
-![HowToBaby Banner](https://github.com/Alan-IQ/howtobaby/.github/blob/main/images/banner.png)
+![HowToBaby Banner](https://github.com/Alan-IQ/howtobaby/blob/main/.github/images/banner.png)
 # HowToBaby
 
 > Know what your child needs. Right now.
