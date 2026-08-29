@@ -1,10 +1,11 @@
+![HowToBaby Banner](https://github.com/Alan-IQ/howtobaby/.github/blob/main/images/banner.png)
 # HowToBaby
 
 > Know what your child needs. Right now.
 
 **Evidence-to-action guidance and practical tools for parents — organized around the child's current stage.**
 
-🫆 Traceable sources • 🔒 Local-first personalization • :globe_with_meridians: Multi-language support
+🔒 Local-first personalization • 🫆 Traceable sources • :globe_with_meridians: Multi-language support
 
 ## About [HowToBaby](https://howtobaby.com)
 
