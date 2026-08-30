@@ -12,6 +12,7 @@ secrets/
 id_rsa
 id_ed25519
 XOA/
+_archived/
 _claude_prompts/
 
 # --- Generated knowledge read models (derived; delete + rebuild is the recovery path) ----------

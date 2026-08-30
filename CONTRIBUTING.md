@@ -66,7 +66,8 @@ The scripts run on plain Node + Git (native type stripping); no build step is re
 
 ## Commits and pull requests
 
-- Work on a branch; `main` is protected by CI (`ci.yml`, `repo-health.yml`).
+- Work on a branch and open a pull request; CI (`ci.yml`, `repo-health.yml`) runs on every push and PR.
+- Branch protection is **not yet enabled** on GitHub (it is a repository setting, not configurable from this codebase). Until a maintainer enables it, a direct push to `main` is technically possible and CI failures are advisory. Required setup (GitHub → Settings → Branches → add rule for `main`): require a pull request before merging; require status checks `Repository baseline` (CI) and `Large-blob guard and size report` (Repository health) to pass; require branches to be up to date; block force pushes and deletions.
 - Commit subject: plain-language imperative describing the whole change, no type/scope prefix. Body bullets use the most specific Conventional Commits prefix (`feat`, `fix`, `docs`, `refactor`, `test`, `build`, `ci`, `chore`, `perf`, `revert`) with an optional scope:
 
   ```text

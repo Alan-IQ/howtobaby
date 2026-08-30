@@ -133,9 +133,15 @@ symlink switching if the hosting layout supports it.
 
 ## Important
 
-Phase 0 decision: `deploy.yml` is trigger-restricted to `workflow_dispatch`
-(manual) because the `apps/web` application does not exist yet and a push to
-`main` would have nothing buildable to deploy. When Phase 1 creates the actual
-Next.js application, re-add the `push: branches: [main]` trigger. The
-static-first/server-capable posture is unchanged: `DEPLOY_TARGET=static` is a
-deployment profile, not the canonical application architecture.
+Status (Phase 0): this document is the **prepared runbook**, not a description of a
+live pipeline. `.github/workflows/deploy.yml` is a manual-only placeholder that
+exits without building or contacting any host, because `apps/web` does not exist
+yet and the Phase 1 gate ("static-first build deploys; full-static export remains
+optional") cannot be tested before then.
+
+Phase 1 implements the workflow steps described above (install → `DEPLOY_TARGET=static`
+build → verify `apps/web/out/index.html` → SSH/rsync to the dedicated document root
+guarded by `.howtobaby-deploy-root` → smoke-check `https://howtobaby.com`) and
+re-enables the `push: branches: [main]` trigger. The static-first/server-capable
+posture is unchanged: `DEPLOY_TARGET=static` is a deployment profile, not the
+canonical application architecture.

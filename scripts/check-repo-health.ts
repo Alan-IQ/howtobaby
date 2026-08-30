@@ -20,7 +20,7 @@
  */
 
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
-import { basename, dirname, join, posix } from "node:path";
+import { dirname, join, posix } from "node:path";
 import { spawnSync } from "node:child_process";
 
 import {
@@ -58,7 +58,8 @@ interface HealthConfig {
   };
   mustBeIgnored: string[];
   denyPatterns: Record<string, string[]>;
-  structuralPlaceholders: string[];
+  /** Exact reviewed placeholder paths (globs) allowed inside deny-pattern directories, with a size cap. */
+  placeholderPaths: Array<{ path: string; maxBytes: number; reason: string }>;
   mediaExtensions: string[];
   authoredDirectories: Record<string, string>;
   exceptions: HealthException[];
@@ -70,6 +71,11 @@ function loadConfig(root: string): HealthConfig {
   const file = join(root, CONFIG_FILE);
   if (!existsSync(file)) throw new Error(`${CONFIG_FILE} not found at repository root`);
   const config = JSON.parse(readFileSync(file, "utf8")) as HealthConfig;
+  for (const p of config.placeholderPaths) {
+    if (!p.path || !p.reason || typeof p.maxBytes !== "number") {
+      throw new Error(`Invalid placeholderPaths entry in ${CONFIG_FILE}: every entry needs path, maxBytes, reason`);
+    }
+  }
   for (const ex of config.exceptions) {
     if (!ex.pattern || !ex.reason || !ex.owner || !ex.added || !Array.isArray(ex.kinds) || ex.kinds.length === 0) {
       throw new Error(`Invalid exception in ${CONFIG_FILE}: every entry needs pattern, kinds[], reason, owner, added`);
@@ -88,8 +94,14 @@ function findException(config: HealthConfig, path: string, kind: string, size: n
   );
 }
 
-function isPlaceholder(config: HealthConfig, path: string): boolean {
-  return config.structuralPlaceholders.includes(basename(path));
+/**
+ * A structural placeholder is allowed only when its exact path (or reviewed glob) is listed in
+ * `placeholderPaths` and it is within that entry's size cap. Basename alone (`.gitkeep`, `README.md`,
+ * `.env.example`) never grants an exemption, so a force-added file inside vendor-themes/, evidence/cache/
+ * or a generated directory is still a violation unless its path was explicitly approved.
+ */
+function findPlaceholder(config: HealthConfig, path: string, size: number) {
+  return config.placeholderPaths.find((p) => globToRegExp(p.path).test(path) && size <= p.maxBytes);
 }
 
 function checkIgnoreProbes(report: Report, config: HealthConfig, root: string): void {
@@ -112,8 +124,9 @@ function checkDenyPatterns(report: Report, config: HealthConfig, tracked: Tracke
     for (const [kind, patterns] of Object.entries(config.denyPatterns)) {
       const matched = matchesAny(blob.path, patterns);
       if (!matched) continue;
-      if (isPlaceholder(config, blob.path) && blob.size < 64 * 1024) {
-        rows.push([`\`${blob.path}\``, kind, "placeholder (allowed)"]);
+      const placeholder = findPlaceholder(config, blob.path, blob.size);
+      if (placeholder) {
+        rows.push([`\`${blob.path}\``, kind, `reviewed placeholder — ${placeholder.reason}`]);
         continue;
       }
       const exception = findException(config, blob.path, `deny-pattern:${kind}`, blob.size);
@@ -272,6 +285,12 @@ function main(): number {
   checkMediaFixtures(report, config, tracked);
   checkChangedBlobs(report, base, root, tracked);
   checkSizeMetrics(report, config, root, tracked, !flags.has("no-history"));
+
+  report.section("Reviewed placeholders in force");
+  report.table(
+    ["Path", "Max size", "Reason"],
+    config.placeholderPaths.map((p) => [`\`${p.path}\``, formatBytes(p.maxBytes), p.reason]),
+  );
 
   report.section("Exceptions in force");
   report.table(
