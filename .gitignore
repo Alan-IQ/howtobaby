@@ -84,3 +84,7 @@ tmp/
 temp/
 *.tmp
 *.cache
+
+# npm/yarn lockfiles: this workspace uses pnpm only (pnpm-lock.yaml)
+package-lock.json
+yarn.lock
