@@ -11,7 +11,7 @@
 import { existsSync, readFileSync, readdirSync, statSync } from "node:fs";
 import { dirname, join, posix, resolve } from "node:path";
 
-import { repoRoot } from "./lib/git.ts";
+import { git, repoRoot } from "./lib/git.ts";
 import { Report } from "./lib/report.ts";
 
 /** Directories that must exist so every owner in REPOSITORY_STRUCTURE.md §2 has a physical home. */
@@ -128,20 +128,29 @@ const REQUIRED_FILES = [
 
 const REQUIRED_WORKFLOWS = ["ci.yml", "repo-health.yml", "deploy.yml", "evidence-watch.yml"];
 
+/**
+ * Layout is verified against the Git index, not the working tree, so a local run matches a fresh CI checkout
+ * (an untracked or gitignored directory exists locally but is missing after clone).
+ */
 function checkLayout(report: Report, root: string): void {
-  report.section("Physical layout");
+  report.section("Physical layout (verified against tracked files)");
+  const tracked = git(["ls-files", "-z", "--cached"], { cwd: root }).split("\0").filter(Boolean);
+  const trackedSet = new Set(tracked);
   let missing = 0;
   for (const dir of REQUIRED_DIRECTORIES) {
-    const full = join(root, dir);
-    if (!existsSync(full) || !statSync(full).isDirectory()) {
+    const prefix = `${dir}/`;
+    if (!tracked.some((p) => p.startsWith(prefix))) {
       missing += 1;
-      report.error("layout", "required directory from REPOSITORY_STRUCTURE.md is missing", dir);
+      const hint = existsSync(join(root, dir)) && statSync(join(root, dir)).isDirectory()
+        ? "exists locally but has no tracked file (untracked, gitignored, or an empty directory) — add a .gitkeep or fix .gitignore"
+        : "is missing";
+      report.error("layout", `required directory from REPOSITORY_STRUCTURE.md ${hint}`, dir);
     }
   }
   for (const file of REQUIRED_FILES) {
-    if (!existsSync(join(root, file))) {
+    if (!trackedSet.has(file)) {
       missing += 1;
-      report.error("layout", "required file is missing", file);
+      report.error("layout", existsSync(join(root, file)) ? "required file exists locally but is not tracked by Git" : "required file is missing", file);
     }
   }
   if (missing === 0) report.info("layout", `${REQUIRED_DIRECTORIES.length} directories and ${REQUIRED_FILES.length} files present`);
