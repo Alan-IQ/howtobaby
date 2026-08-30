@@ -1,0 +1,100 @@
+name: Deploy production
+
+# Static-first deployment profile (docs/SYSTEM_ARCHITECTURE.md §13, DEPLOYMENT_HAWKHOST.md).
+# The application stays server-capable; DEPLOY_TARGET=static selects the full static export only for this
+# shared-hosting profile. Phase 0 decision: the workflow is manual-only (workflow_dispatch) until Phase 1
+# creates a buildable apps/web application. Re-enable the `push: branches: [main]` trigger at that point.
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: howtobaby-production
+  cancel-in-progress: false
+
+jobs:
+  build-and-deploy:
+    name: Build and deploy to HawkHost
+    runs-on: ubuntu-latest
+    environment: production
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          run_install: false
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build static production site
+        env:
+          DEPLOY_TARGET: static
+          NEXT_TELEMETRY_DISABLED: "1"
+        run: pnpm --dir apps/web build
+
+      - name: Verify static export
+        run: |
+          test -d apps/web/out
+          test -f apps/web/out/index.html
+
+      - name: Configure SSH
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.HH_SSH_PRIVATE_KEY }}
+          SSH_KNOWN_HOSTS: ${{ secrets.HH_SSH_KNOWN_HOSTS }}
+        run: |
+          install -m 700 -d ~/.ssh
+          printf '%s\n' "$SSH_PRIVATE_KEY" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          printf '%s\n' "$SSH_KNOWN_HOSTS" > ~/.ssh/known_hosts
+          chmod 600 ~/.ssh/known_hosts
+
+      - name: Verify production deploy target
+        env:
+          SSH_HOST: ${{ secrets.HH_SSH_HOST }}
+          SSH_PORT: ${{ secrets.HH_SSH_PORT }}
+          SSH_USER: ${{ secrets.HH_SSH_USER }}
+          DEPLOY_PATH: ${{ secrets.HH_DEPLOY_PATH }}
+        run: |
+          ssh -i ~/.ssh/id_ed25519 \
+            -p "$SSH_PORT" \
+            "$SSH_USER@$SSH_HOST" \
+            "test -f '$DEPLOY_PATH/.howtobaby-deploy-root'"
+
+      - name: Deploy static output
+        env:
+          SSH_HOST: ${{ secrets.HH_SSH_HOST }}
+          SSH_PORT: ${{ secrets.HH_SSH_PORT }}
+          SSH_USER: ${{ secrets.HH_SSH_USER }}
+          DEPLOY_PATH: ${{ secrets.HH_DEPLOY_PATH }}
+        run: |
+          rsync -az \
+            --delete \
+            --delete-delay \
+            --exclude='.howtobaby-deploy-root' \
+            --exclude='.well-known/' \
+            -e "ssh -i ~/.ssh/id_ed25519 -p $SSH_PORT" \
+            apps/web/out/ \
+            "$SSH_USER@$SSH_HOST:$DEPLOY_PATH/"
+
+      - name: Verify deployed site
+        env:
+          PRODUCTION_URL: https://howtobaby.com
+        run: |
+          curl --fail --silent --show-error \
+            --retry 5 \
+            --retry-delay 3 \
+            --max-time 20 \
+            "$PRODUCTION_URL/" > /dev/null

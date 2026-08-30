@@ -1,0 +1,30 @@
+{
+  "$comment": "Rights metadata for every media/font/icon asset tracked in Git (docs/LICENSING_POLICY.md §8, THIRD_PARTY_NOTICES.md). scripts/report-licenses.ts fails in --strict mode when a tracked asset has no matching entry. Pattern globs are relative to the repository root. Assets under a HowToBaby brand entry are NOT covered by AGPL-3.0-only or CC-BY-NC-SA-4.0; brand rights are reserved.",
+  "version": 1,
+  "assets": [
+    {
+      "assetId": "brand.readme-banner",
+      "pattern": ".github/images/banner.png",
+      "creator": "HowToBaby",
+      "license": "HowToBaby brand asset — all rights reserved; not licensed under AGPL-3.0-only or CC-BY-NC-SA-4.0",
+      "commercialUseAllowed": true,
+      "redistributionAllowed": false,
+      "attributionRequired": false,
+      "sourceUrl": "",
+      "reviewStatus": "maintainer-confirmation-required",
+      "notes": "README banner. Confirm original authorship/ownership or record the actual creator and license."
+    },
+    {
+      "assetId": "brand.app-icons",
+      "pattern": "apps/web/public/icons/**/*.{png,ico}",
+      "creator": "HowToBaby",
+      "license": "HowToBaby brand asset — all rights reserved; not licensed under AGPL-3.0-only or CC-BY-NC-SA-4.0",
+      "commercialUseAllowed": true,
+      "redistributionAllowed": false,
+      "attributionRequired": false,
+      "sourceUrl": "",
+      "reviewStatus": "maintainer-confirmation-required",
+      "notes": "Favicon/PWA icon candidate sets 01–05. Confirm original authorship/ownership or record the actual creator and license; unused candidate sets can be removed once one is chosen."
+    }
+  ]
+}

@@ -22,9 +22,9 @@ The product has two equal pillars:
 
 ## Current status
 
-**Architecture/documentation baseline: v0.8.0 — implementation has not started yet.**
+**Architecture/documentation baseline: v0.8.0 — Phase 0 (documentation and repository baseline) implemented; product code (Phase 1+) has not started.**
 
-The current repository contract intentionally defines product behavior, evidence governance, repository ownership, theme integration, storage boundaries, and implementation phases before production code is scaffolded.
+The repository contract intentionally defines product behavior, evidence governance, repository ownership, theme integration, storage boundaries, and implementation phases before production code is scaffolded. Phase 0 adds the pnpm monorepo root, the physical package layout, `.gitignore` boundaries for generated/cache/vendor/media material, a CI-enforced repository-health gate, and the dependency/asset license-reporting baseline.
 
 ## What makes HowToBaby different
 
@@ -244,9 +244,17 @@ The detailed gates live in [`docs/IMPLEMENTATION_ROADMAP.md`](docs/IMPLEMENTATIO
 
 ## Development
 
-Production code has not been scaffolded yet. Verified install/build/test commands will be added here during **Phase 0/Phase 1** after the repository tooling exists.
+Requirements: Node.js `>= 22.18` (`.nvmrc`) and pnpm 10 (`corepack enable` picks up the pinned version from `package.json`).
 
-Do not copy unverified placeholder commands into CI or contributor instructions.
+```bash
+pnpm install --frozen-lockfile
+pnpm check                            # typecheck + baseline + repository health + strict license report
+node scripts/check-repo-health.ts     # large-blob guard, deny patterns, Git size report
+node scripts/check-repo-baseline.ts   # layout / workspace / workflow / doc-link gate
+node scripts/report-licenses.ts       # dependency + tracked-asset license report
+```
+
+These are the only verified commands so far; the Next.js application and content validators arrive with Phase 1+. Contributor conventions live in [`CONTRIBUTING.md`](CONTRIBUTING.md).
 
 ## Privacy and safety
 

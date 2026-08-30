@@ -121,7 +121,10 @@ howtobaby/
 │  ├─ validate-provenance.ts
 │  ├─ validate-translations.ts
 │  ├─ build-knowledge-index.ts
-│  ├─ check-repo-health.ts
+│  ├─ check-repo-baseline.ts        # Layout/workspace/workflow/doc-link baseline gate
+│  ├─ check-repo-health.ts          # Large-blob guard, deny patterns, size reporting
+│  ├─ report-licenses.ts            # Dependency + tracked-asset license report
+│  ├─ lib/                          # Shared git/glob/report helpers for scripts
 │  ├─ build-evidence-index.ts
 │  ├─ generate-public-pages.ts
 │  └─ evidence-watch.ts
@@ -148,9 +151,10 @@ howtobaby/
 │  └─ visual/
 │
 ├─ .github/
+│  ├─ PULL_REQUEST_TEMPLATE.md
 │  └─ workflows/
 │     ├─ ci.yml
-│     ├─ repo-health.yml            # Optional dedicated health workflow
+│     ├─ repo-health.yml            # Dedicated health workflow (push/PR/weekly)
 │     ├─ deploy.yml
 │     └─ evidence-watch.yml
 │
@@ -160,8 +164,12 @@ howtobaby/
 │  └─ CC-BY-NC-SA-4.0.txt
 ├─ THIRD_PARTY_NOTICES.md
 ├─ CONTRIBUTING.md
+├─ repo-health.config.json        # Health thresholds, deny patterns, reviewed exceptions
+├─ licenses.policy.json           # Dependency-license classes and review decisions
+├─ asset-rights.json              # Rights metadata for tracked media/font/icon assets
 ├─ package.json
 ├─ pnpm-workspace.yaml
+├─ pnpm-lock.yaml
 ├─ tsconfig.json
 ├─ CLAUDE.md                      # AI instruction entry point; routes to canonical docs
 └─ README.md

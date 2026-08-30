@@ -1,0 +1,22 @@
+name: Evidence watch
+
+# Placeholder owned by docs/REPOSITORY_STRUCTURE.md §12 / docs/EVIDENCE_UPDATE_ENGINE.md.
+# Source monitoring (scripts/evidence-watch.ts) is implemented in Phase 9; until then this workflow is
+# manual-only and exits with a clear "not implemented" message so a scheduled run can never silently
+# produce reports, issues, or PRs. It must never bypass release review once implemented.
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  evidence-watch:
+    name: Evidence watch (not implemented before Phase 9)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Not implemented
+        run: |
+          echo "::error title=Evidence watch::scripts/evidence-watch.ts is scheduled for Phase 9 (docs/IMPLEMENTATION_ROADMAP.md). Nothing was fetched."
+          exit 1

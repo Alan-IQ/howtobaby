@@ -1,0 +1,74 @@
+{
+  "$comment": "Repository-health policy for scripts/check-repo-health.ts. Thresholds implement docs/REPOSITORY_HEALTH.md §5; raise a threshold only with a documented reason. Every exception must name a reason and an owner.",
+  "version": 1,
+  "thresholds": {
+    "blobWarnBytes": 10485760,
+    "blobBlockBytes": 26214400,
+    "mediaFixtureMaxBytes": 2097152,
+    "knowledgeTreeTargetBytes": 262144000,
+    "authoredTreeWarnBytes": 524288000,
+    "objectDatabaseReviewBytes": 1073741824,
+    "largeDirectoryWarnBytes": 104857600
+  },
+  "mustBeIgnored": [
+    "packages/knowledge/generated/knowledge.sqlite",
+    "packages/knowledge/generated/manifests/content-manifest.json",
+    "packages/knowledge/generated/route-bundles/now.json",
+    "packages/knowledge/generated/cache/anything.bin",
+    "evidence/cache/cdc/page.html",
+    "evidence/cache/aap/document.pdf",
+    "evidence/cache/screenshot.png",
+    "vendor-themes/purchased-theme/index.tsx",
+    "vendor-themes/purchased-theme/assets/logo.svg",
+    "apps/web/public/audio/lullaby.mp3",
+    "tools/lullaby-player/media/track.mp3",
+    "media-library/anything.wav",
+    "apps/web/.next/build-manifest.json",
+    "apps/web/out/index.html",
+    "packages/core/dist/index.js",
+    "coverage/lcov.info",
+    "node_modules/some-dependency/package.json",
+    "apps/web/node_modules/next/package.json",
+    "scratch.sqlite",
+    "scratch.db",
+    "notes.tmp",
+    ".cache/x",
+    "reports/licenses/dependency-licenses.json",
+    "secrets/deploy_key",
+    ".env",
+    ".env.production"
+  ],
+  "denyPatterns": {
+    "generated-database": ["**/*.sqlite", "**/*.sqlite3", "**/*.db"],
+    "generated-knowledge": ["packages/knowledge/generated/**"],
+    "evidence-cache": ["evidence/cache/**"],
+    "build-output": ["**/.next/**", "**/out/**", "**/dist/**", "**/coverage/**", "**/*.tsbuildinfo"],
+    "dependency-cache": ["**/node_modules/**", "**/.pnpm-store/**"],
+    "vendor-theme-source": ["vendor-themes/**"],
+    "bulk-media": ["apps/web/public/audio/**", "tools/**/media/**", "media-library/**"],
+    "secrets": ["secrets/**", "**/.env", "**/.env.*", "**/*.pem", "**/id_rsa", "**/id_ed25519", "**/*.key"],
+    "archives": ["**/*.zip", "**/*.tar", "**/*.tar.gz", "**/*.tgz", "**/*.7z", "**/*.rar"],
+    "scratch": ["**/*.tmp", "**/*.cache", "**/*.log"]
+  },
+  "structuralPlaceholders": [".gitkeep", "README.md", ".env.example"],
+  "mediaExtensions": [
+    "png", "jpg", "jpeg", "gif", "webp", "avif", "svg", "ico",
+    "mp3", "wav", "ogg", "m4a", "flac", "aac",
+    "mp4", "webm", "mov",
+    "woff", "woff2", "ttf", "otf", "eot",
+    "pdf", "psd", "ai", "sketch", "fig"
+  ],
+  "authoredDirectories": {
+    "knowledge": "packages/knowledge/src"
+  },
+  "exceptions": [
+    {
+      "pattern": "docs/archived/HowToBaby_docs_v*.zip",
+      "kinds": ["deny-pattern:archives"],
+      "maxBytes": 1048576,
+      "reason": "Historical documentation snapshots (v0.4.0–v0.8.0) kept as compact archives for audit history; content is HowToBaby-authored docs.",
+      "owner": "maintainer",
+      "added": "2026-08-29"
+    }
+  ]
+}

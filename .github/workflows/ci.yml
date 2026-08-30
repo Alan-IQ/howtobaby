@@ -1,0 +1,65 @@
+name: CI
+
+# Phase 0 CI skeleton (docs/REPOSITORY_STRUCTURE.md §12, docs/IMPLEMENTATION_ROADMAP.md Phase 0).
+# Validates the repository baseline: workspace install, TypeScript type-check of scripts, physical layout /
+# docs cross-references, repository health (large-blob guard, deny patterns, size reporting) and the
+# dependency/asset license report. Product/content validation jobs are added by later phases.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  NEXT_TELEMETRY_DISABLED: "1"
+
+jobs:
+  baseline:
+    name: Repository baseline
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout (full history for repository-health metrics)
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Type-check scripts
+        run: pnpm typecheck
+
+      - name: Repository baseline (layout, workspace, workflows, license entry points, doc links)
+        run: node scripts/check-repo-baseline.ts
+
+      - name: Repository health (large-blob guard, deny patterns, size reporting)
+        run: node scripts/check-repo-health.ts --json=reports/repo-health.json
+
+      - name: License report (dependencies + tracked assets)
+        run: node scripts/report-licenses.ts --strict
+
+      - name: Upload reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: baseline-reports-${{ github.run_number }}
+          path: reports/
+          if-no-files-found: ignore
+          retention-days: 30

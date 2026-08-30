@@ -1,0 +1,28 @@
+{
+  "name": "howtobaby",
+  "version": "0.8.0",
+  "private": true,
+  "description": "HowToBaby monorepo — evidence-to-action parent guidance and utility platform.",
+  "license": "AGPL-3.0-only",
+  "packageManager": "pnpm@10.34.5",
+  "engines": {
+    "node": ">=22.18.0",
+    "pnpm": ">=10"
+  },
+  "type": "module",
+  "scripts": {
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "check:baseline": "node scripts/check-repo-baseline.ts",
+    "check:repo-health": "node scripts/check-repo-health.ts",
+    "report:licenses": "node scripts/report-licenses.ts",
+    "check": "pnpm typecheck && pnpm check:baseline && pnpm check:repo-health && pnpm report:licenses --strict"
+  },
+  "devDependencies": {
+    "@types/node": "^22.20.1",
+    "@types/next": "^8.0.7",
+    "typescript": "^5.9.3"
+  },
+  "dependencies": {
+    "next": "^16.3.3"
+  }
+}

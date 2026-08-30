@@ -1,20 +1,64 @@
-secrets/
-XOA/
+# HowToBaby .gitignore — implements docs/REPOSITORY_HEALTH.md §4/§7 and docs/REPOSITORY_STRUCTURE.md §5.
+# Git stores authored knowledge, provenance, code, schemas, tests and docs — not generated artifacts,
+# caches, bulk media, vendor theme source, or secrets. scripts/check-repo-health.ts probes these rules.
 
-# Environment variables and secrets
+# --- Secrets and private material -------------------------------------------------------------
+secrets/
 .env
 .env.*
 !.env.example
+*.pem
+*.key
+id_rsa
+id_ed25519
+XOA/
+_claude_prompts/
 
-# Node.js
+# --- Generated knowledge read models (derived; delete + rebuild is the recovery path) ----------
+packages/knowledge/generated/*
+!packages/knowledge/generated/.gitkeep
+*.sqlite
+*.sqlite3
+*.db
+*.db-journal
+*.db-wal
+*.db-shm
+
+# --- Evidence Watch cache: fetched HTML/PDF/source bodies, parser scratch, screenshots ---------
+evidence/cache/*
+!evidence/cache/.gitkeep
+evidence/**/*.snapshot.*
+evidence/**/*.fetched.*
+
+# --- Vendor / licensed theme source (never public unless redistribution is explicitly permitted)
+vendor-themes/*
+!vendor-themes/README.md
+!vendor-themes/.gitkeep
+
+# --- Bulk media libraries (object storage/CDN; small fixtures need an explicit repo-health exception)
+apps/web/public/audio/*
+!apps/web/public/audio/.gitkeep
+tools/**/media/
+media-library/
+
+# --- Build output, dependency and tool caches ---------------------------------------------------
 node_modules/
+.pnpm-store/
 .next/
 out/
 dist/
+build/
 coverage/
 *.tsbuildinfo
+.turbo/
+.cache/
+.eslintcache
+next-env.d.ts
 
-# Python
+# --- Generated reports (license/health output is CI-artifact material, not authored content) --
+reports/
+
+# --- Python tooling (evidence/scripts may use it) ----------------------------------------------
 __pycache__/
 *.py[cod]
 .pytest_cache/
@@ -22,37 +66,21 @@ __pycache__/
 .ruff_cache/
 .venv/
 venv/
-env/
-build/
 *.egg-info/
 
-# Database and local data
-*.db
-*.sqlite
-*.sqlite3
-
-# IDE
+# --- IDE / OS / temporary ----------------------------------------------------------------------
 .vscode/
 .idea/
 *.suo
 *.user
 *.userosscache
 *.sln.docstates
-
-# Operating system
 .DS_Store
 Thumbs.db
 desktop.ini
-
-# Logs
 *.log
 logs/
-
-# Temporary files
 tmp/
 temp/
 *.tmp
-
-# Local uploads or generated files
-uploads/
-generated/
+*.cache
