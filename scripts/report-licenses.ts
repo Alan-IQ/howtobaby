@@ -44,6 +44,8 @@ interface AssetRecord {
   sourceUrl?: string;
   reviewStatus?: string;
   notes?: string;
+  /** Forward-coverage record: no warning when it matches no tracked file yet. */
+  allowUnmatched?: boolean;
 }
 
 interface PnpmLicenseEntry {
@@ -151,7 +153,7 @@ function reportAssets(report: Report, policy: LicensePolicy, assets: AssetRecord
     }
   }
   for (const asset of assets) {
-    if (!used.has(asset.assetId)) report.warn("asset-rights", `rights record "${asset.assetId}" matches no tracked file`, "asset-rights.json");
+    if (!used.has(asset.assetId) && !asset.allowUnmatched) report.warn("asset-rights", `rights record "${asset.assetId}" matches no tracked file`, "asset-rights.json");
   }
   report.line(`${tracked.length} tracked asset file(s), ${assets.length} rights record(s).`);
   report.line();

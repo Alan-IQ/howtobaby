@@ -1,5 +1,5 @@
 {
-  "$comment": "Rights metadata for every media/font/icon asset tracked in Git (docs/LICENSING_POLICY.md §8, THIRD_PARTY_NOTICES.md). scripts/report-licenses.ts fails in --strict mode when a tracked asset has no matching entry. Pattern globs are relative to the repository root. Assets under a HowToBaby brand entry are NOT covered by AGPL-3.0-only or CC-BY-NC-SA-4.0; brand rights are reserved.",
+  "$comment": "Rights metadata for every media/font/icon asset tracked in Git (docs/LICENSING_POLICY.md §8, THIRD_PARTY_NOTICES.md). scripts/report-licenses.ts fails in --strict mode when a tracked asset has no matching entry. Pattern globs are relative to the repository root. Assets under a HowToBaby brand entry are NOT covered by AGPL-3.0-only or CC-BY-NC-SA-4.0; brand rights are reserved. A record with allowUnmatched=true is forward coverage and does not warn while it matches no tracked file.",
   "version": 1,
   "assets": [
     {
@@ -15,8 +15,8 @@
       "notes": "README banner. Confirm original authorship/ownership or record the actual creator and license."
     },
     {
-      "assetId": "brand.app-icons",
-      "pattern": "apps/web/public/icons/**/*.{png,ico}",
+      "assetId": "brand.site-favicon",
+      "pattern": "apps/web/src/app/{favicon.ico,icon.png,icon.svg,icon.ico,apple-icon.png,opengraph-image.png,twitter-image.png}",
       "creator": "HowToBaby",
       "license": "HowToBaby brand asset — all rights reserved; not licensed under AGPL-3.0-only or CC-BY-NC-SA-4.0",
       "commercialUseAllowed": true,
@@ -24,7 +24,20 @@
       "attributionRequired": false,
       "sourceUrl": "",
       "reviewStatus": "maintainer-confirmation-required",
-      "notes": "Favicon/PWA icon candidate sets 01–05. Confirm original authorship/ownership or record the actual creator and license; unused candidate sets can be removed once one is chosen."
+      "notes": "Canonical site favicon and future Next.js app-metadata icon files (App Router file conventions). Confirm original authorship/ownership or record the actual creator and license."
+    },
+    {
+      "assetId": "brand.app-icons",
+      "pattern": "apps/web/public/icons/**/*.{png,ico,svg,webp}",
+      "creator": "HowToBaby",
+      "license": "HowToBaby brand asset — all rights reserved; not licensed under AGPL-3.0-only or CC-BY-NC-SA-4.0",
+      "commercialUseAllowed": true,
+      "redistributionAllowed": false,
+      "attributionRequired": false,
+      "sourceUrl": "",
+      "reviewStatus": "maintainer-confirmation-required",
+      "notes": "Forward coverage for PWA/manifest icons and directly referenced icon assets under public/icons/ (currently empty). Any file added there inherits this record; confirm authorship/license when the first asset lands.",
+      "allowUnmatched": true
     }
   ]
 }
