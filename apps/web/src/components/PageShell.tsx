@@ -6,9 +6,11 @@ import { Icon, PrintAction, type DomainAccent, type IconName } from "@howtobaby/
 import { SITE } from "@/site";
 
 export interface PageShellProps {
-  title: string;
+  title: ReactNode;
+  /** Canonical (EN) title for the printed context strip; pass when `title` is not a plain string. */
+  printTitle?: string;
   /** Section label shown above the title (e.g. destination name). */
-  eyebrow?: string;
+  eyebrow?: ReactNode;
   icon?: IconName;
   accent?: DomainAccent;
   lede?: ReactNode;
@@ -18,12 +20,12 @@ export interface PageShellProps {
 }
 
 /** Common page anatomy scaffold (docs/GUI_DESIGN.md §8): title + context header, body, printed context strip. */
-export function PageShell({ title, eyebrow, icon, accent, lede, printable = false, children }: PageShellProps) {
+export function PageShell({ title, printTitle, eyebrow, icon, accent, lede, printable = false, children }: PageShellProps) {
   return (
     <article className="page-shell">
       <div className="print-context" aria-hidden="true">
         <span>{SITE.name}</span>
-        <span>{eyebrow && eyebrow !== title ? `${eyebrow} · ${title}` : title}</span>
+        <span>{printTitle ?? (typeof title === "string" ? title : SITE.name)}</span>
         <span>{SITE.url}</span>
       </div>
       <header className="page-shell__header">

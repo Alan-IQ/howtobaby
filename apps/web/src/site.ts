@@ -22,14 +22,24 @@ export const PRIMARY_NAV: readonly NavigationItem[] = [
   { href: "/tools", label: "Tools", icon: "tools", accent: "tools" },
 ];
 
+/** Vietnamese navigation labels, keyed by href (global language preference, app chrome only). */
+export const PRIMARY_NAV_VI: Record<string, { label: string; shortLabel?: string }> = {
+  "/": { label: "Hiện tại" },
+  "/feeding": { label: "Ăn uống" },
+  "/play": { label: "Chơi & Phát triển", shortLabel: "Chơi" },
+  "/sleep": { label: "Ngủ" },
+  "/safety": { label: "An toàn" },
+  "/tools": { label: "Công cụ" },
+};
+
 /** Globally reachable legal/source surface (docs/GUI_DESIGN.md §2.1). */
 export const TRUST_LINKS = [
-  { href: "/sources", label: "Sources" },
-  { href: "/methodology", label: "Methodology" },
-  { href: "/editorial-policy", label: "Editorial Policy" },
-  { href: "/disclaimer", label: "Medical Disclaimer" },
-  { href: "/privacy", label: "Privacy" },
-  { href: "/license", label: "License" },
-  { href: SITE.sourceCodeUrl, label: "Source Code", external: true },
-  { href: "/changelog", label: "Changelog / Corrections" },
+  { href: "/sources", label: "Sources", viLabel: "Nguồn" },
+  { href: "/methodology", label: "Methodology", viLabel: "Phương pháp" },
+  { href: "/editorial-policy", label: "Editorial Policy", viLabel: "Chính sách biên tập" },
+  { href: "/disclaimer", label: "Medical Disclaimer", viLabel: "Miễn trừ y khoa" },
+  { href: "/privacy", label: "Privacy", viLabel: "Quyền riêng tư" },
+  { href: "/license", label: "License", viLabel: "Giấy phép" },
+  { href: SITE.sourceCodeUrl, label: "Source Code", viLabel: "Mã nguồn", external: true },
+  { href: "/changelog", label: "Changelog / Corrections", viLabel: "Thay đổi / Đính chính" },
 ] as const;

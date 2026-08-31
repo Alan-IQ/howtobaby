@@ -4,6 +4,7 @@ import Link from "next/link";
 import { ThemeSwitcher } from "@howtobaby/ui";
 
 import { SITE } from "@/site";
+import { LanguageSwitcher } from "./LanguageSwitcher";
 import { PrimaryNav } from "./PrimaryNav";
 
 /**
@@ -19,10 +20,11 @@ export function AppHeader() {
           <span className="app-header__brand-mark" aria-hidden="true">
             hb
           </span>
-          <span>{SITE.name}</span>
+          <span className="app-header__brand-text">{SITE.name}</span>
         </Link>
         <PrimaryNav layout="horizontal" className="app-header__nav" />
         <div className="app-header__controls">
+          <LanguageSwitcher />
           <ThemeSwitcher className="app-header__theme" showThemeFamily={false} />
         </div>
       </div>

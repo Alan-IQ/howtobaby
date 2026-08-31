@@ -1,8 +1,9 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 /**
  * Renders one canonical guidance block with its evidence surfaces (docs/GUI_DESIGN.md §11):
- * claim text + inline SourceChip (Layer A) opening the EvidenceDrawer (Layer B), with an EN/VI
- * toggle proving both locales resolve from the same canonical claim IDs.
+ * claim text + inline SourceChip (Layer A) opening the EvidenceDrawer (Layer B). Both locales
+ * resolve from the same canonical claim IDs; which one renders follows the app-level language
+ * preference — there is deliberately no per-card toggle.
  *
  * The component only presents pre-localized view models built server-side from the
  * KnowledgeRepository; it holds no medical prose and no source URLs of its own.
@@ -12,9 +13,10 @@
 
 import { useState } from "react";
 
-import { Card, EvidenceDrawer, Segmented, SourceChip } from "@howtobaby/ui";
+import { Card, EvidenceDrawer, SourceChip } from "@howtobaby/ui";
 
 import type { GuidanceBlockView } from "@/features/evidence/load";
+import { useLanguage } from "@/i18n/LanguageProvider";
 
 export interface GuidanceEvidenceCardProps {
   /** The same guidance block localized per supported locale. */
@@ -22,24 +24,15 @@ export interface GuidanceEvidenceCardProps {
 }
 
 export function GuidanceEvidenceCard({ variants }: GuidanceEvidenceCardProps) {
-  const [locale, setLocale] = useState<"en" | "vi">("en");
+  // Language comes from the ONE global preference (header control) — no per-card toggle.
+  const { language } = useLanguage();
   const [openClaimId, setOpenClaimId] = useState<string | null>(null);
-  const view = variants[locale];
+  const view = variants[language];
   const openClaim = view.claims.find((claim) => claim.claimId === openClaimId);
 
   return (
     <Card accent="feeding" icon="feeding" eyebrow={view.locale === "vi" ? "Ăn dặm" : "Starting solids"} title={view.title} titleAs="h2">
-      <div className="guidance-evidence-card" lang={locale}>
-        <Segmented
-          name={`lang-${view.blockId}`}
-          legend={view.strings.languageLegend}
-          value={locale}
-          options={[
-            { value: "en", label: "English" },
-            { value: "vi", label: "Tiếng Việt" },
-          ]}
-          onChange={(value) => setLocale(value === "vi" ? "vi" : "en")}
-        />
+      <div className="guidance-evidence-card">
         {view.claims.map((claim) => (
           <div key={claim.claimId} className="guidance-evidence-card__claim">
             <p>{claim.text}</p>

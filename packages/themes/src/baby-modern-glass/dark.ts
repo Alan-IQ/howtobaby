@@ -14,8 +14,10 @@ export const babyModernGlassDark: ColorTokens = {
   "surface.glass.border": "rgba(255, 255, 255, 0.14)",
   "surface.glass.highlight": "rgba(255, 255, 255, 0.07)",
 
+  // Hierarchy: secondary dimmed so title/body vs supporting reads clearly apart in the dark;
+  // muted stays put — it already sits at the 4.5:1 gate floor on the worst accent-glass stop.
   "text.primary": "#f1effa",
-  "text.secondary": "#c2bfd6",
+  "text.secondary": "#b4b1cb",
   "text.muted": "#9895b3",
   "text.on-accent": "#14131f",
   "text.link": "#a9b3f7",

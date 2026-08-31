@@ -13,6 +13,7 @@ import { Badge, Card, ReferenceList } from "@howtobaby/ui";
 
 import { PageShell } from "@/components/PageShell";
 import { GUIDANCE_CLASS_LABELS, UI_STRINGS, formatDate } from "@/features/evidence/labels";
+import { L } from "@/i18n/L";
 import { evidenceSourceViews, knowledgeRepository, referenceEntryForSource } from "@/features/evidence/load";
 
 interface Params {
@@ -56,8 +57,13 @@ export default async function Page({ params }: { params: Promise<Params> }) {
   const references = impactSources.filter((record) => record !== null).map((record) => referenceEntryForSource(record, "en"));
 
   return (
-    <PageShell eyebrow="Evidence" title={`Evidence: ${evidence.claimId}`} lede="What this claim says, which original sources support it, and when it was last verified." printable>
-      <Card icon="document" title="Claim" titleAs="h2">
+    <PageShell
+      eyebrow={<L en="Evidence" vi="Bằng chứng" />}
+      title={`Evidence: ${evidence.claimId}`}
+      lede={<L en="What this claim says, which original sources support it, and when it was last verified." vi="Nội dung của nhận định này, những nguồn gốc nào hỗ trợ nó, và lần kiểm chứng gần nhất." />}
+      printable
+    >
+      <Card icon="document" title={<L en="Claim" vi="Nhận định" />} titleAs="h2">
         <div className="prose">
           <p>{enText}</p>
           <p lang="vi" className="muted">{viText}</p>
@@ -70,7 +76,7 @@ export default async function Page({ params }: { params: Promise<Params> }) {
           </p>
         </div>
       </Card>
-      <Card icon="globe" title="Supporting sources" titleAs="h2">
+      <Card icon="globe" title={<L en="Supporting sources" vi="Nguồn hỗ trợ" />} titleAs="h2">
         <div className="prose">
           {sources.map((source, index) => {
             const record = impactSources[index];
@@ -90,7 +96,7 @@ export default async function Page({ params }: { params: Promise<Params> }) {
           <p className="muted">{UI_STRINGS.en.disclaimer} HowToBaby summarizes and interprets; the original wording belongs to the source.</p>
         </div>
       </Card>
-      <ReferenceList title="Original sources" entries={references} />
+      <ReferenceList title={<L en="Original sources" vi="Nguồn gốc" />} entries={references} />
     </PageShell>
   );
 }

@@ -59,6 +59,15 @@
   text-decoration: none;
   white-space: nowrap;
 }
+/* Very narrow screens keep the mark and drop the wordmark so language + theme controls fit. */
+.app-header__brand-text {
+  display: none;
+}
+@media (min-width: 480px) {
+  .app-header__brand-text {
+    display: inline;
+  }
+}
 .app-header__brand-mark {
   display: inline-grid;
   place-items: center;
@@ -78,17 +87,52 @@
   align-items: center;
   gap: var(--htb-space-2xs);
 }
-.app-header__theme {
-  display: none;
-}
-
 @media (min-width: 960px) {
   .app-header__nav {
     display: block;
   }
-  .app-header__theme {
-    display: flex;
-  }
+}
+
+/* Compact global language control: globe + EN/VI pair, one tap to switch. */
+.lang-switch {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  padding: 2px;
+  border: 1px solid var(--htb-border-subtle);
+  border-radius: var(--htb-radius-pill);
+  background: var(--htb-surface-2);
+}
+.lang-switch__icon {
+  width: 14px;
+  height: 14px;
+  margin-inline-start: var(--htb-space-2xs);
+  color: var(--htb-text-muted);
+}
+.lang-switch__option {
+  appearance: none;
+  border: 0;
+  background: transparent;
+  min-height: 30px;
+  padding: 0 var(--htb-space-xs);
+  border-radius: var(--htb-radius-pill);
+  font: inherit;
+  font-size: var(--htb-font-size-xs);
+  font-weight: var(--htb-font-weight-semibold);
+  letter-spacing: 0.02em;
+  color: var(--htb-text-secondary);
+  cursor: pointer;
+}
+.lang-switch__option:hover {
+  color: var(--htb-text-primary);
+}
+.lang-switch__option[aria-pressed="true"] {
+  background: var(--htb-interactive-primary-bg);
+  color: var(--htb-interactive-primary-fg);
+}
+.lang-switch__option:focus-visible {
+  outline: 2px solid var(--htb-focus-ring);
+  outline-offset: 1px;
 }
 
 /* ---------- main ---------- */
@@ -149,13 +193,20 @@
   gap: var(--htb-space-sm);
   flex-wrap: wrap;
 }
+/* Overline/kicker tier: small, tracked, uppercase — clearly a label, never competing with the title. */
 .page-shell__eyebrow {
   display: inline-flex;
   align-items: center;
   gap: var(--htb-space-xs);
-  font-size: var(--htb-font-size-sm);
+  font-size: var(--htb-font-size-xs);
   font-weight: var(--htb-font-weight-semibold);
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
   color: var(--htb-text-secondary);
+}
+.page-shell__eyebrow .htb-icon {
+  width: 14px;
+  height: 14px;
 }
 .page-shell__eyebrow[data-accent="feeding"] {
   color: var(--htb-accent-feeding);
@@ -275,11 +326,7 @@
     padding-bottom: var(--htb-space-md);
   }
   .site-footer__inner > nav {
-    grid-column: 1;
-  }
-  .site-footer__theme {
-    grid-column: 2;
-    justify-self: end;
+    grid-column: 1 / -1;
   }
   .site-footer__inner > p {
     grid-column: 1 / -1;
@@ -308,12 +355,6 @@
 }
 .site-footer__links a:hover {
   color: var(--htb-text-primary);
-}
-.site-footer__theme {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: var(--htb-space-sm);
 }
 /* Fine print: clearly metadata-tier, never competing with page content. */
 .site-footer__inner > p {

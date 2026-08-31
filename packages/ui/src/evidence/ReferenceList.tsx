@@ -9,12 +9,14 @@
  * (EVIDENCE_PROVENANCE.md §18).
  */
 
+import type { ReactNode } from "react";
+
 import { Icon } from "../primitives/Icon.tsx";
 import type { ReferenceEntry } from "./types.ts";
 
 export interface ReferenceListProps {
   /** Localized section heading; defaults to English. */
-  title?: string;
+  title?: ReactNode;
   entries: ReferenceEntry[];
   /** Localized external-link action label. */
   viewOriginalLabel?: string;

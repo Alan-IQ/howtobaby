@@ -1,7 +1,9 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 /**
  * SourceChip — the compact inline source affordance (docs/GUI_DESIGN.md §11.2,
- * docs/EVIDENCE_PROVENANCE.md §6 Layer A): `Official guidance · CDC · WHO`.
+ * docs/EVIDENCE_PROVENANCE.md §6 Layer A): `Official guidance · CDC · WHO`. Visually this is
+ * quiet provenance metadata that happens to open the Evidence Drawer — a secondary metadata
+ * action, never styled like a primary control.
  *
  * Shows organization names, never raw URLs, and opens evidence detail (the EvidenceDrawer) rather
  * than a generic organization homepage. Renders as a static label when no `onOpen` is provided so
@@ -9,6 +11,8 @@
  */
 
 import type { ReactNode } from "react";
+
+import { Icon } from "../primitives/Icon.tsx";
 
 export interface SourceChipProps {
   /** Localized content-class label, e.g. "Official guidance" (GUI_DESIGN.md §11.1). */
@@ -25,6 +29,7 @@ export interface SourceChipProps {
 function ChipContent({ classLabel, organizations }: Pick<SourceChipProps, "classLabel" | "organizations">): ReactNode {
   return (
     <>
+      <Icon name="document" className="htb-source-chip__icon" />
       <span className="htb-source-chip__class">{classLabel}</span>
       {organizations.map((org) => (
         <span key={org} className="htb-source-chip__org">
