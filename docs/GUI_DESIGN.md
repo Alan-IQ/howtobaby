@@ -23,6 +23,10 @@ Primary destinations:
 5. **Safety**
 6. **Tools**
 
+Navigation labels stay short: **Play & Development** appears as **Play** in top and bottom
+navigation, while the destination's page title keeps the full name. All navigation labels resolve
+from the app message dictionary in the active language — never from per-locale navigation config.
+
 Trust destinations are globally accessible but need not occupy primary navigation permanently:
 
 - Sources
@@ -134,18 +138,40 @@ Contains:
 
 - HowToBaby brand/home;
 - compact current-child/age context when available;
-- language switch;
 - theme control;
+- language control, outermost right;
 - print where contextually relevant;
 - profile edit/personalize control.
 
 Avoid making the header tall on mobile.
+
+### Language control
+
+One global language preference drives all site chrome and page copy. The header control is the
+only global switch:
+
+- a single compact trigger — globe icon above the active locale code (`EN`, `VI`, …);
+- clicking opens an accessible popover listing every locale from the supported-locale registry
+  (`@howtobaby/i18n`); nothing in the control is hard-coded to a specific locale pair, so a new
+  locale appears in the menu without redesign;
+- the active language is marked by selection state plus a check mark, never colour alone;
+- the popover is keyboard operable (arrow keys, Escape) and announced via listbox semantics;
+- the control's visual language matches the adjacent theme-mode control;
+- the preference persists locally (SYSTEM_ARCHITECTURE.md §10) and `<html lang>` always follows
+  the active global language.
+
+Long-form trust/legal document pages may remain English until their own content phases.
+Locale-prefixed public routes are a Phase 3 routing concern.
 
 ### Primary navigation
 
 Desktop: horizontal navigation.
 
 Mobile: compact sticky navigation, segmented tabs, or bottom/scroll-aware pattern as validated by usability. No horizontal page overflow.
+
+The active bottom-navigation item combines a soft domain-accent tint, heavier icon/label, and a
+short centred underline in the domain accent — state is never carried by colour alone, and the
+indicator must not add height or break the bar's equal-column alignment.
 
 ## 7. Now page
 
@@ -315,6 +341,23 @@ Keep public states calm and understandable:
 - `Reviewing an update`
 
 A changed source should not visually imply immediate danger unless the claim's safety level independently warrants that treatment.
+
+### 11.9 Guidance content-language override
+
+Guidance surfaces default to the global language. While the global language is not the canonical
+locale, a guidance card additionally offers a quiet LOCAL toggle between the active global locale
+and the canonical locale:
+
+- the toggle switches only that card's canonical guidance content and its EvidenceDrawer — never
+  the global preference or any other surface;
+- it is hidden entirely while the global language IS the canonical locale;
+- the drawer always renders in the same content locale as its card;
+- a global language change resets/syncs every local override to the new global locale;
+- content rendered in a locale other than `<html lang>` carries an explicit `lang` attribute;
+- the toggle is visually lighter than the global language control and must not compete with the
+  SourceChip;
+- the semantics are generic `canonical ↔ active locale` (owned by `@howtobaby/i18n`), so a newly
+  registered locale needs no redesign.
 
 ## 12. Safety UI
 

@@ -34,6 +34,7 @@ howtobaby/
 │     │  │  ├─ sleep/
 │     │  │  ├─ safety/
 │     │  │  └─ tools/
+│     │  ├─ i18n/                 # LanguageProvider + app message dictionary (framework: packages/i18n)
 │     │  ├─ storage/
 │     │  └─ print/
 │     └─ public/
@@ -88,7 +89,9 @@ howtobaby/
 │  │  ├─ src/audio/
 │  │  └─ src/safety/
 │  │
-│  ├─ i18n/
+│  ├─ i18n/                        # App-locale foundation: supported-locale registry,
+│  │  └─ src/                      #   message-dictionary framework, content-locale override
+│  │
 │  └─ validation/
 │
 ├─ vendor-themes/                  # Optional licensed theme source; private/gitignored unless redistribution permits

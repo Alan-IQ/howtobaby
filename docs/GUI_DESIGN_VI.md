@@ -10,7 +10,15 @@ Calm, modern, warm, trustworthy; dễ scan trên mobile; professional hơn paren
 
 **Now · Feeding · Play & Development · Sleep · Safety · Tools**.
 
+Label điều hướng giữ ngắn gọn: **Play & Development** hiển thị là **Play** (VI: **Chơi**) trong top/bottom navigation; page title của destination vẫn giữ tên đầy đủ. Mọi label điều hướng resolve từ app message dictionary theo ngôn ngữ đang active, không dùng config điều hướng riêng theo locale.
+
 Sources/Methodology/Editorial/Disclaimer/Changelog là trust destinations global.
+
+## Ngôn ngữ — v0.8.0
+
+Một global language preference điều khiển toàn bộ site chrome/page copy. Control ở header là công tắc global duy nhất: một trigger gọn (icon globe phía trên, mã locale đang active phía dưới) mở popover accessible liệt kê mọi locale từ supported-locale registry (`@howtobaby/i18n`) — không hard-code cặp locale nào, thêm locale mới là menu tự có thêm; ngôn ngữ active được đánh dấu bằng selection state + check, không chỉ bằng màu; đặt sau theme control, ngoài cùng bên phải; `<html lang>` luôn theo global language.
+
+Guidance card mặc định theo global language. Khi global language khác canonical locale, card có thêm một LOCAL toggle nhẹ `locale đang active ↔ canonical` chỉ đổi canonical guidance content của card đó và Evidence Drawer của nó — không đổi global preference; ẩn hoàn toàn khi global là canonical; đổi global language sẽ reset/sync mọi local override; content hiển thị khác `<html lang>` phải mang `lang` attribute chính xác. Bản đầy đủ: `GUI_DESIGN.md` §6, §11.9.
 
 ## Theme engine
 

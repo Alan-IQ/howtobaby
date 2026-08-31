@@ -46,6 +46,9 @@ Architecture-level requirements:
 - `apps/web` renders product surfaces and owns no canonical medical prose;
 - `packages/core` owns deterministic age/context/applicability logic;
 - `packages/knowledge` owns the canonical SourceRecord → ClaimSourceRef → Claim → Guidance graph;
+- `packages/i18n` owns the supported-locale registry, the app message-dictionary framework, and
+  content-locale override semantics (canonical guidance translations stay in `packages/knowledge`;
+  the browser language preference/provider stays in `apps/web`);
 - `packages/ui` owns reusable presentation/evidence primitives;
 - `packages/themes` owns the theme contract, first-party theme packs, and vendor adapters;
 - `packages/tool-platform` and `tools/*` own utility modules;

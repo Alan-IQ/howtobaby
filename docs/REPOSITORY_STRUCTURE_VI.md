@@ -24,7 +24,7 @@ howtobaby/
 │  ├─ ui/                          # reusable components/evidence UI
 │  ├─ themes/                      # theme registry + Baby Modern Glass
 │  ├─ tool-platform/
-│  ├─ i18n/
+│  ├─ i18n/                        # locale registry + message dictionaries + content-locale override
 │  └─ validation/
 ├─ tools/                          # lullaby, ambient audio, future tools
 ├─ evidence/
@@ -46,6 +46,7 @@ howtobaby/
 - `apps/web`: route, layout, browser state; **không** chứa canonical health guidance.
 - `packages/core`: date/age/context/resolver thuần; không có medical prose.
 - `packages/knowledge`: source → claim → applicability → guidance → translation; đây là source-of-truth nội bộ của HowToBaby.
+- `packages/i18n`: supported-locale registry, message-dictionary framework, content-locale override; bản dịch guidance canonical vẫn ở `packages/knowledge`, còn browser language preference/provider ở `apps/web`.
 - `packages/ui`: component trình bày; không quyết định nội dung nào phù hợp y khoa.
 - `packages/themes`: semantic tokens/theme family.
 - `tools/*`: tính năng tool; guidance-linked tool chỉ tham chiếu claim ID.
