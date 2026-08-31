@@ -50,7 +50,7 @@ export const babyModernGlassDark: ColorTokens = {
 
   "accent.brand": "#9aa6f5",
   "accent.brand.soft": "#22243e",
-  "accent.brand.glass": "linear-gradient(180deg, rgba(154, 166, 245, 0.20), rgba(154, 166, 245, 0.08))",
+  "accent.brand.glass": "linear-gradient(180deg, rgba(154, 166, 245, 0.17), rgba(154, 166, 245, 0.08))",
   "accent.brand.glass.border": "rgba(154, 166, 245, 0.42)",
   "accent.feeding": "#f0956b",
   "accent.feeding.soft": "#33231b",

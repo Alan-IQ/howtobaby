@@ -621,8 +621,6 @@ select {
 }
 .htb-nav--tabs .htb-nav__link[aria-current="page"] {
   background: transparent;
-}
-.htb-nav--tabs .htb-nav__link[aria-current="page"] {
   font-weight: var(--htb-font-weight-bold);
 }
 .htb-nav--tabs .htb-nav__link[aria-current="page"]::after {

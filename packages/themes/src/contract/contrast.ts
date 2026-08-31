@@ -49,18 +49,87 @@ export function relativeLuminance(color: Rgb): number {
   return 0.2126 * channel(color.r) + 0.7152 * channel(color.g) + 0.0722 * channel(color.b);
 }
 
+function ratioOver(fgRaw: Rgb, bgRaw: Rgb, backdrop: Rgb): number {
+  const bg = composite(bgRaw, { ...backdrop, a: 1 });
+  const fg = composite(fgRaw, bg);
+  const l1 = relativeLuminance(fg);
+  const l2 = relativeLuminance(bg);
+  const [hi, lo] = l1 >= l2 ? [l1, l2] : [l2, l1];
+  return (hi + 0.05) / (lo + 0.05);
+}
+
 /** WCAG contrast ratio between two colours; alpha is composited over `backdrop` (defaults to white). */
 export function contrastRatio(foreground: string, background: string, backdrop = "#ffffff"): number | undefined {
   const bd = parseColor(backdrop);
   const bgRaw = parseColor(background);
   const fgRaw = parseColor(foreground);
   if (!bd || !bgRaw || !fgRaw) return undefined;
-  const bg = composite(bgRaw, { ...bd, a: 1 });
-  const fg = composite(fgRaw, bg);
-  const l1 = relativeLuminance(fg);
-  const l2 = relativeLuminance(bg);
-  const [hi, lo] = l1 >= l2 ? [l1, l2] : [l2, l1];
-  return (hi + 0.05) / (lo + 0.05);
+  return ratioOver(fgRaw, bgRaw, bd);
+}
+
+const STOP_COLOR = /^(#[0-9a-f]{3,8}|rgba?\([^()]*\)|transparent)/i;
+/** direction / shape / position preamble of a gradient argument list — not a colour stop */
+const GRADIENT_PREAMBLE = /^(-?[\d.]+(deg|grad|rad|turn)$|to\s|circle|ellipse|closest-|farthest-|at\s)/;
+
+/** Split on commas that sit outside any parentheses. */
+function splitTopLevel(value: string): string[] {
+  const parts: string[] = [];
+  let depth = 0;
+  let start = 0;
+  for (let i = 0; i < value.length; i++) {
+    const ch = value[i];
+    if (ch === "(") depth++;
+    else if (ch === ")") depth--;
+    else if (ch === "," && depth === 0) {
+      parts.push(value.slice(start, i).trim());
+      start = i + 1;
+    }
+  }
+  parts.push(value.slice(start).trim());
+  return parts;
+}
+
+/**
+ * Extract the colour of every stop from a SINGLE `linear-gradient()`/`radial-gradient()` value.
+ * Multi-layer backgrounds and any stop whose colour this module can't parse return undefined —
+ * callers that require the value to be measurable must treat that as a failure, never a skip.
+ */
+export function parseGradientStops(value: string): Rgb[] | undefined {
+  const v = value.trim();
+  if (splitTopLevel(v).length !== 1) return undefined; // layered backgrounds are not exactly measurable
+  const m = /^(?:linear|radial)-gradient\((.*)\)$/is.exec(v);
+  if (!m) return undefined;
+  const stops: Rgb[] = [];
+  const args = splitTopLevel(m[1]!);
+  for (const [i, arg] of args.entries()) {
+    if (i === 0 && GRADIENT_PREAMBLE.test(arg)) continue; // direction / shape / position
+    if (/^-?[\d.]+%$/.test(arg)) continue; // bare interpolation hint
+    const colorText = STOP_COLOR.exec(arg)?.[1];
+    if (!colorText) return undefined; // unknown stop syntax — refuse to guess
+    const color = colorText.toLowerCase() === "transparent" ? { r: 0, g: 0, b: 0, a: 0 } : parseColor(colorText);
+    if (!color) return undefined;
+    stops.push(color);
+  }
+  return stops.length >= 2 ? stops : undefined;
+}
+
+/**
+ * Worst-case (minimum) WCAG contrast of `foreground` over `background`, where the background may be a
+ * solid colour OR a single linear/radial gradient. Every stop (alpha composited over `backdrop`) is
+ * measured and the lowest ratio returned, so a gradient passes only if text is readable at ALL points.
+ * Undefined means unmeasurable — callers decide whether that is acceptable for the pair.
+ */
+export function worstCaseContrastRatio(foreground: string, background: string, backdrop = "#ffffff"): number | undefined {
+  const bd = parseColor(backdrop);
+  const fgRaw = parseColor(foreground);
+  if (!bd || !fgRaw) return undefined;
+  const solidBg = parseColor(background);
+  if (solidBg) return ratioOver(fgRaw, solidBg, bd);
+  const stops = parseGradientStops(background);
+  if (!stops) return undefined;
+  let worst = Number.POSITIVE_INFINITY;
+  for (const stop of stops) worst = Math.min(worst, ratioOver(fgRaw, stop, bd));
+  return worst;
 }
 
 export const WCAG = {

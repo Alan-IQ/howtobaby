@@ -9,7 +9,16 @@ import { createThemeRegistry } from "../registry/registry.ts";
 import { defaultThemeDefinitions, defaultThemeRegistry, vendorFixtureTheme } from "../registry/default-registry.ts";
 import { parseThemePreference, serializeThemePreference } from "../preference.ts";
 import type { ColorTokens, ThemeDefinition } from "./index.ts";
-import { contrastFindings, contrastRatio, GEOMETRY_TOKEN_PATHS, SEMANTIC_COLOR_TOKENS, ThemeContractError, validateThemeDefinition } from "./index.ts";
+import {
+  contrastFindings,
+  contrastRatio,
+  GEOMETRY_TOKEN_PATHS,
+  parseGradientStops,
+  SEMANTIC_COLOR_TOKENS,
+  ThemeContractError,
+  validateThemeDefinition,
+  worstCaseContrastRatio,
+} from "./index.ts";
 
 const allThemes: ThemeDefinition[] = [...defaultThemeDefinitions];
 
@@ -74,12 +83,64 @@ describe("accessibility contrast gate (docs/GUI_DESIGN.md §16)", () => {
     expect(contrastRatio("#000000", "linear-gradient(#fff, #000)")).toBeUndefined();
   });
 
+  it("measures gradients at their worst stop, composited over the backdrop", () => {
+    expect(parseGradientStops("linear-gradient(180deg, rgba(255, 255, 255, 0.8), #000000)")).toHaveLength(2);
+    expect(parseGradientStops("radial-gradient(circle at 10% 20%, #ffffff, transparent 40%)")).toHaveLength(2);
+    // Layered backgrounds and unsupported syntaxes are refused, not approximated.
+    expect(parseGradientStops("linear-gradient(#fff, #000), radial-gradient(#fff, #000)")).toBeUndefined();
+    expect(parseGradientStops("conic-gradient(#fff, #000)")).toBeUndefined();
+    expect(parseGradientStops("linear-gradient(180deg, oklch(0.7 0.1 200), #000)")).toBeUndefined();
+    // Worst case: black text vs a white→black gradient is decided by the black stop (ratio 1).
+    expect(worstCaseContrastRatio("#000000", "linear-gradient(180deg, #ffffff, #000000)")!).toBeCloseTo(1, 5);
+    // Solid backgrounds behave exactly like contrastRatio.
+    expect(worstCaseContrastRatio("#777777", "#ffffff")!).toBeCloseTo(contrastRatio("#777777", "#ffffff")!, 10);
+    // Alpha stops composite over the supplied backdrop: transparent stop over white == white.
+    expect(worstCaseContrastRatio("#000000", "linear-gradient(180deg, transparent, rgba(255, 255, 255, 0.5))", "#ffffff")!).toBeCloseTo(21, 5);
+  });
+
   it("the gate catches a regression", () => {
     const broken: ThemeDefinition = {
       ...babyModernGlass,
       modes: { ...babyModernGlass.modes, light: { ...babyModernGlass.modes.light!, "text.muted": "#aabbcc" } },
     };
     expect(contrastFindings(broken).length).toBeGreaterThan(0);
+  });
+
+  it("catches a gradient with one failing stop even when the .soft fallback passes (the old proxy gate's blind spot)", () => {
+    const light = babyModernGlass.modes.light!;
+    const broken: ThemeDefinition = {
+      ...babyModernGlass,
+      manifest: { ...babyModernGlass.manifest, modes: ["light"], modeLimitation: "test fixture" },
+      modes: {
+        light: {
+          ...light,
+          // Bottom stop is the shipped (passing) tint; top stop is a mid-grey wash no gated text colour
+          // survives on. `.soft` is untouched and still passes — only per-stop measurement can catch this.
+          "accent.feeding.glass": "linear-gradient(180deg, rgba(128, 128, 128, 0.9), rgba(247, 224, 207, 0.56))",
+        },
+      },
+    };
+    const findings = contrastFindings(broken);
+    const glassFindings = findings.filter((f) => f.bg === "accent.feeding.glass");
+    expect(glassFindings.length).toBeGreaterThan(0);
+    for (const f of glassFindings) expect(f.ratio).toBeLessThan(f.min); // measured, not skipped
+    // The opaque fallback still passes on its own — proving the old .soft proxy would have missed this.
+    expect(findings.filter((f) => f.bg === "accent.feeding.soft")).toEqual([]);
+  });
+
+  it("fails loudly on a required background the parser cannot measure instead of skipping it", () => {
+    const light = babyModernGlass.modes.light!;
+    const broken: ThemeDefinition = {
+      ...babyModernGlass,
+      manifest: { ...babyModernGlass.manifest, modes: ["light"], modeLimitation: "test fixture" },
+      modes: { light: { ...light, "surface.glass": "conic-gradient(from 0deg, #ffffff, #000000)" } },
+    };
+    const unmeasurable = contrastFindings(broken).filter((f) => f.bg === "surface.glass");
+    expect(unmeasurable.length).toBeGreaterThan(0);
+    for (const f of unmeasurable) {
+      expect(f.ratio).toBeUndefined();
+      expect(f.note).toContain("UNMEASURABLE");
+    }
   });
 });
 
