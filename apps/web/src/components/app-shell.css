@@ -18,7 +18,25 @@
   backdrop-filter: blur(var(--htb-glass-blur)) saturate(var(--htb-glass-saturate));
   padding-top: env(safe-area-inset-top);
 }
+.app-header {
+  position: sticky;
+}
+.app-header::after {
+  content: "";
+  position: absolute;
+  inset: 0 0 0 auto;
+  width: 220px;
+  pointer-events: none;
+  background-image: radial-gradient(var(--htb-surface-glass-border) 1.5px, transparent 1.6px);
+  background-size: 16px 16px;
+  background-position: 4px 6px;
+  opacity: 0.5;
+  /* mask alpha only — not palette */
+  -webkit-mask-image: linear-gradient(to left, black, transparent 85%);
+  mask-image: linear-gradient(to left, black, transparent 85%);
+}
 .app-header__inner {
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -242,7 +260,7 @@
   display: inline-flex;
   align-items: center;
   gap: 4px;
-  min-height: 36px;
+  min-height: var(--htb-layout-touch-target);
   color: var(--htb-text-secondary);
 }
 .site-footer__links a:hover {

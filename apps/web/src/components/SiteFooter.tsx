@@ -29,7 +29,8 @@ export function SiteFooter() {
           </ul>
         </nav>
         <div className="site-footer__theme">
-          <ThemeSwitcher />
+          {/* Colour mode only; switching theme family is a Theme Lab affordance, not production UI. */}
+          <ThemeSwitcher showThemeFamily={false} />
         </div>
         <p>
           {SITE.name} is a practical parent reference, not a medical record, diagnosis engine, developmental screening test, emergency

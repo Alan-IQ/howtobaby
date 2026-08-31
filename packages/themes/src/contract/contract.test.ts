@@ -9,7 +9,7 @@ import { createThemeRegistry } from "../registry/registry.ts";
 import { defaultThemeDefinitions, defaultThemeRegistry, vendorFixtureTheme } from "../registry/default-registry.ts";
 import { parseThemePreference, serializeThemePreference } from "../preference.ts";
 import type { ColorTokens, ThemeDefinition } from "./index.ts";
-import { GEOMETRY_TOKEN_PATHS, SEMANTIC_COLOR_TOKENS, ThemeContractError, validateThemeDefinition } from "./index.ts";
+import { contrastFindings, contrastRatio, GEOMETRY_TOKEN_PATHS, SEMANTIC_COLOR_TOKENS, ThemeContractError, validateThemeDefinition } from "./index.ts";
 
 const allThemes: ThemeDefinition[] = [...defaultThemeDefinitions];
 
@@ -56,6 +56,30 @@ describe("theme capability validation", () => {
     expect(validateThemeDefinition(single).some((i) => i.code === "manifest.modes")).toBe(true);
     const documented: ThemeDefinition = { ...single, manifest: { ...single.manifest, modeLimitation: "Light only until the dark palette is reviewed." } };
     expect(validateThemeDefinition(documented)).toEqual([]);
+  });
+});
+
+describe("accessibility contrast gate (docs/GUI_DESIGN.md §16)", () => {
+  it.each(allThemes.map((t) => [t.manifest.id, t] as const))("%s passes every required contrast pair in every mode", (_id, theme) => {
+    const failures = contrastFindings(theme).map((f) => `[${f.mode}] ${f.fg} on ${f.bg} = ${f.ratio?.toFixed(2)} < ${f.min} (${f.note})`);
+    expect(failures).toEqual([]);
+  });
+
+  it("the contrast math matches WCAG reference values", () => {
+    expect(contrastRatio("#000000", "#ffffff")).toBeCloseTo(21, 5);
+    expect(contrastRatio("#ffffff", "#ffffff")).toBeCloseTo(1, 5);
+    expect(contrastRatio("#777777", "#ffffff")!).toBeCloseTo(4.48, 2);
+    // Alpha composites over the backdrop before measuring.
+    expect(contrastRatio("rgba(0, 0, 0, 0.5)", "#ffffff")!).toBeLessThan(21);
+    expect(contrastRatio("#000000", "linear-gradient(#fff, #000)")).toBeUndefined();
+  });
+
+  it("the gate catches a regression", () => {
+    const broken: ThemeDefinition = {
+      ...babyModernGlass,
+      modes: { ...babyModernGlass.modes, light: { ...babyModernGlass.modes.light!, "text.muted": "#aabbcc" } },
+    };
+    expect(contrastFindings(broken).length).toBeGreaterThan(0);
   });
 });
 

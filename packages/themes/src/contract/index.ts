@@ -1,5 +1,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 export * from "./tokens.ts";
 export * from "./adapters.ts";
+export * from "./contrast.ts";
+export * from "./contrast-gate.ts";
 export * from "./manifest.ts";
 export * from "./validate.ts";

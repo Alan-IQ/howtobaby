@@ -12,3 +12,6 @@ export * from "./Switch.tsx";
 export * from "./Segmented.tsx";
 export * from "./Navigation.tsx";
 export * from "./Dialog.tsx";
+export * from "./Tabs.tsx";
+export * from "./Tooltip.tsx";
+export * from "./Popover.tsx";

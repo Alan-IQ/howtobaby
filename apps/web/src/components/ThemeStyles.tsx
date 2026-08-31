@@ -5,13 +5,15 @@
  * fetch (docs/THEME_SYSTEM.md §13: token packs are the low-cost theme path).
  */
 
-import { createThemeBootScript, defaultThemeDefinitions, defaultThemeRegistry, registryToCss } from "@howtobaby/themes";
+import { createThemeBootScript, registryToCss } from "@howtobaby/themes";
 
-const themeCss = registryToCss(defaultThemeDefinitions, defaultThemeRegistry.defaultThemeId);
+import { appThemeDefinitions, appThemeRegistry } from "@/theme-registry";
+
+const themeCss = registryToCss(appThemeDefinitions, appThemeRegistry.defaultThemeId);
 
 const bootScript = createThemeBootScript({
-  themes: Object.fromEntries(defaultThemeRegistry.list().map((m) => [m.id, m.modes])),
-  defaultThemeId: defaultThemeRegistry.defaultThemeId,
+  themes: Object.fromEntries(appThemeRegistry.list().map((m) => [m.id, m.modes])),
+  defaultThemeId: appThemeRegistry.defaultThemeId,
 });
 
 export function ThemeStyles() {

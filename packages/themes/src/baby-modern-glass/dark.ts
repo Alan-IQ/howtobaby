@@ -20,7 +20,7 @@ export const babyModernGlassDark: ColorTokens = {
   "text.link": "#a9b3f7",
 
   "border.subtle": "rgba(255, 255, 255, 0.10)",
-  "border.strong": "rgba(255, 255, 255, 0.28)",
+  "border.strong": "rgba(255, 255, 255, 0.38)",
   "focus.ring": "#a9b3f7",
 
   "interactive.primary.bg": "#9aa6f5",
@@ -60,6 +60,6 @@ export const babyModernGlassDark: ColorTokens = {
   "accent.tools": "#6dc3e3",
   "accent.tools.soft": "#163038",
 
-  "shadow.1": "0 1px 2px rgba(0, 0, 0, 0.40), 0 4px 14px rgba(0, 0, 0, 0.35)",
-  "shadow.2": "0 10px 30px rgba(0, 0, 0, 0.50)",
+  "shadow.1": "0 1px 2px rgba(0, 0, 0, 0.40), 0 4px 14px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.05)",
+  "shadow.2": "0 10px 30px rgba(0, 0, 0, 0.50), inset 0 1px 0 rgba(255, 255, 255, 0.06)",
 };

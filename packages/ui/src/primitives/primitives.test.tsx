@@ -66,3 +66,44 @@ describe("primitives render semantic, accessible markup", () => {
     expect(html).not.toMatch(RAW_COLOR);
   });
 });
+
+describe("Tabs / Tooltip / Popover", () => {
+  it("Tabs render ARIA tab semantics with roving tabindex", async () => {
+    const { Tabs } = await import("./Tabs.tsx");
+    const html = renderToStaticMarkup(
+      <Tabs label="Modes" value="b" items={[{ value: "a", label: "A" }, { value: "b", label: "B" }, { value: "c", label: "C", disabled: true }]} onChange={() => {}}>
+        panel
+      </Tabs>,
+    );
+    expect(html).toContain('role="tablist" aria-label="Modes"');
+    expect(html.match(/role="tab"/g)).toHaveLength(3);
+    expect(html.match(/aria-selected="true"/g)).toHaveLength(1);
+    expect(html).toContain('tabindex="0"');
+    expect(html).toContain('tabindex="-1"');
+    expect(html).toContain('role="tabpanel"');
+  });
+
+  it("Tooltip attaches its content to the trigger via aria-describedby", async () => {
+    const { Tooltip } = await import("./Tooltip.tsx");
+    const html = renderToStaticMarkup(
+      <Tooltip content="More detail">
+        <button type="button">Info</button>
+      </Tooltip>,
+    );
+    const id = /role="tooltip" id="([^"]+)"/.exec(html)?.[1];
+    expect(id).toBeTruthy();
+    expect(html).toContain(`aria-describedby="${id}"`);
+  });
+
+  it("Popover trigger exposes expanded state", async () => {
+    const { Popover } = await import("./Popover.tsx");
+    const html = renderToStaticMarkup(
+      <Popover trigger="Open" label="Details">
+        body
+      </Popover>,
+    );
+    expect(html).toContain('aria-expanded="false"');
+    expect(html).toContain('aria-haspopup="dialog"');
+    expect(html).not.toContain('role="dialog"');
+  });
+});

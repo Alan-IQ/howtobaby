@@ -4,7 +4,7 @@
  * fixture proving a third-party theme can map without domain imports").
  *
  * Level A (tokens) adapter: translates the vendor kit's own token names into HowToBaby semantic tokens. It
- * imports nothing from packages/core, packages/knowledge, packages/ui, or apps/web — only the contract and the
+ * imports nothing from packages/core, packages/knowledge, packages/ui or apps/web — only the contract and the
  * vendor export. Switching between this theme and Baby Modern Glass changes presentation only.
  */
 
@@ -25,7 +25,7 @@ function withAlpha(hex: string, alpha: number): string {
 /** Map one vendor palette into the full semantic token set. Every required token must be assigned. */
 function mapPalette(p: VendorPalette, mode: "light" | "dark"): ColorTokens {
   const onAccent = mode === "light" ? p.card : p.paper;
-  const soft = (c: string) => withAlpha(c, mode === "light" ? 0.12 : 0.18);
+  const soft = (c: string) => withAlpha(c, mode === "light" ? 0.08 : 0.18);
   const statusBg = (c: string) => withAlpha(c, mode === "light" ? 0.1 : 0.16);
   const statusBorder = (c: string) => withAlpha(c, mode === "light" ? 0.35 : 0.4);
   return {

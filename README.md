@@ -26,7 +26,7 @@ The product has two equal pillars:
 
 The repository contract intentionally defines product behavior, evidence governance, repository ownership, theme integration, storage boundaries, and implementation phases before production code is scaffolded. Phase 0 adds the pnpm monorepo root, the physical package layout, `.gitignore` boundaries for generated/cache/vendor/media material, a CI-enforced repository-health gate, and the dependency/asset license-reporting baseline.
 
-Phase 1 adds the Next.js + TypeScript application in `apps/web` (static-first, server-capable; `DEPLOY_TARGET=static` is an optional export profile), the vendor-neutral Theme Contract/Registry and css-vars adapter in `packages/themes` with the first-party **Baby Modern Glass** Light/Dark packs and a third-party adapter fixture, the semantic-token UI primitives in `packages/ui`, the AppShell/Header/primary navigation/page shell with responsive, reduced-motion/transparency and print scaffolding, a locally stored theme preference, the theme-boundary CI gate, and the production deployment pipeline to `https://howtobaby.com` (`.github/workflows/deploy.yml`, runbook in [`DEPLOYMENT_HAWKHOST.md`](DEPLOYMENT_HAWKHOST.md)). All product pages are shell placeholders: content schemas, age resolution and domain guidance start in Phase 2.
+Phase 1 adds the Next.js + TypeScript application in `apps/web` (static-first, server-capable; `DEPLOY_TARGET=static` is an optional export profile), the vendor-neutral Theme Contract/Registry and css-vars adapter in `packages/themes` with the first-party **Baby Modern Glass** Light/Dark packs and a third-party adapter fixture, the semantic-token UI primitives in `packages/ui`, the AppShell/Header/primary navigation/page shell with responsive, reduced-motion/transparency and print scaffolding, a locally stored theme preference, the theme-boundary CI gate, and the production deployment pipeline to `https://howtobaby.com` (`.github/workflows/deploy.yml`, runbook in [`DEPLOYMENT_HAWKHOST.md`](DEPLOYMENT_HAWKHOST.md)). All product pages are shell placeholders: content schemas, age resolution and domain guidance start in Phase 2. Pre-v1, every page ships `noindex` (indexing is deliberately opened in a later phase), and production UI exposes only Baby Modern Glass — the vendor fixture theme exists solely for theme-independence testing via the development-only Theme Lab.
 
 ## What makes HowToBaby different
 
@@ -257,6 +257,7 @@ pnpm test                             # Vitest: theme contract, UI primitives, p
 pnpm build                            # default profile: static-first, server-capable
 pnpm build:static                     # DEPLOY_TARGET=static → apps/web/out (shared-hosting export profile)
 pnpm validate                         # everything above, in CI order
+NEXT_PUBLIC_THEME_LAB=1 pnpm dev      # /theme-lab: primitives/states across themes & modes (dev-only surface)
 node scripts/check-repo-health.ts     # large-blob guard, deny patterns, Git size report
 node scripts/check-repo-baseline.ts   # layout / workspace / workflow / doc-link gate
 node scripts/check-theme-boundary.ts  # no raw palette values / vendor or theme-pack imports in product code

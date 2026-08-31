@@ -20,6 +20,9 @@ export const metadata: Metadata = {
   applicationName: SITE.name,
   alternates: { canonical: "/" },
   openGraph: { type: "website", siteName: SITE.name, url: SITE.url },
+  // Pre-v1: the whole site stays out of search indexes until a later phase deliberately opens indexing
+  // (sitemap/robots strategy is Phase 10 in docs/IMPLEMENTATION_ROADMAP.md).
+  robots: { index: false, follow: false },
 };
 
 export const viewport: Viewport = {

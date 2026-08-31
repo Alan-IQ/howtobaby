@@ -27,8 +27,12 @@ export interface ThemeContextValue {
   readonly colorMode: ColorMode;
   /** True once the persisted preference has been applied on the client. */
   readonly hydrated: boolean;
+  /** True while a non-persisted preview (URL override / Theme Lab) is active. */
+  readonly isPreview: boolean;
   setThemeId(themeId: string): void;
   setColorMode(mode: ColorModePreference): void;
+  /** Apply a preference for this page view only — never written to the store. Pass null to clear. */
+  setPreview(preference: Partial<ThemePreference> | null): void;
 }
 
 const ThemeContext = createContext<ThemeContextValue | null>(null);
@@ -41,10 +45,12 @@ export interface ThemeProviderProps {
 
 export function ThemeProvider({ registry, store, children }: ThemeProviderProps) {
   const [preference, setPreference] = useState<ThemePreference>(() => registry.normalizePreference(undefined));
+  const [preview, setPreviewState] = useState<ThemePreference | null>(null);
   const [hydrated, setHydrated] = useState(false);
   const prefersDark = usePrefersDarkColorScheme();
   const systemMode: ColorMode = prefersDark ? "dark" : "light";
-  const colorMode = registry.resolveColorMode(preference.themeId, preference.colorMode, systemMode);
+  const effective = preview ?? preference;
+  const colorMode = registry.resolveColorMode(effective.themeId, effective.colorMode, systemMode);
 
   // Load the stored preference once on the client (the boot script already painted it pre-hydration).
   useEffect(() => {
@@ -56,10 +62,10 @@ export function ThemeProvider({ registry, store, children }: ThemeProviderProps)
   useEffect(() => {
     if (!hydrated) return;
     const html = document.documentElement;
-    html.setAttribute(DOM_ATTRIBUTES.theme, preference.themeId);
+    html.setAttribute(DOM_ATTRIBUTES.theme, effective.themeId);
     html.setAttribute(DOM_ATTRIBUTES.colorMode, colorMode);
-    html.setAttribute(DOM_ATTRIBUTES.colorModePreference, preference.colorMode);
-  }, [hydrated, preference, colorMode]);
+    html.setAttribute(DOM_ATTRIBUTES.colorModePreference, effective.colorMode);
+  }, [hydrated, effective, colorMode]);
 
   const update = useCallback(
     (next: ThemePreference) => {
@@ -74,13 +80,22 @@ export function ThemeProvider({ registry, store, children }: ThemeProviderProps)
     () => ({
       registry,
       themes: registry.list(),
-      preference,
+      preference: effective,
       colorMode,
       hydrated,
-      setThemeId: (themeId) => update({ ...preference, themeId }),
-      setColorMode: (mode) => update({ ...preference, colorMode: mode }),
+      isPreview: preview !== null,
+      // An explicit user choice ends the preview and persists as usual.
+      setThemeId: (themeId) => {
+        setPreviewState(null);
+        update({ ...preference, themeId });
+      },
+      setColorMode: (mode) => {
+        setPreviewState(null);
+        update({ ...preference, colorMode: mode });
+      },
+      setPreview: (next) => setPreviewState(next === null ? null : registry.normalizePreference({ ...effective, ...next })),
     }),
-    [registry, preference, colorMode, hydrated, update],
+    [registry, preference, effective, preview, colorMode, hydrated, update],
   );
 
   return <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>;
