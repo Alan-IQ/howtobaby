@@ -47,19 +47,18 @@ function relevantSectionValue(entry: ClaimEvidenceEntry["sourceRefs"][number], l
 
 /**
  * Labeled metadata rows for one source reference (GUI_DESIGN.md §11.3): every row carries an
- * explicit label ("Applies to", "Source status", "Last verified by HowToBaby", …) and every value
- * derives from canonical metadata — the "why" line comes from the canonical relationship, never
- * from prose hard-coded in a component.
+ * explicit label with a small decorative icon anchor ("Relevant section", "Applies to"/"Scope",
+ * "Last verified by HowToBaby") and every value derives from canonical metadata. Role and status
+ * render as badges, and "why this source is used" is its own secondary block — all fed from the
+ * same canonical graph, never prose hard-coded in a component.
  */
 function sourceMetaRows(ref: ClaimEvidenceEntry["sourceRefs"][number], source: SourceRecord, locale: UiLocale): EvidenceMetaEntry[] {
   const strings = UI_STRINGS[locale];
-  const meta: EvidenceMetaEntry[] = [{ label: strings.metaRole, value: RELATIONSHIP_LABELS[locale][ref.relationship] }];
+  const meta: EvidenceMetaEntry[] = [];
   const section = relevantSectionValue(ref, locale);
-  if (section !== undefined) meta.push({ label: strings.metaRelevantSection, value: section });
-  meta.push(jurisdictionMeta(source, locale));
-  meta.push({ label: strings.metaStatus, value: STATUS_LABELS[locale][source.status] });
-  meta.push({ label: strings.metaLastVerified, value: formatDate(source.lastVerifiedAt, locale) });
-  meta.push({ label: strings.metaWhy, value: RELATIONSHIP_WHY_LABELS[locale][ref.relationship] });
+  if (section !== undefined) meta.push({ label: strings.metaRelevantSection, value: section, icon: "document" });
+  meta.push({ ...jurisdictionMeta(source, locale), icon: "globe" });
+  meta.push({ label: strings.metaLastVerified, value: formatDate(source.lastVerifiedAt, locale), icon: "calendar" });
   return meta;
 }
 
@@ -76,7 +75,11 @@ export async function evidenceSourceViews(evidence: ClaimEvidenceEntry, locale: 
       organization: source.organization,
       title: source.title,
       relationshipLabel: RELATIONSHIP_LABELS[locale][ref.relationship],
+      statusLabel: STATUS_LABELS[locale][source.status],
+      statusTone: source.status === "current" ? "calm" : "attention",
       meta: sourceMetaRows(ref, source, locale),
+      whyLabel: UI_STRINGS[locale].metaWhy,
+      whyText: RELATIONSHIP_WHY_LABELS[locale][ref.relationship],
       url: source.canonicalUrl,
       ...(note !== null && note !== undefined ? { noteText: note } : {}),
     });

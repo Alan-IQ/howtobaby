@@ -57,7 +57,7 @@ export default async function Page({ params }: { params: Promise<Params> }) {
 
   return (
     <PageShell eyebrow="Evidence" title={`Evidence: ${evidence.claimId}`} lede="What this claim says, which original sources support it, and when it was last verified." printable>
-      <Card title="Claim" titleAs="h2">
+      <Card icon="document" title="Claim" titleAs="h2">
         <div className="prose">
           <p>{enText}</p>
           <p lang="vi" className="muted">{viText}</p>
@@ -70,13 +70,15 @@ export default async function Page({ params }: { params: Promise<Params> }) {
           </p>
         </div>
       </Card>
-      <Card title="Supporting sources" titleAs="h2">
+      <Card icon="globe" title="Supporting sources" titleAs="h2">
         <div className="prose">
           {sources.map((source, index) => {
             const record = impactSources[index];
             return (
               <p key={source.sourceId}>
                 <strong>{source.organization}</strong> — {source.title}
+                <br />
+                {UI_STRINGS.en.metaRole}: {source.relationshipLabel} · {UI_STRINGS.en.metaStatus}: {source.statusLabel}
                 <br />
                 <span className="muted">
                   {source.meta.map((entry) => `${entry.label}: ${entry.value}`).join(" · ")}

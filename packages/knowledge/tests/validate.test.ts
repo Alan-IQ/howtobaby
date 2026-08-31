@@ -268,6 +268,18 @@ describe("EN/VI semantic order parity", () => {
     })).toContain("unit-parity");
   });
 
+  it("fails when the VI drops the unit entirely (about 6 months → khoảng 6)", () => {
+    expect(check({
+      "translations/vi/feeding.yaml": VALID_FIXTURE["translations/vi/feeding.yaml"]!.replace("khoảng 6 tháng tuổi", "khoảng 6"),
+    })).toContain("unit-parity");
+  });
+
+  it("accepts a rephrased VI that preserves the unit", () => {
+    expect(check({
+      "translations/vi/feeding.yaml": VALID_FIXTURE["translations/vi/feeding.yaml"]!.replace("khoảng 6 tháng tuổi", "khoảng 6 tháng"),
+    })).not.toContain("unit-parity");
+  });
+
   it("fails when a boundary qualifier is dropped (trước 4 tháng → lúc 4 tháng)", () => {
     expect(check({
       "translations/vi/feeding.yaml": VALID_FIXTURE["translations/vi/feeding.yaml"]!.replace("bắt đầu trước 4 tháng tuổi", "bắt đầu lúc 4 tháng tuổi"),

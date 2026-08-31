@@ -9,6 +9,7 @@
  * (EVIDENCE_PROVENANCE.md §18).
  */
 
+import { Icon } from "../primitives/Icon.tsx";
 import type { ReferenceEntry } from "./types.ts";
 
 export interface ReferenceListProps {
@@ -33,6 +34,7 @@ export function ReferenceList({ title = "Sources used on this page", entries, vi
   return (
     <section className={["htb-reference-list", className].filter(Boolean).join(" ")} aria-labelledby={headingId}>
       <h2 id={headingId} className="htb-reference-list__title">
+        <Icon name="document" className="htb-reference-list__title-icon" />
         {title}
       </h2>
       <ul>
@@ -46,7 +48,7 @@ export function ReferenceList({ title = "Sources used on this page", entries, vi
               {" · "}
               <a href={entry.url} target="_blank" rel="noopener noreferrer">
                 {viewOriginalLabel}
-                <span aria-hidden="true"> ↗</span>
+                <Icon name="external" className="htb-reference-list__external-icon" />
               </a>
               <span className="htb-reference-list__print-url" aria-hidden="true">
                 {entry.url}

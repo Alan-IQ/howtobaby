@@ -43,6 +43,9 @@ h4 {
 
 h1 {
   font-size: var(--htb-font-size-2xl);
+  /* Page titles lead the hierarchy by weight and tracking, not colour alone. */
+  font-weight: var(--htb-font-weight-bold);
+  letter-spacing: -0.02em;
 }
 h2 {
   font-size: var(--htb-font-size-xl);
@@ -145,6 +148,16 @@ select {
   .htb-card {
     padding: var(--htb-space-lg);
   }
+}
+.htb-card__title-icon {
+  width: 1.05em;
+  height: 1.05em;
+  margin-inline-end: var(--htb-space-xs);
+  vertical-align: -0.14em;
+  color: var(--htb-text-secondary);
+}
+.htb-card[data-accent] .htb-card__title-icon {
+  color: var(--htb-card-accent);
 }
 .htb-card__title {
   font-size: var(--htb-font-size-lg);
@@ -899,6 +912,7 @@ button.htb-source-chip:focus-visible {
 .htb-evidence-drawer__attribution {
   margin: 0 0 var(--htb-space-md);
   font-size: var(--htb-font-size-sm);
+  line-height: var(--htb-font-line-height-normal);
   color: var(--htb-text-secondary);
 }
 .htb-evidence-drawer__claim-labels {
@@ -933,76 +947,152 @@ button.htb-source-chip:focus-visible {
   margin: 0;
   padding: 0;
   display: grid;
-  gap: var(--htb-space-md);
+  gap: var(--htb-space-lg);
 }
+
+/* One supporting source: org leads, role/status badges beside it, title under it, then the
+   grouped metadata panel, the "why" block and a clear View-original action. */
 .htb-evidence-source {
-  padding: var(--htb-space-sm) 0;
+  padding-top: var(--htb-space-md);
   border-top: 1px solid var(--htb-border-subtle);
+  display: grid;
+  gap: var(--htb-space-xs);
 }
 .htb-evidence-source p {
-  margin: 0 0 var(--htb-space-2xs);
+  margin: 0;
+}
+.htb-evidence-source__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--htb-space-2xs) var(--htb-space-sm);
 }
 .htb-evidence-source__org {
-  display: flex;
-  align-items: baseline;
-  gap: var(--htb-space-xs);
+  font-size: var(--htb-font-size-md);
   font-weight: var(--htb-font-weight-semibold);
   color: var(--htb-text-primary);
 }
-.htb-evidence-source__relationship {
-  font-size: var(--htb-font-size-xs);
-  font-weight: var(--htb-font-weight-semibold);
-  color: var(--htb-text-secondary);
+.htb-evidence-source__badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--htb-space-2xs);
+}
+.htb-evidence-source__badge {
+  display: inline-flex;
+  align-items: center;
   padding: 1px var(--htb-space-xs);
   border: 1px solid var(--htb-border-subtle);
   border-radius: var(--htb-radius-pill);
   background: var(--htb-surface-2);
+  color: var(--htb-text-secondary);
+  font-size: var(--htb-font-size-xs);
+  font-weight: var(--htb-font-weight-semibold);
+  line-height: 1.5;
+  white-space: nowrap;
+}
+.htb-evidence-source__badge--attention {
+  color: var(--htb-status-caution);
+  background: var(--htb-status-caution-bg);
+  border-color: var(--htb-status-caution-border);
 }
 .htb-evidence-source__title {
-  color: var(--htb-text-primary);
-}
-.htb-evidence-source__meta {
   font-size: var(--htb-font-size-sm);
   color: var(--htb-text-secondary);
+  max-width: 52ch;
 }
+
+/* Grouped metadata panel: icon + label + value rows on a subtle surface, kept as a <dl>. */
 .htb-evidence-source__meta-list {
-  margin: 0 0 var(--htb-space-2xs);
+  margin: var(--htb-space-2xs) 0 0;
+  padding: var(--htb-space-sm) var(--htb-space-md);
   display: grid;
-  gap: var(--htb-space-2xs);
+  gap: var(--htb-space-xs);
+  border: 1px solid var(--htb-border-subtle);
+  border-radius: var(--htb-radius-md);
+  background: var(--htb-surface-2);
 }
 .htb-evidence-source__meta-row {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--htb-space-2xs);
+  align-items: baseline;
+  gap: var(--htb-space-2xs) var(--htb-space-xs);
   font-size: var(--htb-font-size-sm);
 }
 .htb-evidence-source__meta-row dt {
   margin: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--htb-space-2xs);
   color: var(--htb-text-muted);
+  font-weight: var(--htb-font-weight-medium);
 }
-.htb-evidence-source__meta-row dt::after {
+.htb-evidence-source__meta-row dt .htb-icon {
+  width: 1em;
+  height: 1em;
+  stroke-width: 1.6;
+  transform: translateY(0.12em);
+}
+.htb-evidence-source__meta-row dt span::after {
   content: ":";
 }
 .htb-evidence-source__meta-row dd {
   margin: 0;
   color: var(--htb-text-secondary);
 }
-.htb-evidence-source__status {
-  margin-inline-start: var(--htb-space-xs);
-  color: var(--htb-status-caution);
+
+/* "Why this source is used": a distinct secondary information block, calm brand tint. */
+.htb-evidence-source__why {
+  display: flex;
+  gap: var(--htb-space-xs);
+  padding: var(--htb-space-sm) var(--htb-space-md);
+  border-radius: var(--htb-radius-md);
+  background: var(--htb-accent-brand-soft);
+  color: var(--htb-accent-brand);
+}
+.htb-evidence-source__why .htb-icon {
+  width: 1.1em;
+  height: 1.1em;
+  flex: none;
+  margin-top: 0.2em;
+}
+.htb-evidence-source__why-label {
+  font-size: var(--htb-font-size-xs);
   font-weight: var(--htb-font-weight-semibold);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.htb-evidence-source__why-text {
+  font-size: var(--htb-font-size-sm);
+  color: var(--htb-text-secondary);
 }
 .htb-evidence-source__note {
   font-size: var(--htb-font-size-sm);
   color: var(--htb-text-muted);
 }
+
+/* View original source: a clear, self-evident action. */
 .htb-evidence-source__link {
+  justify-self: start;
   display: inline-flex;
   align-items: center;
   gap: var(--htb-space-2xs);
   min-height: var(--htb-layout-touch-target);
+  padding: 0 var(--htb-space-md);
+  border: 1px solid var(--htb-border-strong);
+  border-radius: var(--htb-radius-pill);
+  background: var(--htb-interactive-subtle-bg);
   color: var(--htb-text-link);
+  font-size: var(--htb-font-size-sm);
   font-weight: var(--htb-font-weight-semibold);
+  text-decoration: none;
+}
+.htb-evidence-source__link:hover {
+  background: var(--htb-interactive-subtle-hover);
+}
+.htb-evidence-source__link .htb-icon {
+  width: 1em;
+  height: 1em;
 }
 .htb-evidence-drawer__disclaimer {
   margin: var(--htb-space-md) 0 0;
@@ -1016,8 +1106,22 @@ button.htb-source-chip:focus-visible {
   margin-top: var(--htb-space-xl);
 }
 .htb-reference-list__title {
+  display: flex;
+  align-items: center;
+  gap: var(--htb-space-xs);
   font-size: var(--htb-font-size-lg);
   margin: 0 0 var(--htb-space-sm);
+}
+.htb-reference-list__title-icon {
+  width: 1em;
+  height: 1em;
+  color: var(--htb-text-secondary);
+}
+.htb-reference-list__external-icon {
+  width: 0.95em;
+  height: 0.95em;
+  vertical-align: -0.12em;
+  margin-inline-start: 2px;
 }
 .htb-reference-list ul {
   list-style: none;
@@ -1047,8 +1151,10 @@ button.htb-source-chip:focus-visible {
   font-size: var(--htb-font-size-sm);
   color: var(--htb-text-secondary);
 }
+/* Status is informational here ("Current" included); tone-colouring belongs to the drawer badges. */
 .htb-reference-list__status {
-  color: var(--htb-status-caution);
+  color: var(--htb-text-secondary);
+  font-weight: var(--htb-font-weight-medium);
 }
 .htb-reference-list__print-url {
   display: none;
@@ -1058,6 +1164,19 @@ button.htb-source-chip:focus-visible {
   /* Chips open a drawer that cannot exist on paper; References carry the provenance instead. */
   .htb-source-chip {
     display: none !important;
+  }
+  /* Badges print as bordered ink labels — no tinted backgrounds fighting the paper. */
+  .htb-badge {
+    background: none !important;
+    border-color: var(--htb-border-strong) !important;
+    color: inherit !important;
+  }
+  .htb-reference-list__entry {
+    break-inside: avoid;
+  }
+  .htb-reference-list__title-icon,
+  .htb-reference-list__external-icon {
+    display: none;
   }
   .htb-reference-list {
     break-inside: avoid;

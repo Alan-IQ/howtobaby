@@ -16,7 +16,11 @@ export type IconName =
   | "menu"
   | "close"
   | "check"
-  | "external";
+  | "external"
+  | "globe"
+  | "document"
+  | "calendar"
+  | "info";
 
 /** Minimal line-icon set drawn in-house (no third-party icon font/asset). Decorative by default. */
 const PATHS: Record<IconName, string> = {
@@ -35,6 +39,10 @@ const PATHS: Record<IconName, string> = {
   close: "M6 6l12 12M18 6 6 18",
   check: "M5 12l4 4L19 7",
   external: "M14 5h5v5M19 5l-8 8M17 14v5H5V7h5",
+  globe: "M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18ZM3 12h18M12 3c2.4 2.5 3.7 5.6 3.7 9s-1.3 6.5-3.7 9c-2.4-2.5-3.7-5.6-3.7-9s1.3-6.5 3.7-9Z",
+  document: "M7 3h7l4 4v14H7V3ZM14 3v4h4M10 12h5M10 16h5",
+  calendar: "M5 5.5h14V20H5V5.5ZM5 9.5h14M8.5 3v4M15.5 3v4",
+  info: "M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18ZM12 11v5M12 7.6h.01",
 };
 
 export interface IconProps extends Omit<SVGProps<SVGSVGElement>, "name"> {

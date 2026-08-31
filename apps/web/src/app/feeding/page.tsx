@@ -26,7 +26,7 @@ export default async function Page() {
         const viBlock = viBlocks.find((b) => b.blockId === enBlock.blockId);
         return viBlock ? <GuidanceEvidenceCard key={enBlock.blockId} variants={{ en: enBlock, vi: viBlock }} /> : null;
       })}
-      <Card title="What this section will hold" titleAs="h2">
+      <Card icon="feeding" title="What this section will hold" titleAs="h2">
         <div className="prose">
           <p>Milk feeding, starting solids, textures, responsive feeding, allergen introduction and feeding safety — organized by stage and readiness rather than by a single age cut-off, with each claim linked to its original source.</p>
           <p className="muted">Guidance appears here only after it has passed the content, evidence and review pipeline — never as unreviewed text. The full feeding domain migrates in a later phase.</p>

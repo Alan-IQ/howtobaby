@@ -1,8 +1,10 @@
 /* SPDX-License-Identifier: AGPL-3.0-only */
 /*
- * Print profile scaffold (docs/GUI_DESIGN.md §15). Colour/typography come from the theme's print tokens via
- * the css-vars adapter (@media print block); this file owns structure: page geometry, hidden chrome, page
- * breaks and the printed context header. Letter and A4 are both supported by not fixing a page size.
+ * Print profile baseline (docs/GUI_DESIGN.md §15, docs/EVIDENCE_PROVENANCE.md §18). Colour and
+ * typography come from the theme's print tokens via the css-vars adapter (@media print block);
+ * this file owns structure: page geometry, hidden chrome, break protection and the printed context
+ * header. Letter and A4 both work because no page size is fixed — only margins are set. Full print
+ * QA / advanced pagination hardening is Phase 10; this is the production-acceptable baseline.
  */
 @page {
   margin: 18mm 16mm;
@@ -16,13 +18,45 @@
   }
   body {
     font-size: 11pt;
-    line-height: 1.4;
+    line-height: 1.45;
+  }
+
+  /* Paper typography hierarchy: size + weight + spacing carry the ramp, ink stays efficient. */
+  h1 {
+    font-size: 19pt;
+    letter-spacing: 0;
+    margin-bottom: 6pt;
+  }
+  h2 {
+    font-size: 14pt;
+    margin-bottom: 4pt;
+  }
+  h3,
+  h4 {
+    font-size: 12pt;
+    margin-bottom: 3pt;
+  }
+  p {
+    orphans: 3;
+    widows: 3;
+  }
+  .page-shell__lede {
+    font-size: 11.5pt;
+    color: var(--htb-text-secondary);
+  }
+  .muted,
+  .htb-card__eyebrow,
+  .page-shell__eyebrow {
+    font-size: 9pt;
+    color: var(--htb-text-secondary);
   }
 
   /* Navigation and interactive chrome disappear; the printed header keeps context. */
   .app-header,
   .app-tabbar,
   .site-footer__theme,
+  .site-footer__links,
+  .dot-row,
   .htb-print-hidden {
     display: none !important;
   }
@@ -60,6 +94,13 @@
     margin-bottom: 8pt;
   }
 
+  /* Provenance stays readable and whole: no claim or source entry split across pages. */
+  .guidance-evidence-card__claim,
+  .htb-reference-list__entry,
+  .htb-evidence-source {
+    break-inside: avoid;
+  }
+
   h1,
   h2,
   h3 {
@@ -69,8 +110,10 @@
     color: inherit;
     text-decoration: none;
   }
-  /* External original-source links keep their target visible on paper. */
-  a[href^="http"]::after {
+  /* External links in running text keep their target visible on paper. Reference entries and
+     evidence sources already print a dedicated scannable URL, so they are excluded here to avoid
+     printing every address twice. */
+  .prose a[href^="http"]::after {
     content: " (" attr(href) ")";
     font-size: 8.5pt;
     color: var(--htb-text-secondary);
@@ -79,6 +122,7 @@
     border-top: 1px solid var(--htb-border-subtle);
     background: transparent;
     margin-top: 12pt;
+    font-size: 9pt;
   }
 }
 

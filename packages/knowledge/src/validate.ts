@@ -350,8 +350,10 @@ function validateTranslations(knowledge: CanonicalKnowledge, issues: IssueCollec
       for (let i = 0; i < enTokens.length; i += 1) {
         const enToken = enTokens[i]!;
         const viToken = viTokens[i]!;
-        if (enToken.unit !== undefined && viToken.unit !== undefined && enToken.unit !== viToken.unit) {
-          issues.error("translation", "unit-parity", `quantity ${enToken.value} carries unit \`${enToken.unit}\` in EN but \`${viToken.unit}\` in VI`, key);
+        // Canonical EN decides the unit: VI must preserve it — a dropped unit ("khoảng 6") is as
+        // much a parity break as a changed one ("khoảng 6 tuần").
+        if (enToken.unit !== undefined && enToken.unit !== viToken.unit) {
+          issues.error("translation", "unit-parity", `quantity ${enToken.value} carries unit \`${enToken.unit}\` in EN but ${viToken.unit !== undefined ? `\`${viToken.unit}\`` : "no recognizable unit"} in VI`, key);
         }
         if ((enToken.qualifier ?? "(none)") !== (viToken.qualifier ?? "(none)")) {
           issues.error("translation", "boundary-parity", `quantity ${enToken.value} is qualified as \`${enToken.qualifier ?? "(none)"}\` in EN but \`${viToken.qualifier ?? "(none)"}\` in VI (before/after/about boundaries must survive translation)`, key);

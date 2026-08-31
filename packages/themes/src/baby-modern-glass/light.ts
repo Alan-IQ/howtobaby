@@ -22,9 +22,12 @@ export const babyModernGlassLight: ColorTokens = {
   "surface.glass.border": "rgba(91, 139, 178, 0.52)",
   "surface.glass.highlight": "rgba(255, 255, 255, 0.85)",
 
-  "text.primary": "#203247",
+  // Text hierarchy: primary is a deep ink-navy so main content clearly leads; secondary keeps the
+  // supporting blue-grey; muted drops saturation (slate, not blue) as well as luminance so metadata
+  // visibly recedes while every step still clears the 4.5:1 gate on the worst glass/tint stop.
+  "text.primary": "#182a3e",
   "text.secondary": "#3d566d",
-  "text.muted": "#4d6579",
+  "text.muted": "#556170",
   "text.on-accent": "#ffffff",
   "text.link": "#31618c",
 

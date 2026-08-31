@@ -11,14 +11,15 @@ const cdc: EvidenceSourceView = {
   organization: "CDC",
   title: "When, What, and How to Introduce Solid Foods",
   relationshipLabel: "Primary source",
+  statusLabel: "Current",
+  statusTone: "calm",
   meta: [
-    { label: "Role in this guidance", value: "Primary source" },
-    { label: "Relevant section", value: "“When, What, and How to Introduce Solid Foods”" },
-    { label: "Applies to", value: "United States" },
-    { label: "Source status", value: "Current" },
-    { label: "Last verified by HowToBaby", value: "Aug 31, 2026" },
-    { label: "Why this source is used", value: "This guidance is based on the official recommendation this organization publishes." },
+    { label: "Relevant section", value: "“When, What, and How to Introduce Solid Foods”", icon: "document" },
+    { label: "Applies to", value: "United States", icon: "globe" },
+    { label: "Last verified by HowToBaby", value: "Aug 31, 2026", icon: "calendar" },
   ],
+  whyLabel: "Why this source is used",
+  whyText: "This guidance is based on the official recommendation this organization publishes.",
   url: "https://www.cdc.gov/infant-toddler-nutrition/foods-and-drinks/when-what-and-how-to-introduce-solid-foods.html",
 };
 
@@ -45,16 +46,14 @@ describe("EvidenceDrawer (GUI_DESIGN.md §11.3)", () => {
     <EvidenceDrawer open onClose={() => {}} title="Sources for this guidance" claimText="Introduce solids at about 6 months." classLabel="Official guidance" sources={[cdc]} />,
   );
 
-  it("shows organization, exact title, and every labeled metadata row", () => {
+  it("shows organization, exact title, role/status badges and every labeled metadata row", () => {
     for (const text of [
       "CDC",
       "When, What, and How to Introduce Solid Foods",
-      "Role in this guidance",
       "Primary source",
       "Relevant section",
       "Applies to",
       "United States",
-      "Source status",
       "Current",
       "Last verified by HowToBaby",
       "Aug 31, 2026",
@@ -64,9 +63,25 @@ describe("EvidenceDrawer (GUI_DESIGN.md §11.3)", () => {
     }
   });
 
-  it("labels metadata as definition pairs instead of bare value lines", () => {
-    expect(html).toMatch(/<dt>Applies to<\/dt><dd>United States<\/dd>/);
-    expect(html).toMatch(/<dt>Source status<\/dt><dd>Current<\/dd>/);
+  it("keeps metadata as a definition list with labeled rows, never bare value lines", () => {
+    expect(html).toContain("<dl");
+    expect(html).toMatch(/<dt>.*<span>Applies to<\/span><\/dt><dd>United States<\/dd>/);
+    expect(html).toMatch(/<dt>.*<span>Last verified by HowToBaby<\/span><\/dt><dd>Aug 31, 2026<\/dd>/);
+  });
+
+  it("renders role and status as compact badges, with attention tone only when flagged", () => {
+    expect(html).toMatch(/htb-evidence-source__badge--status[^-]/);
+    expect(html).not.toContain("htb-evidence-source__badge--attention");
+    const attention = renderToStaticMarkup(
+      <EvidenceDrawer open onClose={() => {}} title="Sources" sources={[{ ...cdc, statusLabel: "Reviewing an update", statusTone: "attention" }]} />,
+    );
+    expect(attention).toContain("htb-evidence-source__badge--attention");
+    expect(attention).toContain("Reviewing an update");
+  });
+
+  it("keeps metadata icons decorative (aria-hidden), never the only signal", () => {
+    expect(html).toMatch(/<svg[^>]+aria-hidden="true"/);
+    expect(html).not.toMatch(/<dt><svg[^>]*><\/svg><\/dt>/); // every dt also carries its text label
   });
 
   it("offers a safe View-original-source action", () => {

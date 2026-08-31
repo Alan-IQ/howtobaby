@@ -28,7 +28,7 @@ export function GuidanceEvidenceCard({ variants }: GuidanceEvidenceCardProps) {
   const openClaim = view.claims.find((claim) => claim.claimId === openClaimId);
 
   return (
-    <Card accent="feeding" eyebrow={view.locale === "vi" ? "Ăn dặm" : "Starting solids"} title={view.title} titleAs="h2">
+    <Card accent="feeding" icon="feeding" eyebrow={view.locale === "vi" ? "Ăn dặm" : "Starting solids"} title={view.title} titleAs="h2">
       <div className="guidance-evidence-card" lang={locale}>
         <Segmented
           name={`lang-${view.blockId}`}

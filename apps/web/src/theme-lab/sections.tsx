@@ -201,6 +201,26 @@ function NavigationSection() {
   );
 }
 
+function TextHierarchySection() {
+  const specimen = (
+    <div style={{ display: "flex", flexDirection: "column", gap: "var(--htb-space-sm)", maxWidth: "62ch" }}>
+      <h2 style={{ margin: 0 }}>Title — leads the page</h2>
+      <p>
+        Primary body content: the guidance itself. It must clearly stand above everything else on the
+        surface — by ink, weight and measure, not colour alone.
+      </p>
+      <p className="supporting">Secondary supporting copy: context and explanation that helps but does not lead.</p>
+      <p className="muted">Muted metadata: Last verified by HowToBaby: Aug 31, 2026 · Source status: Current</p>
+    </div>
+  );
+  return (
+    <div style={{ display: "grid", gap: "var(--htb-space-md)", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))" }}>
+      <Surface tone="glass" elevated style={{ padding: "var(--htb-space-md)" }}>{specimen}</Surface>
+      <Surface tone="1" style={{ padding: "var(--htb-space-md)" }}>{specimen}</Surface>
+    </div>
+  );
+}
+
 /** Ordered showcase. Append Phase 2+ evidence/safety/domain components here. */
 export const LAB_SECTIONS: readonly LabSection[] = [
   { id: "buttons", title: "Buttons", render: () => <ButtonsSection /> },
@@ -209,4 +229,5 @@ export const LAB_SECTIONS: readonly LabSection[] = [
   { id: "forms", title: "Form controls", render: () => <FormsSection /> },
   { id: "overlays", title: "Tabs, tooltip, popover, dialog, drawer", render: () => <OverlaysSection /> },
   { id: "navigation", title: "Navigation, glass, skeleton, text", render: () => <NavigationSection /> },
+  { id: "text-hierarchy", title: "Text hierarchy — primary / secondary / muted", render: () => <TextHierarchySection /> },
 ];

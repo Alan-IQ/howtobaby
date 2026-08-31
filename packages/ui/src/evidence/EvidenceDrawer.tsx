@@ -7,11 +7,14 @@
  * direct quote from CDC/WHO/AAP/FDA. The header attribution line and the "HowToBaby guidance"
  * label on the claim make that explicit, and the no-endorsement line is always rendered.
  *
- * Each supporting source shows organization and exact title, then a compact labeled metadata list
- * (role in this guidance, relevant section, applies-to/scope, source status including "Current",
- * last verified by HowToBaby, why the source is used) and a **View original source** action with
- * safe external-link attributes. Metadata rows arrive pre-localized from canonical data — this
- * component holds no medical prose and derives nothing itself.
+ * Each supporting source has a clear scan hierarchy: organization leads with compact role/status
+ * badges beside it, the exact source title sits under it, and the metadata (relevant section,
+ * applies-to/scope, last verified) is a grouped `<dl>` panel of icon + label + value rows — kept
+ * as a definition list for assistive tech, never flattened into look-alike text lines. "Why this
+ * source is used" is a distinct secondary block, and **View original source** is a clear action
+ * with safe external-link attributes. All strings arrive pre-localized from canonical data; this
+ * component holds no medical prose and derives nothing itself. Icons are decorative anchors only
+ * (aria-hidden) — labels always carry the meaning.
  */
 
 "use client";
@@ -19,6 +22,7 @@
 import type { ReactNode } from "react";
 
 import { Drawer } from "../primitives/Dialog.tsx";
+import { Icon } from "../primitives/Icon.tsx";
 import type { EvidenceSourceView } from "./types.ts";
 
 export interface EvidenceDrawerProps {
@@ -73,25 +77,42 @@ export function EvidenceDrawer({
       <ul className="htb-evidence-drawer__sources">
         {sources.map((source) => (
           <li key={source.sourceId} className="htb-evidence-source">
-            <p className="htb-evidence-source__org">
-              {source.organization}
-              <span className="htb-evidence-source__relationship">{source.relationshipLabel}</span>
-            </p>
+            <div className="htb-evidence-source__head">
+              <p className="htb-evidence-source__org">{source.organization}</p>
+              <p className="htb-evidence-source__badges">
+                <span className="htb-evidence-source__badge htb-evidence-source__badge--role">{source.relationshipLabel}</span>
+                <span className={`htb-evidence-source__badge htb-evidence-source__badge--status${source.statusTone === "attention" ? " htb-evidence-source__badge--attention" : ""}`}>
+                  {source.statusLabel}
+                </span>
+              </p>
+            </div>
             <p className="htb-evidence-source__title">{source.title}</p>
             {source.meta.length > 0 ? (
               <dl className="htb-evidence-source__meta-list">
                 {source.meta.map((entry) => (
                   <div key={entry.label} className="htb-evidence-source__meta-row">
-                    <dt>{entry.label}</dt>
+                    <dt>
+                      {entry.icon ? <Icon name={entry.icon} /> : null}
+                      <span>{entry.label}</span>
+                    </dt>
                     <dd>{entry.value}</dd>
                   </div>
                 ))}
               </dl>
             ) : null}
+            {source.whyText ? (
+              <div className="htb-evidence-source__why">
+                <Icon name="info" />
+                <div>
+                  {source.whyLabel ? <p className="htb-evidence-source__why-label">{source.whyLabel}</p> : null}
+                  <p className="htb-evidence-source__why-text">{source.whyText}</p>
+                </div>
+              </div>
+            ) : null}
             {source.noteText ? <p className="htb-evidence-source__note">{source.noteText}</p> : null}
             <a className="htb-evidence-source__link" href={source.url} target="_blank" rel="noopener noreferrer">
               {viewOriginalLabel}
-              <span aria-hidden="true"> ↗</span>
+              <Icon name="external" />
             </a>
           </li>
         ))}

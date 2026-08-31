@@ -170,6 +170,7 @@
 .page-shell__lede {
   max-width: 62ch;
   font-size: var(--htb-font-size-lg);
+  font-weight: var(--htb-font-weight-regular);
   line-height: var(--htb-font-line-height-relaxed);
   color: var(--htb-text-secondary);
 }
@@ -204,16 +205,23 @@
   outline-offset: 4px;
   border-radius: var(--htb-radius-lg);
 }
+/* Main reading content leads with primary ink; supporting copy inside it steps down explicitly
+   (.prose .supporting / .muted), so the title → body → supporting → metadata ramp reads through
+   colour, weight and size together rather than colour alone. */
 .prose {
   max-width: 68ch;
   display: flex;
   flex-direction: column;
   gap: var(--htb-space-sm);
-  color: var(--htb-text-secondary);
+  color: var(--htb-text-primary);
   line-height: var(--htb-font-line-height-relaxed);
 }
 .prose strong {
-  color: var(--htb-text-primary);
+  font-weight: var(--htb-font-weight-semibold);
+}
+.prose .supporting,
+.supporting {
+  color: var(--htb-text-secondary);
 }
 .muted {
   color: var(--htb-text-muted);
@@ -288,4 +296,10 @@
 }
 .guidance-evidence-card__claim p {
   margin: 0;
+}
+/* The canonical claim is the main content of the card: primary ink, comfortable measure. */
+.guidance-evidence-card__claim > p:first-child {
+  color: var(--htb-text-primary);
+  max-width: 62ch;
+  line-height: var(--htb-font-line-height-relaxed);
 }
