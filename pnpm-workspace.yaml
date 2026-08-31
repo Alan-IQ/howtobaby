@@ -2,3 +2,17 @@ packages:
   - "apps/*"
   - "packages/*"
   - "tools/*"
+
+# Supply-chain policy (pnpm >= 11 enforces this at install and lockfile verification):
+# a dependency version must be published at least 24 hours before it can be resolved,
+# so a freshly compromised release cannot enter the lockfile the day it appears.
+minimumReleaseAge: 1440
+
+# Build scripts are opt-in (pnpm 11 `allowBuilds`). unrs-resolver's install script only downloads an
+# optional native binding and has a JS fallback, so it is deliberately not allowed to run.
+allowBuilds:
+  unrs-resolver: false
+
+# Run package scripts through pnpm's POSIX shell emulator so env-prefixed scripts
+# (e.g. `DEPLOY_TARGET=static next build`) behave identically on Windows and Linux/CI.
+shellEmulator: true

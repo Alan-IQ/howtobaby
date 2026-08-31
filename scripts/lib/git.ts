@@ -65,18 +65,46 @@ export function trackedBlobs(cwd: string): TrackedBlob[] {
   return entries.map((e) => ({ ...e, size: sizes.get(e.oid) ?? 0 }));
 }
 
-/** Paths that Git would ignore, out of the given candidate list. */
-export function ignoredPaths(candidates: string[], cwd: string): Set<string> {
+function checkIgnore(paths: string[], cwd: string): { status: number | null; stdout: string; stderr: string } {
   const result = spawnSync("git", ["check-ignore", "--no-index", "-z", "--stdin"], {
     cwd,
-    input: `${candidates.join("\0")}\0`,
+    input: `${paths.join("\0")}\0`,
     encoding: "utf8",
   });
+  return { status: result.status, stdout: result.stdout, stderr: result.stderr };
+}
+
+/**
+ * Paths that Git would ignore, out of the given candidate list.
+ *
+ * Git refuses a pathspec that passes through a symbolic link in the working tree ("is beyond a symbolic
+ * link") — which is exactly what an installed pnpm workspace looks like (apps/web/node_modules/next is a
+ * symlink). Such a probe is re-evaluated at the nearest ancestor that Git accepts: if that ancestor is
+ * ignored, the probe path is ignored too.
+ */
+export function ignoredPaths(candidates: string[], cwd: string): Set<string> {
+  const batch = checkIgnore(candidates, cwd);
   // exit 1 == none ignored; 128 == error
-  if (result.status !== 0 && result.status !== 1) {
-    throw new Error(`git check-ignore failed: ${result.stderr.trim()}`);
+  if (batch.status === 0 || batch.status === 1) return new Set(batch.stdout.split("\0").filter(Boolean));
+  if (!/beyond a symbolic link/.test(batch.stderr)) throw new Error(`git check-ignore failed: ${batch.stderr.trim()}`);
+
+  const ignored = new Set<string>();
+  for (const candidate of candidates) {
+    let probe = candidate;
+    for (;;) {
+      const single = checkIgnore([probe], cwd);
+      if (single.status === 0) {
+        ignored.add(candidate);
+        break;
+      }
+      if (single.status === 1) break;
+      if (!/beyond a symbolic link/.test(single.stderr)) throw new Error(`git check-ignore failed for ${candidate}: ${single.stderr.trim()}`);
+      const parent = probe.includes("/") ? probe.slice(0, probe.lastIndexOf("/")) : "";
+      if (!parent) break;
+      probe = parent;
+    }
   }
-  return new Set(result.stdout.split("\0").filter(Boolean));
+  return ignored;
 }
 
 export function countObjects(cwd: string): Record<string, string> {

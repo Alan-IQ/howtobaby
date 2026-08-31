@@ -1,28 +1,189 @@
 name: Deploy production
 
-# Phase 0 placeholder — owned by docs/REPOSITORY_STRUCTURE.md §12 and docs/SYSTEM_ARCHITECTURE.md §13.
+# Production deployment to HawkHost (DEPLOYMENT_HAWKHOST.md; docs/REPOSITORY_STRUCTURE.md §12;
+# docs/SYSTEM_ARCHITECTURE.md §13). Pipeline:
 #
-# Recorded decision (Phase 0): HowToBaby deploys static-first and stays server-capable. A full static export
-# (`DEPLOY_TARGET=static` → `output: "export"`) is one deployment profile for shared hosting, never a permanent
-# architecture constraint. The production pipeline (build → verify export → transfer to the host → smoke check)
-# is described as a runbook in DEPLOYMENT_HAWKHOST.md and is implemented in Phase 1, once apps/web exists and
-# the Phase 1 gate ("static-first build deploys; full-static export remains optional") can actually be tested.
+#   push to main
+#     → verify   : repository gates + lint + typecheck + tests + DEPLOY_TARGET=static build + export check
+#     → deploy   : (GitHub Environment `production`) SSH sentinel check → rsync --delete → smoke check
 #
-# Until then this workflow is manual-only and exits non-zero without touching any host, so nothing can deploy
-# by accident and no production secrets are required.
+# The static export is a deployment profile for shared hosting; the application stays static-first and
+# server-capable. Nothing host-specific is hard-coded: hostname, port, user, key, known_hosts and document
+# root all come from the `production` environment secrets (HH_*). The deploy job refuses to run unless the
+# sentinel file `.howtobaby-deploy-root` exists inside HH_DEPLOY_PATH, so a mistyped path can never be wiped.
 
 on:
+  push:
+    branches: [main]
   workflow_dispatch:
 
 permissions:
   contents: read
 
+# One production deploy at a time; never cancel a deploy that has already started transferring files.
+concurrency:
+  group: deploy-production
+  cancel-in-progress: false
+
+env:
+  NEXT_TELEMETRY_DISABLED: "1"
+
 jobs:
-  deploy:
-    name: Production deploy (not implemented before Phase 1)
+  verify:
+    name: Gates and static build
     runs-on: ubuntu-latest
     steps:
-      - name: Not implemented
+      - name: Checkout (full history for repository-health metrics)
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Repository gates (typecheck, baseline, health, theme boundary, strict licenses)
+        run: pnpm check
+
+      - name: Lint
+        run: pnpm lint
+
+      - name: Unit tests
+        run: pnpm test
+
+      - name: Build static export (DEPLOY_TARGET=static)
+        run: pnpm build:static
+
+      - name: Verify static export
         run: |
-          echo "::error title=Deploy production::Production deployment is a Phase 1 deliverable (docs/IMPLEMENTATION_ROADMAP.md). No build was produced and no host was contacted. See DEPLOYMENT_HAWKHOST.md for the prepared runbook."
-          exit 1
+          test -f apps/web/out/index.html || { echo "::error title=Static export::apps/web/out/index.html is missing — refusing to deploy"; exit 1; }
+          test -f apps/web/out/404.html || { echo "::error title=Static export::apps/web/out/404.html is missing"; exit 1; }
+          test -f apps/web/out/.htaccess || { echo "::error title=Static export::apps/web/out/.htaccess is missing"; exit 1; }
+          echo "Static export OK: $(find apps/web/out -type f | wc -l) files, $(du -sh apps/web/out | cut -f1)"
+
+      - name: Upload static export
+        uses: actions/upload-artifact@v4
+        with:
+          name: static-export-${{ github.sha }}
+          path: apps/web/out
+          include-hidden-files: true
+          if-no-files-found: error
+          retention-days: 14
+
+  deploy:
+    name: Deploy to HawkHost
+    needs: verify
+    runs-on: ubuntu-latest
+    environment:
+      name: production
+      url: https://howtobaby.com
+    steps:
+      - name: Check that the production secrets are configured
+        env:
+          HH_SSH_HOST: ${{ secrets.HH_SSH_HOST }}
+          HH_SSH_PORT: ${{ secrets.HH_SSH_PORT }}
+          HH_SSH_USER: ${{ secrets.HH_SSH_USER }}
+          HH_SSH_PRIVATE_KEY: ${{ secrets.HH_SSH_PRIVATE_KEY }}
+          HH_SSH_KNOWN_HOSTS: ${{ secrets.HH_SSH_KNOWN_HOSTS }}
+          HH_DEPLOY_PATH: ${{ secrets.HH_DEPLOY_PATH }}
+        run: |
+          missing=0
+          for name in HH_SSH_HOST HH_SSH_PORT HH_SSH_USER HH_SSH_PRIVATE_KEY HH_SSH_KNOWN_HOSTS HH_DEPLOY_PATH; do
+            if [ -z "${!name}" ]; then
+              echo "::error title=Deploy production::GitHub Environment 'production' secret $name is not set (see DEPLOYMENT_HAWKHOST.md)"
+              missing=1
+            fi
+          done
+          [ "$missing" -eq 0 ] || exit 1
+          case "$HH_DEPLOY_PATH" in
+            /*) ;;
+            *) echo "::error title=Deploy production::HH_DEPLOY_PATH must be an absolute path"; exit 1 ;;
+          esac
+
+      - name: Download static export
+        uses: actions/download-artifact@v4
+        with:
+          name: static-export-${{ github.sha }}
+          path: out
+
+      - name: Verify downloaded export
+        run: |
+          test -f out/index.html || { echo "::error title=Deploy production::downloaded export has no index.html"; exit 1; }
+          test -f out/.htaccess || { echo "::error title=Deploy production::downloaded export has no .htaccess"; exit 1; }
+
+      - name: Configure SSH (deploy key + verified known_hosts)
+        env:
+          HH_SSH_PRIVATE_KEY: ${{ secrets.HH_SSH_PRIVATE_KEY }}
+          HH_SSH_KNOWN_HOSTS: ${{ secrets.HH_SSH_KNOWN_HOSTS }}
+        run: |
+          mkdir -p $HOME/.ssh
+          chmod 700 $HOME/.ssh
+          printf '%s\n' "$HH_SSH_PRIVATE_KEY" > $HOME/.ssh/deploy_key
+          chmod 600 $HOME/.ssh/deploy_key
+          printf '%s\n' "$HH_SSH_KNOWN_HOSTS" > $HOME/.ssh/known_hosts
+          chmod 644 $HOME/.ssh/known_hosts
+
+      - name: Check deployment sentinel on the host
+        env:
+          HH_SSH_HOST: ${{ secrets.HH_SSH_HOST }}
+          HH_SSH_PORT: ${{ secrets.HH_SSH_PORT }}
+          HH_SSH_USER: ${{ secrets.HH_SSH_USER }}
+          HH_DEPLOY_PATH: ${{ secrets.HH_DEPLOY_PATH }}
+        run: |
+          # StrictHostKeyChecking=yes: the host key must match HH_SSH_KNOWN_HOSTS exactly.
+          ssh -i $HOME/.ssh/deploy_key -p "$HH_SSH_PORT" \
+              -o StrictHostKeyChecking=yes -o UserKnownHostsFile=$HOME/.ssh/known_hosts -o BatchMode=yes -o ConnectTimeout=20 \
+              "$HH_SSH_USER@$HH_SSH_HOST" \
+              "test -d \"$HH_DEPLOY_PATH\" && test -f \"$HH_DEPLOY_PATH/.howtobaby-deploy-root\" && command -v rsync >/dev/null" \
+            || { echo "::error title=Deploy production::HH_DEPLOY_PATH is missing, has no .howtobaby-deploy-root sentinel, or rsync is unavailable on the host — refusing rsync --delete"; exit 1; }
+          echo "Sentinel present; document root is dedicated to HowToBaby."
+
+      - name: Deploy with rsync
+        env:
+          HH_SSH_HOST: ${{ secrets.HH_SSH_HOST }}
+          HH_SSH_PORT: ${{ secrets.HH_SSH_PORT }}
+          HH_SSH_USER: ${{ secrets.HH_SSH_USER }}
+          HH_DEPLOY_PATH: ${{ secrets.HH_DEPLOY_PATH }}
+        run: |
+          # --delete keeps the document root identical to the export. The sentinel, cPanel/AutoSSL paths and
+          # cgi-bin are protected so a deploy never removes host-managed files.
+          rsync --archive --compress --checksum --delete --delete-after \
+                --human-readable --itemize-changes --stats \
+                --exclude='.howtobaby-deploy-root' \
+                --exclude='.well-known/' \
+                --exclude='cgi-bin/' \
+                -e "ssh -i $HOME/.ssh/deploy_key -p $HH_SSH_PORT -o StrictHostKeyChecking=yes -o UserKnownHostsFile=$HOME/.ssh/known_hosts -o BatchMode=yes" \
+                out/ "$HH_SSH_USER@$HH_SSH_HOST:$HH_DEPLOY_PATH/"
+
+      - name: Smoke check https://howtobaby.com
+        run: |
+          # Cloudflare/DNS propagation can lag the first deploy; retry briefly, then fail loudly.
+          for attempt in 1 2 3 4 5 6; do
+            code=$(curl -sS -o /tmp/index.html -w '%{http_code}' --max-time 20 https://howtobaby.com/ || echo "000")
+            if [ "$code" = "200" ] && grep -q 'data-theme="baby-modern-glass"' /tmp/index.html; then
+              echo "howtobaby.com responded 200 with the HowToBaby shell (attempt $attempt)."
+              break
+            fi
+            echo "Attempt $attempt: HTTP $code — retrying in 10s"
+            [ "$attempt" -lt 6 ] || { echo "::error title=Smoke check::https://howtobaby.com did not serve the deployed shell (last status $code)"; exit 1; }
+            sleep 10
+          done
+
+          # Canonical host: www must redirect to the apex over https (Cloudflare rule or origin .htaccess).
+          www=$(curl -sS -o /dev/null -w '%{http_code} %{redirect_url}' --max-time 20 https://www.howtobaby.com/ || echo "000")
+          case "$www" in
+            30[1278]\ https://howtobaby.com/*) echo "www.howtobaby.com redirects to the canonical host ($www)." ;;
+            *) echo "::warning title=Canonical host::www.howtobaby.com did not redirect to https://howtobaby.com/ (got: $www). Check the Cloudflare redirect rule / DNS for www." ;;
+          esac
+
+      - name: Remove deploy key
+        if: always()
+        run: rm -f $HOME/.ssh/deploy_key

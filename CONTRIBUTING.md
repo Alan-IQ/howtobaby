@@ -31,23 +31,29 @@ A source URL alone is not enough. Health/safety content changes must preserve cl
 
 ## Development setup
 
-Requirements: Node.js `>= 22.18` (see `.nvmrc`) and pnpm `10` (pinned in `package.json` → `packageManager`; `corepack enable` installs it).
+Requirements: Node.js `>= 22.18` (see `.nvmrc`) and pnpm `11` (pinned in `package.json` → `packageManager`; `corepack enable` installs it). Package scripts run through pnpm's POSIX shell emulator (`shellEmulator: true` in `pnpm-workspace.yaml`), so env-prefixed scripts like `DEPLOY_TARGET=static next build` work on Windows too. pnpm also enforces the supply-chain policy there (`minimumReleaseAge: 1440`): a dependency release younger than 24 hours cannot be resolved into the lockfile — if an install fails on a brand-new release, wait out the window or pick an older version instead of relaxing the policy.
 
 ```bash
 pnpm install --frozen-lockfile
-pnpm check            # typecheck + baseline + repository health + strict license report
+pnpm dev              # Next.js dev server
+pnpm check            # typecheck + baseline + repository health + theme boundary + strict license report
+pnpm lint && pnpm test
+pnpm build            # default static-first/server-capable build
+pnpm build:static     # DEPLOY_TARGET=static export profile (what production deploys)
+pnpm validate         # all of the above in CI order
 ```
 
 Individual gates:
 
 ```bash
-pnpm typecheck                        # TypeScript check of scripts/
+pnpm typecheck                        # scripts/ + every workspace package/app
 node scripts/check-repo-baseline.ts   # layout, workspace config, workflows, license entry points, doc links
 node scripts/check-repo-health.ts     # large-blob guard, deny patterns, size report (--base=origin/main for PR diff)
+node scripts/check-theme-boundary.ts  # semantic tokens only; no vendor-theme / theme-pack imports in product code
 node scripts/report-licenses.ts       # dependency + asset license report (--strict to fail on findings)
 ```
 
-The scripts run on plain Node + Git (native type stripping); no build step is required.
+The `scripts/` gates run on plain Node + Git (native type stripping); no build step is required. Unit tests are Vitest files colocated with their package (`packages/*/src/**/*.test.ts`, `apps/web/src/**/*.test.ts`).
 
 ## Coding conventions
 
@@ -55,6 +61,8 @@ The scripts run on plain Node + Git (native type stripping); no build step is re
 - English for code, identifiers, comments, commit messages, and technical docs. English docs are canonical; Vietnamese companions mirror decisions.
 - New original source files start with `// SPDX-License-Identifier: AGPL-3.0-only` (software) — knowledge/docs are CC-BY-NC-SA-4.0 by path, see `LICENSE.md`.
 - Respect package ownership and dependency direction from `docs/REPOSITORY_STRUCTURE.md`. No medical prose in `apps/web`, `packages/core`, or `packages/ui`; no vendor-theme imports in product/domain code.
+- In `packages/themes`, relative imports keep explicit `.ts` extensions (the package must stay runnable on plain Node for `scripts/generate-theme-reference-css.ts`); ignore/disable your IDE's "import can be shortened" suggestion there — `scripts/check-theme-boundary.ts` fails CI if an import is shortened.
+- Styling uses semantic tokens only (`var(--htb-…)` emitted by the css-vars adapter). Raw colour values belong in theme packs under `packages/themes/src`; `scripts/check-theme-boundary.ts` fails CI otherwise. Product code imports `@howtobaby/themes` (contract + registry) only, never a theme pack or `vendor-themes/**` by path.
 - Stable claim/source/tool/theme IDs never change because files move or labels change.
 - Do not implement behavior from a later phase of `docs/IMPLEMENTATION_ROADMAP.md`.
 
@@ -66,8 +74,8 @@ The scripts run on plain Node + Git (native type stripping); no build step is re
 
 ## Commits and pull requests
 
-- Work on a branch and open a pull request; CI (`ci.yml`, `repo-health.yml`) runs on every push and PR.
-- Branch protection is **not yet enabled** on GitHub (it is a repository setting, not configurable from this codebase). Until a maintainer enables it, a direct push to `main` is technically possible and CI failures are advisory. Required setup (GitHub → Settings → Branches → add rule for `main`): require a pull request before merging; require status checks `Repository baseline` (CI) and `Large-blob guard and size report` (Repository health) to pass; require branches to be up to date; block force pushes and deletions.
+- Work on a branch and open a pull request; CI (`ci.yml`, `repo-health.yml`) runs on every push and PR. **A push to `main` deploys production** (`deploy.yml` → `https://howtobaby.com`) once the `production` GitHub Environment is configured, so never push unreviewed work to `main`.
+- Branch protection is **not yet enabled** on GitHub (it is a repository setting, not configurable from this codebase). Until a maintainer enables it, a direct push to `main` is technically possible and CI failures are advisory. Required setup (GitHub → Settings → Branches → add rule for `main`): require a pull request before merging; require status checks `Repository baseline` and `App lint, typecheck, tests, builds` (CI) and `Large-blob guard and size report` (Repository health) to pass; require branches to be up to date; block force pushes and deletions.
 - Commit subject: plain-language imperative describing the whole change, no type/scope prefix. Body bullets use the most specific Conventional Commits prefix (`feat`, `fix`, `docs`, `refactor`, `test`, `build`, `ci`, `chore`, `perf`, `revert`) with an optional scope:
 
   ```text

@@ -1,5 +1,5 @@
 {
-  "$comment": "Dependency-license policy for scripts/report-licenses.ts, implementing docs/LICENSING_POLICY.md §9. HowToBaby software is AGPL-3.0-only; dependencies are classified by SPDX id. 'allowed' needs no review; 'review' must have a reviewed[] decision before --strict passes; anything else (unknown/custom/unlisted) is a review-required finding. Never add an id to 'allowed' merely because installation succeeded.",
+  "$comment": "Dependency-license policy for scripts/report-licenses.ts, implementing docs/LICENSING_POLICY.md \u00a79. HowToBaby software is AGPL-3.0-only; dependencies are classified by SPDX id. 'allowed' needs no review; 'review' must have a reviewed[] decision before --strict passes; anything else (unknown/custom/unlisted) is a review-required finding. Never add an id to 'allowed' merely because installation succeeded.",
   "version": 1,
   "allowed": [
     "MIT",
@@ -52,11 +52,150 @@
     "Unknown"
   ],
   "forbidden": [],
-  "reviewed": [],
+  "reviewed": [
+    {
+      "name": "@img/sharp-libvips-linux-x64",
+      "license": "LGPL-3.0-or-later",
+      "decision": "accepted",
+      "reason": "Optional prebuilt libvips binary installed by next -> sharp for build-time/server image optimization on this platform only. LGPL-3.0 library used unmodified and dynamically linked; never bundled into the client, never part of the static export (images.unoptimized under DEPLOY_TARGET=static), never redistributed by this repository. Compatible with AGPL-3.0-only application code.",
+      "reviewedBy": "maintainer (recorded during Phase 1 toolchain setup; confirm at next license review)",
+      "date": "2026-08-30"
+    },
+    {
+      "name": "@img/sharp-libvips-linux-arm64",
+      "license": "LGPL-3.0-or-later",
+      "decision": "accepted",
+      "reason": "Optional prebuilt libvips binary installed by next -> sharp for build-time/server image optimization on this platform only. LGPL-3.0 library used unmodified and dynamically linked; never bundled into the client, never part of the static export (images.unoptimized under DEPLOY_TARGET=static), never redistributed by this repository. Compatible with AGPL-3.0-only application code.",
+      "reviewedBy": "maintainer (recorded during Phase 1 toolchain setup; confirm at next license review)",
+      "date": "2026-08-30"
+    },
+    {
+      "name": "@img/sharp-libvips-linux-arm",
+      "license": "LGPL-3.0-or-later",
+      "decision": "accepted",
+      "reason": "Optional prebuilt libvips binary installed by next -> sharp for build-time/server image optimization on this platform only. LGPL-3.0 library used unmodified and dynamically linked; never bundled into the client, never part of the static export (images.unoptimized under DEPLOY_TARGET=static), never redistributed by this repository. Compatible with AGPL-3.0-only application code.",
+      "reviewedBy": "maintainer (recorded during Phase 1 toolchain setup; confirm at next license review)",
+      "date": "2026-08-30"
+    },
+    {
+      "name": "@img/sharp-libvips-linux-ppc64",
+      "license": "LGPL-3.0-or-later",
+      "decision": "accepted",
+      "reason": "Optional prebuilt libvips binary installed by next -> sharp for build-time/server image optimization on this platform only. LGPL-3.0 library used unmodified and dynamically linked; never bundled into the client, never part of the static export (images.unoptimized under DEPLOY_TARGET=static), never redistributed by this repository. Compatible with AGPL-3.0-only application code.",
+      "reviewedBy": "maintainer (recorded during Phase 1 toolchain setup; confirm at next license review)",
+      "date": "2026-08-30"
+    },
+    {
+      "name": "@img/sharp-libvips-linux-s390x",
+      "license": "LGPL-3.0-or-later",
+      "decision": "accepted",
+      "reason": "Optional prebuilt libvips binary installed by next -> sharp for build-time/server image optimization on this platform only. LGPL-3.0 library used unmodified and dynamically linked; never bundled into the client, never part of the static export (images.unoptimized under DEPLOY_TARGET=static), never redistributed by this repository. Compatible with AGPL-3.0-only application code.",
+      "reviewedBy": "maintainer (recorded during Phase 1 toolchain setup; confirm at next license review)",
+      "date": "2026-08-30"
+    },
+    {
+      "name": "@img/sharp-libvips-linux-riscv64",
+      "license": "LGPL-3.0-or-later",
+      "decision": "accepted",
+      "reason": "Optional prebuilt libvips binary installed by next -> sharp for build-time/server image optimization on this platform only. LGPL-3.0 library used unmodified and dynamically linked; never bundled into the client, never part of the static export (images.unoptimized under DEPLOY_TARGET=static), never redistributed by this repository. Compatible with AGPL-3.0-only application code.",
+      "reviewedBy": "maintainer (recorded during Phase 1 toolchain setup; confirm at next license review)",
+      "date": "2026-08-30"
+    },
+    {
+      "name": "@img/sharp-libvips-linuxmusl-x64",
+      "license": "LGPL-3.0-or-later",
+      "decision": "accepted",
+      "reason": "Optional prebuilt libvips binary installed by next -> sharp for build-time/server image optimization on this platform only. LGPL-3.0 library used unmodified and dynamically linked; never bundled into the client, never part of the static export (images.unoptimized under DEPLOY_TARGET=static), never redistributed by this repository. Compatible with AGPL-3.0-only application code.",
+      "reviewedBy": "maintainer (recorded during Phase 1 toolchain setup; confirm at next license review)",
+      "date": "2026-08-30"
+    },
+    {
+      "name": "@img/sharp-libvips-linuxmusl-arm64",
+      "license": "LGPL-3.0-or-later",
+      "decision": "accepted",
+      "reason": "Optional prebuilt libvips binary installed by next -> sharp for build-time/server image optimization on this platform only. LGPL-3.0 library used unmodified and dynamically linked; never bundled into the client, never part of the static export (images.unoptimized under DEPLOY_TARGET=static), never redistributed by this repository. Compatible with AGPL-3.0-only application code.",
+      "reviewedBy": "maintainer (recorded during Phase 1 toolchain setup; confirm at next license review)",
+      "date": "2026-08-30"
+    },
+    {
+      "name": "@img/sharp-libvips-darwin-x64",
+      "license": "LGPL-3.0-or-later",
+      "decision": "accepted",
+      "reason": "Optional prebuilt libvips binary installed by next -> sharp for build-time/server image optimization on this platform only. LGPL-3.0 library used unmodified and dynamically linked; never bundled into the client, never part of the static export (images.unoptimized under DEPLOY_TARGET=static), never redistributed by this repository. Compatible with AGPL-3.0-only application code.",
+      "reviewedBy": "maintainer (recorded during Phase 1 toolchain setup; confirm at next license review)",
+      "date": "2026-08-30"
+    },
+    {
+      "name": "@img/sharp-libvips-darwin-arm64",
+      "license": "LGPL-3.0-or-later",
+      "decision": "accepted",
+      "reason": "Optional prebuilt libvips binary installed by next -> sharp for build-time/server image optimization on this platform only. LGPL-3.0 library used unmodified and dynamically linked; never bundled into the client, never part of the static export (images.unoptimized under DEPLOY_TARGET=static), never redistributed by this repository. Compatible with AGPL-3.0-only application code.",
+      "reviewedBy": "maintainer (recorded during Phase 1 toolchain setup; confirm at next license review)",
+      "date": "2026-08-30"
+    },
+    {
+      "name": "@img/sharp-libvips-win32-x64",
+      "license": "LGPL-3.0-or-later",
+      "decision": "accepted",
+      "reason": "Optional prebuilt libvips binary installed by next -> sharp for build-time/server image optimization on this platform only. LGPL-3.0 library used unmodified and dynamically linked; never bundled into the client, never part of the static export (images.unoptimized under DEPLOY_TARGET=static), never redistributed by this repository. Compatible with AGPL-3.0-only application code.",
+      "reviewedBy": "maintainer (recorded during Phase 1 toolchain setup; confirm at next license review)",
+      "date": "2026-08-30"
+    },
+    {
+      "name": "@img/sharp-libvips-win32-arm64",
+      "license": "LGPL-3.0-or-later",
+      "decision": "accepted",
+      "reason": "Optional prebuilt libvips binary installed by next -> sharp for build-time/server image optimization on this platform only. LGPL-3.0 library used unmodified and dynamically linked; never bundled into the client, never part of the static export (images.unoptimized under DEPLOY_TARGET=static), never redistributed by this repository. Compatible with AGPL-3.0-only application code.",
+      "reviewedBy": "maintainer (recorded during Phase 1 toolchain setup; confirm at next license review)",
+      "date": "2026-08-30"
+    },
+    {
+      "name": "@img/sharp-win32-x64",
+      "license": "Apache-2.0 AND LGPL-3.0-or-later",
+      "decision": "accepted",
+      "reason": "Optional prebuilt sharp binary for Windows, installed by next -> sharp for build-time/server image optimization only. Sharp's own code is Apache-2.0; the bundled libvips is LGPL-3.0, used unmodified and dynamically linked. Never bundled into the client, never part of the static export (images.unoptimized under DEPLOY_TARGET=static), never redistributed by this repository. Compatible with AGPL-3.0-only application code.",
+      "reviewedBy": "maintainer (recorded during Phase 1 toolchain setup; confirm at next license review)",
+      "date": "2026-08-30"
+    },
+    {
+      "name": "@img/sharp-win32-arm64",
+      "license": "Apache-2.0 AND LGPL-3.0-or-later",
+      "decision": "accepted",
+      "reason": "Optional prebuilt sharp binary for Windows, installed by next -> sharp for build-time/server image optimization only. Sharp's own code is Apache-2.0; the bundled libvips is LGPL-3.0, used unmodified and dynamically linked. Never bundled into the client, never part of the static export (images.unoptimized under DEPLOY_TARGET=static), never redistributed by this repository. Compatible with AGPL-3.0-only application code.",
+      "reviewedBy": "maintainer (recorded during Phase 1 toolchain setup; confirm at next license review)",
+      "date": "2026-08-30"
+    },
+    {
+      "name": "@img/sharp-win32-ia32",
+      "license": "Apache-2.0 AND LGPL-3.0-or-later",
+      "decision": "accepted",
+      "reason": "Optional prebuilt sharp binary for Windows, installed by next -> sharp for build-time/server image optimization only. Sharp's own code is Apache-2.0; the bundled libvips is LGPL-3.0, used unmodified and dynamically linked. Never bundled into the client, never part of the static export (images.unoptimized under DEPLOY_TARGET=static), never redistributed by this repository. Compatible with AGPL-3.0-only application code.",
+      "reviewedBy": "maintainer (recorded during Phase 1 toolchain setup; confirm at next license review)",
+      "date": "2026-08-30"
+    }
+  ],
   "assetExtensions": [
-    "png", "jpg", "jpeg", "gif", "webp", "avif", "svg", "ico",
-    "mp3", "wav", "ogg", "m4a", "flac", "aac",
-    "mp4", "webm", "mov",
-    "woff", "woff2", "ttf", "otf", "eot"
+    "png",
+    "jpg",
+    "jpeg",
+    "gif",
+    "webp",
+    "avif",
+    "svg",
+    "ico",
+    "mp3",
+    "wav",
+    "ogg",
+    "m4a",
+    "flac",
+    "aac",
+    "mp4",
+    "webm",
+    "mov",
+    "woff",
+    "woff2",
+    "ttf",
+    "otf",
+    "eot"
   ]
 }

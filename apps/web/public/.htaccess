@@ -1,0 +1,34 @@
+# HowToBaby static export — Apache/cPanel document-root rules (DEPLOYMENT_HAWKHOST.md).
+# Deployed verbatim from apps/web/public by the static export. Canonical host is https://howtobaby.com;
+# Cloudflare enforces the same redirect at the edge, this is the origin-side guarantee.
+
+RewriteEngine On
+
+# www -> apex, http -> https (single hop to the canonical origin).
+RewriteCond %{HTTP_HOST} ^www\.(.+)$ [NC]
+RewriteRule ^ https://%1%{REQUEST_URI} [R=301,L]
+RewriteCond %{HTTPS} !=on
+RewriteCond %{HTTP:X-Forwarded-Proto} !=https
+RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
+
+# Next.js static export: directory URLs resolve to index.html; unknown paths get the exported 404 page.
+DirectoryIndex index.html
+ErrorDocument 404 /404.html
+
+<IfModule mod_headers.c>
+  Header set X-Content-Type-Options "nosniff"
+  Header set Referrer-Policy "strict-origin-when-cross-origin"
+  Header set X-Frame-Options "SAMEORIGIN"
+  # Hashed Next.js assets are immutable; HTML must revalidate.
+  <FilesMatch "\.(js|css|woff2?)$">
+    Header set Cache-Control "public, max-age=31536000, immutable"
+  </FilesMatch>
+  <FilesMatch "\.html$">
+    Header set Cache-Control "no-cache"
+  </FilesMatch>
+</IfModule>
+
+# Never serve the deployment sentinel.
+<Files ".howtobaby-deploy-root">
+  Require all denied
+</Files>

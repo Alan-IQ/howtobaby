@@ -76,7 +76,12 @@ function loadJson<T>(root: string, file: string): T {
 }
 
 function pnpmLicenses(root: string): Record<string, PnpmLicenseEntry[]> {
-  const result = spawnSync("pnpm", ["licenses", "list", "--json"], { cwd: root, encoding: "utf8", maxBuffer: 64 * 1024 * 1024, shell: process.platform === "win32" });
+  // On Windows pnpm is a .cmd shim, which needs a shell; pass the command as one string there so Node does
+  // not hit DEP0190 (args array combined with shell: true).
+  const result =
+    process.platform === "win32"
+      ? spawnSync("pnpm licenses list --json", { cwd: root, encoding: "utf8", maxBuffer: 64 * 1024 * 1024, shell: true })
+      : spawnSync("pnpm", ["licenses", "list", "--json"], { cwd: root, encoding: "utf8", maxBuffer: 64 * 1024 * 1024 });
   if (result.status !== 0) {
     throw new Error(`pnpm licenses list failed (is the workspace installed? run \`pnpm install\`): ${result.stderr.trim() || result.stdout.trim()}`);
   }

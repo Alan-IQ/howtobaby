@@ -1,9 +1,10 @@
 name: CI
 
-# Phase 0 CI skeleton (docs/REPOSITORY_STRUCTURE.md §12, docs/IMPLEMENTATION_ROADMAP.md Phase 0).
-# Validates the repository baseline: workspace install, TypeScript type-check of scripts, physical layout /
-# docs cross-references, repository health (large-blob guard, deny patterns, size reporting) and the
-# dependency/asset license report. Product/content validation jobs are added by later phases.
+# CI gates (docs/REPOSITORY_STRUCTURE.md §12, docs/IMPLEMENTATION_ROADMAP.md Phase 0–1).
+# `baseline` validates the repository contract (layout, health, licenses, theme/vendor boundary);
+# `app` validates the product code (lint, typecheck, unit tests) and proves both deployment profiles build:
+# the default static-first/server-capable build and the DEPLOY_TARGET=static export used by deploy.yml.
+# Product/content validation jobs (schemas, provenance, EN/VI parity) are added by later phases.
 
 on:
   push:
@@ -44,13 +45,16 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Type-check scripts
-        run: pnpm typecheck
+        run: pnpm exec tsc -p tsconfig.json --noEmit
 
       - name: Repository baseline (layout, workspace, workflows, license entry points, doc links)
         run: node scripts/check-repo-baseline.ts
 
       - name: Repository health (large-blob guard, deny patterns, size reporting)
         run: node scripts/check-repo-health.ts --json=reports/repo-health.json
+
+      - name: Theme boundary (semantic tokens only, no vendor/theme-pack imports in product code)
+        run: node scripts/check-theme-boundary.ts
 
       - name: License report (dependencies + tracked assets)
         run: node scripts/report-licenses.ts --strict
@@ -63,3 +67,44 @@ jobs:
           path: reports/
           if-no-files-found: ignore
           retention-days: 30
+
+  app:
+    name: App lint, typecheck, tests, builds
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Lint
+        run: pnpm lint
+
+      - name: Type-check (scripts + workspace packages + app)
+        run: pnpm typecheck
+
+      - name: Unit tests (theme contract, primitives, storage)
+        run: pnpm test
+
+      - name: Build — default profile (static-first, server-capable)
+        run: pnpm build
+
+      - name: Build — static export profile (DEPLOY_TARGET=static)
+        run: pnpm build:static
+
+      - name: Verify static export entry point
+        run: |
+          test -f apps/web/out/index.html || { echo "::error title=Static export::apps/web/out/index.html is missing"; exit 1; }
+          test -f apps/web/out/404.html || { echo "::error title=Static export::apps/web/out/404.html is missing"; exit 1; }
+          test -f apps/web/out/.htaccess || { echo "::error title=Static export::apps/web/out/.htaccess is missing"; exit 1; }
+          echo "Static export OK: $(find apps/web/out -type f | wc -l) files"

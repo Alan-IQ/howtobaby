@@ -22,9 +22,11 @@ The product has two equal pillars:
 
 ## Current status
 
-**Architecture/documentation baseline: v0.8.0 — Phase 0 (documentation and repository baseline) implemented; product code (Phase 1+) has not started.**
+**Architecture/documentation baseline: v0.8.0 — Phase 0 (repository baseline) and Phase 1 (app shell + theme engine) implemented; no guidance content is published yet (Phase 2+).**
 
 The repository contract intentionally defines product behavior, evidence governance, repository ownership, theme integration, storage boundaries, and implementation phases before production code is scaffolded. Phase 0 adds the pnpm monorepo root, the physical package layout, `.gitignore` boundaries for generated/cache/vendor/media material, a CI-enforced repository-health gate, and the dependency/asset license-reporting baseline.
+
+Phase 1 adds the Next.js + TypeScript application in `apps/web` (static-first, server-capable; `DEPLOY_TARGET=static` is an optional export profile), the vendor-neutral Theme Contract/Registry and css-vars adapter in `packages/themes` with the first-party **Baby Modern Glass** Light/Dark packs and a third-party adapter fixture, the semantic-token UI primitives in `packages/ui`, the AppShell/Header/primary navigation/page shell with responsive, reduced-motion/transparency and print scaffolding, a locally stored theme preference, the theme-boundary CI gate, and the production deployment pipeline to `https://howtobaby.com` (`.github/workflows/deploy.yml`, runbook in [`DEPLOYMENT_HAWKHOST.md`](DEPLOYMENT_HAWKHOST.md)). All product pages are shell placeholders: content schemas, age resolution and domain guidance start in Phase 2.
 
 ## What makes HowToBaby different
 
@@ -244,17 +246,24 @@ The detailed gates live in [`docs/IMPLEMENTATION_ROADMAP.md`](docs/IMPLEMENTATIO
 
 ## Development
 
-Requirements: Node.js `>= 22.18` (`.nvmrc`) and pnpm 10 (`corepack enable` picks up the pinned version from `package.json`).
+Requirements: Node.js `>= 22.18` (`.nvmrc`) and pnpm 11 (`corepack enable` picks up the version pinned in `package.json` → `packageManager`).
 
 ```bash
 pnpm install --frozen-lockfile
-pnpm check                            # typecheck + baseline + repository health + strict license report
+pnpm dev                              # Next.js dev server (apps/web)
+pnpm check                            # typecheck + baseline + repository health + theme boundary + strict license report
+pnpm lint                             # ESLint (apps/web)
+pnpm test                             # Vitest: theme contract, UI primitives, preference storage
+pnpm build                            # default profile: static-first, server-capable
+pnpm build:static                     # DEPLOY_TARGET=static → apps/web/out (shared-hosting export profile)
+pnpm validate                         # everything above, in CI order
 node scripts/check-repo-health.ts     # large-blob guard, deny patterns, Git size report
 node scripts/check-repo-baseline.ts   # layout / workspace / workflow / doc-link gate
+node scripts/check-theme-boundary.ts  # no raw palette values / vendor or theme-pack imports in product code
 node scripts/report-licenses.ts       # dependency + tracked-asset license report
 ```
 
-These are the only verified commands so far; the Next.js application and content validators arrive with Phase 1+. Contributor conventions live in [`CONTRIBUTING.md`](CONTRIBUTING.md).
+Content validators (`validate-*.ts`, `build-knowledge-index.ts`) are Phase 2 placeholders. Contributor conventions live in [`CONTRIBUTING.md`](CONTRIBUTING.md); production deployment is described in [`DEPLOYMENT_HAWKHOST.md`](DEPLOYMENT_HAWKHOST.md).
 
 ## Privacy and safety
 

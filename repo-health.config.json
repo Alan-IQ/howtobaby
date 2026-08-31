@@ -1,5 +1,5 @@
 {
-  "$comment": "Repository-health policy for scripts/check-repo-health.ts. Thresholds implement docs/REPOSITORY_HEALTH.md §5; raise a threshold only with a documented reason. Every exception must name a reason and an owner. placeholderPaths are the only files permitted inside deny-pattern directories; basename alone never grants an exemption.",
+  "$comment": "Repository-health policy for scripts/check-repo-health.ts. Thresholds implement docs/REPOSITORY_HEALTH.md \u00a75; raise a threshold only with a documented reason. Every exception must name a reason and an owner. placeholderPaths are the only files permitted inside deny-pattern directories; basename alone never grants an exemption.",
   "version": 1,
   "thresholds": {
     "blobWarnBytes": 10485760,
@@ -36,7 +36,8 @@
     "reports/licenses/dependency-licenses.json",
     "secrets/deploy_key",
     ".env",
-    ".env.production"
+    ".env.production",
+    "packages/ui/src/theme-tokens.generated.css"
   ],
   "denyPatterns": {
     "generated-database": [
@@ -117,7 +118,7 @@
     {
       "path": "vendor-themes/README.md",
       "maxBytes": 16384,
-      "reason": "public installation/license instructions only (docs/THEME_SYSTEM.md §9); no vendor source"
+      "reason": "public installation/license instructions only (docs/THEME_SYSTEM.md \u00a79); no vendor source"
     }
   ],
   "mediaExtensions": [
@@ -159,7 +160,7 @@
         "deny-pattern:archives"
       ],
       "maxBytes": 1048576,
-      "reason": "Historical documentation snapshots (v0.4.0–v0.8.0) kept as compact archives for audit history; content is HowToBaby-authored docs.",
+      "reason": "Historical documentation snapshots (v0.4.0\u2013v0.8.0) kept as compact archives for audit history; content is HowToBaby-authored docs.",
       "owner": "maintainer",
       "added": "2026-08-29"
     }

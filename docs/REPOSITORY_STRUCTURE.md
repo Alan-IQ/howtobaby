@@ -123,6 +123,7 @@ howtobaby/
 │  ├─ build-knowledge-index.ts
 │  ├─ check-repo-baseline.ts        # Layout/workspace/workflow/doc-link baseline gate
 │  ├─ check-repo-health.ts          # Large-blob guard, deny patterns, size reporting
+│  ├─ check-theme-boundary.ts       # Semantic-token / vendor-import boundary gate (THEME_SYSTEM.md)
 │  ├─ report-licenses.ts            # Dependency + tracked-asset license report
 │  ├─ lib/                          # Shared git/glob/report helpers for scripts
 │  ├─ build-evidence-index.ts

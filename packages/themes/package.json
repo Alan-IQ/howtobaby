@@ -1,0 +1,19 @@
+{
+  "name": "@howtobaby/themes",
+  "version": "0.8.0",
+  "private": true,
+  "license": "AGPL-3.0-only",
+  "description": "HowToBaby vendor-neutral Theme Contract, Theme Registry, first-party theme packs and adapters (docs/THEME_SYSTEM.md).",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "vitest run"
+  },
+  "devDependencies": {
+    "typescript": "^5.9.3",
+    "vitest": "^4.1.11"
+  }
+}
