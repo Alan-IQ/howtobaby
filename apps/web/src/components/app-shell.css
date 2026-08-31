@@ -115,7 +115,7 @@
   background: var(--htb-surface-glass);
   -webkit-backdrop-filter: blur(var(--htb-glass-blur)) saturate(var(--htb-glass-saturate));
   backdrop-filter: blur(var(--htb-glass-blur)) saturate(var(--htb-glass-saturate));
-  padding: var(--htb-space-2xs) var(--htb-space-2xs) calc(var(--htb-space-2xs) + env(safe-area-inset-bottom));
+  padding: var(--htb-space-2xs) var(--htb-space-xs) calc(var(--htb-space-2xs) + env(safe-area-inset-bottom));
 }
 @media (min-width: 960px) {
   .app-tabbar {
@@ -133,6 +133,14 @@
   display: flex;
   flex-direction: column;
   gap: var(--htb-space-xs);
+}
+.page-shell__header h1 {
+  font-size: var(--htb-font-size-2xl);
+}
+@media (min-width: 768px) {
+  .page-shell__header h1 {
+    font-size: var(--htb-font-size-3xl);
+  }
 }
 .page-shell__toolbar {
   display: flex;
@@ -178,6 +186,11 @@
   display: flex;
   flex-direction: column;
   gap: var(--htb-space-lg);
+}
+@media (min-width: 960px) {
+  .page-shell__body {
+    gap: var(--htb-space-xl);
+  }
 }
 
 /* ---------- content helpers ---------- */
@@ -238,7 +251,7 @@
   background: var(--htb-border-strong);
 }
 
-/* ---------- footer ---------- */
+/* ---------- footer: compact trust strip — links + mode switch on one band, fine print below ---------- */
 .site-footer {
   border-top: 1px solid var(--htb-border-subtle);
   background: var(--htb-surface-2);
@@ -246,22 +259,36 @@
 .site-footer__inner {
   max-width: var(--htb-layout-content-max-width);
   margin: 0 auto;
-  padding: var(--htb-space-lg) var(--htb-space-md) calc(var(--htb-space-lg) + var(--htb-layout-mobile-nav-height));
+  padding: var(--htb-space-md) var(--htb-space-md) calc(var(--htb-space-md) + var(--htb-layout-mobile-nav-height) + env(safe-area-inset-bottom));
   display: flex;
   flex-direction: column;
-  gap: var(--htb-space-md);
+  gap: var(--htb-space-sm);
   font-size: var(--htb-font-size-sm);
   color: var(--htb-text-secondary);
 }
 @media (min-width: 960px) {
   .site-footer__inner {
-    padding-bottom: var(--htb-space-lg);
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    row-gap: var(--htb-space-sm);
+    padding-bottom: var(--htb-space-md);
+  }
+  .site-footer__inner > nav {
+    grid-column: 1;
+  }
+  .site-footer__theme {
+    grid-column: 2;
+    justify-self: end;
+  }
+  .site-footer__inner > p {
+    grid-column: 1 / -1;
   }
 }
 .site-footer__links {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--htb-space-2xs) var(--htb-space-md);
+  gap: 0 var(--htb-space-md);
   margin: 0;
   padding: 0;
   list-style: none;
@@ -273,6 +300,12 @@
   min-height: var(--htb-layout-touch-target);
   color: var(--htb-text-secondary);
 }
+/* Pointer-precision devices don't need the 44px touch rows — the footer stays compact there. */
+@media (pointer: fine) {
+  .site-footer__links a {
+    min-height: 30px;
+  }
+}
 .site-footer__links a:hover {
   color: var(--htb-text-primary);
 }
@@ -281,6 +314,13 @@
   flex-wrap: wrap;
   align-items: center;
   gap: var(--htb-space-sm);
+}
+/* Fine print: clearly metadata-tier, never competing with page content. */
+.site-footer__inner > p {
+  margin: 0;
+  max-width: 80ch;
+  font-size: var(--htb-font-size-xs);
+  line-height: var(--htb-font-line-height-normal);
 }
 
 /* ---------- Guidance evidence card (Phase 2 canonical-claim rendering) ---------- */

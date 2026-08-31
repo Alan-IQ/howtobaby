@@ -40,8 +40,10 @@ export function ReferenceList({ title = "Sources used on this page", entries, vi
       <ul>
         {deduped.map((entry) => (
           <li key={entry.sourceId} className="htb-reference-list__entry">
-            <span className="htb-reference-list__org">{entry.organization}</span>
-            <span className="htb-reference-list__source-title">{entry.title}</span>
+            <span className="htb-reference-list__heading">
+              <span className="htb-reference-list__org">{entry.organization}</span>
+              <span className="htb-reference-list__source-title">{entry.title}</span>
+            </span>
             <span className="htb-reference-list__meta">
               {entry.verifiedLabel}
               {entry.statusLabel ? <span className="htb-reference-list__status"> · {entry.statusLabel}</span> : null}

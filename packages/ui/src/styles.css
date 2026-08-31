@@ -614,34 +614,64 @@ select {
   color: var(--htb-accent-tools);
 }
 
-/* Compact bottom-tab layout (mobile) */
+/* Compact bottom-tab layout (mobile/tablet): equal columns, centred, calm active pill. */
 .htb-nav--tabs {
   display: grid;
   grid-auto-flow: column;
   grid-auto-columns: 1fr;
-  gap: 0;
+  gap: 2px;
+  width: 100%;
+  max-width: 560px;
+  margin-inline: auto;
+}
+.htb-nav--tabs li {
+  display: grid;
+  min-width: 0;
 }
 .htb-nav--tabs .htb-nav__link {
+  display: flex;
   flex-direction: column;
+  align-items: center;
   justify-content: center;
-  gap: 2px;
+  gap: 3px;
+  min-width: 0;
   min-height: var(--htb-layout-mobile-nav-height);
   padding: var(--htb-space-2xs) 2px;
   border-radius: var(--htb-radius-md);
   font-size: var(--htb-font-size-xs);
-  line-height: 1.1;
+  line-height: 1.15;
+  letter-spacing: 0;
   text-align: center;
 }
-.htb-nav--tabs .htb-nav__link[aria-current="page"] {
-  background: transparent;
-  font-weight: var(--htb-font-weight-bold);
+.htb-nav--tabs .htb-icon {
+  width: 22px;
+  height: 22px;
 }
-.htb-nav--tabs .htb-nav__link[aria-current="page"]::after {
-  content: "";
-  width: 18px;
-  height: 3px;
-  border-radius: var(--htb-radius-pill);
-  background: currentColor;
+/* Active: soft tinted pill + heavier icon/label — clear without shouting, never colour alone. */
+.htb-nav--tabs .htb-nav__link[aria-current="page"] {
+  background: var(--htb-interactive-subtle-hover);
+  font-weight: var(--htb-font-weight-semibold);
+}
+.htb-nav--tabs .htb-nav__link[aria-current="page"] .htb-icon {
+  stroke-width: 2.1;
+}
+.htb-nav--tabs .htb-nav__link[data-accent="feeding"][aria-current="page"] {
+  background: var(--htb-accent-feeding-soft);
+}
+.htb-nav--tabs .htb-nav__link[data-accent="play"][aria-current="page"] {
+  background: var(--htb-accent-play-soft);
+}
+.htb-nav--tabs .htb-nav__link[data-accent="sleep"][aria-current="page"] {
+  background: var(--htb-accent-sleep-soft);
+}
+.htb-nav--tabs .htb-nav__link[data-accent="safety"][aria-current="page"] {
+  background: var(--htb-accent-safety-soft);
+}
+.htb-nav--tabs .htb-nav__link[data-accent="tools"][aria-current="page"] {
+  background: var(--htb-accent-tools-soft);
+}
+.htb-nav--tabs .htb-nav__link[data-accent="brand"][aria-current="page"] {
+  background: var(--htb-accent-brand-soft);
 }
 .htb-nav--tabs .htb-nav__label {
   max-width: 100%;
@@ -981,14 +1011,14 @@ button.htb-source-chip:focus-visible {
 .htb-evidence-source__badge {
   display: inline-flex;
   align-items: center;
-  padding: 1px var(--htb-space-xs);
+  padding: 2px var(--htb-space-xs);
   border: 1px solid var(--htb-border-subtle);
   border-radius: var(--htb-radius-pill);
   background: var(--htb-surface-2);
   color: var(--htb-text-secondary);
   font-size: var(--htb-font-size-xs);
   font-weight: var(--htb-font-weight-semibold);
-  line-height: 1.5;
+  line-height: 1.35;
   white-space: nowrap;
 }
 .htb-evidence-source__badge--attention {
@@ -1002,68 +1032,78 @@ button.htb-source-chip:focus-visible {
   max-width: 52ch;
 }
 
-/* Grouped metadata panel: icon + label + value rows on a subtle surface, kept as a <dl>. */
+/* Grouped metadata panel, kept as a <dl>: a fixed 14px icon column, the label beside it, and the
+   value on its own line indented to the label start — every row shares the same geometry, so
+   nothing jiggles between rows or wraps unpredictably in a narrow drawer. */
 .htb-evidence-source__meta-list {
-  margin: var(--htb-space-2xs) 0 0;
+  margin: 0;
   padding: var(--htb-space-sm) var(--htb-space-md);
   display: grid;
-  gap: var(--htb-space-xs);
+  gap: var(--htb-space-sm);
   border: 1px solid var(--htb-border-subtle);
   border-radius: var(--htb-radius-md);
   background: var(--htb-surface-2);
 }
 .htb-evidence-source__meta-row {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: baseline;
-  gap: var(--htb-space-2xs) var(--htb-space-xs);
-  font-size: var(--htb-font-size-sm);
+  display: grid;
+  gap: 2px;
 }
 .htb-evidence-source__meta-row dt {
   margin: 0;
-  display: inline-flex;
+  display: flex;
   align-items: center;
   gap: var(--htb-space-2xs);
   color: var(--htb-text-muted);
+  font-size: var(--htb-font-size-xs);
   font-weight: var(--htb-font-weight-medium);
+  letter-spacing: 0.01em;
+  line-height: var(--htb-font-line-height-normal);
 }
 .htb-evidence-source__meta-row dt .htb-icon {
-  width: 1em;
-  height: 1em;
+  flex: none;
+  width: 14px;
+  height: 14px;
   stroke-width: 1.6;
-  transform: translateY(0.12em);
-}
-.htb-evidence-source__meta-row dt span::after {
-  content: ":";
 }
 .htb-evidence-source__meta-row dd {
   margin: 0;
+  padding-inline-start: calc(14px + var(--htb-space-2xs));
   color: var(--htb-text-secondary);
+  font-size: var(--htb-font-size-sm);
+  line-height: var(--htb-font-line-height-normal);
 }
 
 /* "Why this source is used": a distinct secondary information block, calm brand tint. */
 .htb-evidence-source__why {
   display: flex;
-  gap: var(--htb-space-xs);
+  gap: var(--htb-space-2xs);
   padding: var(--htb-space-sm) var(--htb-space-md);
   border-radius: var(--htb-radius-md);
   background: var(--htb-accent-brand-soft);
   color: var(--htb-accent-brand);
 }
 .htb-evidence-source__why .htb-icon {
-  width: 1.1em;
-  height: 1.1em;
   flex: none;
-  margin-top: 0.2em;
+  width: 14px;
+  height: 14px;
+  stroke-width: 1.6;
+  /* Optically centred against the first (label) line. */
+  margin-top: 2px;
+}
+.htb-evidence-source__why > div {
+  display: grid;
+  gap: 2px;
 }
 .htb-evidence-source__why-label {
   font-size: var(--htb-font-size-xs);
   font-weight: var(--htb-font-weight-semibold);
+  letter-spacing: 0.02em;
   text-transform: uppercase;
-  letter-spacing: 0.04em;
+  line-height: var(--htb-font-line-height-normal);
 }
 .htb-evidence-source__why-text {
   font-size: var(--htb-font-size-sm);
+  line-height: var(--htb-font-line-height-normal);
   color: var(--htb-text-secondary);
 }
 .htb-evidence-source__note {
@@ -1103,14 +1143,14 @@ button.htb-source-chip:focus-visible {
 }
 
 .htb-reference-list {
-  margin-top: var(--htb-space-xl);
+  margin-top: var(--htb-space-lg);
 }
 .htb-reference-list__title {
   display: flex;
   align-items: center;
   gap: var(--htb-space-xs);
   font-size: var(--htb-font-size-lg);
-  margin: 0 0 var(--htb-space-sm);
+  margin: 0 0 var(--htb-space-xs);
 }
 .htb-reference-list__title-icon {
   width: 1em;
@@ -1128,13 +1168,20 @@ button.htb-source-chip:focus-visible {
   margin: 0;
   padding: 0;
   display: grid;
-  gap: var(--htb-space-sm);
+  gap: 0;
 }
+/* Compact two-line entries: "ORG · Title" then one metadata/action line. */
 .htb-reference-list__entry {
   display: grid;
   gap: 2px;
-  padding: var(--htb-space-sm) 0;
+  padding: var(--htb-space-xs) 0;
   border-top: 1px solid var(--htb-border-subtle);
+}
+.htb-reference-list__heading {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--htb-space-2xs) var(--htb-space-xs);
 }
 .htb-reference-list__org {
   font-size: var(--htb-font-size-xs);
@@ -1144,12 +1191,17 @@ button.htb-source-chip:focus-visible {
   letter-spacing: 0.04em;
 }
 .htb-reference-list__source-title {
+  font-size: var(--htb-font-size-sm);
   color: var(--htb-text-primary);
   font-weight: var(--htb-font-weight-semibold);
 }
 .htb-reference-list__meta {
   font-size: var(--htb-font-size-sm);
-  color: var(--htb-text-secondary);
+  line-height: var(--htb-font-line-height-normal);
+  color: var(--htb-text-muted);
+}
+.htb-reference-list__meta a {
+  color: var(--htb-text-link);
 }
 /* Status is informational here ("Current" included); tone-colouring belongs to the drawer badges. */
 .htb-reference-list__status {

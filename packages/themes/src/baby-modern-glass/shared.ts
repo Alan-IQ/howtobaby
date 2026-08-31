@@ -27,7 +27,7 @@ export const babyModernGlassFoundation: FoundationTokens = {
     easingEmphasized: "cubic-bezier(0.3, 0, 0, 1)",
   },
   glass: { blur: "18px", saturate: "1.4" },
-  layout: { contentMaxWidth: "1120px", headerHeight: "60px", mobileNavHeight: "64px", touchTarget: "44px" },
+  layout: { contentMaxWidth: "1120px", headerHeight: "60px", mobileNavHeight: "56px", touchTarget: "44px" },
 };
 
 export const babyModernGlassPrint: PrintTokens = {
