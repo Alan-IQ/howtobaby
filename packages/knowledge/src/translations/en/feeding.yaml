@@ -1,0 +1,12 @@
+# SPDX-License-Identifier: CC-BY-NC-SA-4.0
+# Canonical English strings for the feeding domain. English is authored/reviewed first
+# (GUIDANCE_CONTENT_CONTRACT.md §10); Vietnamese parity lives in translations/vi/feeding.yaml.
+# Source qualifiers ("about", "not recommended") must survive here — no invented precision.
+
+locale: en
+strings:
+  feeding.solids.start: >-
+    Introduce your baby to foods other than breast milk or infant formula at about
+    6 months, when they show signs of developmental readiness. Introducing solid
+    foods before 4 months is not recommended.
+  guidance.feeding.solids-start.title: Starting solid foods

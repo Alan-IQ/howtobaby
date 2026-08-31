@@ -251,9 +251,12 @@ Requirements: Node.js `>= 22.18` (`.nvmrc`) and pnpm 11 (`corepack enable` picks
 ```bash
 pnpm install --frozen-lockfile
 pnpm dev                              # Next.js dev server (apps/web)
-pnpm check                            # typecheck + baseline + repository health + theme boundary + strict license report
+pnpm check                            # typecheck + baseline + repository health + theme boundary + knowledge validation + strict license report
 pnpm lint                             # ESLint (apps/web)
-pnpm test                             # Vitest: theme contract, UI primitives, preference storage
+pnpm test                             # Vitest: theme contract, UI primitives, preference storage, knowledge graph
+pnpm build:knowledge                  # derived read models: knowledge.sqlite + manifests + evidence indexes (gitignored)
+pnpm validate:knowledge               # content/source/provenance/EN-VI-parity gates over canonical YAML
+pnpm check:knowledge-determinism      # delete-and-rebuild determinism proof for every derived knowledge artifact
 pnpm build                            # default profile: static-first, server-capable
 pnpm build:static                     # DEPLOY_TARGET=static → apps/web/out (shared-hosting export profile)
 pnpm validate                         # everything above, in CI order

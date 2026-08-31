@@ -1,0 +1,35 @@
+# SPDX-License-Identifier: CC-BY-NC-SA-4.0
+# Canonical source registry (docs/EVIDENCE_PROVENANCE.md §2, docs/REPOSITORY_STRUCTURE.md §8).
+# A source record identifies the original authority; it is not permission to reproduce the work.
+# Every `lastVerifiedAt` date means a maintainer actually opened the source on that date.
+
+sources:
+  - id: cdc-introduction-solid-foods
+    organization: CDC
+    title: "When, What, and How to Introduce Solid Foods"
+    canonicalUrl: "https://www.cdc.gov/infant-toddler-nutrition/foods-and-drinks/when-what-and-how-to-introduce-solid-foods.html"
+    jurisdiction: US
+    sourceType: public-health-guidance
+    updatedAt: 2026-04-14
+    lastVerifiedAt: 2026-08-31
+    nextReviewAt: 2027-08-31
+    status: current
+    accessMode: link-only
+    notes: >-
+      CDC parent guidance citing the Dietary Guidelines for Americans and AAP.
+      Interpret + cite + link only; the page wording stays CDC's.
+
+  - id: who-complementary-feeding
+    organization: WHO
+    title: "Infant and young child feeding"
+    canonicalUrl: "https://www.who.int/news-room/fact-sheets/detail/infant-and-young-child-feeding"
+    jurisdiction: global
+    sourceType: fact-sheet
+    updatedAt: 2026-08-04
+    lastVerifiedAt: 2026-08-31
+    nextReviewAt: 2027-08-31
+    status: current
+    accessMode: link-only
+    notes: >-
+      Global normative guidance used as corroboration for U.S.-primary feeding claims
+      (GUIDANCE_CONTENT_CONTRACT.md §12: U.S. authority stays primary for the U.S. product).

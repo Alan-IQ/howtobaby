@@ -1,16 +1,24 @@
 <component name="InspectionProjectProfileManager">
-  <profile version="1.0">
-    <option name="myName" value="Project Default" />
-    <!-- HowToBaby: intentional patterns the default profile flags.
-         - ES6PreferShortImport: packages/themes must keep explicit .ts import specifiers
-           (plain-Node runnable; enforced by scripts/check-theme-boundary.ts). Kept consistent repo-wide.
-         - PointlessBooleanExpressionJS: `caps?.[key] !== true` in the theme validator is a deliberate
-           exact-true capability check, not an accidental tautology.
-         - HtmlRequiredTitleElement: the <title> is injected by the Next.js Metadata API, not authored in JSX. -->
-    <!-- HtmlUnknownAnchorTarget: JetBrains does not index id attributes on JSX elements, so every href="#..." in TSX is a false positive (e.g. the Theme Lab section index links, whose anchors exist at runtime). -->
-    <inspection_tool class="HtmlUnknownAnchorTarget" enabled="false" level="WARNING" enabled_by_default="false" />
-    <inspection_tool class="ES6PreferShortImport" enabled="false" level="WARNING" enabled_by_default="false" />
-    <inspection_tool class="PointlessBooleanExpressionJS" enabled="false" level="WARNING" enabled_by_default="false" />
-    <inspection_tool class="HtmlRequiredTitleElement" enabled="false" level="WARNING" enabled_by_default="false" />
-  </profile>
+    <profile version="1.0">
+        <option name="myName" value="Project Default" />
+        <!-- HowToBaby: intentional patterns the default profile flags.
+             - ES6PreferShortImport: packages/themes must keep explicit .ts import specifiers
+               (plain-Node runnable; enforced by scripts/check-theme-boundary.ts). Kept consistent repo-wide.
+             - PointlessBooleanExpressionJS: `caps?.[key] !== true` in the theme validator is a deliberate
+               exact-true capability check, not an accidental tautology.
+             - HtmlRequiredTitleElement: the <title> is injected by the Next.js Metadata API, not authored in JSX. -->
+        <!-- HtmlUnknownAnchorTarget: JetBrains does not index id attributes on JSX elements, so every href="#..." in TSX is a false positive (e.g. the Theme Lab section index links, whose anchors exist at runtime). -->
+        <!-- SqlNoDataSourceInspection / SqlDialectInspection: the SQL embedded in packages/knowledge
+             (src/sqlite.ts DDL, repository/sqlite.ts queries) targets the generated, gitignored
+             knowledge.sqlite read model — by design there is no committed database to register as an
+             IDE data source, so "no data sources are configured" is a permanent false positive here.
+             This SQL is proven by the knowledge test suite and the deterministic-rebuild gate,
+             not by IDE data-source resolution. -->
+        <inspection_tool class="SqlNoDataSourceInspection" enabled="false" level="WARNING" enabled_by_default="false" />
+        <inspection_tool class="SqlDialectInspection" enabled="false" level="WARNING" enabled_by_default="false" />
+        <inspection_tool class="HtmlUnknownAnchorTarget" enabled="false" level="WARNING" enabled_by_default="false" />
+        <inspection_tool class="ES6PreferShortImport" enabled="false" level="WARNING" enabled_by_default="false" />
+        <inspection_tool class="PointlessBooleanExpressionJS" enabled="false" level="WARNING" enabled_by_default="false" />
+        <inspection_tool class="HtmlRequiredTitleElement" enabled="false" level="WARNING" enabled_by_default="false" />
+    </profile>
 </component>

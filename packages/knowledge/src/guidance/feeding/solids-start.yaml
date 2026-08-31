@@ -1,0 +1,13 @@
+# SPDX-License-Identifier: CC-BY-NC-SA-4.0
+# Guidance blocks map reviewed claims onto stages and app routes; the route-evidence index
+# (page References, print citations) derives from this mapping — never from page code.
+
+blocks:
+  - id: guidance.feeding.solids-start
+    domain: feeding
+    stage: feed-06-08m
+    titleKey: guidance.feeding.solids-start.title
+    claimIds:
+      - feeding.solids.start
+    routes:
+      - /feeding

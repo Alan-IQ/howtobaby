@@ -4,7 +4,9 @@ name: CI
 # `baseline` validates the repository contract (layout, health, licenses, theme/vendor boundary);
 # `app` validates the product code (lint, typecheck, unit tests) and proves both deployment profiles build:
 # the default static-first/server-capable build and the DEPLOY_TARGET=static export used by deploy.yml.
-# Product/content validation jobs (schemas, provenance, EN/VI parity) are added by later phases.
+# `app` also runs the Phase 2 content gates (docs/IMPLEMENTATION_ROADMAP.md Phase 2): knowledge
+# schema/source/provenance/EN-VI-parity validation, the deterministic knowledge.sqlite/index
+# rebuild check, and the knowledge/evidence index build that the web build consumes.
 
 on:
   push:
@@ -93,8 +95,14 @@ jobs:
       - name: Type-check (scripts + workspace packages + app)
         run: pnpm typecheck
 
-      - name: Unit tests (theme contract, primitives, storage)
+      - name: Unit tests (theme contract, primitives, storage, knowledge graph)
         run: pnpm test
+
+      - name: Knowledge validation (schemas, sources, provenance, coverage, EN/VI parity)
+        run: pnpm validate:knowledge
+
+      - name: Deterministic knowledge rebuild (knowledge.sqlite + evidence indexes)
+        run: pnpm check:knowledge-determinism
 
       - name: Build — default profile (static-first, server-capable)
         run: pnpm build

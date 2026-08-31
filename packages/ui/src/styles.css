@@ -852,3 +852,187 @@ select {
     display: none !important;
   }
 }
+
+/* ---------- Evidence: SourceChip / EvidenceDrawer / ReferenceList (GUI_DESIGN.md §11) ---------- */
+.htb-source-chip {
+  display: inline-flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--htb-space-2xs);
+  min-height: var(--htb-layout-touch-target);
+  padding: var(--htb-space-2xs) var(--htb-space-sm);
+  border: 1px solid var(--htb-border-subtle);
+  border-radius: var(--htb-radius-pill);
+  background: var(--htb-surface-2);
+  color: var(--htb-text-secondary);
+  font-size: var(--htb-font-size-xs);
+  font-weight: var(--htb-font-weight-semibold);
+  line-height: 1.4;
+  text-align: start;
+}
+button.htb-source-chip {
+  cursor: pointer;
+  font-family: inherit;
+  transition: background-color var(--htb-motion-duration-fast) var(--htb-motion-easing-standard),
+    border-color var(--htb-motion-duration-fast) var(--htb-motion-easing-standard);
+}
+button.htb-source-chip:hover {
+  background: var(--htb-interactive-subtle-bg);
+  border-color: var(--htb-border-strong);
+}
+button.htb-source-chip:focus-visible {
+  outline: 2px solid var(--htb-focus-ring);
+  outline-offset: 2px;
+}
+.htb-source-chip__class {
+  color: var(--htb-text-primary);
+}
+.htb-source-chip__org {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--htb-space-2xs);
+}
+.htb-source-chip__sep {
+  color: var(--htb-text-muted);
+}
+
+.htb-evidence-drawer__claim {
+  margin: 0 0 var(--htb-space-md);
+  padding: var(--htb-space-sm) var(--htb-space-md);
+  border-inline-start: 3px solid var(--htb-border-strong);
+  border-radius: var(--htb-radius-sm);
+  background: var(--htb-surface-2);
+}
+.htb-evidence-drawer__claim p {
+  margin: var(--htb-space-2xs) 0 0;
+  color: var(--htb-text-primary);
+}
+.htb-evidence-drawer__class {
+  font-size: var(--htb-font-size-xs);
+  font-weight: var(--htb-font-weight-semibold);
+  color: var(--htb-text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.htb-evidence-drawer__sources {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: var(--htb-space-md);
+}
+.htb-evidence-source {
+  padding: var(--htb-space-sm) 0;
+  border-top: 1px solid var(--htb-border-subtle);
+}
+.htb-evidence-source p {
+  margin: 0 0 var(--htb-space-2xs);
+}
+.htb-evidence-source__org {
+  display: flex;
+  align-items: baseline;
+  gap: var(--htb-space-xs);
+  font-weight: var(--htb-font-weight-semibold);
+  color: var(--htb-text-primary);
+}
+.htb-evidence-source__relationship {
+  font-size: var(--htb-font-size-xs);
+  font-weight: var(--htb-font-weight-semibold);
+  color: var(--htb-text-secondary);
+  padding: 1px var(--htb-space-xs);
+  border: 1px solid var(--htb-border-subtle);
+  border-radius: var(--htb-radius-pill);
+  background: var(--htb-surface-2);
+}
+.htb-evidence-source__title {
+  color: var(--htb-text-primary);
+}
+.htb-evidence-source__meta {
+  font-size: var(--htb-font-size-sm);
+  color: var(--htb-text-secondary);
+}
+.htb-evidence-source__status {
+  margin-inline-start: var(--htb-space-xs);
+  color: var(--htb-status-caution);
+  font-weight: var(--htb-font-weight-semibold);
+}
+.htb-evidence-source__note {
+  font-size: var(--htb-font-size-sm);
+  color: var(--htb-text-muted);
+}
+.htb-evidence-source__link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--htb-space-2xs);
+  min-height: var(--htb-layout-touch-target);
+  color: var(--htb-text-link);
+  font-weight: var(--htb-font-weight-semibold);
+}
+.htb-evidence-drawer__disclaimer {
+  margin: var(--htb-space-md) 0 0;
+  padding-top: var(--htb-space-sm);
+  border-top: 1px solid var(--htb-border-subtle);
+  font-size: var(--htb-font-size-xs);
+  color: var(--htb-text-muted);
+}
+
+.htb-reference-list {
+  margin-top: var(--htb-space-xl);
+}
+.htb-reference-list__title {
+  font-size: var(--htb-font-size-lg);
+  margin: 0 0 var(--htb-space-sm);
+}
+.htb-reference-list ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: var(--htb-space-sm);
+}
+.htb-reference-list__entry {
+  display: grid;
+  gap: 2px;
+  padding: var(--htb-space-sm) 0;
+  border-top: 1px solid var(--htb-border-subtle);
+}
+.htb-reference-list__org {
+  font-size: var(--htb-font-size-xs);
+  font-weight: var(--htb-font-weight-semibold);
+  color: var(--htb-text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.htb-reference-list__source-title {
+  color: var(--htb-text-primary);
+  font-weight: var(--htb-font-weight-semibold);
+}
+.htb-reference-list__meta {
+  font-size: var(--htb-font-size-sm);
+  color: var(--htb-text-secondary);
+}
+.htb-reference-list__status {
+  color: var(--htb-status-caution);
+}
+.htb-reference-list__print-url {
+  display: none;
+}
+
+@media print {
+  /* Chips open a drawer that cannot exist on paper; References carry the provenance instead. */
+  .htb-source-chip {
+    display: none !important;
+  }
+  .htb-reference-list {
+    break-inside: avoid;
+  }
+  .htb-reference-list__meta a {
+    display: none;
+  }
+  /* Printed pages keep a scannable original-source URL (EVIDENCE_PROVENANCE.md §18). */
+  .htb-reference-list__print-url {
+    display: inline;
+    color: var(--htb-text-muted);
+    word-break: break-all;
+  }
+}

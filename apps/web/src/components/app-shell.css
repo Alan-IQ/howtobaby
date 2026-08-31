@@ -274,3 +274,18 @@
   align-items: center;
   gap: var(--htb-space-sm);
 }
+
+/* ---------- Guidance evidence card (Phase 2 canonical-claim rendering) ---------- */
+.guidance-evidence-card {
+  display: grid;
+  gap: var(--htb-space-md);
+  justify-items: start;
+}
+.guidance-evidence-card__claim {
+  display: grid;
+  gap: var(--htb-space-xs);
+  justify-items: start;
+}
+.guidance-evidence-card__claim p {
+  margin: 0;
+}

@@ -1,0 +1,25 @@
+{
+  "name": "@howtobaby/knowledge",
+  "version": "0.8.0",
+  "private": true,
+  "license": "AGPL-3.0-only",
+  "description": "HowToBaby canonical source/claim/guidance/translation graph, schema validation, derived read models and KnowledgeRepository interfaces (docs/EVIDENCE_PROVENANCE.md, docs/GUIDANCE_CONTENT_CONTRACT.md).",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./repository": "./repository/index.ts",
+    "./repository/sqlite": "./repository/sqlite.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "yaml": "^2.8.1"
+  },
+  "devDependencies": {
+    "@types/node": "^22.20.1",
+    "typescript": "^5.9.3",
+    "vitest": "^4.1.11"
+  }
+}

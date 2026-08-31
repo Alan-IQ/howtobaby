@@ -1,0 +1,11 @@
+# SPDX-License-Identifier: CC-BY-NC-SA-4.0
+# Coverage matrix framework (docs/GUIDANCE_CONTENT_CONTRACT.md §11): each cell declares the claims
+# a stage × domain must ship with. Validation requires every listed claim to exist, be
+# source-reviewed, have EN + VI text, and be rendered by at least one guidance block/route.
+# Phase 2 seeds one cell to prove the framework; domain migrations (Phases 4–6) grow it.
+
+cells:
+  - domain: feeding
+    stage: feed-06-08m
+    requiredClaimIds:
+      - feeding.solids.start

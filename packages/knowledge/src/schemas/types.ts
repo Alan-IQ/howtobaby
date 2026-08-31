@@ -1,0 +1,222 @@
+// SPDX-License-Identifier: AGPL-3.0-only
+/**
+ * Canonical knowledge-graph types.
+ *
+ * These mirror the contracts in docs/EVIDENCE_PROVENANCE.md (SourceRecord, ClaimSourceRef,
+ * SourceLocator) and docs/GUIDANCE_CONTENT_CONTRACT.md (Claim, guidance/precision/safety/review
+ * classes). The docs own the meaning; this module owns the machine-checkable shape.
+ *
+ * Authoring stays in Git-tracked YAML under packages/knowledge/src/**; everything importing these
+ * types works on a loaded projection of that canonical data, never on a competing store.
+ */
+
+// ---------------------------------------------------------------------------------------------
+// Sources (EVIDENCE_PROVENANCE.md §2)
+// ---------------------------------------------------------------------------------------------
+
+export const SOURCE_STATUSES = [
+  "current",
+  "changed-review-required",
+  "superseded",
+  "retired",
+  "temporarily-unreachable",
+] as const;
+export type SourceStatus = (typeof SOURCE_STATUSES)[number];
+
+export const SOURCE_ACCESS_MODES = [
+  "link-only",
+  "monitor-only",
+  "approved-syndication",
+  "public-domain-or-compatible-reuse",
+] as const;
+export type SourceAccessMode = (typeof SOURCE_ACCESS_MODES)[number];
+
+export interface SourceRecord {
+  id: string;
+  organization: string;
+  title: string;
+  canonicalUrl: string;
+  jurisdiction: "US" | "global" | string;
+  sourceType: string;
+  publishedAt?: string;
+  updatedAt?: string;
+  lastVerifiedAt: string;
+  nextReviewAt?: string;
+  status: SourceStatus;
+  supersededBy?: string;
+  accessMode: SourceAccessMode;
+  notes?: string;
+}
+
+// ---------------------------------------------------------------------------------------------
+// Claim-to-source relationship (EVIDENCE_PROVENANCE.md §3)
+// ---------------------------------------------------------------------------------------------
+
+export const SOURCE_RELATIONSHIPS = [
+  "primary",
+  "direct-support",
+  "corroborating",
+  "contextual",
+  "conflicting",
+] as const;
+export type SourceRelationship = (typeof SOURCE_RELATIONSHIPS)[number];
+
+/** Relationships that count as approved direct/primary support for `official-guidance`. */
+export const DIRECT_SUPPORT_RELATIONSHIPS: readonly SourceRelationship[] = ["primary", "direct-support"];
+
+export interface SourceLocator {
+  heading?: string;
+  section?: string;
+  anchor?: string;
+  page?: number;
+  table?: string;
+  figure?: string;
+  paragraphHint?: string;
+  sourceVersionHint?: string;
+}
+
+export interface ClaimSourceRef {
+  sourceId: string;
+  relationship: SourceRelationship;
+  locator?: SourceLocator;
+  supportNoteKey?: string;
+  verifiedAt: string;
+}
+
+// ---------------------------------------------------------------------------------------------
+// Claims (GUIDANCE_CONTENT_CONTRACT.md §1/§6/§9)
+// ---------------------------------------------------------------------------------------------
+
+export const GUIDANCE_CLASSES = [
+  "official-guidance",
+  "evidence-synthesis",
+  "typical-pattern",
+  "example-plan",
+  "practical-interpretation",
+  "product-heuristic",
+] as const;
+export type GuidanceClass = (typeof GUIDANCE_CLASSES)[number];
+
+export const PRECISION_CLASSES = ["source-exact", "source-approximate", "source-range", "product-heuristic"] as const;
+export type PrecisionClass = (typeof PRECISION_CLASSES)[number];
+
+export const SAFETY_LEVELS = ["info", "caution", "clinician", "urgent", "emergency"] as const;
+export type SafetyLevel = (typeof SAFETY_LEVELS)[number];
+
+export const REVIEW_STATUSES = [
+  "draft",
+  "source-verified",
+  "clinical-review-required",
+  "clinically-reviewed",
+  "release-approved",
+  "superseded",
+] as const;
+export type ReviewStatus = (typeof REVIEW_STATUSES)[number];
+
+/** Review states in which a claim counts as source-reviewed (urgent/emergency wording gate). */
+export const SOURCE_REVIEWED_STATUSES: readonly ReviewStatus[] = [
+  "source-verified",
+  "clinically-reviewed",
+  "release-approved",
+];
+
+export interface Claim {
+  id: string;
+  /** Translation key resolving the parent-facing claim text in every locale. */
+  textKey: string;
+  /** Stable public slug for the /evidence/... trust route (EVIDENCE_PROVENANCE.md §8). */
+  publicSlug: string;
+  guidanceClass: GuidanceClass;
+  precisionClass: PrecisionClass;
+  safetyLevel: SafetyLevel;
+  sourceRefs: ClaimSourceRef[];
+  applicability?: string[];
+  exclusions?: string[];
+  uncertaintyNoteKey?: string;
+  reviewedAt: string;
+  reviewStatus: ReviewStatus;
+}
+
+// ---------------------------------------------------------------------------------------------
+// Guidance blocks (GUIDANCE_CONTENT_CONTRACT.md §1; route mapping feeds route-evidence index)
+// ---------------------------------------------------------------------------------------------
+
+export const KNOWLEDGE_DOMAINS = ["feeding", "development", "sleep", "safety"] as const;
+export type KnowledgeDomain = (typeof KNOWLEDGE_DOMAINS)[number];
+
+export interface GuidanceBlock {
+  id: string;
+  domain: KnowledgeDomain;
+  /** Stage bin from GUIDANCE_CONTENT_CONTRACT.md §3–§5 (e.g. `feed-06-08m`); optional for cross-stage blocks. */
+  stage?: string;
+  titleKey: string;
+  /** Claims rendered by this block, in presentation order. */
+  claimIds: string[];
+  /** App routes on which this block renders; the route-evidence index derives from this mapping. */
+  routes: string[];
+}
+
+// ---------------------------------------------------------------------------------------------
+// Translations (GUIDANCE_CONTENT_CONTRACT.md §10 — EN canonical, VI semantic parity)
+// ---------------------------------------------------------------------------------------------
+
+export const LOCALES = ["en", "vi"] as const;
+export type Locale = (typeof LOCALES)[number];
+export const CANONICAL_LOCALE: Locale = "en";
+
+/** One authored translation file: a flat key → string bundle for a single locale. */
+export interface TranslationBundle {
+  locale: Locale;
+  strings: Record<string, string>;
+}
+
+// ---------------------------------------------------------------------------------------------
+// Tool evidence links (TOOL_PLATFORM.md §3/§7 — knowledge side only records claim dependencies)
+// ---------------------------------------------------------------------------------------------
+
+export const TOOL_CLASSES = ["utility", "guidance-linked", "safety-sensitive"] as const;
+export type ToolClass = (typeof TOOL_CLASSES)[number];
+
+export const TOOL_LIFECYCLES = ["fixture", "planned", "released"] as const;
+export type ToolLifecycle = (typeof TOOL_LIFECYCLES)[number];
+
+/**
+ * Canonical record of a tool's guidance/safety claim dependencies. The runtime ToolDefinition
+ * (packages/tool-platform) references these claim IDs; it never duplicates medical prose or
+ * source URLs (CLAUDE.md §8). `lifecycle: "fixture"` marks architecture-proof records that must
+ * never ship as product tools.
+ */
+export interface ToolEvidenceRecord {
+  id: string;
+  title: string;
+  toolClass: ToolClass;
+  lifecycle: ToolLifecycle;
+  guidanceClaimIds?: string[];
+  safetyClaimIds?: string[];
+}
+
+// ---------------------------------------------------------------------------------------------
+// Coverage matrix framework (GUIDANCE_CONTENT_CONTRACT.md §11)
+// ---------------------------------------------------------------------------------------------
+
+/** One stage × domain coverage requirement: which claims must exist, translated and reviewed. */
+export interface CoverageCell {
+  domain: KnowledgeDomain;
+  stage: string;
+  requiredClaimIds: string[];
+}
+
+export interface CoverageMatrix {
+  cells: CoverageCell[];
+}
+
+// ---------------------------------------------------------------------------------------------
+// Content release metadata (SYSTEM_ARCHITECTURE.md §11)
+// ---------------------------------------------------------------------------------------------
+
+/** Deterministic content-version record (volatile builtAt/gitSha live in build-info.json instead). */
+export interface ContentVersionRecord {
+  contentVersion: string;
+  sourceRegistryVersion: string;
+  localeVersions: Record<string, string>;
+}

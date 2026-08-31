@@ -1,0 +1,37 @@
+# SPDX-License-Identifier: CC-BY-NC-SA-4.0
+# Canonical feeding claims — starting solid foods (docs/GUIDANCE_CONTENT_CONTRACT.md §4/§9).
+# Parent-facing wording lives in translations/<locale>/feeding.yaml under each claim's textKey;
+# it must preserve source qualifiers ("about 6 months") — no invented precision.
+
+domain: feeding
+
+claims:
+  - id: feeding.solids.start
+    textKey: feeding.solids.start
+    publicSlug: feeding-solids-start
+    guidanceClass: official-guidance
+    precisionClass: source-approximate
+    safetyLevel: info
+    applicability:
+      - "feeding-stage:feed-04-06m"
+      - "feeding-stage:feed-06-08m"
+    sourceRefs:
+      - sourceId: cdc-introduction-solid-foods
+        relationship: primary
+        locator:
+          heading: "When, What, and How to Introduce Solid Foods"
+          paragraphHint: >-
+            "The Dietary Guidelines for Americans and the American Academy of Pediatrics
+            recommend introducing children to foods other than breast milk or infant formula
+            at about 6 months." Also: "Introducing foods before 4 months is not recommended."
+        verifiedAt: 2026-08-31
+      - sourceId: who-complementary-feeding
+        relationship: corroborating
+        locator:
+          section: "Complementary feeding"
+          paragraphHint: >-
+            "start at 6 months with small amounts of food and increase gradually as the
+            child gets older"
+        verifiedAt: 2026-08-31
+    reviewedAt: 2026-08-31
+    reviewStatus: source-verified

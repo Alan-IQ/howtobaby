@@ -1,0 +1,13 @@
+# SPDX-License-Identifier: CC-BY-NC-SA-4.0
+# Canonical tool → claim dependency records (docs/TOOL_PLATFORM.md §7). Runtime ToolDefinitions
+# (packages/tool-platform, Phase 8) reference canonical claim IDs through these records instead of
+# duplicating medical prose or source URLs. `lifecycle: fixture` marks architecture-proof entries
+# that exercise the tool-evidence index and MUST never ship as product tools.
+
+tools:
+  - id: tool.fixture.evidence-pipeline
+    title: "Evidence pipeline fixture (architecture proof only, never shipped)"
+    toolClass: guidance-linked
+    lifecycle: fixture
+    guidanceClaimIds:
+      - feeding.solids.start

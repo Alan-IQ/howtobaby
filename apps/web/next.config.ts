@@ -20,7 +20,7 @@ const nextConfig: NextConfig = {
   reactStrictMode: true,
   poweredByHeader: false,
   // Workspace packages ship TypeScript source; Next compiles them in place.
-  transpilePackages: ["@howtobaby/themes", "@howtobaby/ui"],
+  transpilePackages: ["@howtobaby/knowledge", "@howtobaby/themes", "@howtobaby/ui"],
 };
 
 export default nextConfig;
