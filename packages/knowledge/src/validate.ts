@@ -5,11 +5,21 @@
  * Implements the Phase 2 CI gates from docs/IMPLEMENTATION_ROADMAP.md and the build-time rules in
  * docs/EVIDENCE_PROVENANCE.md §16 / docs/GUIDANCE_CONTENT_CONTRACT.md §10–§11:
  *   - source IDs, relationships, locators and supersession chains resolve;
- *   - `official-guidance` requires approved direct/primary support that is still current;
+ *   - `official-guidance` requires an approved primary/direct source whose approved scope covers
+ *     the claim's domain and whose status is still usable — `relationship: primary` alone can
+ *     never promote an unapproved source into a canonical primary health source;
+ *   - the public release gate: a claim rendered by any GuidanceBlock (and therefore on a public
+ *     route) must be in a release-eligible review state — enforced here, not by UI filters, so a
+ *     draft claim cannot ship by being attached to a block while omitted from the coverage matrix;
+ *   - source lifecycle: a `changed-review-required` source propagates a review signal to every
+ *     dependent claim (warning; error when a release-approved claim's support went stale);
  *   - precision classes cannot invent precision (qualifiers/ranges must appear in the text);
  *   - urgent/emergency wording requires a source-reviewed state;
- *   - EN is canonical and VI must keep key + semantic-critical parity (quantities, qualifiers, negation);
- *   - the coverage matrix cells resolve to reviewed, translated, renderable claims;
+ *   - EN is canonical and VI must keep semantic-critical parity: quantities in order, their
+ *     units, boundary qualifiers (before/after/about), and negation;
+ *   - the coverage matrix validates stage × domain × section × locales × source coverage ×
+ *     review status;
+ *   - locator hints stay concise paraphrased context, never long verbatim quotations;
  *   - tool claim references resolve and fixtures cannot ship.
  *
  * Every rule reports through IssueCollector so scripts/CI render one consistent report.
@@ -20,8 +30,12 @@ import type { IssueCollector } from "./schemas/issues.ts";
 import {
   CANONICAL_LOCALE,
   DIRECT_SUPPORT_RELATIONSHIPS,
+  LOCALES,
+  RELEASE_ELIGIBLE_STATUSES,
+  REVIEW_STATUS_RANK,
   SOURCE_REVIEWED_STATUSES,
   type Claim,
+  type KnowledgeDomain,
   type SourceRecord,
 } from "./schemas/types.ts";
 
@@ -35,8 +49,89 @@ const VI_NEGATION = /(không|đừng|tránh|chưa nên)/i;
 /** A numeric range expression for `source-range` claims. */
 const RANGE_EXPRESSION = /\d+\s*(?:–|—|-|to|through)\s*\d+/i;
 
-function digitRuns(text: string): string[] {
-  return (text.match(/\d+(?:[.,]\d+)?/g) ?? []).map((n) => n.replace(",", ".")).sort();
+/** Source statuses that keep a reference usable as support (superseded/retired are not). */
+const USABLE_SOURCE_STATUSES = ["current", "changed-review-required", "temporarily-unreachable"] as const;
+
+// ---------------------------------------------------------------------------------------------
+// EN/VI semantic number tokens: value + unit + boundary qualifier, compared IN ORDER.
+// Sorting all numbers and comparing sets would let "about 6 months … before 4 months" pass
+// against a Vietnamese text that swapped the boundaries ("khoảng 4 tháng … trước 6 tháng").
+// ---------------------------------------------------------------------------------------------
+
+type BoundaryQualifier = "before" | "after" | "about";
+
+interface NumberToken {
+  value: string;
+  unit?: string;
+  qualifier?: BoundaryQualifier;
+}
+
+const UNIT_PATTERNS: Record<"en" | "vi", Array<[RegExp, string]>> = {
+  en: [
+    [/^months?\b/i, "month"],
+    [/^weeks?\b/i, "week"],
+    [/^days?\b/i, "day"],
+    [/^years?\b/i, "year"],
+    [/^hours?\b/i, "hour"],
+    [/^minutes?\b/i, "minute"],
+    [/^(?:milliliters?|ml)\b/i, "ml"],
+    [/^(?:ounces?|oz)\b/i, "oz"],
+  ],
+  vi: [
+    [/^tháng\b/i, "month"],
+    [/^tuần\b/i, "week"],
+    [/^ngày\b/i, "day"],
+    [/^năm\b/i, "year"],
+    [/^(?:giờ|tiếng)\b/i, "hour"],
+    [/^phút\b/i, "minute"],
+    [/^ml\b/i, "ml"],
+    [/^oz\b/i, "oz"],
+  ],
+};
+
+const QUALIFIER_PATTERNS: Record<"en" | "vi", Array<[RegExp, BoundaryQualifier]>> = {
+  en: [
+    [/\b(?:before|under|younger than|earlier than)\s*$/i, "before"],
+    [/\b(?:after|over|older than|later than)\s*$/i, "after"],
+    [/\b(?:about|around|approximately|roughly)\s*$/i, "about"],
+  ],
+  vi: [
+    [/(?:trước|dưới|chưa đầy|chưa đến|sớm hơn)\s*$/i, "before"],
+    [/(?:sau|trên|quá|muộn hơn)\s*$/i, "after"],
+    [/(?:khoảng|tầm|xấp xỉ|gần)\s*$/i, "about"],
+  ],
+};
+
+/** Extract the ordered semantic number tokens (value, unit, boundary qualifier) of a text. */
+export function semanticNumberTokens(text: string, locale: "en" | "vi"): NumberToken[] {
+  const tokens: NumberToken[] = [];
+  const numberPattern = /\d+(?:[.,]\d+)?/g;
+  let match: RegExpExecArray | null;
+  while ((match = numberPattern.exec(text)) !== null) {
+    const value = match[0].replace(",", ".");
+    const windowBefore = text.slice(Math.max(0, match.index - 20), match.index);
+    const windowAfter = text.slice(match.index + match[0].length).trimStart();
+    let unit: string | undefined;
+    for (const [pattern, name] of UNIT_PATTERNS[locale]) {
+      if (pattern.test(windowAfter)) {
+        unit = name;
+        break;
+      }
+    }
+    let qualifier: BoundaryQualifier | undefined;
+    for (const [pattern, name] of QUALIFIER_PATTERNS[locale]) {
+      if (pattern.test(windowBefore)) {
+        qualifier = name;
+        break;
+      }
+    }
+    tokens.push({ value, ...(unit !== undefined ? { unit } : {}), ...(qualifier !== undefined ? { qualifier } : {}) });
+  }
+  return tokens;
+}
+
+function describeTokens(tokens: NumberToken[]): string {
+  return tokens.map((t) => [t.qualifier, t.value, t.unit].filter(Boolean).join(" ")).join(", ");
 }
 
 function collectUsedKeys(knowledge: CanonicalKnowledge): Map<string, string> {
@@ -77,6 +172,14 @@ function validateSources(knowledge: CanonicalKnowledge, issues: IssueCollector, 
   return byId;
 }
 
+/** True when the source may back a claim right now (approval + scope + lifecycle status). */
+function isApprovedUsablePrimary(source: SourceRecord | undefined, domain: KnowledgeDomain): boolean {
+  if (!source) return false;
+  if (source.approvalLevel !== "approved-primary") return false;
+  if (!(source.approvedScopes ?? []).includes(domain)) return false;
+  return (USABLE_SOURCE_STATUSES as readonly string[]).includes(source.status);
+}
+
 function validateClaims(knowledge: CanonicalKnowledge, issues: IssueCollector, sources: Map<string, SourceRecord>, today: string): Map<string, Claim> {
   const byId = new Map<string, Claim>();
   const slugs = new Map<string, string>();
@@ -93,10 +196,10 @@ function validateClaims(knowledge: CanonicalKnowledge, issues: IssueCollector, s
     slugs.set(claim.publicSlug, claim.id);
   }
 
-  for (const { claim, file } of knowledge.claims) {
+  for (const { claim, domain, file } of knowledge.claims) {
     if (claim.reviewedAt > today) issues.error("schema", "future-date", `\`reviewedAt\` ${claim.reviewedAt} is in the future`, claim.id, file);
 
-    // Provenance: references resolve; verification dates are sane.
+    // Provenance: references resolve; verification dates are sane; approval boundary holds.
     for (const ref of claim.sourceRefs) {
       const source = sources.get(ref.sourceId);
       if (!source) {
@@ -107,20 +210,54 @@ function validateClaims(knowledge: CanonicalKnowledge, issues: IssueCollector, s
       if (source.status === "superseded" && source.supersededBy) {
         issues.warn("provenance", "superseded-support", `sourceRef \`${ref.sourceId}\` is superseded by \`${source.supersededBy}\`; the reference needs review`, claim.id, file);
       }
+
+      // Approval boundary (EVIDENCE_PROVENANCE.md §4): primary/direct-support is an approved role,
+      // not a free-form label — an unapproved source cannot become primary by declaration.
+      if (DIRECT_SUPPORT_RELATIONSHIPS.includes(ref.relationship)) {
+        if (source.approvalLevel !== "approved-primary") {
+          issues.error("provenance", "unapproved-primary-source", `sourceRef \`${ref.sourceId}\` declares \`${ref.relationship}\` but the source's approvalLevel is \`${source.approvalLevel}\`; only approved primary health sources may carry primary/direct-support relationships`, claim.id, file);
+        } else if (!(source.approvedScopes ?? []).includes(domain)) {
+          issues.error("provenance", "primary-source-scope-mismatch", `sourceRef \`${ref.sourceId}\` is approved for [${(source.approvedScopes ?? []).join(", ")}] but is used as \`${ref.relationship}\` support in domain \`${domain}\``, claim.id, file);
+        }
+      }
+
+      // Source lifecycle propagation (EVIDENCE_PROVENANCE.md §16): a changed source must not be
+      // silently treated as fully current by its dependent claims.
+      if (source.status === "changed-review-required") {
+        const changedAt = source.updatedAt;
+        if (changedAt !== undefined && ref.verifiedAt < changedAt) {
+          if (claim.reviewStatus === "release-approved") {
+            issues.error("provenance", "release-on-changed-source", `sourceRef \`${ref.sourceId}\` changed on ${changedAt} (status \`changed-review-required\`) after it was last verified (${ref.verifiedAt}); a release-approved claim cannot keep treating this source as current without re-review`, claim.id, file);
+          } else {
+            issues.warn("provenance", "changed-source-review-required", `sourceRef \`${ref.sourceId}\` changed on ${changedAt} after it was last verified (${ref.verifiedAt}); re-verify the reference against the updated source`, claim.id, file);
+          }
+        } else {
+          issues.warn("provenance", "changed-source-pending-review", `sourceRef \`${ref.sourceId}\` is \`changed-review-required\`; this claim's support is under review and must not be presented as fully current`, claim.id, file);
+        }
+      }
+
+      // Rights boundary (EVIDENCE_PROVENANCE.md §12–§13, LICENSING_POLICY.md): locator hints are
+      // concise paraphrased context for finding the passage, not stored verbatim quotations.
+      const hint = ref.locator?.paragraphHint;
+      if (hint !== undefined && (hint.length > 240 || /["“”«»][^"“”«»]{80,}["“”«»]/.test(hint))) {
+        issues.warn("provenance", "verbatim-locator-hint", `sourceRef \`${ref.sourceId}\` has a \`paragraphHint\` that looks like a long verbatim quotation; keep locator hints as concise paraphrased locator/context`, claim.id, file);
+      }
     }
 
-    // official-guidance: approved direct/primary support that is still usable (EVIDENCE_PROVENANCE.md §4/§16).
+    // official-guidance: at least one approved primary/direct source whose approved scope covers
+    // the claim's domain and whose status is still usable (EVIDENCE_PROVENANCE.md §4/§16).
     if (claim.guidanceClass === "official-guidance") {
       const direct = claim.sourceRefs.filter((ref) => DIRECT_SUPPORT_RELATIONSHIPS.includes(ref.relationship));
       if (direct.length === 0) {
         issues.error("provenance", "official-guidance-direct-support", "an official-guidance claim requires at least one `primary` or `direct-support` source reference", claim.id, file);
       } else {
-        const usable = direct.filter((ref) => {
-          const status = sources.get(ref.sourceId)?.status;
-          return status === "current" || status === "changed-review-required" || status === "temporarily-unreachable";
-        });
-        if (usable.length === 0) {
+        const statusUsable = direct.filter((ref) => (USABLE_SOURCE_STATUSES as readonly string[]).includes(sources.get(ref.sourceId)?.status ?? ""));
+        if (statusUsable.length === 0) {
           issues.error("provenance", "official-guidance-superseded-support", "every direct/primary support for this official-guidance claim is superseded or retired", claim.id, file);
+        }
+        const approvedUsable = direct.filter((ref) => isApprovedUsablePrimary(sources.get(ref.sourceId), domain));
+        if (approvedUsable.length === 0) {
+          issues.error("provenance", "official-guidance-approved-scope-support", `an official-guidance claim requires at least one approved primary/direct source whose \`approvedScopes\` cover domain \`${domain}\` and whose status is usable`, claim.id, file);
         }
       }
     }
@@ -163,13 +300,20 @@ function validateGuidance(knowledge: CanonicalKnowledge, issues: IssueCollector,
     }
     seen.add(block.id);
     for (const claimId of block.claimIds) {
-      if (!claims.has(claimId)) {
+      const claim = claims.get(claimId);
+      if (!claim) {
         issues.error("schema", "unresolved-claim", `references unknown claim ID \`${claimId}\``, block.id);
         continue;
       }
       const domain = claimDomain.get(claimId);
       if (domain !== undefined && domain !== block.domain) {
         issues.warn("schema", "cross-domain-claim", `renders claim \`${claimId}\` from domain \`${domain}\` inside domain \`${block.domain}\``, block.id);
+      }
+      // Public release gate: every claim a block renders reaches a public route, so it must be in
+      // a release-eligible review state. Enforced at the validation/build gate — a draft or
+      // clinical-review-required or superseded claim cannot ship by bypassing the coverage matrix.
+      if (!RELEASE_ELIGIBLE_STATUSES.includes(claim.reviewStatus)) {
+        issues.error("schema", "unreleased-claim-rendered", `renders claim \`${claimId}\` whose reviewStatus is \`${claim.reviewStatus}\`; only ${RELEASE_ELIGIBLE_STATUSES.map((s) => `\`${s}\``).join("/")} claims may appear on public guidance routes`, block.id);
       }
     }
   }
@@ -191,15 +335,28 @@ function validateTranslations(knowledge: CanonicalKnowledge, issues: IssueCollec
     if (en[key] === undefined) issues.error("translation", "orphan-vi-key", `VI key \`${key}\` has no canonical EN counterpart`, key);
   }
 
-  // Semantic-critical parity: quantities/age boundaries, qualifiers, negation (GUIDANCE_CONTENT_CONTRACT.md §10).
+  // Semantic-critical parity (GUIDANCE_CONTENT_CONTRACT.md §10): quantities are compared in
+  // order together with their units and boundary qualifiers, so identical numbers with swapped
+  // semantics ("about 6 … before 4" vs "khoảng 4 … trước 6") cannot pass.
   for (const key of Object.keys(en)) {
     const enText = en[key]!;
     const viText = vi[key];
     if (viText === undefined) continue;
-    const enDigits = digitRuns(enText);
-    const viDigits = digitRuns(viText);
-    if (enDigits.join(",") !== viDigits.join(",")) {
-      issues.error("translation", "quantity-parity", `numeric values differ between EN [${enDigits.join(", ")}] and VI [${viDigits.join(", ")}]`, key);
+    const enTokens = semanticNumberTokens(enText, "en");
+    const viTokens = semanticNumberTokens(viText, "vi");
+    if (enTokens.map((t) => t.value).join(",") !== viTokens.map((t) => t.value).join(",")) {
+      issues.error("translation", "quantity-parity", `numeric values (in order) differ between EN [${describeTokens(enTokens)}] and VI [${describeTokens(viTokens)}]; identical numbers in a different semantic order (e.g. swapped age boundaries) are a parity break`, key);
+    } else {
+      for (let i = 0; i < enTokens.length; i += 1) {
+        const enToken = enTokens[i]!;
+        const viToken = viTokens[i]!;
+        if (enToken.unit !== undefined && viToken.unit !== undefined && enToken.unit !== viToken.unit) {
+          issues.error("translation", "unit-parity", `quantity ${enToken.value} carries unit \`${enToken.unit}\` in EN but \`${viToken.unit}\` in VI`, key);
+        }
+        if ((enToken.qualifier ?? "(none)") !== (viToken.qualifier ?? "(none)")) {
+          issues.error("translation", "boundary-parity", `quantity ${enToken.value} is qualified as \`${enToken.qualifier ?? "(none)"}\` in EN but \`${viToken.qualifier ?? "(none)"}\` in VI (before/after/about boundaries must survive translation)`, key);
+        }
+      }
     }
     if (EN_NEGATION.test(enText) && !VI_NEGATION.test(viText)) {
       issues.error("translation", "negation-parity", "EN text contains a negation/prohibition the VI text does not preserve", key);
@@ -213,7 +370,7 @@ function validateTranslations(knowledge: CanonicalKnowledge, issues: IssueCollec
   }
 }
 
-function validateCoverage(knowledge: CanonicalKnowledge, issues: IssueCollector, claims: Map<string, Claim>): void {
+function validateCoverage(knowledge: CanonicalKnowledge, issues: IssueCollector, claims: Map<string, Claim>, sources: Map<string, SourceRecord>): void {
   const claimDomain = new Map(knowledge.claims.map((c) => [c.claim.id, c.domain]));
   const renderedClaims = new Set(knowledge.guidance.flatMap((b) => b.claimIds));
   const seen = new Set<string>();
@@ -224,23 +381,37 @@ function validateCoverage(knowledge: CanonicalKnowledge, issues: IssueCollector,
       continue;
     }
     seen.add(cellId);
-    for (const claimId of cell.requiredClaimIds) {
-      const claim = claims.get(claimId);
-      if (!claim) {
-        issues.error("coverage", "unresolved-claim", `requires unknown claim ID \`${claimId}\``, cellId);
-        continue;
-      }
-      if (claimDomain.get(claimId) !== cell.domain) {
-        issues.error("coverage", "domain-mismatch", `required claim \`${claimId}\` belongs to domain \`${claimDomain.get(claimId)}\`, not \`${cell.domain}\``, cellId);
-      }
-      if (!SOURCE_REVIEWED_STATUSES.includes(claim.reviewStatus)) {
-        issues.error("coverage", "unreviewed-claim", `required claim \`${claimId}\` is \`${claim.reviewStatus}\`; coverage requires a source-reviewed state`, cellId);
-      }
-      if (knowledge.translations.vi[claim.textKey] === undefined) {
-        issues.error("coverage", "missing-vi", `required claim \`${claimId}\` has no Vietnamese text`, cellId);
-      }
-      if (!renderedClaims.has(claimId)) {
-        issues.error("coverage", "unrendered-claim", `required claim \`${claimId}\` is not rendered by any guidance block/route`, cellId);
+    for (const section of cell.sections) {
+      const sectionId = `${cellId}#${section.section}`;
+      const minimumStatus = section.minimumReviewStatus ?? "source-verified";
+      const minimumRank = REVIEW_STATUS_RANK[minimumStatus];
+      const requiredLocales = section.requiredLocales ?? LOCALES;
+      for (const claimId of section.requiredClaimIds) {
+        const claim = claims.get(claimId);
+        if (!claim) {
+          issues.error("coverage", "unresolved-claim", `requires unknown claim ID \`${claimId}\``, sectionId);
+          continue;
+        }
+        if (claimDomain.get(claimId) !== cell.domain) {
+          issues.error("coverage", "domain-mismatch", `required claim \`${claimId}\` belongs to domain \`${claimDomain.get(claimId)}\`, not \`${cell.domain}\``, sectionId);
+        }
+        if (REVIEW_STATUS_RANK[claim.reviewStatus] < minimumRank) {
+          issues.error("coverage", "unreviewed-claim", `required claim \`${claimId}\` is \`${claim.reviewStatus}\`; this section requires at least \`${minimumStatus}\``, sectionId);
+        }
+        for (const locale of requiredLocales) {
+          if (knowledge.translations[locale]?.[claim.textKey] === undefined) {
+            issues.error("coverage", "missing-locale-text", `required claim \`${claimId}\` has no \`${locale}\` text`, sectionId);
+          }
+        }
+        if (!renderedClaims.has(claimId)) {
+          issues.error("coverage", "unrendered-claim", `required claim \`${claimId}\` is not rendered by any guidance block/route`, sectionId);
+        }
+        if (section.requireApprovedPrimarySource === true) {
+          const supported = claim.sourceRefs.some((ref) => DIRECT_SUPPORT_RELATIONSHIPS.includes(ref.relationship) && isApprovedUsablePrimary(sources.get(ref.sourceId), cell.domain));
+          if (!supported) {
+            issues.error("coverage", "missing-approved-primary-source", `required claim \`${claimId}\` has no usable approved primary/direct source covering domain \`${cell.domain}\``, sectionId);
+          }
+        }
       }
     }
   }
@@ -277,7 +448,7 @@ export function validateKnowledge(knowledge: CanonicalKnowledge, today: string =
   const claims = validateClaims(knowledge, issues, sources, today);
   validateGuidance(knowledge, issues, claims);
   validateTranslations(knowledge, issues);
-  validateCoverage(knowledge, issues, claims);
+  validateCoverage(knowledge, issues, claims, sources);
   validateTools(knowledge, issues, claims);
   return issues;
 }

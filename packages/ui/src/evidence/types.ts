@@ -8,21 +8,29 @@
  * stays the only citation source.
  */
 
+/**
+ * One labeled metadata row for a source (e.g. label "Applies to", value "United States").
+ * Labels are explicit so the drawer never shows bare values like "United States" whose meaning
+ * the reader has to guess; every row is caller-localized, derived from canonical metadata.
+ */
+export interface EvidenceMetaEntry {
+  label: string;
+  value: string;
+}
+
 /** One supporting source as shown in the EvidenceDrawer (EVIDENCE_PROVENANCE.md §6 Layer B). */
 export interface EvidenceSourceView {
   sourceId: string;
   organization: string;
   title: string;
-  /** Localized relationship label, e.g. "Primary source" / "Corroborating". */
+  /** Localized relationship value, e.g. "Primary source" / "Corroborating source". */
   relationshipLabel: string;
-  /** Localized locator hint, e.g. "Section: Complementary feeding". */
-  locatorLabel?: string;
-  /** Localized jurisdiction/context label, e.g. "United States" / "Global (WHO)". */
-  jurisdictionLabel?: string;
-  /** Calm freshness signal, e.g. "Verified Aug 31, 2026" (EVIDENCE_PROVENANCE.md §14). */
-  verifiedLabel: string;
-  /** Present only when the state needs surfacing, e.g. "Reviewing an update". */
-  statusLabel?: string;
+  /**
+   * Labeled metadata rows in display order: role in this guidance, relevant section,
+   * applies-to/scope, source status (including "Current"), last verified by HowToBaby, and an
+   * optional "Why this source is used" line — all derived from canonical metadata upstream.
+   */
+  meta: EvidenceMetaEntry[];
   /** Canonical original-source URL (never an affiliate/tracking redirect). */
   url: string;
   /** Concise HowToBaby interpretation/uncertainty note when needed. */

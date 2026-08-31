@@ -21,17 +21,18 @@ claims:
         locator:
           heading: "When, What, and How to Introduce Solid Foods"
           paragraphHint: >-
-            "The Dietary Guidelines for Americans and the American Academy of Pediatrics
-            recommend introducing children to foods other than breast milk or infant formula
-            at about 6 months." Also: "Introducing foods before 4 months is not recommended."
+            Paragraph citing the DGA and AAP on the recommended starting age for foods
+            other than breast milk or formula (about 6 months), and the note that
+            starting before 4 months is not recommended. Paraphrased, not source wording.
         verifiedAt: 2026-08-31
       - sourceId: who-complementary-feeding
         relationship: corroborating
         locator:
           section: "Complementary feeding"
           paragraphHint: >-
-            "start at 6 months with small amounts of food and increase gradually as the
-            child gets older"
+            Opening of the complementary-feeding section on starting complementary foods
+            at 6 months in small amounts and increasing gradually with age. Paraphrased
+            locator context — not source wording.
         verifiedAt: 2026-08-31
     reviewedAt: 2026-08-31
     reviewStatus: source-verified

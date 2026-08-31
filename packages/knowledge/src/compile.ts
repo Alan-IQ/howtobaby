@@ -41,6 +41,12 @@ export interface ClaimEvidenceEntry {
   safetyLevel: string;
   reviewStatus: string;
   reviewedAt: string;
+  /**
+   * Source-lifecycle propagation (EVIDENCE_PROVENANCE.md §14/§16): true when any supporting
+   * source is `changed-review-required`, so surfaces can show a calm "reviewing an update"
+   * signal instead of presenting the support as fully current.
+   */
+  sourceReviewPending: boolean;
   uncertaintyNoteKey?: string;
   sourceRefs: ClaimSourceRef[];
 }
@@ -145,6 +151,7 @@ function computeContentVersion(knowledge: CanonicalKnowledge): ContentVersionRec
 export function compileKnowledge(knowledge: CanonicalKnowledge): CompiledKnowledge {
   const claims: CompiledClaim[] = knowledge.claims.map(({ claim, domain }) => ({ ...claim, domain }));
   const claimById = new Map(claims.map((c) => [c.id, c]));
+  const sourceById = new Map(knowledge.sources.map((s) => [s.id, s]));
 
   const claimEvidence: ClaimEvidenceEntry[] = claims.map((claim) => ({
     claimId: claim.id,
@@ -156,6 +163,7 @@ export function compileKnowledge(knowledge: CanonicalKnowledge): CompiledKnowled
     safetyLevel: claim.safetyLevel,
     reviewStatus: claim.reviewStatus,
     reviewedAt: claim.reviewedAt,
+    sourceReviewPending: claim.sourceRefs.some((ref) => sourceById.get(ref.sourceId)?.status === "changed-review-required"),
     ...(claim.uncertaintyNoteKey !== undefined ? { uncertaintyNoteKey: claim.uncertaintyNoteKey } : {}),
     sourceRefs: claim.sourceRefs,
   }));

@@ -2,6 +2,9 @@
 # Canonical source registry (docs/EVIDENCE_PROVENANCE.md §2, docs/REPOSITORY_STRUCTURE.md §8).
 # A source record identifies the original authority; it is not permission to reproduce the work.
 # Every `lastVerifiedAt` date means a maintainer actually opened the source on that date.
+# `approvalLevel`/`approvedScopes` are the machine-checkable approval boundary: only an
+# approved-primary source can back `relationship: primary`/`direct-support`, and only inside
+# its approved domains — a blog/retailer/influencer source can never become primary by declaration.
 
 sources:
   - id: cdc-introduction-solid-foods
@@ -15,6 +18,8 @@ sources:
     nextReviewAt: 2027-08-31
     status: current
     accessMode: link-only
+    approvalLevel: approved-primary
+    approvedScopes: [feeding]
     notes: >-
       CDC parent guidance citing the Dietary Guidelines for Americans and AAP.
       Interpret + cite + link only; the page wording stays CDC's.
@@ -30,6 +35,8 @@ sources:
     nextReviewAt: 2027-08-31
     status: current
     accessMode: link-only
+    approvalLevel: approved-primary
+    approvedScopes: [feeding]
     notes: >-
       Global normative guidance used as corroboration for U.S.-primary feeding claims
       (GUIDANCE_CONTENT_CONTRACT.md §12: U.S. authority stays primary for the U.S. product).

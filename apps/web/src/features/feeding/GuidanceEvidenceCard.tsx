@@ -57,7 +57,9 @@ export function GuidanceEvidenceCard({ variants }: GuidanceEvidenceCardProps) {
             open
             onClose={() => setOpenClaimId(null)}
             title={view.strings.sourcesDrawerTitle}
+            attribution={view.strings.drawerAttribution}
             claimText={openClaim.text}
+            claimLabel={view.strings.claimLabel}
             classLabel={openClaim.classLabel}
             sources={openClaim.sources}
             viewOriginalLabel={view.strings.viewOriginal}

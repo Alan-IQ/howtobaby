@@ -18,6 +18,7 @@ import {
   REVIEW_STATUSES,
   SAFETY_LEVELS,
   SOURCE_ACCESS_MODES,
+  SOURCE_APPROVAL_LEVELS,
   SOURCE_RELATIONSHIPS,
   SOURCE_STATUSES,
   TOOL_CLASSES,
@@ -25,6 +26,7 @@ import {
   type Claim,
   type ClaimSourceRef,
   type CoverageCell,
+  type CoverageSectionRequirement,
   type GuidanceBlock,
   type KnowledgeDomain,
   type Locale,
@@ -178,7 +180,8 @@ function asRaw(value: unknown, issues: IssueCollector, category: IssueCategory, 
 
 const SOURCE_KEYS = [
   "id", "organization", "title", "canonicalUrl", "jurisdiction", "sourceType",
-  "publishedAt", "updatedAt", "lastVerifiedAt", "nextReviewAt", "status", "supersededBy", "accessMode", "notes",
+  "publishedAt", "updatedAt", "lastVerifiedAt", "nextReviewAt", "status", "supersededBy", "accessMode",
+  "approvalLevel", "approvedScopes", "notes",
 ] as const;
 
 export function parseSourceRecord(value: unknown, issues: IssueCollector, file?: string): SourceRecord | undefined {
@@ -204,7 +207,25 @@ export function parseSourceRecord(value: unknown, issues: IssueCollector, file?:
   const status = r.requireEnum("status", SOURCE_STATUSES);
   const supersededBy = r.optionalString("supersededBy");
   const accessMode = r.requireEnum("accessMode", SOURCE_ACCESS_MODES);
+  const approvalLevel = r.requireEnum("approvalLevel", SOURCE_APPROVAL_LEVELS);
+  const approvedScopesRaw = r.optionalStringArray("approvedScopes");
   const notes = r.optionalString("notes");
+
+  let approvedScopes: KnowledgeDomain[] | undefined;
+  if (approvedScopesRaw !== undefined) {
+    const invalid = approvedScopesRaw.filter((scope) => !(KNOWLEDGE_DOMAINS as readonly string[]).includes(scope));
+    if (invalid.length > 0) {
+      r.fail("invalid-approved-scope", `\`approvedScopes\` entries must be knowledge domains (${KNOWLEDGE_DOMAINS.join(", ")}); got: ${invalid.join(", ")}`);
+    } else {
+      approvedScopes = approvedScopesRaw as KnowledgeDomain[];
+    }
+  }
+  if ((approvalLevel === "approved-primary" || approvalLevel === "approved-supporting") && (approvedScopes === undefined || approvedScopes.length === 0)) {
+    r.fail("approved-source-without-scope", "an approved source must declare the knowledge domains it is approved for in `approvedScopes`");
+  }
+  if (approvalLevel === "unapproved" && approvedScopesRaw !== undefined) {
+    r.fail("unapproved-source-with-scope", "`approvedScopes` is only valid on an approved source");
+  }
 
   if (status === "superseded" && supersededBy === undefined) {
     r.fail("superseded-without-successor", "a superseded source must name its successor in `supersededBy`");
@@ -213,9 +234,10 @@ export function parseSourceRecord(value: unknown, issues: IssueCollector, file?:
     r.fail("successor-without-superseded", "`supersededBy` is only valid on a source whose status is `superseded`");
   }
 
-  if (r.failed || !id || !organization || !title || !canonicalUrl || !jurisdiction || !sourceType || !lastVerifiedAt || !status || !accessMode) return undefined;
+  if (r.failed || !id || !organization || !title || !canonicalUrl || !jurisdiction || !sourceType || !lastVerifiedAt || !status || !accessMode || !approvalLevel) return undefined;
   return {
-    id, organization, title, canonicalUrl, jurisdiction, sourceType, lastVerifiedAt, status, accessMode,
+    id, organization, title, canonicalUrl, jurisdiction, sourceType, lastVerifiedAt, status, accessMode, approvalLevel,
+    ...(approvedScopes !== undefined ? { approvedScopes } : {}),
     ...(publishedAt !== undefined ? { publishedAt } : {}),
     ...(updatedAt !== undefined ? { updatedAt } : {}),
     ...(nextReviewAt !== undefined ? { nextReviewAt } : {}),
@@ -429,7 +451,40 @@ export function parseToolEvidenceRecord(value: unknown, issues: IssueCollector, 
 
 // --- CoverageCell ------------------------------------------------------------------------------
 
-const COVERAGE_KEYS = ["domain", "stage", "requiredClaimIds"] as const;
+const COVERAGE_KEYS = ["domain", "stage", "sections"] as const;
+const COVERAGE_SECTION_KEYS = ["section", "requiredClaimIds", "minimumReviewStatus", "requiredLocales", "requireApprovedPrimarySource"] as const;
+
+function parseCoverageSection(value: unknown, issues: IssueCollector, cellSubject: string, file?: string): CoverageSectionRequirement | undefined {
+  const raw = asRaw(value, issues, "coverage", cellSubject, file);
+  if (!raw) return undefined;
+  const subject = typeof raw["section"] === "string" ? `${cellSubject}#${raw["section"]}` : cellSubject;
+  const r = new RecordReader(raw, issues, "coverage", subject, file);
+  r.unknownKeys(COVERAGE_SECTION_KEYS);
+  const section = r.requireString("section", PUBLIC_SLUG_PATTERN, "is not a kebab-case section id");
+  const requiredClaimIds = r.requireStringArray("requiredClaimIds", 1);
+  const minimumReviewStatus = raw["minimumReviewStatus"] !== undefined ? r.requireEnum("minimumReviewStatus", REVIEW_STATUSES) : undefined;
+  let requiredLocales: Locale[] | undefined;
+  if (raw["requiredLocales"] !== undefined) {
+    const locales = r.requireStringArray("requiredLocales", 1);
+    if (locales !== undefined) {
+      const invalid = locales.filter((locale) => !(LOCALES as readonly string[]).includes(locale));
+      if (invalid.length > 0) r.fail("invalid-locale", `\`requiredLocales\` entries must be supported locales (${LOCALES.join(", ")}); got: ${invalid.join(", ")}`);
+      else requiredLocales = locales as Locale[];
+    }
+  }
+  let requireApprovedPrimarySource: boolean | undefined;
+  if (raw["requireApprovedPrimarySource"] !== undefined) {
+    if (typeof raw["requireApprovedPrimarySource"] !== "boolean") r.fail("invalid-format", "`requireApprovedPrimarySource` must be a boolean when present");
+    else requireApprovedPrimarySource = raw["requireApprovedPrimarySource"];
+  }
+  if (r.failed || !section || !requiredClaimIds) return undefined;
+  return {
+    section, requiredClaimIds,
+    ...(minimumReviewStatus !== undefined ? { minimumReviewStatus } : {}),
+    ...(requiredLocales !== undefined ? { requiredLocales } : {}),
+    ...(requireApprovedPrimarySource !== undefined ? { requireApprovedPrimarySource } : {}),
+  };
+}
 
 export function parseCoverageCell(value: unknown, issues: IssueCollector, file?: string): CoverageCell | undefined {
   const raw = asRaw(value, issues, "coverage", "(coverage cell)", file);
@@ -439,7 +494,27 @@ export function parseCoverageCell(value: unknown, issues: IssueCollector, file?:
   r.unknownKeys(COVERAGE_KEYS);
   const domain = r.requireEnum("domain", KNOWLEDGE_DOMAINS) as KnowledgeDomain | undefined;
   const stage = r.requireString("stage");
-  const requiredClaimIds = r.requireStringArray("requiredClaimIds", 1);
-  if (r.failed || !domain || !stage || !requiredClaimIds) return undefined;
-  return { domain, stage, requiredClaimIds };
+  const sectionsRaw = raw["sections"];
+  let sections: CoverageSectionRequirement[] | undefined;
+  if (!Array.isArray(sectionsRaw) || sectionsRaw.length === 0) {
+    r.fail("missing-field", "`sections` must be a non-empty list of section requirements (stage × domain × section contract)");
+  } else {
+    sections = [];
+    const seen = new Set<string>();
+    for (const entry of sectionsRaw) {
+      const parsed = parseCoverageSection(entry, issues, subject, file);
+      if (parsed === undefined) {
+        r.failed = true;
+        continue;
+      }
+      if (seen.has(parsed.section)) {
+        r.fail("duplicate-section", `section \`${parsed.section}\` is declared more than once in this cell`);
+        continue;
+      }
+      seen.add(parsed.section);
+      sections.push(parsed);
+    }
+  }
+  if (r.failed || !domain || !stage || !sections) return undefined;
+  return { domain, stage, sections };
 }

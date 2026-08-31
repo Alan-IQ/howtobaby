@@ -45,6 +45,11 @@ type SourceAccessMode =
   | "approved-syndication"
   | "public-domain-or-compatible-reuse";
 
+type SourceApprovalLevel =
+  | "approved-primary"      // may back primary/direct-support relationships, inside approvedScopes
+  | "approved-supporting"   // approved for corroborating/contextual roles only
+  | "unapproved";           // recorded but never citable as primary health support
+
 interface SourceRecord {
   id: string;
   organization: string;
@@ -59,11 +64,19 @@ interface SourceRecord {
   status: SourceStatus;
   supersededBy?: string;
   accessMode: SourceAccessMode;
+  approvalLevel: SourceApprovalLevel;
+  approvedScopes?: KnowledgeDomain[]; // required for approved tiers
   notes?: string;
 }
 ```
 
 A source record identifies the original authority. It is not permission to reproduce the full work.
+
+`approvalLevel`/`approvedScopes` are the machine-checkable approval boundary: build validation
+only accepts a `primary`/`direct-support` relationship when the source is `approved-primary` and
+its `approvedScopes` cover the claim's domain. Declaring `relationship: primary` therefore can
+never promote a blog, retailer/manufacturer, influencer, or otherwise unapproved source into a
+canonical primary health source (see GUIDANCE_CONTENT_CONTRACT.md §12 for the governance list).
 
 ## 3. Claim-to-source relationship
 
@@ -97,13 +110,13 @@ interface ClaimSourceRef {
 }
 ```
 
-Locators should be specific enough for a maintainer or parent to find the supporting portion without HowToBaby copying large source passages.
+Locators should be specific enough for a maintainer or parent to find the supporting portion without HowToBaby copying large source passages. `paragraphHint` is concise paraphrased locator/context, never a stored long verbatim quotation — validation warns on quote-length hints (`verbatim-locator-hint`).
 
 ## 4. Minimum provenance rules by guidance class
 
 ### `official-guidance`
 
-Requires at least one `primary` or `direct-support` reference to an approved authority whose source scope actually covers the claim.
+Requires at least one `primary` or `direct-support` reference to an approved authority whose source scope actually covers the claim. Machine-checked: the referenced source must be `approvalLevel: approved-primary`, its `approvedScopes` must include the claim's domain, and its status must still be usable (not superseded/retired).
 
 ### `evidence-synthesis`
 
@@ -368,12 +381,16 @@ CI must fail when:
 - a guidance-linked Tool renders a health claim not traceable to a canonical claim;
 - a page manually declares a source that none of its claims use;
 - a required public source link is missing;
-- EN/VI versions materially diverge on source-sensitive qualifiers.
+- a `primary`/`direct-support` reference points at a source that is not `approved-primary`, or whose `approvedScopes` do not cover the claim's domain;
+- a GuidanceBlock renders a claim that is not release-eligible (`draft`, `clinical-review-required`, `superseded`) — the public release gate is enforced at build time and cannot be bypassed by omitting the claim from the coverage matrix;
+- a release-approved claim keeps relying on a `changed-review-required` source that was not re-verified after the change;
+- EN/VI versions materially diverge on source-sensitive qualifiers — quantities are compared in order together with their units and boundary qualifiers (before/after/about), so swapped age boundaries, changed units, dropped qualifiers, and lost negation all fail.
 
 Warnings or review-required states should be generated when:
 
 - a locator can no longer be found;
-- a source changed since claim review;
+- a source changed since claim review (`changed-review-required` propagates a review signal to every dependent claim; the claim's support is no longer presented as fully current);
+- a locator `paragraphHint` looks like a long verbatim quotation;
 - a source is temporarily unreachable;
 - a monitored heading/section moved.
 

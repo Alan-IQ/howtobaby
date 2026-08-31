@@ -11,9 +11,14 @@ const cdc: EvidenceSourceView = {
   organization: "CDC",
   title: "When, What, and How to Introduce Solid Foods",
   relationshipLabel: "Primary source",
-  locatorLabel: "Heading: “When, What, and How to Introduce Solid Foods”",
-  jurisdictionLabel: "United States",
-  verifiedLabel: "Verified Aug 31, 2026",
+  meta: [
+    { label: "Role in this guidance", value: "Primary source" },
+    { label: "Relevant section", value: "“When, What, and How to Introduce Solid Foods”" },
+    { label: "Applies to", value: "United States" },
+    { label: "Source status", value: "Current" },
+    { label: "Last verified by HowToBaby", value: "Aug 31, 2026" },
+    { label: "Why this source is used", value: "This guidance is based on the official recommendation this organization publishes." },
+  ],
   url: "https://www.cdc.gov/infant-toddler-nutrition/foods-and-drinks/when-what-and-how-to-introduce-solid-foods.html",
 };
 
@@ -40,10 +45,28 @@ describe("EvidenceDrawer (GUI_DESIGN.md §11.3)", () => {
     <EvidenceDrawer open onClose={() => {}} title="Sources for this guidance" claimText="Introduce solids at about 6 months." classLabel="Official guidance" sources={[cdc]} />,
   );
 
-  it("shows organization, exact title, relationship, locator, jurisdiction and verification", () => {
-    for (const text of ["CDC", "When, What, and How to Introduce Solid Foods", "Primary source", "Heading:", "United States", "Verified Aug 31, 2026"]) {
+  it("shows organization, exact title, and every labeled metadata row", () => {
+    for (const text of [
+      "CDC",
+      "When, What, and How to Introduce Solid Foods",
+      "Role in this guidance",
+      "Primary source",
+      "Relevant section",
+      "Applies to",
+      "United States",
+      "Source status",
+      "Current",
+      "Last verified by HowToBaby",
+      "Aug 31, 2026",
+      "Why this source is used",
+    ]) {
       expect(html).toContain(text);
     }
+  });
+
+  it("labels metadata as definition pairs instead of bare value lines", () => {
+    expect(html).toMatch(/<dt>Applies to<\/dt><dd>United States<\/dd>/);
+    expect(html).toMatch(/<dt>Source status<\/dt><dd>Current<\/dd>/);
   });
 
   it("offers a safe View-original-source action", () => {
@@ -55,19 +78,23 @@ describe("EvidenceDrawer (GUI_DESIGN.md §11.3)", () => {
     expect(html).toContain("They have not reviewed or endorsed HowToBaby.");
   });
 
-  it("quotes the supported claim so the mapping stays unambiguous", () => {
+  it("presents the claim as HowToBaby guidance supported by sources, never as a source quote", () => {
+    expect(html).toContain("not a direct quote from these organizations");
+    expect(html).toContain("HowToBaby guidance");
     expect(html).toContain("Introduce solids at about 6 months.");
     expect(html).toContain("Official guidance");
+    expect(html).not.toContain("<blockquote");
   });
 });
 
 describe("ReferenceList (GUI_DESIGN.md §11.4)", () => {
   it("deduplicates by source ID and renders provenance per entry", () => {
-    const entry = { sourceId: cdc.sourceId, organization: "CDC", title: cdc.title, verifiedLabel: cdc.verifiedLabel, url: cdc.url };
+    const entry = { sourceId: cdc.sourceId, organization: "CDC", title: cdc.title, verifiedLabel: "Last verified by HowToBaby: Aug 31, 2026", url: cdc.url, statusLabel: "Current" };
     const html = renderToStaticMarkup(<ReferenceList entries={[entry, entry]} />);
     expect(html).toContain("Sources used on this page");
     expect(html.match(/htb-reference-list__entry/g)).toHaveLength(1);
-    expect(html).toContain("Verified Aug 31, 2026");
+    expect(html).toContain("Last verified by HowToBaby: Aug 31, 2026");
+    expect(html).toContain("Current");
     // Print keeps a scannable URL even though the interactive link is hidden on paper.
     expect(html).toContain("htb-reference-list__print-url");
   });

@@ -53,11 +53,17 @@ interface ClaimSourceRef {
 }
 ```
 
-Locator giúp maintainer/user tìm đúng đoạn gốc mà không phải copy cả bài.
+Locator giúp maintainer/user tìm đúng đoạn gốc mà không phải copy cả bài. `paragraphHint` là locator/context đã paraphrase ngắn gọn, không lưu quote verbatim dài (validation cảnh báo `verbatim-locator-hint`).
+
+Source record còn mang ranh giới approval machine-checkable: `approvalLevel`
+(`approved-primary` / `approved-supporting` / `unapproved`) và `approvedScopes` (các domain được
+duyệt). Chỉ source `approved-primary` đúng scope mới được khai `relationship: primary`/
+`direct-support` — blog, retailer/manufacturer, influencer không thể tự trở thành nguồn chính
+chỉ bằng cách khai relationship.
 
 ## 3. Rule theo guidance class
 
-- `official-guidance`: bắt buộc có ít nhất một source `primary`/`direct-support` từ authority phù hợp scope.
+- `official-guidance`: bắt buộc có ít nhất một source `primary`/`direct-support` từ authority phù hợp scope — máy kiểm tra: source phải `approved-primary`, `approvedScopes` phủ domain của claim, status còn dùng được (không superseded/retired).
 - `evidence-synthesis`: phải ghi các source quan trọng đã dùng; disagreement không được giấu.
 - `practical-interpretation`: phải truy về claim/source đang được diễn giải và phải rõ đây là wording HowToBaby.
 - `typical-pattern`: không được biến thành official chỉ vì có citation.

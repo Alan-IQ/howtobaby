@@ -96,6 +96,8 @@ export class SQLiteKnowledgeRepository implements KnowledgeRepository {
     const updatedAt = optStr(row, "updated_at");
     const nextReviewAt = optStr(row, "next_review_at");
     const supersededBy = optStr(row, "superseded_by");
+    const approvedScopesRaw = optStr(row, "approved_scopes");
+    const approvedScopes = approvedScopesRaw !== undefined ? (JSON.parse(approvedScopesRaw) as SourceRecord["approvedScopes"]) : undefined;
     const notes = optStr(row, "notes");
     return {
       id: str(row, "id"),
@@ -107,6 +109,8 @@ export class SQLiteKnowledgeRepository implements KnowledgeRepository {
       lastVerifiedAt: str(row, "last_verified_at"),
       status: str(row, "status") as SourceRecord["status"],
       accessMode: str(row, "access_mode") as SourceRecord["accessMode"],
+      approvalLevel: str(row, "approval_level") as SourceRecord["approvalLevel"],
+      ...(approvedScopes !== undefined ? { approvedScopes } : {}),
       ...(publishedAt !== undefined ? { publishedAt } : {}),
       ...(updatedAt !== undefined ? { updatedAt } : {}),
       ...(nextReviewAt !== undefined ? { nextReviewAt } : {}),
@@ -149,6 +153,9 @@ export class SQLiteKnowledgeRepository implements KnowledgeRepository {
   async getClaimEvidence(id: ClaimId): Promise<ClaimEvidenceEntry | null> {
     const claim = await this.getClaim(id);
     if (!claim) return null;
+    const pending = this.db
+      .prepare("SELECT 1 AS hit FROM claim_source_refs r JOIN sources s ON s.id = r.source_id WHERE r.claim_id = ? AND s.status = 'changed-review-required' LIMIT 1")
+      .get(id) as Row | undefined;
     return {
       claimId: claim.id,
       domain: claim.domain,
@@ -159,6 +166,7 @@ export class SQLiteKnowledgeRepository implements KnowledgeRepository {
       safetyLevel: claim.safetyLevel,
       reviewStatus: claim.reviewStatus,
       reviewedAt: claim.reviewedAt,
+      sourceReviewPending: pending !== undefined,
       ...(claim.uncertaintyNoteKey !== undefined ? { uncertaintyNoteKey: claim.uncertaintyNoteKey } : {}),
       sourceRefs: claim.sourceRefs,
     };

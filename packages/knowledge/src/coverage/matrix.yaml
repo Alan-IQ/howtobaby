@@ -1,11 +1,18 @@
 # SPDX-License-Identifier: CC-BY-NC-SA-4.0
-# Coverage matrix framework (docs/GUIDANCE_CONTENT_CONTRACT.md §11): each cell declares the claims
-# a stage × domain must ship with. Validation requires every listed claim to exist, be
-# source-reviewed, have EN + VI text, and be rendered by at least one guidance block/route.
-# Phase 2 seeds one cell to prove the framework; domain migrations (Phases 4–6) grow it.
+# Coverage matrix framework (docs/GUIDANCE_CONTENT_CONTRACT.md §11). Each cell declares, per
+# stage × domain, the required sections a stage must ship with; every section pins the claims it
+# requires together with the review floor, the locales that must carry the text, and whether an
+# approved primary source covering the domain is mandatory:
+#   stage × domain × required section × EN × VI × source coverage × review status.
+# Phase 2 seeds one cell to prove the contract; domain migrations (Phases 4–6) grow it.
 
 cells:
   - domain: feeding
     stage: feed-06-08m
-    requiredClaimIds:
-      - feeding.solids.start
+    sections:
+      - section: solids-introduction
+        requiredClaimIds:
+          - feeding.solids.start
+        minimumReviewStatus: source-verified
+        requiredLocales: [en, vi]
+        requireApprovedPrimarySource: true

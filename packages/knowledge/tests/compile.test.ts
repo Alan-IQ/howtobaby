@@ -57,6 +57,7 @@ describe("reverse evidence indexes", () => {
     expect(compiled.claimEvidence).toHaveLength(1);
     const entry = compiled.claimEvidence[0]!;
     expect(entry.claimId).toBe("feeding.solids.start");
+    expect(entry.sourceReviewPending).toBe(false);
     expect(entry.sourceRefs.map((r) => r.sourceId)).toEqual(["cdc-introduction-solid-foods", "who-complementary-feeding"]);
   });
 
@@ -99,5 +100,29 @@ describe("reverse evidence indexes", () => {
     expect(text).toBe(artifacts.get("claim-evidence-index.json"));
     const parsed = JSON.parse(text) as Array<Record<string, unknown>>;
     expect(Object.keys(parsed[0]!)).toEqual([...Object.keys(parsed[0]!)].sort());
+  });
+});
+
+describe("source lifecycle propagation into the read model", () => {
+  it("flags claim evidence as review-pending when a supporting source is changed-review-required", () => {
+    const { knowledge, dir } = loadFixture({
+      "sources/registry.yaml": VALID_FIXTURE["sources/registry.yaml"]!.replace(
+        `    lastVerifiedAt: 2026-08-30
+    status: current
+    accessMode: link-only
+    approvalLevel: approved-primary
+    approvedScopes: [feeding]
+  - id: who-complementary-feeding`,
+        `    lastVerifiedAt: 2026-08-30
+    status: changed-review-required
+    accessMode: link-only
+    approvalLevel: approved-primary
+    approvedScopes: [feeding]
+  - id: who-complementary-feeding`,
+      ),
+    });
+    cleanupFixture(dir);
+    const entry = compileKnowledge(knowledge).claimEvidence[0]!;
+    expect(entry.sourceReviewPending).toBe(true);
   });
 });

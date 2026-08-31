@@ -3,10 +3,15 @@
  * EvidenceDrawer — the default detailed provenance surface (docs/GUI_DESIGN.md §11.3,
  * docs/EVIDENCE_PROVENANCE.md §6 Layer B).
  *
- * For each supporting source it shows organization, exact title, relationship, locator,
- * jurisdiction, verification/status signal and a **View original source** action with safe
- * external-link attributes. The no-endorsement line is always rendered: the drawer must never
- * imply that CDC/AAP/WHO/FDA reviewed or endorsed HowToBaby.
+ * The drawer presents HowToBaby guidance supported by original sources — it must never read as a
+ * direct quote from CDC/WHO/AAP/FDA. The header attribution line and the "HowToBaby guidance"
+ * label on the claim make that explicit, and the no-endorsement line is always rendered.
+ *
+ * Each supporting source shows organization and exact title, then a compact labeled metadata list
+ * (role in this guidance, relevant section, applies-to/scope, source status including "Current",
+ * last verified by HowToBaby, why the source is used) and a **View original source** action with
+ * safe external-link attributes. Metadata rows arrive pre-localized from canonical data — this
+ * component holds no medical prose and derives nothing itself.
  */
 
 "use client";
@@ -21,8 +26,15 @@ export interface EvidenceDrawerProps {
   onClose: () => void;
   /** Drawer heading, e.g. localized "Sources for this guidance". */
   title: ReactNode;
-  /** The HowToBaby claim/context being supported, quoted so the mapping stays unambiguous. */
+  /**
+   * Attribution line under the heading clarifying that what follows is HowToBaby guidance
+   * supported by the listed original sources, not their verbatim wording. Always rendered.
+   */
+  attribution?: string;
+  /** The HowToBaby claim/context being supported, shown so the mapping stays unambiguous. */
   claimText?: string;
+  /** Localized label identifying the claim as HowToBaby's own wording. */
+  claimLabel?: string;
   /** Localized content-class label for the claim, e.g. "Official guidance". */
   classLabel?: string;
   sources: EvidenceSourceView[];
@@ -37,7 +49,9 @@ export function EvidenceDrawer({
   open,
   onClose,
   title,
+  attribution = "HowToBaby guidance, supported by the original sources listed below. The wording is HowToBaby's — not a direct quote from these organizations.",
   claimText,
+  claimLabel = "HowToBaby guidance",
   classLabel,
   sources,
   viewOriginalLabel = "View original source",
@@ -46,11 +60,15 @@ export function EvidenceDrawer({
 }: EvidenceDrawerProps) {
   return (
     <Drawer open={open} onClose={onClose} title={title} {...(closeLabel !== undefined ? { closeLabel } : {})} className="htb-evidence-drawer">
+      <p className="htb-evidence-drawer__attribution">{attribution}</p>
       {claimText ? (
-        <blockquote className="htb-evidence-drawer__claim">
-          {classLabel ? <span className="htb-evidence-drawer__class">{classLabel}</span> : null}
+        <div className="htb-evidence-drawer__claim">
+          <p className="htb-evidence-drawer__claim-labels">
+            <span className="htb-evidence-drawer__class">{claimLabel}</span>
+            {classLabel ? <span className="htb-evidence-drawer__class htb-evidence-drawer__class--secondary">{classLabel}</span> : null}
+          </p>
           <p>{claimText}</p>
-        </blockquote>
+        </div>
       ) : null}
       <ul className="htb-evidence-drawer__sources">
         {sources.map((source) => (
@@ -60,12 +78,16 @@ export function EvidenceDrawer({
               <span className="htb-evidence-source__relationship">{source.relationshipLabel}</span>
             </p>
             <p className="htb-evidence-source__title">{source.title}</p>
-            {source.locatorLabel ? <p className="htb-evidence-source__meta">{source.locatorLabel}</p> : null}
-            {source.jurisdictionLabel ? <p className="htb-evidence-source__meta">{source.jurisdictionLabel}</p> : null}
-            <p className="htb-evidence-source__meta">
-              {source.verifiedLabel}
-              {source.statusLabel ? <span className="htb-evidence-source__status">{source.statusLabel}</span> : null}
-            </p>
+            {source.meta.length > 0 ? (
+              <dl className="htb-evidence-source__meta-list">
+                {source.meta.map((entry) => (
+                  <div key={entry.label} className="htb-evidence-source__meta-row">
+                    <dt>{entry.label}</dt>
+                    <dd>{entry.value}</dd>
+                  </div>
+                ))}
+              </dl>
+            ) : null}
             {source.noteText ? <p className="htb-evidence-source__note">{source.noteText}</p> : null}
             <a className="htb-evidence-source__link" href={source.url} target="_blank" rel="noopener noreferrer">
               {viewOriginalLabel}

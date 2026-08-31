@@ -11,14 +11,16 @@
 
 import type { ClaimEvidenceEntry, SourceRecord } from "@howtobaby/knowledge";
 import { GeneratedKnowledgeRepository } from "@howtobaby/knowledge/repository";
-import type { EvidenceSourceView, ReferenceEntry } from "@howtobaby/ui";
+import type { EvidenceMetaEntry, EvidenceSourceView, ReferenceEntry } from "@howtobaby/ui";
 
 import {
   GUIDANCE_CLASS_LABELS,
   RELATIONSHIP_LABELS,
+  RELATIONSHIP_WHY_LABELS,
   STATUS_LABELS,
   UI_STRINGS,
-  jurisdictionLabel,
+  formatDate,
+  jurisdictionMeta,
   verifiedLabel,
   type UiLocale,
 } from "./labels";
@@ -30,16 +32,35 @@ export function knowledgeRepository(): GeneratedKnowledgeRepository {
   return repository;
 }
 
-function locatorLabel(entry: ClaimEvidenceEntry["sourceRefs"][number], locale: UiLocale): string | undefined {
+/** Value for the "Relevant section" row: heading/section plus page/table/figure specifics. */
+function relevantSectionValue(entry: ClaimEvidenceEntry["sourceRefs"][number], locale: UiLocale): string | undefined {
   const locator = entry.locator;
   if (!locator) return undefined;
   const parts: string[] = [];
-  if (locator.heading) parts.push(`${locale === "vi" ? "Mục" : "Heading"}: “${locator.heading}”`);
-  if (locator.section) parts.push(`${locale === "vi" ? "Phần" : "Section"}: “${locator.section}”`);
+  if (locator.heading) parts.push(`“${locator.heading}”`);
+  if (locator.section) parts.push(`“${locator.section}”`);
   if (locator.page !== undefined) parts.push(`${locale === "vi" ? "Trang" : "Page"} ${locator.page}`);
   if (locator.table) parts.push(`${locale === "vi" ? "Bảng" : "Table"} ${locator.table}`);
   if (locator.figure) parts.push(`${locale === "vi" ? "Hình" : "Figure"} ${locator.figure}`);
   return parts.length > 0 ? parts.join(" · ") : undefined;
+}
+
+/**
+ * Labeled metadata rows for one source reference (GUI_DESIGN.md §11.3): every row carries an
+ * explicit label ("Applies to", "Source status", "Last verified by HowToBaby", …) and every value
+ * derives from canonical metadata — the "why" line comes from the canonical relationship, never
+ * from prose hard-coded in a component.
+ */
+function sourceMetaRows(ref: ClaimEvidenceEntry["sourceRefs"][number], source: SourceRecord, locale: UiLocale): EvidenceMetaEntry[] {
+  const strings = UI_STRINGS[locale];
+  const meta: EvidenceMetaEntry[] = [{ label: strings.metaRole, value: RELATIONSHIP_LABELS[locale][ref.relationship] }];
+  const section = relevantSectionValue(ref, locale);
+  if (section !== undefined) meta.push({ label: strings.metaRelevantSection, value: section });
+  meta.push(jurisdictionMeta(source, locale));
+  meta.push({ label: strings.metaStatus, value: STATUS_LABELS[locale][source.status] });
+  meta.push({ label: strings.metaLastVerified, value: formatDate(source.lastVerifiedAt, locale) });
+  meta.push({ label: strings.metaWhy, value: RELATIONSHIP_WHY_LABELS[locale][ref.relationship] });
+  return meta;
 }
 
 /** Map one claim's provenance into the EvidenceDrawer view model for a locale. */
@@ -50,22 +71,29 @@ export async function evidenceSourceViews(evidence: ClaimEvidenceEntry, locale: 
     const source = await repo.getSource(ref.sourceId);
     if (!source) continue; // validation gates guarantee resolution; never fabricate a source here
     const note = ref.supportNoteKey ? await repo.getText(locale, ref.supportNoteKey) : null;
-    const status = STATUS_LABELS[locale][source.status];
-    const locator = locatorLabel(ref, locale);
     views.push({
       sourceId: source.id,
       organization: source.organization,
       title: source.title,
       relationshipLabel: RELATIONSHIP_LABELS[locale][ref.relationship],
-      verifiedLabel: verifiedLabel(source.lastVerifiedAt, locale),
+      meta: sourceMetaRows(ref, source, locale),
       url: source.canonicalUrl,
-      jurisdictionLabel: jurisdictionLabel(source, locale),
-      ...(locator !== undefined ? { locatorLabel: locator } : {}),
-      ...(status !== undefined ? { statusLabel: status } : {}),
       ...(note !== null && note !== undefined ? { noteText: note } : {}),
     });
   }
   return views;
+}
+
+/** ReferenceList entry for one source record (shared by route references and evidence detail). */
+export function referenceEntryForSource(source: SourceRecord, locale: UiLocale): ReferenceEntry {
+  return {
+    sourceId: source.id,
+    organization: source.organization,
+    title: source.title,
+    verifiedLabel: verifiedLabel(source.lastVerifiedAt, locale),
+    url: source.canonicalUrl,
+    statusLabel: STATUS_LABELS[locale][source.status],
+  };
 }
 
 /** One claim rendered inside a guidance card, fully localized. */
@@ -123,15 +151,7 @@ export async function loadReferenceEntries(route: string, locale: UiLocale): Pro
   for (const sourceId of routeEvidence.sourceIds) {
     const source = await repo.getSource(sourceId);
     if (!source) continue;
-    const status = STATUS_LABELS[locale][source.status];
-    entries.push({
-      sourceId: source.id,
-      organization: source.organization,
-      title: source.title,
-      verifiedLabel: verifiedLabel(source.lastVerifiedAt, locale),
-      url: source.canonicalUrl,
-      ...(status !== undefined ? { statusLabel: status } : {}),
-    });
+    entries.push(referenceEntryForSource(source, locale));
   }
   return entries;
 }

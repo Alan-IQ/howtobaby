@@ -13,7 +13,7 @@ import { Badge, Card, ReferenceList } from "@howtobaby/ui";
 
 import { PageShell } from "@/components/PageShell";
 import { GUIDANCE_CLASS_LABELS, UI_STRINGS, formatDate } from "@/features/evidence/labels";
-import { evidenceSourceViews, knowledgeRepository } from "@/features/evidence/load";
+import { evidenceSourceViews, knowledgeRepository, referenceEntryForSource } from "@/features/evidence/load";
 
 interface Params {
   slug: string;
@@ -53,14 +53,7 @@ export default async function Page({ params }: { params: Promise<Params> }) {
     evidenceSourceViews(evidence, "en"),
   ]);
   const impactSources = await Promise.all(evidence.sourceRefs.map((ref) => repo.getSource(ref.sourceId)));
-  const references = sources.map((source) => ({
-    sourceId: source.sourceId,
-    organization: source.organization,
-    title: source.title,
-    verifiedLabel: source.verifiedLabel,
-    url: source.url,
-    ...(source.statusLabel !== undefined ? { statusLabel: source.statusLabel } : {}),
-  }));
+  const references = impactSources.filter((record) => record !== null).map((record) => referenceEntryForSource(record, "en"));
 
   return (
     <PageShell eyebrow="Evidence" title={`Evidence: ${evidence.claimId}`} lede="What this claim says, which original sources support it, and when it was last verified." printable>
@@ -85,13 +78,8 @@ export default async function Page({ params }: { params: Promise<Params> }) {
               <p key={source.sourceId}>
                 <strong>{source.organization}</strong> — {source.title}
                 <br />
-                {source.relationshipLabel}
-                {source.locatorLabel ? <> · {source.locatorLabel}</> : null}
-                {source.jurisdictionLabel ? <> · {source.jurisdictionLabel}</> : null}
-                <br />
                 <span className="muted">
-                  {source.verifiedLabel}
-                  {source.statusLabel ? <> · {source.statusLabel}</> : null}
+                  {source.meta.map((entry) => `${entry.label}: ${entry.value}`).join(" · ")}
                   {record?.updatedAt ? <> · Source updated {formatDate(record.updatedAt, "en")}</> : null}
                 </span>
               </p>

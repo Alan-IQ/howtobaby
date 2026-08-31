@@ -31,6 +31,15 @@ export const SOURCE_ACCESS_MODES = [
 ] as const;
 export type SourceAccessMode = (typeof SOURCE_ACCESS_MODES)[number];
 
+/**
+ * Machine-checkable editorial approval boundary (EVIDENCE_PROVENANCE.md §2/§4).
+ * Only an `approved-primary` source may carry a `primary`/`direct-support` relationship, and only
+ * inside its `approvedScopes` — declaring `relationship: primary` can never promote an unapproved
+ * source (blog, retailer, manufacturer, influencer, …) into a canonical primary health source.
+ */
+export const SOURCE_APPROVAL_LEVELS = ["approved-primary", "approved-supporting", "unapproved"] as const;
+export type SourceApprovalLevel = (typeof SOURCE_APPROVAL_LEVELS)[number];
+
 export interface SourceRecord {
   id: string;
   organization: string;
@@ -45,6 +54,10 @@ export interface SourceRecord {
   status: SourceStatus;
   supersededBy?: string;
   accessMode: SourceAccessMode;
+  /** Editorial approval tier; validation gates primary/direct-support usage on it. */
+  approvalLevel: SourceApprovalLevel;
+  /** Knowledge domains this source is approved to support (required for approved tiers). */
+  approvedScopes?: KnowledgeDomain[];
   notes?: string;
 }
 
@@ -119,6 +132,24 @@ export const SOURCE_REVIEWED_STATUSES: readonly ReviewStatus[] = [
   "clinically-reviewed",
   "release-approved",
 ];
+
+/**
+ * Review states eligible to render on public guidance routes. Enforced as a build/validation gate
+ * (validate.ts `unreleased-claim-rendered`), never merely as a UI filter: a draft /
+ * clinical-review-required / superseded claim attached to any GuidanceBlock fails the build even
+ * when the claim is absent from the coverage matrix.
+ */
+export const RELEASE_ELIGIBLE_STATUSES: readonly ReviewStatus[] = SOURCE_REVIEWED_STATUSES;
+
+/** Ordering for minimum-review-status comparisons; `superseded` never satisfies any minimum. */
+export const REVIEW_STATUS_RANK: Record<ReviewStatus, number> = {
+  superseded: -1,
+  draft: 0,
+  "clinical-review-required": 1,
+  "source-verified": 2,
+  "clinically-reviewed": 3,
+  "release-approved": 4,
+};
 
 export interface Claim {
   id: string;
@@ -199,11 +230,28 @@ export interface ToolEvidenceRecord {
 // Coverage matrix framework (GUIDANCE_CONTENT_CONTRACT.md §11)
 // ---------------------------------------------------------------------------------------------
 
-/** One stage × domain coverage requirement: which claims must exist, translated and reviewed. */
+/**
+ * One required content section inside a coverage cell. The full coverage contract is
+ * stage × domain × required section × required locales (EN/VI) × source coverage × review status
+ * (GUIDANCE_CONTENT_CONTRACT.md §11).
+ */
+export interface CoverageSectionRequirement {
+  /** Stable kebab-case section id within the cell, e.g. `solids-introduction`. */
+  section: string;
+  requiredClaimIds: string[];
+  /** Minimum review status every required claim must reach (default `source-verified`). */
+  minimumReviewStatus?: ReviewStatus;
+  /** Locales that must carry each required claim's text (default: every supported locale). */
+  requiredLocales?: Locale[];
+  /** Require at least one approved primary/direct source covering the cell's domain. */
+  requireApprovedPrimarySource?: boolean;
+}
+
+/** One stage × domain coverage cell: the sections a stage must ship with. */
 export interface CoverageCell {
   domain: KnowledgeDomain;
   stage: string;
-  requiredClaimIds: string[];
+  sections: CoverageSectionRequirement[];
 }
 
 export interface CoverageMatrix {

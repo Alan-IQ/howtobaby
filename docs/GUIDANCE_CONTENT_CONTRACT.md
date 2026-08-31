@@ -264,6 +264,16 @@ CI should validate at minimum:
 stage × domain × required section × EN × VI × source coverage × review status
 ```
 
+The machine contract lives in the coverage matrix (packages/knowledge/src/coverage): each
+stage × domain cell declares required sections, and each section pins its `requiredClaimIds`, a
+`minimumReviewStatus` floor (default `source-verified`; `superseded` never passes), the
+`requiredLocales` that must carry the text, and `requireApprovedPrimarySource` for the source
+coverage axis (an approved primary/direct source covering the cell's domain).
+
+Separately from coverage, the public release gate is validated on guidance blocks themselves:
+any claim rendered by a GuidanceBlock must be in a release-eligible review state, so an
+unreviewed claim cannot reach a public route by staying out of the coverage matrix.
+
 Public pages, Personalized Now, print, any guidance-linked tool, and future assistant retrieval must resolve from the same canonical claim IDs.
 
 ## 12. Source hierarchy and governance

@@ -23,6 +23,8 @@ sources:
     lastVerifiedAt: 2026-08-30
     status: current
     accessMode: link-only
+    approvalLevel: approved-primary
+    approvedScopes: [feeding]
   - id: who-complementary-feeding
     organization: WHO
     title: "Infant and young child feeding"
@@ -32,6 +34,8 @@ sources:
     lastVerifiedAt: 2026-08-30
     status: current
     accessMode: link-only
+    approvalLevel: approved-primary
+    approvedScopes: [feeding]
 `,
   "claims/feeding/solids.yaml": `
 domain: feeding
@@ -89,7 +93,12 @@ tools:
 cells:
   - domain: feeding
     stage: feed-06-08m
-    requiredClaimIds: [feeding.solids.start]
+    sections:
+      - section: solids-introduction
+        requiredClaimIds: [feeding.solids.start]
+        minimumReviewStatus: source-verified
+        requiredLocales: [en, vi]
+        requireApprovedPrimarySource: true
 `,
 };
 

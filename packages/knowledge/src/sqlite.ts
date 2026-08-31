@@ -38,6 +38,8 @@ CREATE TABLE sources (
   status TEXT NOT NULL,
   superseded_by TEXT,
   access_mode TEXT NOT NULL,
+  approval_level TEXT NOT NULL,
+  approved_scopes TEXT,
   notes TEXT
 ) WITHOUT ROWID;
 
@@ -137,10 +139,10 @@ function populate(db: DatabaseSync, compiled: CompiledKnowledge): void {
   }
 
   const insertSource = db.prepare(
-    "INSERT INTO sources (id, organization, title, canonical_url, jurisdiction, source_type, published_at, updated_at, last_verified_at, next_review_at, status, superseded_by, access_mode, notes) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
+    "INSERT INTO sources (id, organization, title, canonical_url, jurisdiction, source_type, published_at, updated_at, last_verified_at, next_review_at, status, superseded_by, access_mode, approval_level, approved_scopes, notes) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
   );
   for (const s of compiled.sources) {
-    insertSource.run(s.id, s.organization, s.title, s.canonicalUrl, s.jurisdiction, s.sourceType, s.publishedAt ?? null, s.updatedAt ?? null, s.lastVerifiedAt, s.nextReviewAt ?? null, s.status, s.supersededBy ?? null, s.accessMode, s.notes ?? null);
+    insertSource.run(s.id, s.organization, s.title, s.canonicalUrl, s.jurisdiction, s.sourceType, s.publishedAt ?? null, s.updatedAt ?? null, s.lastVerifiedAt, s.nextReviewAt ?? null, s.status, s.supersededBy ?? null, s.accessMode, s.approvalLevel, s.approvedScopes !== undefined ? JSON.stringify(s.approvedScopes) : null, s.notes ?? null);
   }
 
   const insertClaim = db.prepare(
