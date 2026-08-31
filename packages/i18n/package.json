@@ -1,0 +1,19 @@
+{
+  "name": "@howtobaby/i18n",
+  "version": "0.8.0",
+  "private": true,
+  "license": "AGPL-3.0-only",
+  "description": "HowToBaby app-locale foundation: the central supported-locale registry, key/message dictionary framework and content-locale override semantics. Browser preference/provider wiring lives in apps/web; canonical medical translations live in @howtobaby/knowledge.",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "vitest run"
+  },
+  "devDependencies": {
+    "typescript": "^5.9.3",
+    "vitest": "^4.1.11"
+  }
+}

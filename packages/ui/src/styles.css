@@ -160,7 +160,8 @@ select {
   color: var(--htb-card-accent);
 }
 .htb-card__title {
-  font-size: var(--htb-font-size-lg);
+  /* Above canonical guidance/claim text (lg): titles lead by size + weight, never text-shadow. */
+  font-size: var(--htb-font-size-xl);
 }
 .htb-card__eyebrow {
   font-size: var(--htb-font-size-xs);
@@ -665,10 +666,27 @@ select {
   width: 22px;
   height: 22px;
 }
-/* Active: soft tinted pill + heavier icon/label — clear without shouting, never colour alone. */
+/* Active: soft tinted pill + heavier icon/label, plus a short centred underline in the domain
+   accent (shape + weight + tint together — never colour alone). The underline is absolutely
+   positioned inside the link, so the bar's height and equal-column alignment are untouched. */
+.htb-nav--tabs .htb-nav__link {
+  position: relative;
+}
 .htb-nav--tabs .htb-nav__link[aria-current="page"] {
   background: var(--htb-interactive-subtle-hover);
   font-weight: var(--htb-font-weight-semibold);
+}
+.htb-nav--tabs .htb-nav__link[aria-current="page"]::after {
+  content: "";
+  position: absolute;
+  bottom: 3px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 16px;
+  height: 3px;
+  border-radius: var(--htb-radius-pill);
+  /* currentColor = the active link's domain accent (or primary ink for brand/home). */
+  background: currentColor;
 }
 .htb-nav--tabs .htb-nav__link[aria-current="page"] .htb-icon {
   stroke-width: 2.1;
@@ -932,6 +950,9 @@ select {
   font-weight: var(--htb-font-weight-medium);
   line-height: 1.4;
   text-align: start;
+  /* Extremely subtle text lift off the glass surface: a hairline of the theme's glass highlight
+     under the ink. Not a glow, not emphasis — the chip stays quiet provenance metadata. */
+  text-shadow: 0 1px 0 var(--htb-surface-glass-highlight);
 }
 /* Touch screens keep a comfortable target without changing the resting look elsewhere. */
 @media (pointer: coarse) {

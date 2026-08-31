@@ -12,6 +12,8 @@ interface OverlayProps {
   closeLabel?: string;
   children?: ReactNode;
   className?: string;
+  /** BCP 47 tag when the overlay's content locale differs from the document locale. */
+  lang?: string | undefined;
 }
 
 function useNativeDialog(open: boolean, onClose: () => void) {
@@ -60,10 +62,10 @@ export interface DrawerProps extends OverlayProps {
 }
 
 /** Side/bottom drawer for progressive disclosure (evidence, adjustments). Same native-dialog foundation. */
-export function Drawer({ open, onClose, title, closeLabel = "Close", side = "end", children, className }: DrawerProps) {
+export function Drawer({ open, onClose, title, closeLabel = "Close", side = "end", children, className, lang }: DrawerProps) {
   const ref = useNativeDialog(open, onClose);
   return (
-    <dialog ref={ref} className={["htb-drawer", side === "bottom" ? "htb-drawer--bottom" : "", className].filter(Boolean).join(" ")} aria-labelledby="htb-drawer-title">
+    <dialog ref={ref} lang={lang} className={["htb-drawer", side === "bottom" ? "htb-drawer--bottom" : "", className].filter(Boolean).join(" ")} aria-labelledby="htb-drawer-title">
       <div className="htb-drawer__body">
         <div className="htb-drawer__header">
           <h2 id="htb-drawer-title">{title}</h2>

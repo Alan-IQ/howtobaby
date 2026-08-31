@@ -12,9 +12,11 @@
  * hard-coded medical prose in a component.
  */
 
+import type { AppLocale } from "@howtobaby/i18n";
 import type { GuidanceClass, SourceRecord, SourceRelationship, SourceStatus } from "@howtobaby/knowledge";
 
-export type UiLocale = "en" | "vi";
+/** Locale for evidence-presentation labels — the app locale from the central registry. */
+export type UiLocale = AppLocale;
 
 export const GUIDANCE_CLASS_LABELS: Record<UiLocale, Record<GuidanceClass, string>> = {
   en: {

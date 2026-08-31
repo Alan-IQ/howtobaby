@@ -18,8 +18,8 @@ export const babyModernGlassFoundation: FoundationTokens = {
     weight: { regular: "400", medium: "500", semibold: "600", bold: "700" },
   },
   spacing: { "2xs": "4px", xs: "8px", sm: "12px", md: "16px", lg: "24px", xl: "32px", "2xl": "48px", "3xl": "64px" },
-  // Softer than sharp, tighter than before: surfaces read precise and modern, not puffy.
-  radius: { sm: "6px", md: "10px", lg: "14px", xl: "20px", pill: "999px" },
+  // Softer than sharp, tighter than before: surfaces read precise and modern, not puffy or bubbly.
+  radius: { sm: "6px", md: "10px", lg: "12px", xl: "16px", pill: "999px" },
   motion: {
     durationFast: "120ms",
     durationBase: "200ms",

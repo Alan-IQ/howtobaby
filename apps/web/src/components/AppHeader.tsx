@@ -8,9 +8,10 @@ import { LanguageSwitcher } from "./LanguageSwitcher";
 import { PrimaryNav } from "./PrimaryNav";
 
 /**
- * Header (docs/GUI_DESIGN.md §6): brand/home, primary navigation on desktop, theme control. Child/age context,
- * language switch and profile controls attach here in the phases that introduce them (2–3); the slots are
- * intentionally absent rather than rendered inert.
+ * Header (docs/GUI_DESIGN.md §6): brand/home, primary navigation on desktop, then the presentation
+ * controls — theme mode, and the global language trigger outermost right. Child/age context and
+ * profile controls attach here in the phases that introduce them; the slots are intentionally
+ * absent rather than rendered inert.
  */
 export function AppHeader() {
   return (
@@ -24,8 +25,8 @@ export function AppHeader() {
         </Link>
         <PrimaryNav layout="horizontal" className="app-header__nav" />
         <div className="app-header__controls">
-          <LanguageSwitcher />
           <ThemeSwitcher className="app-header__theme" showThemeFamily={false} />
+          <LanguageSwitcher />
         </div>
       </div>
     </header>

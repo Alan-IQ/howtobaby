@@ -19,23 +19,6 @@
   box-shadow: inset 0 1px 0 var(--htb-surface-glass-highlight), var(--htb-shadow-1);
   padding-top: env(safe-area-inset-top);
 }
-.app-header {
-  position: sticky;
-}
-.app-header::after {
-  content: "";
-  position: absolute;
-  inset: 0 0 0 auto;
-  width: 220px;
-  pointer-events: none;
-  background-image: radial-gradient(var(--htb-surface-glass-border) 1.5px, transparent 1.6px);
-  background-size: 16px 16px;
-  background-position: 4px 6px;
-  opacity: 0.5;
-  /* mask alpha only — not palette */
-  -webkit-mask-image: linear-gradient(to left, black, transparent 85%);
-  mask-image: linear-gradient(to left, black, transparent 85%);
-}
 .app-header__inner {
   position: relative;
   display: flex;
@@ -93,46 +76,112 @@
   }
 }
 
-/* Compact global language control: globe + EN/VI pair, one tap to switch. */
-.lang-switch {
+/* Global language control: one compact trigger (globe above the active locale code) opening a
+   popover that lists every registered locale. Visual language matches the theme-mode control:
+   the same glass pill, the same footprint — one presentation-preferences cluster. */
+.lang-menu {
+  position: relative;
   display: inline-flex;
+}
+.lang-menu__trigger {
+  display: inline-flex;
+  flex-direction: column;
   align-items: center;
-  gap: 2px;
-  padding: 2px;
-  border: 1px solid var(--htb-border-subtle);
+  justify-content: center;
+  gap: 1px;
+  min-width: var(--htb-layout-touch-target);
+  min-height: var(--htb-layout-touch-target);
+  padding: 4px var(--htb-space-xs);
+  border: 1px solid var(--htb-surface-glass-border);
   border-radius: var(--htb-radius-pill);
-  background: var(--htb-surface-2);
-}
-.lang-switch__icon {
-  width: 14px;
-  height: 14px;
-  margin-inline-start: var(--htb-space-2xs);
-  color: var(--htb-text-muted);
-}
-.lang-switch__option {
-  appearance: none;
-  border: 0;
-  background: transparent;
-  min-height: 30px;
-  padding: 0 var(--htb-space-xs);
-  border-radius: var(--htb-radius-pill);
-  font: inherit;
-  font-size: var(--htb-font-size-xs);
-  font-weight: var(--htb-font-weight-semibold);
-  letter-spacing: 0.02em;
+  background: var(--htb-surface-glass);
+  -webkit-backdrop-filter: blur(var(--htb-glass-blur)) saturate(var(--htb-glass-saturate));
+  backdrop-filter: blur(var(--htb-glass-blur)) saturate(var(--htb-glass-saturate));
+  box-shadow: inset 0 1px 0 var(--htb-surface-glass-highlight);
   color: var(--htb-text-secondary);
   cursor: pointer;
 }
-.lang-switch__option:hover {
+.lang-menu__trigger:hover {
   color: var(--htb-text-primary);
 }
-.lang-switch__option[aria-pressed="true"] {
-  background: var(--htb-interactive-primary-bg);
-  color: var(--htb-interactive-primary-fg);
-}
-.lang-switch__option:focus-visible {
+.lang-menu__trigger:focus-visible {
   outline: 2px solid var(--htb-focus-ring);
   outline-offset: 1px;
+}
+.lang-menu__trigger[aria-expanded="true"] {
+  color: var(--htb-text-primary);
+  background: var(--htb-surface-1);
+  box-shadow: var(--htb-shadow-1);
+}
+.lang-menu__globe {
+  width: 16px;
+  height: 16px;
+}
+.lang-menu__code {
+  font-size: 10px;
+  font-weight: var(--htb-font-weight-semibold);
+  letter-spacing: 0.06em;
+  line-height: 1;
+}
+.lang-menu__panel {
+  position: absolute;
+  top: calc(100% + var(--htb-space-2xs));
+  right: 0;
+  z-index: 50;
+  min-width: 176px;
+  margin: 0;
+  padding: var(--htb-space-2xs);
+  list-style: none;
+  border: 1px solid var(--htb-border-subtle);
+  border-radius: var(--htb-radius-lg);
+  background: var(--htb-surface-1);
+  box-shadow: var(--htb-shadow-2);
+}
+.lang-menu__option {
+  display: flex;
+  align-items: center;
+  gap: var(--htb-space-xs);
+  width: 100%;
+  min-height: 38px;
+  padding: 0 var(--htb-space-sm);
+  border: 0;
+  border-radius: var(--htb-radius-md);
+  background: transparent;
+  color: var(--htb-text-secondary);
+  font: inherit;
+  font-size: var(--htb-font-size-sm);
+  text-align: start;
+  cursor: pointer;
+}
+.lang-menu__option:hover {
+  background: var(--htb-interactive-subtle-bg);
+  color: var(--htb-text-primary);
+}
+.lang-menu__option:focus-visible {
+  outline: 2px solid var(--htb-focus-ring);
+  outline-offset: -2px;
+}
+/* Active language: stronger ink + check mark — state is never colour alone. */
+.lang-menu__option[aria-selected="true"] {
+  background: var(--htb-surface-2);
+  color: var(--htb-text-primary);
+  font-weight: var(--htb-font-weight-semibold);
+}
+.lang-menu__option-code {
+  flex: none;
+  width: 2.2em;
+  font-size: var(--htb-font-size-xs);
+  font-weight: var(--htb-font-weight-semibold);
+  letter-spacing: 0.05em;
+  color: var(--htb-text-muted);
+}
+.lang-menu__option-name {
+  flex: 1;
+}
+.lang-menu__option-check {
+  flex: none;
+  width: 14px;
+  height: 14px;
 }
 
 /* ---------- main ---------- */
@@ -228,7 +277,7 @@
 }
 .page-shell__lede {
   max-width: 62ch;
-  font-size: var(--htb-font-size-lg);
+  font-size: var(--htb-font-size-md);
   font-weight: var(--htb-font-weight-regular);
   line-height: var(--htb-font-line-height-relaxed);
   color: var(--htb-text-secondary);
@@ -378,9 +427,61 @@
 .guidance-evidence-card__claim p {
   margin: 0;
 }
-/* The canonical claim is the main content of the card: primary ink, comfortable measure. */
+/* The canonical claim is the main content of the card — and of the page: primary ink, semantic lg
+   (above the md page lede, below the card title), comfortable measure. Prominence comes from
+   typography, contrast and spacing — never text-shadow. */
 .guidance-evidence-card__claim > p:first-child {
   color: var(--htb-text-primary);
   max-width: 62ch;
+  font-size: var(--htb-font-size-lg);
   line-height: var(--htb-font-line-height-relaxed);
+}
+
+/* Local content-language override: a quiet text-tier toggle pinned to the card's top corner.
+   Deliberately lighter than the global language control and quieter than the SourceChip: no fill,
+   hairline divider, xs codes. Hidden entirely while the global language is the canonical locale. */
+.guidance-lang-toggle {
+  position: absolute;
+  top: var(--htb-space-sm);
+  inset-inline-end: var(--htb-space-sm);
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid var(--htb-border-subtle);
+  border-radius: var(--htb-radius-pill);
+  background: transparent;
+}
+.guidance-lang-toggle__option {
+  appearance: none;
+  border: 0;
+  background: transparent;
+  min-height: 26px;
+  padding: 0 var(--htb-space-xs);
+  border-radius: var(--htb-radius-pill);
+  font: inherit;
+  font-size: var(--htb-font-size-xs);
+  font-weight: var(--htb-font-weight-medium);
+  letter-spacing: 0.04em;
+  color: var(--htb-text-muted);
+  cursor: pointer;
+}
+@media (pointer: coarse) {
+  .guidance-lang-toggle__option {
+    min-height: 34px;
+  }
+}
+.guidance-lang-toggle__option:hover {
+  color: var(--htb-text-primary);
+}
+.guidance-lang-toggle__option[aria-pressed="true"] {
+  color: var(--htb-text-primary);
+  font-weight: var(--htb-font-weight-semibold);
+  background: var(--htb-interactive-subtle-hover);
+}
+.guidance-lang-toggle__option:focus-visible {
+  outline: 2px solid var(--htb-focus-ring);
+  outline-offset: 1px;
+}
+/* The host card anchors the pinned toggle. */
+.guidance-card--localizable {
+  position: relative;
 }

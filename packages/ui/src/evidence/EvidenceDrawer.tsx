@@ -47,6 +47,11 @@ export interface EvidenceDrawerProps {
   /** Localized no-endorsement disclaimer; a default is always rendered. */
   disclaimer?: string;
   closeLabel?: string;
+  /**
+   * BCP 47 tag of the drawer's content locale when it differs from `<html lang>` (e.g. a local
+   * guidance-language override); assistive tech then announces the drawer correctly.
+   */
+  contentLang?: string | undefined;
 }
 
 export function EvidenceDrawer({
@@ -61,9 +66,10 @@ export function EvidenceDrawer({
   viewOriginalLabel = "View original source",
   disclaimer = "These organizations publish the original guidance. They have not reviewed or endorsed HowToBaby.",
   closeLabel,
+  contentLang,
 }: EvidenceDrawerProps) {
   return (
-    <Drawer open={open} onClose={onClose} title={title} {...(closeLabel !== undefined ? { closeLabel } : {})} className="htb-evidence-drawer">
+    <Drawer open={open} onClose={onClose} title={title} lang={contentLang} {...(closeLabel !== undefined ? { closeLabel } : {})} className="htb-evidence-drawer">
       <p className="htb-evidence-drawer__attribution">{attribution}</p>
       {claimText ? (
         <div className="htb-evidence-drawer__claim">

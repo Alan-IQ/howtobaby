@@ -1,7 +1,8 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 /** Site-level constants: canonical host, navigation semantics (docs/GUI_DESIGN.md §2), source-code link. */
 
-import type { NavigationItem } from "@howtobaby/ui";
+import type { AppMessageKey } from "@/i18n/messages";
+import type { DomainAccent, IconName } from "@howtobaby/ui";
 
 export const SITE = {
   name: "HowToBaby",
@@ -12,34 +13,36 @@ export const SITE = {
   licenseUrl: "https://github.com/Alan-IQ/HowToBaby/blob/main/LICENSE.md",
 } as const;
 
-/** Primary destinations, in the order the GUI contract fixes them. */
-export const PRIMARY_NAV: readonly NavigationItem[] = [
-  { href: "/", label: "Now", icon: "home", accent: "brand" },
-  { href: "/feeding", label: "Feeding", icon: "feeding", accent: "feeding" },
-  { href: "/play", label: "Play & Development", shortLabel: "Play", icon: "play", accent: "play" },
-  { href: "/sleep", label: "Sleep", icon: "sleep", accent: "sleep" },
-  { href: "/safety", label: "Safety", icon: "safety", accent: "safety" },
-  { href: "/tools", label: "Tools", icon: "tools", accent: "tools" },
+/**
+ * Primary destinations, in the order the GUI contract fixes them. Semantics only (route, icon,
+ * accent, message key): the localized labels live in the app message dictionary, keyed by
+ * `nav.<key>.label`, so navigation needs no per-locale config of its own.
+ */
+export interface PrimaryDestination {
+  readonly href: string;
+  readonly key: "now" | "feeding" | "play" | "sleep" | "safety" | "tools";
+  readonly icon: IconName;
+  readonly accent: DomainAccent;
+  readonly labelKey: AppMessageKey;
+}
+
+export const PRIMARY_NAV: readonly PrimaryDestination[] = [
+  { href: "/", key: "now", icon: "home", accent: "brand", labelKey: "nav.now.label" },
+  { href: "/feeding", key: "feeding", icon: "feeding", accent: "feeding", labelKey: "nav.feeding.label" },
+  { href: "/play", key: "play", icon: "play", accent: "play", labelKey: "nav.play.label" },
+  { href: "/sleep", key: "sleep", icon: "sleep", accent: "sleep", labelKey: "nav.sleep.label" },
+  { href: "/safety", key: "safety", icon: "safety", accent: "safety", labelKey: "nav.safety.label" },
+  { href: "/tools", key: "tools", icon: "tools", accent: "tools", labelKey: "nav.tools.label" },
 ];
 
-/** Vietnamese navigation labels, keyed by href (global language preference, app chrome only). */
-export const PRIMARY_NAV_VI: Record<string, { label: string; shortLabel?: string }> = {
-  "/": { label: "Hiện tại" },
-  "/feeding": { label: "Ăn uống" },
-  "/play": { label: "Chơi & Phát triển", shortLabel: "Chơi" },
-  "/sleep": { label: "Ngủ" },
-  "/safety": { label: "An toàn" },
-  "/tools": { label: "Công cụ" },
-};
-
-/** Globally reachable legal/source surface (docs/GUI_DESIGN.md §2.1). */
-export const TRUST_LINKS = [
-  { href: "/sources", label: "Sources", viLabel: "Nguồn" },
-  { href: "/methodology", label: "Methodology", viLabel: "Phương pháp" },
-  { href: "/editorial-policy", label: "Editorial Policy", viLabel: "Chính sách biên tập" },
-  { href: "/disclaimer", label: "Medical Disclaimer", viLabel: "Miễn trừ y khoa" },
-  { href: "/privacy", label: "Privacy", viLabel: "Quyền riêng tư" },
-  { href: "/license", label: "License", viLabel: "Giấy phép" },
-  { href: SITE.sourceCodeUrl, label: "Source Code", viLabel: "Mã nguồn", external: true },
-  { href: "/changelog", label: "Changelog / Corrections", viLabel: "Thay đổi / Đính chính" },
-] as const;
+/** Globally reachable legal/source surface (docs/GUI_DESIGN.md §2.1). Labels via the app dictionary. */
+export const TRUST_LINKS: readonly { href: string; labelKey: AppMessageKey; external?: true }[] = [
+  { href: "/sources", labelKey: "trust.sources.label" },
+  { href: "/methodology", labelKey: "trust.methodology.label" },
+  { href: "/editorial-policy", labelKey: "trust.editorialPolicy.label" },
+  { href: "/disclaimer", labelKey: "trust.disclaimer.label" },
+  { href: "/privacy", labelKey: "trust.privacy.label" },
+  { href: "/license", labelKey: "trust.license.label" },
+  { href: SITE.sourceCodeUrl, labelKey: "trust.sourceCode.label", external: true },
+  { href: "/changelog", labelKey: "trust.changelog.label" },
+];
