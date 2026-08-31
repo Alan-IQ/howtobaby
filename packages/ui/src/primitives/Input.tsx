@@ -47,13 +47,16 @@ export function Select({ label, hint, className, id, options, ...rest }: SelectP
       <label className="htb-field__label" htmlFor={selectId}>
         {label}
       </label>
-      <select id={selectId} className="htb-select" aria-describedby={hintId} {...rest}>
-        {options.map((o) => (
-          <option key={o.value} value={o.value} disabled={o.disabled}>
-            {o.label}
-          </option>
-        ))}
-      </select>
+      {/* The shell paints the custom chevron (native arrows hug the edge); the control itself stays a plain <select>. */}
+      <span className="htb-select-shell">
+        <select id={selectId} className="htb-select" aria-describedby={hintId} {...rest}>
+          {options.map((o) => (
+            <option key={o.value} value={o.value} disabled={o.disabled}>
+              {o.label}
+            </option>
+          ))}
+        </select>
+      </span>
       {hint ? (
         <p id={hintId} className="htb-field__hint">
           {hint}
