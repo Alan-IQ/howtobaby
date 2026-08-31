@@ -16,6 +16,7 @@
   background: var(--htb-surface-glass);
   -webkit-backdrop-filter: blur(var(--htb-glass-blur)) saturate(var(--htb-glass-saturate));
   backdrop-filter: blur(var(--htb-glass-blur)) saturate(var(--htb-glass-saturate));
+  box-shadow: inset 0 1px 0 var(--htb-surface-glass-highlight), var(--htb-shadow-1);
   padding-top: env(safe-area-inset-top);
 }
 .app-header {
@@ -110,6 +111,7 @@
   inset: auto 0 0 0;
   z-index: 40;
   border-top: 1px solid var(--htb-surface-glass-border);
+  box-shadow: var(--htb-shadow-2);
   background: var(--htb-surface-glass);
   -webkit-backdrop-filter: blur(var(--htb-glass-blur)) saturate(var(--htb-glass-saturate));
   backdrop-filter: blur(var(--htb-glass-blur)) saturate(var(--htb-glass-saturate));

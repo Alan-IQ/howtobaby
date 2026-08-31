@@ -33,7 +33,7 @@ export default function NowPage() {
           </Link>
         ))}
       </div>
-      <Card tone="2" title="How HowToBaby works" titleAs="h2">
+      <Card title="How HowToBaby works" titleAs="h2">
         <div className="prose">
           <p>
             HowToBaby organizes approved guidance from public-health authorities by age and context, keeps each statement linked to its source,

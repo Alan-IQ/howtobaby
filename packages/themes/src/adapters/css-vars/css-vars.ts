@@ -66,12 +66,20 @@ export function themeToCss(definition: ThemeDefinition): string {
   }
 
   // Glass fallback (docs/GUI_DESIGN.md §4.4): when blur is unavailable or the user reduces transparency,
-  // the glass surface becomes the opaque semantic surface. Border/shadow hierarchy is untouched.
-  // [data-color-mode] presence keeps specificity >= the per-mode block so the fallback actually wins.
-  const glassFallback = `${themeSelector(id)}[data-color-mode] {\n  ${colorTokenVar("surface.glass")}: var(${colorTokenVar("surface.glass.solid")});\n  ${geometryTokenVar("glass.blur")}: 0px;\n  ${geometryTokenVar("glass.saturate")}: 1;\n}`;
+  // every glass surface — neutral and accent-tinted — becomes its opaque counterpart. Border/shadow
+  // hierarchy is untouched. [data-color-mode] keeps specificity >= the per-mode block so the fallback wins.
+  const glassFallbackDecls = [
+    `  ${colorTokenVar("surface.glass")}: var(${colorTokenVar("surface.glass.solid")});`,
+    ...(["brand", "feeding", "play", "sleep", "safety", "tools"] as const).map(
+      (a) => `  ${colorTokenVar(`accent.${a}.glass`)}: var(${colorTokenVar(`accent.${a}.soft`)});`,
+    ),
+    `  ${geometryTokenVar("glass.blur")}: 0px;`,
+    `  ${geometryTokenVar("glass.saturate")}: 1;`,
+  ].join("\n");
+  const glassFallback = `${themeSelector(id)}[data-color-mode] {\n${glassFallbackDecls}\n}`;
   blocks.push(`@media (prefers-reduced-transparency: reduce) {\n${glassFallback}\n}`);
   blocks.push(`@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {\n${glassFallback}\n}`);
-  blocks.push(`${themeSelector(id)}[data-color-mode][data-reduce-transparency="true"] {\n  ${colorTokenVar("surface.glass")}: var(${colorTokenVar("surface.glass.solid")});\n  ${geometryTokenVar("glass.blur")}: 0px;\n  ${geometryTokenVar("glass.saturate")}: 1;\n}`);
+  blocks.push(`${themeSelector(id)}[data-color-mode][data-reduce-transparency="true"] {\n${glassFallbackDecls}\n}`);
 
   // Reduced motion: durations collapse to 0 so transitions/animations built on the tokens stop.
   const motionOff = declarations([
@@ -93,6 +101,7 @@ export function themeToCss(definition: ThemeDefinition): string {
       [colorTokenVar("surface.glass"), p.canvas],
       [colorTokenVar("surface.glass.solid"), p.canvas],
       [colorTokenVar("surface.glass.border"), p.border],
+      [colorTokenVar("surface.glass.highlight"), "transparent"],
       [colorTokenVar("text.primary"), p.text],
       [colorTokenVar("text.secondary"), p.textSecondary],
       [colorTokenVar("text.muted"), p.textSecondary],
@@ -108,6 +117,8 @@ export function themeToCss(definition: ThemeDefinition): string {
       ...(["brand", "feeding", "play", "sleep", "safety", "tools"] as const).flatMap((a): Array<[string, string]> => [
         [colorTokenVar(`accent.${a}`), p.textSecondary],
         [colorTokenVar(`accent.${a}.soft`), p.canvas],
+        [colorTokenVar(`accent.${a}.glass`), p.canvas],
+        [colorTokenVar(`accent.${a}.glass.border`), p.border],
       ]),
     ]);
     // Same specificity as the per-mode selector (two attributes) and emitted later, so print wins over the mode block.

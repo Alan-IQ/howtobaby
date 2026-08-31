@@ -14,7 +14,6 @@ id_ed25519
 XOA/
 _archived/
 _claude_prompts/
-!.idea/inspectionProfiles/
 
 # --- Generated knowledge read models (derived; delete + rebuild is the recovery path) ----------
 packages/knowledge/generated/*
@@ -76,7 +75,8 @@ venv/
 
 # --- IDE / OS / temporary ----------------------------------------------------------------------
 .vscode/
-.idea/
+.idea/*
+!.idea/inspectionProfiles/
 .junie/
 *.suo
 *.user

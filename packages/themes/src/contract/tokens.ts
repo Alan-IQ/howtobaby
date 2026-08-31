@@ -17,6 +17,7 @@ export const SEMANTIC_COLOR_TOKENS = [
   "surface.glass",
   "surface.glass.solid", // opaque fallback used when blur is unavailable or transparency is reduced
   "surface.glass.border",
+  "surface.glass.highlight", // inset top light-edge that sells the glass; near-invisible in dark mode
   // text
   "text.primary",
   "text.secondary",
@@ -52,18 +53,33 @@ export const SEMANTIC_COLOR_TOKENS = [
   "status.emergency.bg",
   "status.emergency.border",
   // domain accents
+  // Per-domain accent: label colour, solid soft tint, and the tinted-glass surface pair.
+  // `.glass` is the translucent tinted background (may be a gradient); `.glass.border` its defined edge;
+  // `.soft` doubles as the opaque reduced-transparency fallback for `.glass`.
   "accent.brand",
   "accent.brand.soft",
+  "accent.brand.glass",
+  "accent.brand.glass.border",
   "accent.feeding",
   "accent.feeding.soft",
+  "accent.feeding.glass",
+  "accent.feeding.glass.border",
   "accent.play",
   "accent.play.soft",
+  "accent.play.glass",
+  "accent.play.glass.border",
   "accent.sleep",
   "accent.sleep.soft",
+  "accent.sleep.glass",
+  "accent.sleep.glass.border",
   "accent.safety",
   "accent.safety.soft",
+  "accent.safety.glass",
+  "accent.safety.glass.border",
   "accent.tools",
   "accent.tools.soft",
+  "accent.tools.glass",
+  "accent.tools.glass.border",
   // elevation
   "shadow.1",
   "shadow.2",

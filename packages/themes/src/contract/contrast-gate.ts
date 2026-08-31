@@ -44,11 +44,16 @@ export const CONTRAST_REQUIREMENTS: readonly ContrastRequirement[] = [
     (s): ContrastRequirement => ({ fg: `status.${s}` as SemanticColorToken, bg: `status.${s}.bg` as SemanticColorToken, min: WCAG.text, note: `status ${s} text` }),
   ),
 
-  // Domain accents are used as compact label text (eyebrows, nav highlight) on canvas/cards and on their soft tint.
+  // Domain accents are used as compact label text (eyebrows, nav highlight) on canvas/cards and on their soft
+  // tint, and body copy sits on the tinted-glass card surfaces. The solid `.soft` tint is the measurable proxy
+  // for `.glass` — it is exactly what the reduced-transparency fallback renders.
   ...(["brand", "feeding", "play", "sleep", "safety", "tools"] as const).flatMap((a): ContrastRequirement[] => [
     { fg: `accent.${a}` as SemanticColorToken, bg: "canvas", min: WCAG.text, note: `accent ${a} as label text on canvas` },
     { fg: `accent.${a}` as SemanticColorToken, bg: "surface.1", min: WCAG.text, note: `accent ${a} as label text on cards` },
     { fg: `accent.${a}` as SemanticColorToken, bg: `accent.${a}.soft` as SemanticColorToken, min: WCAG.text, note: `accent ${a} on its soft tint` },
+    { fg: "text.primary", bg: `accent.${a}.soft` as SemanticColorToken, min: WCAG.text, note: `primary text on ${a} tinted surface` },
+    { fg: "text.secondary", bg: `accent.${a}.soft` as SemanticColorToken, min: WCAG.text, note: `secondary text on ${a} tinted surface` },
+    { fg: "text.muted", bg: `accent.${a}.soft` as SemanticColorToken, min: WCAG.text, note: `muted text on ${a} tinted surface` },
   ]),
 ];
 
