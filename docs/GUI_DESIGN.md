@@ -440,7 +440,9 @@ button, not a pair of options:
 - placement: on wide/desktop layouts it sits IN FLOW directly under the card title
   (left-aligned pill row); on mobile (tab-bar widths) it pins to the card's top-right corner
   beside the eyebrow; in the Evidence Drawer it sits in the header area;
-- it is styled as a compact slider pill: BOTH full native names stay visible (`Tiếng Việt`,
+- it is styled as a slider pill near the STANDARD sliding-control height (lower than the
+  theme-mode segmented control), with a slightly translucent thumb so the selection sits into
+  the card rather than popping off it (both colour modes): BOTH full native names stay visible (`Tiếng Việt`,
   `English`, later e.g. `Español`) — never short codes such as `EN`/`VI` — each carrying its own
   `lang` attribute, with one persistent raised thumb resting on the language the content is
   CURRENTLY displayed in. Despite the slider look it remains ONE button: a tap anywhere flips
