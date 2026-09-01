@@ -475,7 +475,9 @@
   grid-auto-flow: column;
   grid-auto-columns: 1fr;
   align-items: stretch;
-  /* Standard sliding-control height — identical to the theme-mode segmented control. */
+  /* Compact slider: 40px overall (touch-target − 4px, padding + border included) — 6px lower than
+     the 46px theme-mode segmented control, whose options keep the full touch-target − 6px height.
+     docs/GUI_DESIGN.md §11.9 records this exact geometry. */
   min-height: calc(var(--htb-layout-touch-target) - 4px);
   padding: 3px;
   /* Whisper-weight glass track: same family as the header glass controls but sitting ON a card,

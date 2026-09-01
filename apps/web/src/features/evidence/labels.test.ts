@@ -1,8 +1,9 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 /**
  * EN/VI presentation-parity guards for the evidence UI vocabulary: both locales must expose the
- * same label sets (no meaning available in one language only), statuses must include an explicit
- * "Current", and metadata helpers must emit labeled rows, never bare values.
+ * same label sets (no meaning available in one language only), a healthy `current` source must
+ * carry no public status badge (its trust signal is the source-version + verification dates),
+ * and metadata helpers must emit labeled rows, never bare values.
  */
 
 import { describe, expect, it } from "vitest";
@@ -16,6 +17,10 @@ import {
   STATUS_LABELS,
   UI_STRINGS,
   jurisdictionMeta,
+  publicStatusLabel,
+  sourceVersionDate,
+  sourceVersionLabel,
+  sourceVersionMeta,
   verifiedLabel,
 } from "./labels";
 
@@ -42,9 +47,43 @@ describe("EN/VI presentation parity", () => {
     expect(Object.keys(UI_STRINGS.vi).sort()).toEqual(Object.keys(UI_STRINGS.en).sort());
   });
 
-  it("names the healthy status unambiguously as a version state in both locales", () => {
-    expect(STATUS_LABELS.en.current).toBe("Current version");
-    expect(STATUS_LABELS.vi.current).toBe("Phiên bản hiện hành");
+  it("renders no public status badge for a healthy current source, in both locales", () => {
+    expect("current" in STATUS_LABELS.en).toBe(false);
+    expect(publicStatusLabel("current", "en")).toBeUndefined();
+    expect(publicStatusLabel("current", "vi")).toBeUndefined();
+  });
+
+  it("keeps every non-current lifecycle state visible with the shared vocabulary", () => {
+    expect(publicStatusLabel("changed-review-required", "en")).toBe("Reviewing an update");
+    expect(publicStatusLabel("changed-review-required", "vi")).toBe("Đang rà soát bản cập nhật");
+    expect(publicStatusLabel("superseded", "en")).toBe("Superseded");
+    expect(publicStatusLabel("retired", "en")).toBe("Retired");
+    expect(publicStatusLabel("temporarily-unreachable", "en")).toBe("Source temporarily unavailable");
+  });
+});
+
+describe("source-version date (updatedAt ?? publishedAt, never invented)", () => {
+  it("prefers the authority's updatedAt over publishedAt", () => {
+    expect(sourceVersionDate({ publishedAt: "2025-01-10", updatedAt: "2026-04-14" })).toBe("2026-04-14");
+    expect(sourceVersionMeta({ publishedAt: "2025-01-10", updatedAt: "2026-04-14" }, "en")).toEqual({ label: "Current source version", value: "Apr 14, 2026" });
+    expect(sourceVersionLabel({ updatedAt: "2026-04-14" }, "vi")).toBe("Phiên bản nguồn hiện tại: 14/04/2026");
+  });
+
+  it("falls back to publishedAt when there is no updatedAt", () => {
+    expect(sourceVersionDate({ publishedAt: "2026-08-04" })).toBe("2026-08-04");
+    expect(sourceVersionLabel({ publishedAt: "2026-08-04" }, "en")).toBe("Current source version: Aug 4, 2026");
+  });
+
+  it("omits the row entirely when the authority provides neither date", () => {
+    expect(sourceVersionDate({})).toBeUndefined();
+    expect(sourceVersionMeta({}, "en")).toBeUndefined();
+    expect(sourceVersionLabel({}, "vi")).toBeUndefined();
+  });
+
+  it("never conflates the source version with HowToBaby's verification date", () => {
+    const source = { ...baseSource, updatedAt: "2026-04-14" };
+    expect(sourceVersionLabel(source, "en")).toBe("Current source version: Apr 14, 2026");
+    expect(verifiedLabel(source.lastVerifiedAt, "en")).toBe("Last verified by HowToBaby: Aug 31, 2026");
   });
 });
 

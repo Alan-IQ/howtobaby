@@ -1406,7 +1406,7 @@ button.htb-source-chip:focus-visible {
 .htb-reference-list__meta a {
   color: var(--htb-text-link);
 }
-/* Status is informational here ("Current" included); tone-colouring belongs to the drawer badges. */
+/* Status appears only for non-current sources and stays informational here; tone-colouring belongs to the drawer badges. */
 .htb-reference-list__status {
   color: var(--htb-text-secondary);
   font-weight: var(--htb-font-weight-medium);

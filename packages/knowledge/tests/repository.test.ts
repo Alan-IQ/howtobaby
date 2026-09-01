@@ -14,7 +14,7 @@ import { GeneratedKnowledgeRepository } from "../repository/generated.ts";
 import { SQLiteKnowledgeRepository } from "../repository/sqlite.ts";
 import type { KnowledgeRepository } from "../repository/types.ts";
 import { compileKnowledge, writeGeneratedArtifacts } from "../src/index.ts";
-import { cleanupFixture, loadFixture } from "./helpers.ts";
+import { DATED_REGISTRY, cleanupFixture, loadFixture } from "./helpers.ts";
 
 const { knowledge, dir } = loadFixture();
 const outDir = join(dir, "generated");
@@ -92,5 +92,28 @@ describe("canonical-vs-derived invariant", () => {
     expect(sqliteClaim).toEqual(compiled.claims[0]);
     expect(await sqliteRepo.listClaimEvidence()).toEqual(await generatedRepo.listClaimEvidence());
     expect(await sqliteRepo.listPublicSources()).toEqual(await generatedRepo.listPublicSources());
+  });
+});
+
+describe("source-version dates in the public source projection", () => {
+  it("both read models expose publishedAt/updatedAt identically and omit them when absent", async () => {
+    const dated = loadFixture({ "sources/registry.yaml": DATED_REGISTRY });
+    const datedOut = join(dated.dir, "generated");
+    writeGeneratedArtifacts(compileKnowledge(dated.knowledge), datedOut, "all");
+    const datedSqlite = new SQLiteKnowledgeRepository(join(datedOut, "knowledge.sqlite"));
+    try {
+      const fromSqlite = await datedSqlite.listPublicSources();
+      const fromJson = await new GeneratedKnowledgeRepository(datedOut).listPublicSources();
+      expect(fromSqlite).toEqual(fromJson);
+      const cdc = fromSqlite.find((s) => s.sourceId === "cdc-introduction-solid-foods")!;
+      const who = fromSqlite.find((s) => s.sourceId === "who-complementary-feeding")!;
+      expect(cdc.updatedAt).toBe("2026-04-14");
+      expect("publishedAt" in cdc).toBe(false);
+      expect(who.publishedAt).toBe("2026-08-04");
+      expect("updatedAt" in who).toBe(false);
+    } finally {
+      datedSqlite.close();
+      cleanupFixture(dated.dir);
+    }
   });
 });

@@ -22,11 +22,13 @@ The product has two equal pillars:
 
 ## Current status
 
-**Architecture/documentation baseline: v0.8.0 — Phase 0 (repository baseline) and Phase 1 (app shell + theme engine) implemented; no guidance content is published yet (Phase 2+).**
+**v0.8.0 — Phase 0 (repository baseline), Phase 1 (app shell + theme engine) and Phase 2 (content/source schema platform) implemented; Phase 3+ (age/context routing, domain content, personalization, tools, Evidence Watch) not yet started.**
 
 The repository contract intentionally defines product behavior, evidence governance, repository ownership, theme integration, storage boundaries, and implementation phases before production code is scaffolded. Phase 0 adds the pnpm monorepo root, the physical package layout, `.gitignore` boundaries for generated/cache/vendor/media material, a CI-enforced repository-health gate, and the dependency/asset license-reporting baseline.
 
-Phase 1 adds the Next.js + TypeScript application in `apps/web` (static-first, server-capable; `DEPLOY_TARGET=static` is an optional export profile), the vendor-neutral Theme Contract/Registry and css-vars adapter in `packages/themes` with the first-party **Baby Modern Glass** Light/Dark packs and a third-party adapter fixture, the semantic-token UI primitives in `packages/ui`, the AppShell/Header/primary navigation/page shell with responsive, reduced-motion/transparency and print scaffolding, a locally stored theme preference, the theme-boundary CI gate, and the production deployment pipeline to `https://howtobaby.com` (`.github/workflows/deploy.yml`, runbook in [`DEPLOYMENT_HAWKHOST.md`](DEPLOYMENT_HAWKHOST.md)). All product pages are shell placeholders: content schemas, age resolution and domain guidance start in Phase 2. Pre-v1, every page ships `noindex` (indexing is deliberately opened in a later phase), and production UI exposes only Baby Modern Glass — the vendor fixture theme exists solely for theme-independence testing via the development-only Theme Lab.
+Phase 1 adds the Next.js + TypeScript application in `apps/web` (static-first, server-capable; `DEPLOY_TARGET=static` is an optional export profile), the vendor-neutral Theme Contract/Registry and css-vars adapter in `packages/themes` with the first-party **Baby Modern Glass** Light/Dark packs and a third-party adapter fixture, the semantic-token UI primitives in `packages/ui`, the AppShell/Header/primary navigation/page shell with responsive, reduced-motion/transparency and print scaffolding, a locally stored theme preference, the theme-boundary CI gate, and the production deployment pipeline to `https://howtobaby.com` (`.github/workflows/deploy.yml`, runbook in [`DEPLOYMENT_HAWKHOST.md`](DEPLOYMENT_HAWKHOST.md)).
+
+Phase 2 adds the canonical knowledge graph in `packages/knowledge` — Git-tracked YAML for sources, claims, guidance blocks and EN/VI translations, with schema/source-approval/provenance/translation-parity/coverage validators and a release gate — compiled into derived, rebuildable read models (`knowledge.sqlite`, JSON manifests and the claim/source/route/tool evidence indexes, all gitignored) behind the `KnowledgeRepository` interface. The app renders its first canonical sample guidance (starting solids, on `/feeding`) in English and Vietnamese from that graph, with SourceChip, Evidence Drawer, page References, the `/sources` registry and `/evidence/[slug]` detail pages all fed from one provenance graph; a global EN/VI language preference with a per-card canonical-language toggle; and a deterministic delete-and-rebuild CI gate for every derived artifact. Only that sample claim is published — full domain content (Feeding, Play & Development, Sleep, Safety), age/context resolution, the personalized Now view, Tools and Evidence Watch belong to later phases. Pre-v1, every page ships `noindex` (indexing is deliberately opened in a later phase), and production UI exposes only Baby Modern Glass — the vendor fixture theme exists solely for theme-independence testing via the development-only Theme Lab.
 
 ## What makes HowToBaby different
 
@@ -246,28 +248,18 @@ The detailed gates live in [`docs/IMPLEMENTATION_ROADMAP.md`](docs/IMPLEMENTATIO
 
 ## Development
 
-Requirements: Node.js `>= 22.18` (`.nvmrc`) and pnpm 11 (`corepack enable` picks up the version pinned in `package.json` → `packageManager`).
+Requirements: Node.js `>= 22.18` (`.nvmrc`) and pnpm 11 — run `corepack enable` once and pnpm resolves to the version pinned in `package.json` → `packageManager`.
 
 ```bash
-pnpm install --frozen-lockfile
-pnpm dev                              # Next.js dev server (apps/web)
-pnpm check                            # typecheck + baseline + repository health + theme boundary + knowledge validation + strict license report
-pnpm lint                             # ESLint (apps/web)
-pnpm test                             # Vitest: theme contract, UI primitives, preference storage, knowledge graph
-pnpm build:knowledge                  # derived read models: knowledge.sqlite + manifests + evidence indexes (gitignored)
-pnpm validate:knowledge               # content/source/provenance/EN-VI-parity gates over canonical YAML
-pnpm check:knowledge-determinism      # delete-and-rebuild determinism proof for every derived knowledge artifact
-pnpm build                            # default profile: static-first, server-capable
-pnpm build:static                     # DEPLOY_TARGET=static → apps/web/out (shared-hosting export profile)
-pnpm validate                         # everything above, in CI order
-NEXT_PUBLIC_THEME_LAB=1 pnpm dev      # /theme-lab: primitives/states across themes & modes (dev-only surface)
-node scripts/check-repo-health.ts     # large-blob guard, deny patterns, Git size report
-node scripts/check-repo-baseline.ts   # layout / workspace / workflow / doc-link gate
-node scripts/check-theme-boundary.ts  # no raw palette values / vendor or theme-pack imports in product code
-node scripts/report-licenses.ts       # dependency + tracked-asset license report
+pnpm install --frozen-lockfile                 # install (also generates the theme reference CSS)
+pnpm dev                                       # build derived knowledge, then the Next.js dev server
+pnpm build && pnpm --filter @howtobaby/web start   # production build (static-first, server-capable) + local server
+pnpm build:static                              # DEPLOY_TARGET=static export → apps/web/out (what production deploys)
+pnpm validate                                  # every CI gate in CI order: check, lint, test, determinism, both builds
+pnpm clean:local                               # remove node_modules + rebuildable build output (cross-platform)
 ```
 
-Content validators (`validate-*.ts`, `build-knowledge-index.ts`) are Phase 2 placeholders. Contributor conventions live in [`CONTRIBUTING.md`](CONTRIBUTING.md); production deployment is described in [`DEPLOYMENT_HAWKHOST.md`](DEPLOYMENT_HAWKHOST.md).
+The full command reference, the individual gates, the local cleanup workflow (`pnpm clean:modules`, `pnpm clean:build`, `pnpm clean:local`) and a note on pnpm's workspace `node_modules` layout live in [`CONTRIBUTING.md`](CONTRIBUTING.md); production deployment is described in [`DEPLOYMENT_HAWKHOST.md`](DEPLOYMENT_HAWKHOST.md).
 
 ## Privacy and safety
 

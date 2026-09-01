@@ -59,10 +59,7 @@ export function LocalizedEvidenceDetail({ texts, views }: LocalizedEvidenceDetai
               <br />
               {source.roleStatusLine}
               <br />
-              <span className="muted">
-                {source.metaLine}
-                {source.sourceUpdatedText ? <> · {source.sourceUpdatedText}</> : null}
-              </span>
+              <span className="muted">{source.metaLine}</span>
             </p>
           ))}
           <p className="muted">{view.disclaimerLine}</p>

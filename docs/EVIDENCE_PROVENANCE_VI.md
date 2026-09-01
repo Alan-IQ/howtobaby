@@ -86,9 +86,10 @@ Khi click, hiển thị:
 - title source;
 - relationship;
 - section/page locator;
-- jurisdiction;
-- last verified;
-- source status;
+- jurisdiction/scope;
+- phiên bản nguồn hiện tại (`updatedAt ?? publishedAt`; bỏ hàng này nếu authority không cung cấp ngày) — đặt sau jurisdiction/scope và trước ngày HowToBaby kiểm chứng;
+- last verified by HowToBaby;
+- source status CHỈ khi source không còn `current` (đang rà soát bản cập nhật / superseded / retired / tạm không truy cập được) — source `current` lành mạnh không hiện badge trạng thái;
 - **View original source**;
 - interpretation/conflict note khi cần.
 
@@ -152,11 +153,21 @@ Nếu authority có official syndication, treat thành `approved-syndication`; g
 
 ## 10. Freshness status
 
-Public UI có thể dùng:
+Ba trường ngày trong `SourceRecord` mang ba nghĩa khác nhau, không được trộn:
 
-- **Verified [date]**
-- **Reviewing an update**
-- **Superseded** chỉ trong history khi phù hợp.
+- `publishedAt` = ngày xuất bản, chỉ khi authority cung cấp và xác định được;
+- `updatedAt` = ngày revision/cập nhật hiện tại của nguồn, chỉ khi authority cung cấp (CDC "last reviewed/updated", ngày revision fact sheet WHO, …) — mỗi authority gọi tên ngày khác nhau nên không gọi mọi ngày là "Published";
+- `lastVerifiedAt` = ngày maintainer HowToBaby thực sự mở và kiểm tra nguồn — hoàn toàn khác với ngày phiên bản nguồn.
+
+Phiên bản nguồn hiển thị cho user = `updatedAt ?? publishedAt`; không có cả hai thì bỏ hàng, không bịa ngày. Hai trường này được sao đúng từ trang nguồn gốc vào YAML canonical và đi nguyên vẹn qua mọi read model dẫn xuất (`knowledge.sqlite`, `source-public-index.json`, `PublicSourceEntry`).
+
+Public UI:
+
+- source `current` lành mạnh — **không có badge trạng thái**; thông tin tin cậy là hàng `Current source version: Apr 14, 2026` / VI `Phiên bản nguồn hiện tại: 14/04/2026` cộng **Last verified by HowToBaby: [date]** / VI **HowToBaby kiểm chứng lần cuối: [date]**;
+- **Reviewing an update** / VI **Đang rà soát bản cập nhật**;
+- **Superseded**, **Retired**, **Source temporarily unavailable** — hiện thật, không âm thầm xóa citation.
+
+Mọi trạng thái non-current dùng cùng attention treatment và cùng bộ nhãn trên Evidence Drawer, `/sources`, trang evidence detail và References. `current` vẫn nằm trong `SourceStatus` và canonical model cho validation/lifecycle; chỉ phần presentation là im lặng.
 
 Source thay đổi không đồng nghĩa recommendation cũ sai; wording không nên gây hoảng.
 

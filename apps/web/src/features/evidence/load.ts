@@ -22,16 +22,23 @@ import {
   SAFETY_LEVEL_LABELS,
   RELATIONSHIP_LABELS,
   RELATIONSHIP_WHY_LABELS,
-  STATUS_LABELS,
   UI_STRINGS,
   formatDate,
   jurisdictionMeta,
+  publicStatusLabel,
   sourceStatusTone,
+  sourceVersionLabel,
+  sourceVersionMeta,
   verifiedLabel,
   type UiLocale,
 } from "./labels";
 
 let repository: GeneratedKnowledgeRepository | undefined;
+
+/** Spread helper: include an optional view field only when it has a value (exactOptionalPropertyTypes). */
+function optional<K extends string>(key: K, value: string | undefined): { [P in K]?: string } {
+  return value === undefined ? {} : ({ [key]: value } as { [P in K]?: string });
+}
 
 export function knowledgeRepository(): GeneratedKnowledgeRepository {
   repository ??= new GeneratedKnowledgeRepository();
@@ -52,18 +59,22 @@ function relevantSectionValue(entry: ClaimEvidenceEntry["sourceRefs"][number], l
 }
 
 /**
- * Labeled metadata rows for one source reference (GUI_DESIGN.md §11.3): every row carries an
- * explicit label with a small decorative icon anchor ("Relevant section", "Applies to"/"Scope",
- * "Last verified by HowToBaby") and every value derives from canonical metadata. Role and status
- * render as badges, and "why this source is used" is its own secondary block — all fed from the
- * same canonical graph, never prose hard-coded in a component.
+ * Labeled metadata rows for one source reference (GUI_DESIGN.md §11.3), in the required order:
+ * relevant section → jurisdiction/scope → current source version (omitted when the authority
+ * gives no date) → last verified by HowToBaby. Every row carries an explicit label with a small
+ * decorative icon anchor and every value derives from canonical metadata. Role renders as a
+ * badge; a status badge appears only for non-current sources; and "why this source is used" is
+ * its own secondary block — all fed from the same canonical graph, never prose hard-coded in a
+ * component.
  */
-function sourceMetaRows(ref: ClaimEvidenceEntry["sourceRefs"][number], source: SourceRecord, locale: UiLocale): EvidenceMetaEntry[] {
+export function sourceMetaRows(ref: ClaimEvidenceEntry["sourceRefs"][number], source: SourceRecord, locale: UiLocale): EvidenceMetaEntry[] {
   const strings = UI_STRINGS[locale];
   const meta: EvidenceMetaEntry[] = [];
   const section = relevantSectionValue(ref, locale);
   if (section !== undefined) meta.push({ label: strings.metaRelevantSection, value: section, icon: "document" });
   meta.push({ ...jurisdictionMeta(source, locale), icon: "globe" });
+  const version = sourceVersionMeta(source, locale);
+  if (version !== undefined) meta.push({ ...version, icon: "document" });
   meta.push({ label: strings.metaLastVerified, value: formatDate(source.lastVerifiedAt, locale), icon: "calendar" });
   return meta;
 }
@@ -81,7 +92,7 @@ export async function evidenceSourceViews(evidence: ClaimEvidenceEntry, locale: 
       organization: source.organization,
       title: source.title,
       relationshipLabel: RELATIONSHIP_LABELS[locale][ref.relationship],
-      statusLabel: STATUS_LABELS[locale][source.status],
+      ...optional("statusLabel", publicStatusLabel(source.status, locale)),
       statusTone: sourceStatusTone(source.status),
       meta: sourceMetaRows(ref, source, locale),
       whyLabel: UI_STRINGS[locale].metaWhy,
@@ -99,9 +110,10 @@ export function referenceEntryForSource(source: SourceRecord, locale: UiLocale):
     sourceId: source.id,
     organization: source.organization,
     title: source.title,
+    ...optional("versionLabel", sourceVersionLabel(source, locale)),
     verifiedLabel: verifiedLabel(source.lastVerifiedAt, locale),
     url: source.canonicalUrl,
-    statusLabel: STATUS_LABELS[locale][source.status],
+    ...optional("statusLabel", publicStatusLabel(source.status, locale)),
   };
 }
 
@@ -173,12 +185,10 @@ export interface EvidenceDetailSourceView {
   organization: string;
   /** Exact original source title — never translated. */
   title: string;
-  /** "Role in this guidance: … · Source status: …". */
+  /** "Role in this guidance: …", plus " · Source status: …" only for a non-current source. */
   roleStatusLine: string;
-  /** Joined labeled metadata rows ("Relevant section: … · Applies to: … · Last verified …"). */
+  /** Joined labeled metadata rows ("Relevant section: … · Applies to: … · Current source version: … · Last verified …"). */
   metaLine: string;
-  /** "Source updated <date>", when the source records an update date. */
-  sourceUpdatedText?: string;
 }
 
 /** The evidence detail trust surface for one claim, localized for one registered locale. */
@@ -203,7 +213,7 @@ export interface EvidenceDetailView {
  */
 export async function loadEvidenceDetailViews(evidence: ClaimEvidenceEntry): Promise<Record<UiLocale, EvidenceDetailView>> {
   const repo = knowledgeRepository();
-  const records = await Promise.all(evidence.sourceRefs.map((ref) => repo.getSource(ref.sourceId)));
+  const records = (await Promise.all(evidence.sourceRefs.map((ref) => repo.getSource(ref.sourceId)))).filter((record) => record !== null);
   const views = {} as Record<UiLocale, EvidenceDetailView>;
   for (const { id: locale } of SUPPORTED_LOCALES) {
     const strings = UI_STRINGS[locale];
@@ -215,19 +225,15 @@ export async function loadEvidenceDetailViews(evidence: ClaimEvidenceEntry): Pro
       safetyLabel: SAFETY_LEVEL_LABELS[locale][evidence.safetyLevel] ?? evidence.safetyLevel,
       safetyLevel: evidence.safetyLevel,
       reviewLine: `${REVIEW_STATUS_LABELS[locale][evidence.reviewStatus] ?? evidence.reviewStatus} · ${strings.reviewedOn} ${formatDate(evidence.reviewedAt, locale)} · ${strings.domainLabel}: ${evidence.domain}`,
-      sources: sources.map((source, index) => {
-        const record = records[index];
-        return {
-          sourceId: source.sourceId,
-          organization: source.organization,
-          title: source.title,
-          roleStatusLine: `${strings.metaRole}: ${source.relationshipLabel} · ${strings.metaStatus}: ${source.statusLabel}`,
-          metaLine: source.meta.map((entry) => `${entry.label}: ${entry.value}`).join(" · "),
-          ...(record?.updatedAt ? { sourceUpdatedText: `${strings.sourceUpdated} ${formatDate(record.updatedAt, locale)}` } : {}),
-        };
-      }),
+      sources: sources.map((source) => ({
+        sourceId: source.sourceId,
+        organization: source.organization,
+        title: source.title,
+        roleStatusLine: `${strings.metaRole}: ${source.relationshipLabel}${source.statusLabel !== undefined ? ` · ${strings.metaStatus}: ${source.statusLabel}` : ""}`,
+        metaLine: source.meta.map((entry) => `${entry.label}: ${entry.value}`).join(" · "),
+      })),
       disclaimerLine: `${strings.disclaimer} ${strings.wordingNote}`,
-      references: records.filter((record) => record !== null).map((record) => referenceEntryForSource(record, locale)),
+      references: records.map((record) => referenceEntryForSource(record, locale)),
     };
   }
   return views;

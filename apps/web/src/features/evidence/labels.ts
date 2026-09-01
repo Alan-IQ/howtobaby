@@ -6,8 +6,8 @@
  * comes from the canonical translation bundles via the KnowledgeRepository. Vietnamese UI labels
  * here mirror the canonical evidence vocabulary so both locales present the same meaning.
  *
- * Every drawer metadata line is labeled (e.g. "Applies to: United States", "Last verified by
- * HowToBaby: …") so parents never see bare values whose meaning they have to guess, and the
+ * Every drawer metadata line is labeled (e.g. "Applies to: United States", "Current source
+ * version: …", "Last verified by HowToBaby: …") so parents never see bare values whose meaning they have to guess, and the
  * "why this source is used" line is derived from canonical relationship metadata — never
  * hard-coded medical prose in a component.
  */
@@ -75,17 +75,21 @@ export const RELATIONSHIP_WHY_LABELS: Record<UiLocale, Record<SourceRelationship
   },
 };
 
-/** Public freshness/status signals (EVIDENCE_PROVENANCE.md §14) — including an explicit "Current". */
-export const STATUS_LABELS: Record<UiLocale, Record<SourceStatus, string>> = {
+/**
+ * Public status labels for NON-current lifecycle states (EVIDENCE_PROVENANCE.md §14). A healthy
+ * `current` source is a machine lifecycle state and carries no public badge: its trust signal
+ * is the source-version date plus HowToBaby's verification date (see `sourceVersionMeta`).
+ * `current` stays in SourceStatus and the canonical model; only its presentation is silent.
+ */
+export type PublicSourceStatus = Exclude<SourceStatus, "current">;
+export const STATUS_LABELS: Record<UiLocale, Record<PublicSourceStatus, string>> = {
   en: {
-    current: "Current version",
     "changed-review-required": "Reviewing an update",
     superseded: "Superseded",
     retired: "Retired",
     "temporarily-unreachable": "Source temporarily unavailable",
   },
   vi: {
-    current: "Phiên bản hiện hành",
     "changed-review-required": "Đang rà soát bản cập nhật",
     superseded: "Đã được thay thế",
     retired: "Đã ngừng sử dụng",
@@ -93,15 +97,43 @@ export const STATUS_LABELS: Record<UiLocale, Record<SourceStatus, string>> = {
   },
 };
 
+/** Localized public status label, or `undefined` for a healthy `current` source (no badge). */
+export function publicStatusLabel(status: SourceStatus, locale: UiLocale): string | undefined {
+  return status === "current" ? undefined : STATUS_LABELS[locale][status];
+}
+
 /**
  * Presentation tone for a source status, shared by EVERY surface that shows one (Evidence
- * Drawer badge, /sources registry badge, evidence detail): `current` is calm/neutral; every
- * non-current state (changed-review-required, superseded, retired, temporarily-unreachable)
- * warrants quiet attention. Honest, never alarming (docs/GUI_DESIGN.md §11.8).
+ * Drawer badge, /sources registry badge, evidence detail, References): every non-current state
+ * (changed-review-required, superseded, retired, temporarily-unreachable) warrants quiet
+ * attention; `current` is calm and renders no badge at all. Honest, never alarming
+ * (docs/GUI_DESIGN.md §11.8).
  */
 export type SourceStatusTone = "calm" | "attention";
 export function sourceStatusTone(status: SourceStatus): SourceStatusTone {
   return status === "current" ? "calm" : "attention";
+}
+
+/**
+ * The source's current version date as the authority states it: `updatedAt` (current
+ * revision/update date) first, then `publishedAt` (publication date); `undefined` when the
+ * authority provides neither — the row is omitted, never invented (EVIDENCE_PROVENANCE.md §14).
+ * Distinct from `lastVerifiedAt`, which is HowToBaby's own verification date.
+ */
+export function sourceVersionDate(source: Pick<SourceRecord, "publishedAt" | "updatedAt">): string | undefined {
+  return source.updatedAt ?? source.publishedAt;
+}
+
+/** Labeled "Current source version: <date>" row, or `undefined` when there is no source date. */
+export function sourceVersionMeta(source: Pick<SourceRecord, "publishedAt" | "updatedAt">, locale: UiLocale): { label: string; value: string } | undefined {
+  const date = sourceVersionDate(source);
+  return date === undefined ? undefined : { label: UI_STRINGS[locale].metaSourceVersion, value: formatDate(date, locale) };
+}
+
+/** "Current source version: <date>" as one line, or `undefined` when there is no source date. */
+export function sourceVersionLabel(source: Pick<SourceRecord, "publishedAt" | "updatedAt">, locale: UiLocale): string | undefined {
+  const meta = sourceVersionMeta(source, locale);
+  return meta === undefined ? undefined : `${meta.label}: ${meta.value}`;
 }
 
 /** Review-status labels for the evidence detail trust surface (EVIDENCE_PROVENANCE.md §5). */
@@ -190,13 +222,14 @@ export const UI_STRINGS: Record<UiLocale, {
   metaAppliesTo: string;
   metaScope: string;
   metaStatus: string;
+  /** Label for the authority's current source-version date (`updatedAt ?? publishedAt`). */
+  metaSourceVersion: string;
   metaLastVerified: string;
   metaWhy: string;
   jurisdictionUS: string;
   jurisdictionGlobal: string;
   reviewedOn: string;
   domainLabel: string;
-  sourceUpdated: string;
   wordingNote: string;
 }> = {
   en: {
@@ -214,13 +247,13 @@ export const UI_STRINGS: Record<UiLocale, {
     metaAppliesTo: "Applies to",
     metaScope: "Scope",
     metaStatus: "Source status",
+    metaSourceVersion: "Current source version",
     metaLastVerified: "Last verified by HowToBaby",
     metaWhy: "Why this source is used",
     jurisdictionUS: "United States",
     jurisdictionGlobal: "Global",
     reviewedOn: "Reviewed",
     domainLabel: "Domain",
-    sourceUpdated: "Source updated",
     wordingNote: "HowToBaby summarizes and interprets; the original wording belongs to the source.",
   },
   vi: {
@@ -238,13 +271,13 @@ export const UI_STRINGS: Record<UiLocale, {
     metaAppliesTo: "Áp dụng cho",
     metaScope: "Phạm vi",
     metaStatus: "Trạng thái nguồn",
+    metaSourceVersion: "Phiên bản nguồn hiện tại",
     metaLastVerified: "HowToBaby kiểm chứng lần cuối",
     metaWhy: "Vì sao dùng nguồn này",
     jurisdictionUS: "Hoa Kỳ",
     jurisdictionGlobal: "Toàn cầu",
     reviewedOn: "Rà soát",
     domainLabel: "Mảng nội dung",
-    sourceUpdated: "Nguồn cập nhật",
     wordingNote: "HowToBaby tóm lược và diễn giải; câu chữ gốc thuộc về nguồn.",
   },
 };

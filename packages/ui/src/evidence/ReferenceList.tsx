@@ -47,6 +47,7 @@ export function ReferenceList({ title = "Sources used on this page", entries, vi
               <span className="htb-reference-list__source-title">{entry.title}</span>
             </span>
             <span className="htb-reference-list__meta">
+              {entry.versionLabel ? <span className="htb-reference-list__version">{entry.versionLabel} · </span> : null}
               {entry.verifiedLabel}
               {entry.statusLabel ? <span className="htb-reference-list__status"> · {entry.statusLabel}</span> : null}
               {" · "}

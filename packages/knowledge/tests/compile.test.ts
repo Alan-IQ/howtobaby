@@ -13,7 +13,7 @@ import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 
 import { DETERMINISTIC_ARTIFACTS, compileKnowledge, generatedJsonArtifacts, writeGeneratedArtifacts } from "../src/index.ts";
-import { VALID_FIXTURE, cleanupFixture, loadFixture } from "./helpers.ts";
+import { DATED_REGISTRY, VALID_FIXTURE, cleanupFixture, loadFixture } from "./helpers.ts";
 
 function hash(buffer: Buffer | string): string {
   return createHash("sha256").update(buffer).digest("hex");
@@ -89,9 +89,25 @@ describe("reverse evidence indexes", () => {
   it("public source index exposes only trust metadata with claim counts", () => {
     const cdc = compiled.publicSources.find((s) => s.sourceId === "cdc-introduction-solid-foods")!;
     expect(cdc.claimCount).toBe(1);
+    // No source-version dates in the fixture → the keys are omitted, never emitted as null/invented.
     expect(Object.keys(cdc).sort()).toEqual([
       "canonicalUrl", "claimCount", "jurisdiction", "lastVerifiedAt", "organization", "sourceId", "sourceType", "status", "title",
     ]);
+  });
+
+  it("public source index carries the authority's publishedAt/updatedAt exactly as authored", () => {
+    const { knowledge, dir } = loadFixture({ "sources/registry.yaml": DATED_REGISTRY });
+    cleanupFixture(dir);
+    const { publicSources } = compileKnowledge(knowledge);
+    const cdc = publicSources.find((s) => s.sourceId === "cdc-introduction-solid-foods")!;
+    const who = publicSources.find((s) => s.sourceId === "who-complementary-feeding")!;
+    expect(cdc.updatedAt).toBe("2026-04-14");
+    expect(cdc.publishedAt).toBeUndefined();
+    expect(who.publishedAt).toBe("2026-08-04");
+    expect(who.updatedAt).toBeUndefined();
+    const json = JSON.parse(generatedJsonArtifacts(compileKnowledge(knowledge)).get("source-public-index.json")!) as Array<Record<string, unknown>>;
+    expect(json.find((s) => s["sourceId"] === "cdc-introduction-solid-foods")!["updatedAt"]).toBe("2026-04-14");
+    expect(json.find((s) => s["sourceId"] === "who-complementary-feeding")!["publishedAt"]).toBe("2026-08-04");
   });
 
   it("stable JSON serialization sorts keys recursively", () => {

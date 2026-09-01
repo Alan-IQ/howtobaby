@@ -4,8 +4,9 @@
  * generated read-model rows; this client leaf localizes them through the shared presenter for
  * the active locale — no hard-coded `"en"` presentation, no per-locale page config.
  *
- * Source status renders with its semantic tone (docs/GUI_DESIGN.md §11.8): `current` as a calm
- * neutral badge, every non-current state as quiet caution — the same tone mapping the Evidence
+ * A healthy `current` source shows no status badge (docs/GUI_DESIGN.md §11.8): its trust
+ * information is the source-version date and HowToBaby's verification date in the meta line.
+ * Every non-current state renders as a quiet caution badge — the same tone mapping the Evidence
  * Drawer uses.
  */
 
@@ -31,7 +32,13 @@ export function LocalizedSourceRegistry({ sources }: { sources: PublicSourceEntr
           <Card key={view.sourceId} title={view.title} titleAs="h2" eyebrow={view.organization}>
             <div className="prose">
               <p className="muted">
-                {view.metaLine} · <Badge {...(view.statusTone === "attention" ? { status: "caution" as const } : {})}>{view.statusLabel}</Badge>
+                {view.metaLine}
+                {view.statusLabel !== undefined ? (
+                  <>
+                    {" · "}
+                    <Badge {...(view.statusTone === "attention" ? { status: "caution" as const } : {})}>{view.statusLabel}</Badge>
+                  </>
+                ) : null}
               </p>
               <p className="muted">{usedBy(view.claimCount)}</p>
               <p>

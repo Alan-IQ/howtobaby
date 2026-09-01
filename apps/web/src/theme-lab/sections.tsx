@@ -210,7 +210,7 @@ function TextHierarchySection() {
         surface — by ink, weight and measure, not colour alone.
       </p>
       <p className="supporting">Secondary supporting copy: context and explanation that helps but does not lead.</p>
-      <p className="muted">Muted metadata: Last verified by HowToBaby: Aug 31, 2026 · Source status: Current</p>
+      <p className="muted">Muted metadata: Current source version: Apr 14, 2026 · Last verified by HowToBaby: Aug 31, 2026</p>
     </div>
   );
   return (

@@ -30,13 +30,18 @@ export interface EvidenceSourceView {
   title: string;
   /** Localized relationship value rendered as a compact role badge, e.g. "Primary source". */
   relationshipLabel: string;
-  /** Localized source status rendered as a compact badge — always present, including "Current". */
-  statusLabel: string;
-  /** "calm" (current) keeps the neutral badge; "attention" uses the caution tint. Never the only signal. */
+  /**
+   * Localized public status rendered as a compact badge — present only for a NON-current source
+   * (reviewing an update, superseded, retired, temporarily unavailable). A healthy `current`
+   * source carries no badge: its trust information is the source-version and verification rows.
+   */
+  statusLabel?: string;
+  /** "attention" uses the caution tint for non-current states; never the only signal. */
   statusTone?: "calm" | "attention";
   /**
-   * Labeled metadata rows in display order (relevant section, applies-to/scope, last verified by
-   * HowToBaby, …) — all caller-localized and derived from canonical metadata upstream.
+   * Labeled metadata rows in display order (relevant section, applies-to/scope, current source
+   * version, last verified by HowToBaby) — all caller-localized and derived from canonical
+   * metadata upstream.
    */
   meta: EvidenceMetaEntry[];
   /** Localized heading for the secondary "Why this source is used" block. */
@@ -54,7 +59,10 @@ export interface ReferenceEntry {
   sourceId: string;
   organization: string;
   title: string;
+  /** "Current source version: <date>" — omitted when the authority records no source date. */
+  versionLabel?: string;
   verifiedLabel: string;
   url: string;
+  /** Public status for a NON-current source only; a healthy `current` source shows none. */
   statusLabel?: string;
 }

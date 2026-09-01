@@ -220,17 +220,23 @@ export class SQLiteKnowledgeRepository implements KnowledgeRepository {
         "SELECT s.*, (SELECT COUNT(DISTINCT r.claim_id) FROM claim_source_refs r WHERE r.source_id = s.id) AS claim_count FROM sources s ORDER BY s.id",
       )
       .all() as Row[];
-    return rows.map((row) => ({
-      sourceId: str(row, "id"),
-      organization: str(row, "organization"),
-      title: str(row, "title"),
-      canonicalUrl: str(row, "canonical_url"),
-      jurisdiction: str(row, "jurisdiction"),
-      sourceType: str(row, "source_type"),
-      status: str(row, "status") as PublicSourceEntry["status"],
-      lastVerifiedAt: str(row, "last_verified_at"),
-      claimCount: Number(row["claim_count"]),
-    }));
+    return rows.map((row) => {
+      const publishedAt = optStr(row, "published_at");
+      const updatedAt = optStr(row, "updated_at");
+      return {
+        sourceId: str(row, "id"),
+        organization: str(row, "organization"),
+        title: str(row, "title"),
+        canonicalUrl: str(row, "canonical_url"),
+        jurisdiction: str(row, "jurisdiction"),
+        sourceType: str(row, "source_type"),
+        status: str(row, "status") as PublicSourceEntry["status"],
+        ...(publishedAt !== undefined ? { publishedAt } : {}),
+        ...(updatedAt !== undefined ? { updatedAt } : {}),
+        lastVerifiedAt: str(row, "last_verified_at"),
+        claimCount: Number(row["claim_count"]),
+      };
+    });
   }
 
   async getText(locale: Locale, key: string): Promise<string | null> {

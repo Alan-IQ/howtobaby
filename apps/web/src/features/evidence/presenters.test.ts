@@ -45,7 +45,7 @@ describe("/sources registry presenter", () => {
       expect(view.title).toBe(ENTRY.title);
       expect(view.organization).toBe(ENTRY.organization);
       expect(view.url).toBe(ENTRY.canonicalUrl);
-      expect(view.statusLabel).toBe(STATUS_LABELS[locale][ENTRY.status]);
+      expect(view.statusLabel).toBeUndefined(); // healthy current source: no badge
       expect(view.metaLine).toContain(UI_STRINGS[locale].jurisdictionUS);
       expect(view.metaLine).toContain(SOURCE_TYPE_LABELS[locale]["fact-sheet"]);
       expect(view.metaLine).toContain(UI_STRINGS[locale].metaLastVerified);
@@ -53,16 +53,29 @@ describe("/sources registry presenter", () => {
   });
 
   it("renders Vietnamese presentation under vi — not the English fallback", () => {
-    const view = sourceRegistryEntryView(ENTRY, "vi");
-    expect(view.statusLabel).toBe("Phiên bản hiện hành");
+    const view = sourceRegistryEntryView({ ...ENTRY, updatedAt: "2026-04-14" }, "vi");
+    expect(view.metaLine).toContain("Phiên bản nguồn hiện tại: 14/04/2026");
     expect(view.metaLine).toContain("Hoa Kỳ");
     expect(view.metaLine).toContain("26/08/2026");
     expect(view.metaLine).not.toContain("United States");
   });
 
-  it("maps tone to badge semantics: current calm, changed-review-required attention", () => {
+  it("renders no status badge for a current source but keeps every non-current state visible", () => {
+    expect(sourceRegistryEntryView(ENTRY, "en").statusLabel).toBeUndefined();
     expect(sourceRegistryEntryView(ENTRY, "en").statusTone).toBe("calm");
-    expect(sourceRegistryEntryView({ ...ENTRY, status: "changed-review-required" }, "en").statusTone).toBe("attention");
+    for (const status of ["changed-review-required", "superseded", "retired", "temporarily-unreachable"] as const) {
+      const view = sourceRegistryEntryView({ ...ENTRY, status }, "en");
+      expect(view.statusLabel).toBe(STATUS_LABELS.en[status]);
+      expect(view.statusTone).toBe("attention");
+    }
+  });
+
+  it("places the source-version segment (updatedAt ?? publishedAt) before HowToBaby's verification, or omits it", () => {
+    const updated = sourceRegistryEntryView({ ...ENTRY, publishedAt: "2025-01-10", updatedAt: "2026-04-14" }, "en").metaLine;
+    expect(updated).toContain("Current source version: Apr 14, 2026 · Last verified by HowToBaby: Aug 26, 2026");
+    expect(updated).not.toContain("Jan 10, 2025");
+    expect(sourceRegistryEntryView({ ...ENTRY, publishedAt: "2026-08-04" }, "en").metaLine).toContain("Current source version: Aug 4, 2026");
+    expect(sourceRegistryEntryView(ENTRY, "en").metaLine).not.toContain("Current source version");
   });
 });
 

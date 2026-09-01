@@ -72,6 +72,16 @@ interface SourceRecord {
 
 A source record identifies the original authority. It is not permission to reproduce the full work.
 
+Date fields carry three distinct meanings and must never be conflated:
+
+- `publishedAt` — the publication date, only when the authority provides one and it can be determined;
+- `updatedAt` — the source's current revision/update date, only when the authority provides one (CDC "last reviewed/updated", WHO fact-sheet revision date, …). Authorities label these dates differently, so HowToBaby never calls every date "Published";
+- `lastVerifiedAt` — the date a HowToBaby maintainer actually opened and checked the source. This is HowToBaby's verification, entirely separate from the source-version dates.
+
+The **current source version** shown to users is derived deterministically as `updatedAt ?? publishedAt`; when the authority provides neither, the row is omitted — a date is never invented. Both fields are copied verbatim from the original source page into canonical YAML and propagate unchanged through every derived read model (`knowledge.sqlite`, `source-public-index.json`, `PublicSourceEntry`).
+
+`status: current` is a machine lifecycle state used by validation and Evidence Watch. A healthy `current` source carries **no** public badge; the source-version date plus `lastVerifiedAt` are its public trust information (§14).
+
 `approvalLevel`/`approvedScopes` are the machine-checkable approval boundary: build validation
 only accepts a `primary`/`direct-support` relationship when the source is `approved-primary` and
 its `approvedScopes` cover the claim's domain. Declaring `relationship: primary` therefore can
@@ -190,8 +200,9 @@ Opening the source chip should show, for each supporting source:
 - relationship to the claim;
 - source locator when useful;
 - jurisdiction/context;
-- last verified date;
-- current/change/superseded status;
+- current source version (`updatedAt ?? publishedAt`; omitted when the authority gives no date) — shown after jurisdiction/scope and before the HowToBaby verification date;
+- last verified by HowToBaby date;
+- status only for a non-current source (reviewing an update / superseded / retired / temporarily unavailable) — a healthy `current` source shows no status badge;
 - **View original** link;
 - concise HowToBaby interpretation note where necessary;
 - meaningful conflict/uncertainty note.
@@ -257,8 +268,9 @@ Shows the authorities and exact source records currently used by HowToBaby, grou
 Useful metadata:
 
 - source count;
-- last verification date;
-- status;
+- current source version (`updatedAt ?? publishedAt`, when available);
+- last verification date (HowToBaby);
+- status — rendered only for non-current sources, with the same attention treatment as the Evidence Drawer;
 - topics/claims using the source;
 - original-source link.
 
@@ -352,9 +364,12 @@ Public UI should normally show simple trust signals rather than internal workflo
 
 Recommended display:
 
-- **Verified [date]** — current and reviewed;
-- **Reviewing an update** — monitored source changed and the relevant claim is being re-reviewed;
-- **Superseded** — normally not shown as current advice; visible in history when useful.
+- healthy `current` source — **no status badge**. Its trust information is the source-version metadata row (`Current source version: Apr 14, 2026` / VI `Phiên bản nguồn hiện tại: 14/04/2026`, derived as `updatedAt ?? publishedAt`, omitted when the authority provides no date) plus **Last verified by HowToBaby: [date]**;
+- **Reviewing an update** / VI **Đang rà soát bản cập nhật** — monitored source changed and the relevant claim is being re-reviewed;
+- **Superseded** — normally not shown as current advice; visible in history when useful;
+- **Retired** and **Source temporarily unavailable** — shown honestly rather than silently removing the evidence.
+
+Every non-current state uses the same semantic attention treatment and the same label vocabulary on the Evidence Drawer, `/sources`, evidence detail pages and page References. `current` stays in `SourceStatus` and the canonical model for validation/lifecycle logic; only its public presentation is silent.
 
 Internal states remain more granular.
 

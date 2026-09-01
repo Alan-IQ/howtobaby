@@ -361,9 +361,10 @@ Rules:
 - source organization and exact title;
 - relationship: primary/direct support/corroborating/contextual/conflicting;
 - locator such as section/heading/page when available;
-- jurisdiction/context;
-- last verified date;
-- current/reviewing-update status;
+- jurisdiction/context (`Applies to: United States` / `Scope: Global`);
+- current source version (`Current source version: Apr 14, 2026` / VI `Phiên bản nguồn hiện tại: 14/04/2026`) — derived as `updatedAt ?? publishedAt`, omitted when the authority provides no date, placed after jurisdiction/scope and before the HowToBaby verification date;
+- last verified by HowToBaby date;
+- status badge only for a non-current source (reviewing an update, superseded, retired, temporarily unavailable); a healthy `current` source carries no status badge;
 - **View original source** action;
 - concise interpretation/uncertainty/conflict note when needed.
 
@@ -380,8 +381,12 @@ Each entry may show:
 ```text
 CDC
 When, What, and How to Introduce Solid Foods
-Verified Aug 26, 2026 · View original source ↗
+Current source version: Apr 14, 2026 · Last verified by HowToBaby: Aug 31, 2026 · View original source ↗
 ```
+
+The source-version segment is omitted when the authority provides no date; a non-current status
+(e.g. `Reviewing an update`) is appended after the verification date, while a healthy `current`
+source shows no status text.
 
 ### 11.5 Evidence detail page
 
@@ -397,8 +402,9 @@ This page may expose claim text, classification, applicability, source relations
 
 `/sources` exposes the actual source registry used by the product. `/methodology` explains how sources become claims and how freshness/review works. Both should deep-link to original authorities.
 
-Source status on `/sources` uses the same semantic tone mapping as the Evidence Drawer:
-`current` renders as a calm/neutral badge; `changed-review-required` as quiet caution; and
+Source status on `/sources` uses the same semantic tone mapping as the Evidence Drawer: a healthy
+`current` source renders no status badge — its meta line carries the current source version and
+the HowToBaby verification date instead; `changed-review-required` renders as quiet caution; and
 superseded/retired/temporarily-unreachable states follow the same non-current attention
 treatment — honest, never alarmist (see §11.8).
 
@@ -412,16 +418,23 @@ treatment — honest, never alarmist (see §11.8).
 
 ### 11.8 Freshness signals
 
-Keep public states calm and understandable, and name them unambiguously — the healthy state is
-a version statement, not a bare adjective:
+Keep public states calm and understandable. A healthy `current` source is a machine lifecycle
+state, not a public claim: it renders **no** status badge/chip. Its trust information is two
+labeled dates, always in this order:
 
-- `Verified Aug 26, 2026`
-- `Current version` / VI `Phiên bản hiện hành` (never a bare `Current`)
-- `Reviewing an update`
+- `Current source version: Apr 14, 2026` / VI `Phiên bản nguồn hiện tại: 14/04/2026` — the
+  authority's own version date, derived as `updatedAt ?? publishedAt` and omitted when the
+  authority provides neither (never an invented date, never labeled "Published" for every source);
+- `Last verified by HowToBaby: Aug 31, 2026` — HowToBaby's verification, a different fact.
 
-The same status vocabulary (features/evidence STATUS_LABELS) is the ONE source for every surface
-that shows a source status — the /sources registry, the Evidence Drawer badges, evidence detail
-rows — so wording can never drift between surfaces.
+Non-current states stay visible with the same attention treatment on every surface:
+
+- `Reviewing an update` / VI `Đang rà soát bản cập nhật`
+- `Superseded`, `Retired`, `Source temporarily unavailable`
+
+The same status vocabulary (features/evidence STATUS_LABELS, non-current states only) is the ONE
+source for every surface that shows a source status — the /sources registry, the Evidence Drawer
+badges, evidence detail rows and page References — so wording can never drift between surfaces.
 
 A changed source should not visually imply immediate danger unless the claim's safety level independently warrants that treatment.
 
@@ -440,9 +453,11 @@ button, not a pair of options:
 - placement: on wide/desktop layouts it sits IN FLOW directly under the card title
   (left-aligned pill row); on mobile (tab-bar widths) it pins to the card's top-right corner
   beside the eyebrow; in the Evidence Drawer it sits in the header area;
-- it is styled as a slider pill near the STANDARD sliding-control height (lower than the
-  theme-mode segmented control), with a slightly translucent thumb so the selection sits into
-  the card rather than popping off it (both colour modes): BOTH full native names stay visible (`Tiếng Việt`,
+- it is styled as a compact slider pill: its outer height is `layout.touchTarget − 4px` (40px
+  overall, 3px padding + 1px border included), i.e. 6px lower than the 46px theme-mode segmented
+  control (whose options keep the full `touchTarget − 6px` inner height), with a slightly
+  translucent thumb so the selection sits into the card rather than popping off it (both colour
+  modes): BOTH full native names stay visible (`Tiếng Việt`,
   `English`, later e.g. `Español`) — never short codes such as `EN`/`VI` — each carrying its own
   `lang` attribute, with one persistent raised thumb resting on the language the content is
   CURRENTLY displayed in. Despite the slider look it remains ONE button: a tap anywhere flips

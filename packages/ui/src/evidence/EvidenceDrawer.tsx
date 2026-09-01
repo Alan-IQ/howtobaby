@@ -7,9 +7,10 @@
  * direct quote from CDC/WHO/AAP/FDA. The header attribution line and the "HowToBaby guidance"
  * label on the claim make that explicit, and the no-endorsement line is always rendered.
  *
- * Each supporting source has a clear scan hierarchy: organization leads with compact role/status
- * badges beside it, the exact source title sits under it, and the metadata (relevant section,
- * applies-to/scope, last verified) is a grouped `<dl>` panel of icon + label + value rows — kept
+ * Each supporting source has a clear scan hierarchy: organization leads with a compact role badge
+ * beside it (plus a status badge only for a non-current source), the exact source title sits
+ * under it, and the metadata (relevant section, applies-to/scope, current source version, last
+ * verified) is a grouped `<dl>` panel of icon + label + value rows — kept
  * as a definition list for assistive tech, never flattened into look-alike text lines. "Why this
  * source is used" is a distinct secondary block, and **View original source** is a clear action
  * with safe external-link attributes. All strings arrive pre-localized from canonical data; this
@@ -95,9 +96,11 @@ export function EvidenceDrawer({
               <p className="htb-evidence-source__org">{source.organization}</p>
               <p className="htb-evidence-source__badges">
                 <span className="htb-evidence-source__badge htb-evidence-source__badge--role">{source.relationshipLabel}</span>
-                <span className={`htb-evidence-source__badge htb-evidence-source__badge--status${source.statusTone === "attention" ? " htb-evidence-source__badge--attention" : ""}`}>
-                  {source.statusLabel}
-                </span>
+                {source.statusLabel !== undefined ? (
+                  <span className={`htb-evidence-source__badge htb-evidence-source__badge--status${source.statusTone === "attention" ? " htb-evidence-source__badge--attention" : ""}`}>
+                    {source.statusLabel}
+                  </span>
+                ) : null}
               </p>
             </div>
             <p className="htb-evidence-source__title">{source.title}</p>

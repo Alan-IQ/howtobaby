@@ -103,6 +103,11 @@ cells:
 };
 
 /** Write `files` (fixture + overrides; `null` deletes) into a temp dir and load + validate it. */
+/** The valid registry with authority-stated source-version dates: CDC `updatedAt`, WHO `publishedAt` only. */
+export const DATED_REGISTRY = VALID_FIXTURE["sources/registry.yaml"]!
+  .replace("    sourceType: public-health-guidance\n", "    sourceType: public-health-guidance\n    updatedAt: 2026-04-14\n")
+  .replace("    sourceType: fact-sheet\n", "    sourceType: fact-sheet\n    publishedAt: 2026-08-04\n");
+
 export function loadFixture(overrides: Record<string, string | null> = {}): { knowledge: CanonicalKnowledge; dir: string } {
   const dir = mkdtempSync(join(tmpdir(), "htb-knowledge-fixture-"));
   const files: Record<string, string | null> = { ...VALID_FIXTURE, ...overrides };

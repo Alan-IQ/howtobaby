@@ -31,29 +31,61 @@ A source URL alone is not enough. Health/safety content changes must preserve cl
 
 ## Development setup
 
-Requirements: Node.js `>= 22.18` (see `.nvmrc`) and pnpm `11` (pinned in `package.json` → `packageManager`; `corepack enable` installs it). Package scripts run through pnpm's POSIX shell emulator (`shellEmulator: true` in `pnpm-workspace.yaml`), so env-prefixed scripts like `DEPLOY_TARGET=static next build` work on Windows too. pnpm also enforces the supply-chain policy there (`minimumReleaseAge: 1440`): a dependency release younger than 24 hours cannot be resolved into the lockfile — if an install fails on a brand-new release, wait out the window or pick an older version instead of relaxing the policy.
+### Requirements
+
+- Node.js `>= 22.18` (see `.nvmrc`).
+- pnpm `11`, pinned in `package.json` → `packageManager`. Run `corepack enable` once; every `pnpm` invocation then resolves to the pinned version automatically (no global pnpm install needed). If Corepack is missing, `npm install -g corepack` restores it.
+- Package scripts run through pnpm's POSIX shell emulator (`shellEmulator: true` in `pnpm-workspace.yaml`), so env-prefixed scripts like `DEPLOY_TARGET=static next build` work on Windows too. pnpm also enforces the supply-chain policy there (`minimumReleaseAge: 1440`): a dependency release younger than 24 hours cannot be resolved into the lockfile — if an install fails on a brand-new release, wait out the window or pick an older version instead of relaxing the policy.
+
+### Everyday commands
 
 ```bash
-pnpm install --frozen-lockfile
-pnpm dev              # Next.js dev server
-pnpm check            # typecheck + baseline + repository health + theme boundary + strict license report
-pnpm lint && pnpm test
-pnpm build            # default static-first/server-capable build
-pnpm build:static     # DEPLOY_TARGET=static export profile (what production deploys)
-pnpm validate         # all of the above in CI order
+pnpm install --frozen-lockfile        # install exactly what pnpm-lock.yaml pins; postinstall writes packages/ui/src/theme-tokens.generated.css
+pnpm dev                              # build:knowledge (derived read models), then the Next.js dev server for apps/web
+pnpm build                            # build:knowledge + default profile: static-first, server-capable (.next)
+pnpm --filter @howtobaby/web start    # serve that default-profile build locally (next start) — server-capable verification
+pnpm build:static                     # build:knowledge + DEPLOY_TARGET=static export → apps/web/out (the profile production deploys)
+pnpm validate                         # every CI gate, in CI order (see below)
 ```
 
-Individual gates:
+`pnpm --filter @howtobaby/web start` serves the default build only; the static export in `apps/web/out` is plain files — open it with any static file server.
+
+### Validation gates
+
+`pnpm validate` = `pnpm check && pnpm lint && pnpm test && pnpm check:knowledge-determinism && pnpm build && pnpm build:static`, where:
 
 ```bash
-pnpm typecheck                        # scripts/ + every workspace package/app
-node scripts/check-repo-baseline.ts   # layout, workspace config, workflows, license entry points, doc links
-node scripts/check-repo-health.ts     # large-blob guard, deny patterns, size report (--base=origin/main for PR diff)
-node scripts/check-theme-boundary.ts  # semantic tokens only; no vendor-theme / theme-pack imports in product code
-node scripts/report-licenses.ts       # dependency + asset license report (--strict to fail on findings)
+pnpm check                            # typecheck + check:baseline + check:repo-health + check:theme-boundary + validate:knowledge + report:licenses --strict
+pnpm typecheck                        # tsc over scripts/, then every workspace package/app (apps/web runs `next typegen` first)
+pnpm check:baseline                   # layout, workspace config, workflows, license entry points, doc links
+pnpm check:repo-health                # large-blob guard, deny patterns, size report (--base=origin/main for PR diff)
+pnpm check:theme-boundary             # semantic tokens only; no vendor-theme / theme-pack imports in product code
+pnpm validate:knowledge               # validate-sources → validate-content → validate-provenance → validate-translations over canonical YAML
+pnpm report:licenses --strict         # dependency + tracked-asset license report; --strict fails on findings
+pnpm lint                             # ESLint in every workspace that defines it (apps/web)
+pnpm test                             # Vitest in every workspace that defines it, then `pnpm test:scripts` (node:test for scripts/lib)
+pnpm check:knowledge-determinism      # two from-scratch builds of every derived knowledge artifact must be byte-identical
+pnpm build:knowledge                  # build-knowledge-index (knowledge.sqlite + manifests) + build-evidence-index (evidence indexes)
 ```
 
-The `scripts/` gates run on plain Node + Git (native type stripping); no build step is required. Unit tests are Vitest files colocated with their package (`packages/*/src/**/*.test.ts`, `apps/web/src/**/*.test.ts`).
+The `scripts/` gates run on plain Node + Git (native type stripping); no build step is required. Unit tests are Vitest files colocated with their package (`packages/*/src/**/*.test.ts`, `packages/knowledge/tests/*.test.ts`, `apps/web/src/**/*.test.ts(x)`); tests for the plain-Node scripts live in `scripts/lib/*.test.ts` and run on `node --test` so they need no dependencies.
+
+### Cleaning up
+
+Use the cross-platform cleanup scripts instead of hand-written shell commands (`rm -rf **/node_modules`, `Remove-Item`, …). They run on plain Node — no dependencies, so they work after `node_modules` is gone — and delete only generated/disposable paths:
+
+```bash
+pnpm clean:modules                    # root + every workspace node_modules
+pnpm clean:build                      # rebuildable output/caches: apps/web/.next, apps/web/out, next-env.d.ts, *.tsbuildinfo,
+                                      # packages/knowledge/generated/* (keeps .gitkeep), packages/ui/src/theme-tokens.generated.css,
+                                      # coverage/, dist/, .turbo/, .eslintcache, reports/
+pnpm clean:local                      # both of the above — a full, safe local reset
+node scripts/clean.ts local --dry-run # list what would be removed without deleting anything
+```
+
+The scripts never touch canonical YAML/Markdown/JSON, source code, docs, tests, `.git`, `.github`, or `evidence/` (including the Evidence Watch cache); `scripts/lib/clean.ts` checks every path against an allowlist of disposable names and a denylist of protected roots before removing it. After `clean:modules`/`clean:local`, run `pnpm install --frozen-lockfile` again; after `clean:build`, the next `pnpm dev`/`pnpm build` regenerates everything (or run `pnpm gen:theme-css` for the theme reference CSS alone).
+
+About the many `node_modules` folders: a pnpm workspace has one `node_modules` at the root plus one per workspace package (`apps/*`, `packages/*`, `tools/*`) — that is normal, not duplication. pnpm keeps a single copy of every package version in its content-addressable global store and hard-links it into the root virtual store (`node_modules/.pnpm`); workspace `node_modules` folders mostly contain symlinks into that virtual store, so their on-disk footprint is small. `pnpm store path` shows where the global store lives. `pnpm store prune` removes unreferenced packages from that global store; it is an optional, occasional housekeeping step (for example after removing several projects), not part of the routine cleanup — it affects every pnpm project on the machine and only forces re-downloads later.
 
 ## Coding conventions
 

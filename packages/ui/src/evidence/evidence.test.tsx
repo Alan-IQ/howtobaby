@@ -11,11 +11,11 @@ const cdc: EvidenceSourceView = {
   organization: "CDC",
   title: "When, What, and How to Introduce Solid Foods",
   relationshipLabel: "Primary source",
-  statusLabel: "Current version",
   statusTone: "calm",
   meta: [
     { label: "Relevant section", value: "“When, What, and How to Introduce Solid Foods”", icon: "document" },
     { label: "Applies to", value: "United States", icon: "globe" },
+    { label: "Current source version", value: "Apr 14, 2026", icon: "document" },
     { label: "Last verified by HowToBaby", value: "Aug 31, 2026", icon: "calendar" },
   ],
   whyLabel: "Why this source is used",
@@ -46,7 +46,7 @@ describe("EvidenceDrawer (GUI_DESIGN.md §11.3)", () => {
     <EvidenceDrawer open onClose={() => {}} title="Sources for this guidance" claimText="Introduce solids at about 6 months." classLabel="Official guidance" sources={[cdc]} />,
   );
 
-  it("shows organization, exact title, role/status badges and every labeled metadata row", () => {
+  it("shows organization, exact title, the role badge and every labeled metadata row", () => {
     for (const text of [
       "CDC",
       "When, What, and How to Introduce Solid Foods",
@@ -54,7 +54,8 @@ describe("EvidenceDrawer (GUI_DESIGN.md §11.3)", () => {
       "Relevant section",
       "Applies to",
       "United States",
-      "Current",
+      "Current source version",
+      "Apr 14, 2026",
       "Last verified by HowToBaby",
       "Aug 31, 2026",
       "Why this source is used",
@@ -69,9 +70,10 @@ describe("EvidenceDrawer (GUI_DESIGN.md §11.3)", () => {
     expect(html).toMatch(/<dt>.*<span>Last verified by HowToBaby<\/span><\/dt><dd>Aug 31, 2026<\/dd>/);
   });
 
-  it("renders role and status as compact badges, with attention tone only when flagged", () => {
-    expect(html).toMatch(/htb-evidence-source__badge--status[^-]/);
+  it("renders no status badge for a current source, and an attention badge for a non-current one", () => {
+    expect(html).not.toContain("htb-evidence-source__badge--status");
     expect(html).not.toContain("htb-evidence-source__badge--attention");
+    expect(html).toContain("htb-evidence-source__badge--role");
     const attention = renderToStaticMarkup(
       <EvidenceDrawer open onClose={() => {}} title="Sources" sources={[{ ...cdc, statusLabel: "Reviewing an update", statusTone: "attention" }]} />,
     );
@@ -104,12 +106,15 @@ describe("EvidenceDrawer (GUI_DESIGN.md §11.3)", () => {
 
 describe("ReferenceList (GUI_DESIGN.md §11.4)", () => {
   it("deduplicates by source ID and renders provenance per entry", () => {
-    const entry = { sourceId: cdc.sourceId, organization: "CDC", title: cdc.title, verifiedLabel: "Last verified by HowToBaby: Aug 31, 2026", url: cdc.url, statusLabel: "Current version" };
+    const entry = { sourceId: cdc.sourceId, organization: "CDC", title: cdc.title, versionLabel: "Current source version: Apr 14, 2026", verifiedLabel: "Last verified by HowToBaby: Aug 31, 2026", url: cdc.url };
     const html = renderToStaticMarkup(<ReferenceList entries={[entry, entry]} />);
     expect(html).toContain("Sources used on this page");
     expect(html.match(/htb-reference-list__entry/g)).toHaveLength(1);
+    expect(html).toContain("Current source version: Apr 14, 2026");
     expect(html).toContain("Last verified by HowToBaby: Aug 31, 2026");
-    expect(html).toContain("Current");
+    expect(html).not.toContain("htb-reference-list__status"); // current source: no status text
+    const reviewing = renderToStaticMarkup(<ReferenceList entries={[{ ...entry, statusLabel: "Reviewing an update" }]} />);
+    expect(reviewing).toContain("Reviewing an update");
     // Print keeps a scannable URL even though the interactive link is hidden on paper.
     expect(html).toContain("htb-reference-list__print-url");
   });
