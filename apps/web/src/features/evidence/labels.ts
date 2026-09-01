@@ -93,6 +93,87 @@ export const STATUS_LABELS: Record<UiLocale, Record<SourceStatus, string>> = {
   },
 };
 
+/**
+ * Presentation tone for a source status, shared by EVERY surface that shows one (Evidence
+ * Drawer badge, /sources registry badge, evidence detail): `current` is calm/neutral; every
+ * non-current state (changed-review-required, superseded, retired, temporarily-unreachable)
+ * warrants quiet attention. Honest, never alarming (docs/GUI_DESIGN.md §11.8).
+ */
+export type SourceStatusTone = "calm" | "attention";
+export function sourceStatusTone(status: SourceStatus): SourceStatusTone {
+  return status === "current" ? "calm" : "attention";
+}
+
+/** Review-status labels for the evidence detail trust surface (EVIDENCE_PROVENANCE.md §5). */
+export const REVIEW_STATUS_LABELS: Record<UiLocale, Record<string, string>> = {
+  en: {
+    draft: "Draft — not published guidance",
+    "source-verified": "Source-verified",
+    "clinical-review-required": "Awaiting clinical review",
+    "clinically-reviewed": "Clinically reviewed",
+    "release-approved": "Release-approved",
+    superseded: "Superseded",
+  },
+  vi: {
+    draft: "Bản nháp — chưa phải hướng dẫn xuất bản",
+    "source-verified": "Đã kiểm chứng nguồn",
+    "clinical-review-required": "Chờ rà soát lâm sàng",
+    "clinically-reviewed": "Đã rà soát lâm sàng",
+    "release-approved": "Đã duyệt phát hành",
+    superseded: "Đã được thay thế",
+  },
+};
+
+/** Precision-class labels (evidence detail badges). */
+export const PRECISION_CLASS_LABELS: Record<UiLocale, Record<string, string>> = {
+  en: {
+    "source-exact": "Source-exact",
+    "source-approximate": "Source-approximate",
+    "source-range": "Source range",
+    "product-heuristic": "Product heuristic",
+  },
+  vi: {
+    "source-exact": "Chính xác theo nguồn",
+    "source-approximate": "Xấp xỉ theo nguồn",
+    "source-range": "Khoảng theo nguồn",
+    "product-heuristic": "Gợi ý của sản phẩm",
+  },
+};
+
+/** Safety-level labels (evidence detail badges; the badge tone still comes from the level itself). */
+export const SAFETY_LEVEL_LABELS: Record<UiLocale, Record<string, string>> = {
+  en: {
+    info: "Info",
+    caution: "Caution",
+    clinician: "Ask your clinician",
+    urgent: "Urgent",
+    emergency: "Emergency",
+  },
+  vi: {
+    info: "Thông tin",
+    caution: "Thận trọng",
+    clinician: "Hỏi bác sĩ",
+    urgent: "Khẩn",
+    emergency: "Cấp cứu",
+  },
+};
+
+/** Source-type labels for the /sources registry; unknown types fall back to the raw identifier. */
+export const SOURCE_TYPE_LABELS: Record<UiLocale, Record<string, string>> = {
+  en: {
+    "fact-sheet": "Fact sheet",
+    "public-health-guidance": "Public health guidance",
+  },
+  vi: {
+    "fact-sheet": "Tờ thông tin",
+    "public-health-guidance": "Hướng dẫn y tế công cộng",
+  },
+};
+
+export function sourceTypeLabel(sourceType: string, locale: UiLocale): string {
+  return SOURCE_TYPE_LABELS[locale][sourceType] ?? sourceType;
+}
+
 export const UI_STRINGS: Record<UiLocale, {
   languageLegend: string;
   sourcesDrawerTitle: string;
@@ -113,6 +194,10 @@ export const UI_STRINGS: Record<UiLocale, {
   metaWhy: string;
   jurisdictionUS: string;
   jurisdictionGlobal: string;
+  reviewedOn: string;
+  domainLabel: string;
+  sourceUpdated: string;
+  wordingNote: string;
 }> = {
   en: {
     languageLegend: "Language",
@@ -133,6 +218,10 @@ export const UI_STRINGS: Record<UiLocale, {
     metaWhy: "Why this source is used",
     jurisdictionUS: "United States",
     jurisdictionGlobal: "Global",
+    reviewedOn: "Reviewed",
+    domainLabel: "Domain",
+    sourceUpdated: "Source updated",
+    wordingNote: "HowToBaby summarizes and interprets; the original wording belongs to the source.",
   },
   vi: {
     languageLegend: "Ngôn ngữ",
@@ -153,6 +242,10 @@ export const UI_STRINGS: Record<UiLocale, {
     metaWhy: "Vì sao dùng nguồn này",
     jurisdictionUS: "Hoa Kỳ",
     jurisdictionGlobal: "Toàn cầu",
+    reviewedOn: "Rà soát",
+    domainLabel: "Mảng nội dung",
+    sourceUpdated: "Nguồn cập nhật",
+    wordingNote: "HowToBaby tóm lược và diễn giải; câu chữ gốc thuộc về nguồn.",
   },
 };
 
@@ -173,7 +266,7 @@ export function verifiedLabel(date: string, locale: UiLocale): string {
  * Labeled jurisdiction row: "Applies to: United States" for US sources, "Scope: Global" for
  * global normative sources — never a bare value like "United States" or "Global (WHO)".
  */
-export function jurisdictionMeta(source: SourceRecord, locale: UiLocale): { label: string; value: string } {
+export function jurisdictionMeta(source: Pick<SourceRecord, "jurisdiction">, locale: UiLocale): { label: string; value: string } {
   const strings = UI_STRINGS[locale];
   if (source.jurisdiction === "US") return { label: strings.metaAppliesTo, value: strings.jurisdictionUS };
   if (source.jurisdiction === "global") return { label: strings.metaScope, value: strings.jurisdictionGlobal };

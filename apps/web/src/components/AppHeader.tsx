@@ -1,10 +1,12 @@
 // SPDX-License-Identifier: AGPL-3.0-only
+"use client";
+
 import Link from "next/link";
 
-import { ThemeSwitcher } from "@howtobaby/ui";
-
+import { useMessages } from "@/i18n/T";
 import { SITE } from "@/site";
 import { LanguageSwitcher } from "./LanguageSwitcher";
+import { LocalizedThemeSwitcher } from "./LocalizedThemeSwitcher";
 import { PrimaryNav } from "./PrimaryNav";
 
 /**
@@ -14,10 +16,11 @@ import { PrimaryNav } from "./PrimaryNav";
  * absent rather than rendered inert.
  */
 export function AppHeader() {
+  const t = useMessages();
   return (
     <header className="app-header">
       <div className="app-header__inner">
-        <Link href="/" className="app-header__brand" aria-label={`${SITE.name} — home`}>
+        <Link href="/" className="app-header__brand" aria-label={`${SITE.name} — ${t("app.brandHome.label")}`}>
           <span className="app-header__brand-mark" aria-hidden="true">
             hb
           </span>
@@ -25,7 +28,7 @@ export function AppHeader() {
         </Link>
         <PrimaryNav layout="horizontal" className="app-header__nav" />
         <div className="app-header__controls">
-          <ThemeSwitcher className="app-header__theme" showThemeFamily={false} />
+          <LocalizedThemeSwitcher className="app-header__theme" showThemeFamily={false} />
           <LanguageSwitcher />
         </div>
       </div>

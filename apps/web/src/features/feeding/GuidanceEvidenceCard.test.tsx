@@ -63,23 +63,25 @@ function render(overrides: Partial<GuidanceEvidenceCardViewProps>): string {
   return renderToStaticMarkup(<GuidanceEvidenceCardView {...props} />);
 }
 
-describe("local guidance content-language override", () => {
+describe("local guidance content-language override (single-tap binary toggle)", () => {
   it("hides the local toggle while the global language is canonical (global EN)", () => {
     const html = render({ globalLocale: "en", contentLocale: "en" });
-    expect(html).not.toContain("guidance-lang-toggle");
+    expect(html).not.toContain("content-lang-toggle__label");
     expect(html).toContain("Start solid foods at about 6 months.");
     // Content matches <html lang>; no per-element lang override is emitted.
     expect(html).not.toContain('lang="en"');
   });
 
-  it("shows a VI ↔ EN local toggle while the global language is VI, VI active by default", () => {
+  it("shows ONE toggle button labelled with the displayed language's full native name (global VI)", () => {
     const html = render({ globalLocale: "vi", contentLocale: "vi" });
-    expect(html).toContain("guidance-lang-toggle");
-    expect(html).toContain('aria-label="Guidance language"');
-    // Active global locale listed first, canonical second; state via aria-pressed, never colour.
-    expect(html.indexOf(">VI</button>")).toBeGreaterThan(-1);
-    expect(html.indexOf(">VI</button>")).toBeLessThan(html.indexOf(">EN</button>"));
-    expect(html).toMatch(/aria-pressed="true"[^>]*lang="vi"|lang="vi"[^>]*aria-pressed="true"/);
+    // A single binary toggle — one button, not a pick-one-of-two group.
+    expect(html.match(/content-lang-toggle"/g)?.length).toBe(1);
+    expect(html).not.toContain('role="group"');
+    // Visible text is the FULL native name of the language currently displayed — never a code.
+    expect(html).toContain('lang="vi">Tiếng Việt</span>');
+    expect(html).not.toContain(">VI</button>");
+    expect(html).not.toContain(">EN</button>");
+    expect(html).toContain('aria-label="Guidance language: Tiếng Việt"');
     expect(html).toContain("Bắt đầu ăn dặm khi bé khoảng 6 tháng tuổi.");
     // Card content equals the global language — no lang attribute on the claim block.
     expect(html).not.toContain('class="guidance-evidence-card__claim" lang');
@@ -92,9 +94,10 @@ describe("local guidance content-language override", () => {
     // Claim block and title carry lang="en" because <html lang> stays "vi" (global unchanged).
     expect(html).toMatch(/guidance-evidence-card__claim" lang="en"/);
     expect(html).toContain('<span lang="en">Starting solid foods</span>');
-    // EN is the active toggle option now.
-    expect(html).toMatch(/aria-pressed="true"[^>]*lang="en"|lang="en"[^>]*aria-pressed="true"/);
-    // Card chrome (eyebrow, toggle group label) stays in the GLOBAL language surface.
+    // The toggle now shows the language currently displayed: English, in its own language.
+    expect(html).toContain('lang="en">English</span>');
+    expect(html).toContain('aria-label="Guidance language: English"');
+    // Card chrome (eyebrow, toggle accessible-name prefix) stays in the GLOBAL language surface.
     expect(html).toContain("Starting solids");
   });
 
@@ -112,9 +115,16 @@ describe("local guidance content-language override", () => {
     expect(html).not.toMatch(/<dialog[^>]*lang=/);
   });
 
-  it("names each toggle option in its own language for assistive tech", () => {
-    const html = render({ globalLocale: "vi", contentLocale: "vi" });
-    expect(html).toContain('aria-label="Tiếng Việt"');
-    expect(html).toContain('aria-label="English"');
+  it("renders the SAME language control inside the drawer (shared state, one control semantics)", () => {
+    const html = render({ globalLocale: "vi", contentLocale: "vi", openClaimId: "claim-solids-start" });
+    // One toggle in the card, one in the drawer — both reflect the same content locale.
+    expect(html.match(/content-lang-toggle"/g)?.length).toBe(2);
+    expect(html).toContain("htb-evidence-drawer__lang");
+    expect(html.match(/lang="vi">Tiếng Việt<\/span>/g)?.length).toBe(2);
+  });
+
+  it("shows no drawer toggle either while the global language is canonical", () => {
+    const html = render({ globalLocale: "en", contentLocale: "en", openClaimId: "claim-solids-start" });
+    expect(html).not.toContain("content-lang-toggle__label");
   });
 });

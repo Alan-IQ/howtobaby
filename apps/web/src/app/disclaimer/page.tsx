@@ -4,17 +4,24 @@ import type { Metadata } from "next";
 import { Card } from "@howtobaby/ui";
 
 import { PageShell } from "@/components/PageShell";
-import { SITE } from "@/site";
+import { T } from "@/i18n/T";
 
 export const metadata: Metadata = { title: "Medical Disclaimer" };
 
 export default function Page() {
   return (
-    <PageShell eyebrow="Trust" title="Medical Disclaimer" lede="What HowToBaby is — and is not." printable>
+    <PageShell eyebrow={<T id="trust.eyebrow" />} title={<T id="trust.disclaimer.label" />} lede={<T id="page.disclaimer.lede" />} printable>
       <Card tone="2">
         <div className="prose">
-          <p><strong>{SITE.name} is a practical parent reference.</strong> It is not a medical record, a diagnosis engine, a developmental screening test, an emergency service, or a substitute for pediatric care.</p>
-          <p>Age selects candidate guidance; it does not prove readiness, suitability or developmental status. Always follow the advice of your child’s clinician, and contact local emergency services in an emergency.</p>
+          <p>
+            <strong>
+              <T id="disclaimer.p1.lead" />
+            </strong>{" "}
+            <T id="disclaimer.p1.rest" />
+          </p>
+          <p>
+            <T id="disclaimer.p2" />
+          </p>
         </div>
       </Card>
     </PageShell>

@@ -1,14 +1,13 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 import type { ReactNode } from "react";
 
-import { Icon, PrintAction, type DomainAccent, type IconName } from "@howtobaby/ui";
+import { Icon, type DomainAccent, type IconName } from "@howtobaby/ui";
 
 import { SITE } from "@/site";
+import { LocalizedPrintAction } from "./LocalizedPrintAction";
 
 export interface PageShellProps {
   title: ReactNode;
-  /** Canonical (EN) title for the printed context strip; pass when `title` is not a plain string. */
-  printTitle?: string;
   /** Section label shown above the title (e.g. destination name). */
   eyebrow?: ReactNode;
   icon?: IconName;
@@ -19,13 +18,17 @@ export interface PageShellProps {
   children?: ReactNode;
 }
 
-/** Common page anatomy scaffold (docs/GUI_DESIGN.md §8): title + context header, body, printed context strip. */
-export function PageShell({ title, printTitle, eyebrow, icon, accent, lede, printable = false, children }: PageShellProps) {
+/**
+ * Common page anatomy scaffold (docs/GUI_DESIGN.md §8): title + context header, body, printed
+ * context strip. The printed context reuses the page title node, so it follows the active global
+ * language exactly like the on-screen title (brand name and canonical URL stay verbatim).
+ */
+export function PageShell({ title, eyebrow, icon, accent, lede, printable = false, children }: PageShellProps) {
   return (
     <article className="page-shell">
       <div className="print-context" aria-hidden="true">
         <span>{SITE.name}</span>
-        <span>{printTitle ?? (typeof title === "string" ? title : SITE.name)}</span>
+        <span>{title}</span>
         <span>{SITE.url}</span>
       </div>
       <header className="page-shell__header">
@@ -38,7 +41,7 @@ export function PageShell({ title, printTitle, eyebrow, icon, accent, lede, prin
           ) : (
             <span />
           )}
-          {printable ? <PrintAction /> : null}
+          {printable ? <LocalizedPrintAction /> : null}
         </div>
         <h1>{title}</h1>
         {lede ? <p className="page-shell__lede">{lede}</p> : null}

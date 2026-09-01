@@ -4,15 +4,20 @@
  * uses — organization, exact title, jurisdiction, verification date, status, how many claims use
  * it, and a link to the original. Rendered from the generated source-public-index; the same
  * provenance graph that powers inline source chips and page references.
+ *
+ * The whole page follows the ONE global language preference: rows localize through the shared
+ * presenter (LocalizedSourceRegistry), page prose through the app dictionary. Exact source
+ * titles, organization names and URLs stay verbatim.
  */
 
 import type { Metadata } from "next";
 
-import { Badge, Card } from "@howtobaby/ui";
+import { Card } from "@howtobaby/ui";
 
 import { PageShell } from "@/components/PageShell";
-import { STATUS_LABELS, verifiedLabel } from "@/features/evidence/labels";
+import { LocalizedSourceRegistry } from "@/features/evidence/LocalizedSourceRegistry";
 import { knowledgeRepository } from "@/features/evidence/load";
+import { T } from "@/i18n/T";
 import { SITE } from "@/site";
 
 export const metadata: Metadata = { title: "Sources" };
@@ -21,29 +26,18 @@ export default async function Page() {
   const sources = await knowledgeRepository().listPublicSources();
 
   return (
-    <PageShell eyebrow="Trust" title="Sources" lede="The registry of original authorities HowToBaby guidance is built from." printable>
-      {sources.map((source) => (
-        <Card key={source.sourceId} title={source.title} titleAs="h2" eyebrow={source.organization}>
-          <div className="prose">
-            <p className="muted">
-              {source.jurisdiction === "US" ? "United States" : source.jurisdiction === "global" ? "Global" : source.jurisdiction} · {source.sourceType} · {verifiedLabel(source.lastVerifiedAt, "en")}
-              {STATUS_LABELS.en[source.status] ? <> · <Badge status="caution">{STATUS_LABELS.en[source.status]}</Badge></> : null}
-            </p>
-            <p className="muted">
-              {source.claimCount === 1 ? "Used by 1 published claim" : `Used by ${source.claimCount} published claims`}
-            </p>
-            <p>
-              <a href={source.canonicalUrl} target="_blank" rel="noopener noreferrer">
-                View original source<span aria-hidden="true"> ↗</span>
-              </a>
-            </p>
-          </div>
-        </Card>
-      ))}
+    <PageShell eyebrow={<T id="trust.eyebrow" />} title={<T id="trust.sources.label" />} lede={<T id="page.sources.lede" />} printable>
+      <LocalizedSourceRegistry sources={sources} />
       <Card tone="2">
         <div className="prose">
-          <p className="muted">Every record above is maintained as reviewed data in the public repository; this page is generated from it and is never edited by hand.</p>
-          <p><a href={SITE.sourceCodeUrl} rel="noopener">Browse the repository</a></p>
+          <p className="muted">
+            <T id="sources.generatedNote" />
+          </p>
+          <p>
+            <a href={SITE.sourceCodeUrl} rel="noopener">
+              <T id="sources.browseRepository" />
+            </a>
+          </p>
         </div>
       </Card>
     </PageShell>

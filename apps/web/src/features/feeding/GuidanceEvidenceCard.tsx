@@ -4,11 +4,13 @@
  * claim text + inline SourceChip (Layer A) opening the EvidenceDrawer (Layer B).
  *
  * Language semantics: the card defaults to the ONE global language preference. While the global
- * language is not the canonical locale, a quiet LOCAL toggle (active locale ↔ canonical) lets a
- * parent read just this card's canonical guidance — and its Evidence Drawer — in the canonical
- * wording without touching the global preference. The override semantics live in @howtobaby/i18n
- * (contentLocale*), are generic over the registry, and reset automatically when the global
- * language changes. Content whose locale differs from `<html lang>` carries an explicit `lang`.
+ * language is not the canonical locale, a quiet LOCAL single-tap binary toggle (active locale ↔
+ * canonical, visible text = the displayed language's full native name) lets a parent flip just
+ * this card's canonical guidance without touching the global preference. The card and its
+ * Evidence Drawer render the SAME control over the SAME state — switching in either updates
+ * both. The override semantics live in @howtobaby/i18n (contentLocale*), are generic over the
+ * registry, and reset automatically when the global language changes. Content whose locale
+ * differs from `<html lang>` carries an explicit `lang`.
  *
  * The component only presents pre-localized view models built server-side from the
  * KnowledgeRepository; it holds no medical prose and no source URLs of its own.
@@ -18,17 +20,11 @@
 
 import { useState } from "react";
 
-import {
-  contentLocaleOverride,
-  contentLocaleToggleOptions,
-  localeDefinition,
-  resolveContentLocale,
-  type AppLocale,
-  type ContentLocaleOverride,
-} from "@howtobaby/i18n";
+import { contentLocaleOverride, resolveContentLocale, type AppLocale, type ContentLocaleOverride } from "@howtobaby/i18n";
 import { Card, EvidenceDrawer, SourceChip } from "@howtobaby/ui";
 
 import type { GuidanceBlockView } from "@/features/evidence/load";
+import { ContentLanguageToggle } from "@/i18n/ContentLanguageToggle";
 import { useLanguage } from "@/i18n/LanguageProvider";
 import { useMessages } from "@/i18n/T";
 
@@ -89,7 +85,12 @@ export function GuidanceEvidenceCardView({
   const openClaim = view.claims.find((claim) => claim.claimId === openClaimId);
   // `<html lang>` follows the global language; mark content only when it deviates from it.
   const contentLang = contentLocale === globalLocale ? undefined : contentLocale;
-  const toggleOptions = contentLocaleToggleOptions(globalLocale);
+  // ONE local control, rendered in BOTH the card and its Evidence Drawer, driving ONE shared
+  // content-locale state: switching in either place updates the other, and neither touches the
+  // global preference. Hidden entirely while the global language is the canonical locale.
+  const languageToggle = (
+    <ContentLanguageToggle globalLocale={globalLocale} contentLocale={contentLocale} label={contentLanguageLabel} onToggle={onSelectContentLocale} />
+  );
 
   return (
     <Card
@@ -100,23 +101,7 @@ export function GuidanceEvidenceCardView({
       titleAs="h2"
       className="guidance-card--localizable"
     >
-      {toggleOptions ? (
-        <div className="guidance-lang-toggle" role="group" aria-label={contentLanguageLabel}>
-          {toggleOptions.map((locale) => (
-            <button
-              key={locale}
-              type="button"
-              className="guidance-lang-toggle__option"
-              aria-pressed={locale === contentLocale}
-              aria-label={localeDefinition(locale).nativeName}
-              lang={locale}
-              onClick={() => onSelectContentLocale(locale)}
-            >
-              {localeDefinition(locale).code}
-            </button>
-          ))}
-        </div>
-      ) : null}
+      <div className="guidance-card__lang-toggle">{languageToggle}</div>
       <div className="guidance-evidence-card">
         {view.claims.map((claim) => (
           <div key={claim.claimId} className="guidance-evidence-card__claim" lang={contentLang}>
@@ -144,6 +129,7 @@ export function GuidanceEvidenceCardView({
             disclaimer={view.strings.disclaimer}
             closeLabel={view.strings.close}
             contentLang={contentLang}
+            languageControl={languageToggle}
           />
         ) : null}
       </div>

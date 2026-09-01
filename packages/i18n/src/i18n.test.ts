@@ -14,6 +14,7 @@ import {
   localeDefinition,
   parseLocale,
   resolveContentLocale,
+  toggleContentLocale,
 } from "./index.ts";
 
 describe("supported-locale registry", () => {
@@ -108,5 +109,22 @@ describe("local content-locale override (guidance card + Evidence Drawer)", () =
   it("round-trips back to the global locale when the user toggles home", () => {
     const backHome = contentLocaleOverride("vi", "vi");
     expect(resolveContentLocale("vi", backHome)).toBe("vi");
+  });
+});
+
+describe("single-tap binary content-locale toggle", () => {
+  it("flips active global ↔ canonical in one activation, both directions", () => {
+    expect(toggleContentLocale("vi", "vi")).toBe("en");
+    expect(toggleContentLocale("vi", "en")).toBe("vi");
+  });
+
+  it("is undefined while the global locale is canonical (the toggle must not render)", () => {
+    expect(toggleContentLocale("en", "en")).toBeUndefined();
+  });
+
+  it("stays generic over the locale registry (hypothetical third locale)", () => {
+    expect(toggleContentLocale("es", "es", "en")).toBe("en");
+    expect(toggleContentLocale("es", "en", "en")).toBe("es");
+    expect(toggleContentLocale("en", "en", "en")).toBeUndefined();
   });
 });

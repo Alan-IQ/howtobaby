@@ -11,11 +11,10 @@ export const metadata: Metadata = { title: "Sleep" };
 export default function Page() {
   return (
     <PageShell
-      eyebrow={<T id="page.sleep.title" />}
+      eyebrow={<T id="domain.sleep.title" />}
       icon="sleep"
       accent="sleep"
-      title={<T id="page.sleep.title" />}
-      printTitle="Sleep"
+      title={<T id="domain.sleep.title" />}
       lede={<T id="page.sleep.lede" />}
     >
       <Card icon="sleep" title={<T id="section.placeholder.title" />} titleAs="h2">

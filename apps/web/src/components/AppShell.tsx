@@ -3,6 +3,8 @@ import type { ReactNode } from "react";
 
 import { SkipLink } from "@howtobaby/ui";
 
+import { T } from "@/i18n/T";
+
 import { AppHeader } from "./AppHeader";
 import { PrimaryNav } from "./PrimaryNav";
 import { SiteFooter } from "./SiteFooter";
@@ -13,7 +15,9 @@ export const MAIN_CONTENT_ID = "main-content";
 export function AppShell({ children }: { children: ReactNode }) {
   return (
     <div className="app-shell">
-      <SkipLink targetId={MAIN_CONTENT_ID}>Skip to content</SkipLink>
+      <SkipLink targetId={MAIN_CONTENT_ID}>
+        <T id="app.skipToContent" />
+      </SkipLink>
       <AppHeader />
       <main id={MAIN_CONTENT_ID} className="app-main" tabIndex={-1}>
         {children}

@@ -52,6 +52,12 @@ export interface EvidenceDrawerProps {
    * guidance-language override); assistive tech then announces the drawer correctly.
    */
   contentLang?: string | undefined;
+  /**
+   * The SAME local content-language control the host guidance card renders (shared state: a
+   * switch here updates the card and vice versa). Slot only — the control's semantics live with
+   * the host app's i18n layer.
+   */
+  languageControl?: ReactNode;
 }
 
 export function EvidenceDrawer({
@@ -67,9 +73,11 @@ export function EvidenceDrawer({
   disclaimer = "These organizations publish the original guidance. They have not reviewed or endorsed HowToBaby.",
   closeLabel,
   contentLang,
+  languageControl,
 }: EvidenceDrawerProps) {
   return (
     <Drawer open={open} onClose={onClose} title={title} lang={contentLang} {...(closeLabel !== undefined ? { closeLabel } : {})} className="htb-evidence-drawer">
+      {languageControl ? <div className="htb-evidence-drawer__lang">{languageControl}</div> : null}
       <p className="htb-evidence-drawer__attribution">{attribution}</p>
       {claimText ? (
         <div className="htb-evidence-drawer__claim">

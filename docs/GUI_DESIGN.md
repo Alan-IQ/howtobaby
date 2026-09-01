@@ -23,9 +23,14 @@ Primary destinations:
 5. **Safety**
 6. **Tools**
 
-Navigation labels stay short: **Play & Development** appears as **Play** in top and bottom
-navigation, while the destination's page title keeps the full name. All navigation labels resolve
-from the app message dictionary in the active language — never from per-locale navigation config.
+Navigation labels stay short: **Play & Development** appears as **Play** (VI: **Chơi**) in top
+and bottom navigation ONLY. Everywhere a destination is presented as content — its page title,
+a destination card on Now/Home, any display name — the full domain title is used (**Play &
+Development** / **Chơi & Phát triển**). The two are distinct dictionary keys by contract
+(`nav.<domain>.label` vs `domain.<domain>.title`); a navigation label is never reused as a
+generic domain display title, so the shortening cannot regress onto content surfaces. All of
+them resolve from the app message dictionary in the active language — never from per-locale
+navigation config.
 
 Trust destinations are globally accessible but need not occupy primary navigation permanently:
 
@@ -160,8 +165,16 @@ only global switch:
 - the preference persists locally (SYSTEM_ARCHITECTURE.md §10) and `<html lang>` always follows
   the active global language.
 
-Long-form trust/legal document pages may remain English until their own content phases.
-Locale-prefixed public routes are a Phase 3 routing concern.
+Every currently shipped user-facing page follows the global language — the trust/legal pages
+(`/sources`, `/methodology`, `/editorial-policy`, `/disclaimer`, `/privacy`, `/license`,
+`/changelog`), the evidence detail pages and the not-found/error UI included; there is no
+English-only page exception. Never translated: exact original source titles, organization and
+other proper names, URLs, license identifiers such as `AGPL-3.0-only` / `CC BY-NC-SA 4.0`, and
+canonical identifiers/IDs — the labels and context around them localize. Localized presentation
+of canonical evidence data goes through locale-generic presenters/view models built for every
+registered locale — no page hard-codes an English presentation or branches on a locale pair.
+Document metadata (`<title>`) stays in the canonical prerender locale until locale-prefixed
+public routes land; those are a Phase 3 routing concern.
 
 ### Primary navigation
 
@@ -171,7 +184,30 @@ Mobile: compact sticky navigation, segmented tabs, or bottom/scroll-aware patter
 
 The active bottom-navigation item combines a soft domain-accent tint, heavier icon/label, and a
 short centred underline in the domain accent — state is never carried by colour alone, and the
-indicator must not add height or break the bar's equal-column alignment.
+indicator must not add height or break the bar's equal-column alignment. The underline is ONE
+shared indicator that slides between the equal-width items on route change; the desktop row's
+soft active pill is likewise a shared indicator that slides between items. Both follow the
+Motion contract below, and the statically styled active link (aria-current, tint, weight)
+remains the prerender/no-JS state, so navigation state never depends on the animation.
+
+### Motion
+
+Stateful/sliding controls animate state changes instead of repainting them instantly, within one
+calm system:
+
+- segmented controls (e.g. the theme colour-mode switch) move ONE shared selection pill between
+  options — never per-option background swaps;
+- primary navigation (bottom tab bar and desktop row) moves its shared active indicator to the
+  new item, as above;
+- the local guidance-language toggle swaps its label with a subtle slide;
+- the global language popover opens with a short slide-down + fade and closes with the reverse
+  transition, absolutely positioned so open/close never shifts layout.
+
+All motion uses the semantic motion duration/easing tokens (fast/base ≈ 120–200 ms, standard
+easing; no bounce or exaggerated animation). Keyboard operability, focus behavior and visible
+state never depend on an animation. Under `prefers-reduced-motion: reduce` or the project
+reduced-motion preference the motion tokens collapse to 0 ms, so every transition becomes
+effectively instant while the end states stay identical.
 
 ## 7. Now page
 
@@ -325,6 +361,11 @@ This page may expose claim text, classification, applicability, source relations
 
 `/sources` exposes the actual source registry used by the product. `/methodology` explains how sources become claims and how freshness/review works. Both should deep-link to original authorities.
 
+Source status on `/sources` uses the same semantic tone mapping as the Evidence Drawer:
+`current` renders as a calm/neutral badge; `changed-review-required` as quiet caution; and
+superseded/retired/temporarily-unreachable states follow the same non-current attention
+treatment — honest, never alarmist (see §11.8).
+
 ### 11.7 Original-source link behavior
 
 - use clear wording such as **View original source**;
@@ -345,19 +386,28 @@ A changed source should not visually imply immediate danger unless the claim's s
 ### 11.9 Guidance content-language override
 
 Guidance surfaces default to the global language. While the global language is not the canonical
-locale, a guidance card additionally offers a quiet LOCAL toggle between the active global locale
-and the canonical locale:
+locale, a guidance card additionally offers a quiet LOCAL control — a SINGLE binary toggle
+button, not a pair of options:
 
-- the toggle switches only that card's canonical guidance content and its EvidenceDrawer — never
-  the global preference or any other surface;
+- one tap/click flips that surface's canonical content between the active global locale and the
+  canonical locale; the user never has to choose one of two buttons;
+- the visible text is always the full native name of the language the content is CURRENTLY
+  displayed in (`Tiếng Việt`, `English`, later e.g. `Español`) — never a short code such as
+  `EN`/`VI` — and carries that language's `lang` attribute;
 - it is hidden entirely while the global language IS the canonical locale;
-- the drawer always renders in the same content locale as its card;
-- a global language change resets/syncs every local override to the new global locale;
+- the card and its Evidence Drawer render the SAME control over ONE shared content-locale
+  state: switching in the card updates the drawer and switching in the drawer updates the card,
+  and the drawer always renders in the same content locale as its card;
+- the local switch never touches the global preference; a global language change resets/syncs
+  every local override to the new global locale;
 - content rendered in a locale other than `<html lang>` carries an explicit `lang` attribute;
+- the label swap animates with a subtle token-driven slide (see §6 Motion; reduced motion makes
+  it instant);
 - the toggle is visually lighter than the global language control and must not compete with the
   SourceChip;
-- the semantics are generic `canonical ↔ active locale` (owned by `@howtobaby/i18n`), so a newly
-  registered locale needs no redesign.
+- the semantics are generic `canonical ↔ active locale` (owned by `@howtobaby/i18n`,
+  `toggleContentLocale`), so a newly registered locale needs no redesign — nothing hard-codes
+  the EN/VI pair.
 
 ## 12. Safety UI
 

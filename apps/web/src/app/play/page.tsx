@@ -6,17 +6,17 @@ import { Card } from "@howtobaby/ui";
 import { PageShell } from "@/components/PageShell";
 import { T } from "@/i18n/T";
 
-// The PAGE keeps the full "Play & Development" title; only navigation labels shorten to "Play".
+// The PAGE title keeps the full domain name ("Play & Development" / "Chơi & Phát triển");
+// only navigation labels shorten to "Play"/"Chơi" (domain.play.title vs nav.play.label).
 export const metadata: Metadata = { title: "Play & Development" };
 
 export default function Page() {
   return (
     <PageShell
-      eyebrow={<T id="page.play.title" />}
+      eyebrow={<T id="domain.play.title" />}
       icon="play"
       accent="play"
-      title={<T id="page.play.title" />}
-      printTitle="Play & Development"
+      title={<T id="domain.play.title" />}
       lede={<T id="page.play.lede" />}
     >
       <Card icon="play" title={<T id="section.placeholder.title" />} titleAs="h2">

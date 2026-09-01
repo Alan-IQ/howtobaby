@@ -6,6 +6,11 @@
  * menu row with no redesign. The active language is marked by `aria-selected` plus a check icon,
  * never colour alone. This is the ONE global switch; guidance surfaces may add a LOCAL
  * content-language override, which never touches this preference.
+ *
+ * Motion: the popover stays mounted and animates open with a short slide-down + fade and closed
+ * with the reverse (CSS visibility keeps it out of the tab order and the accessibility tree
+ * while closed, without unmounting mid-exit). Keyboard and focus behavior never depend on the
+ * animation, and the motion tokens collapse it to instant under reduced motion.
  */
 
 "use client";
@@ -82,7 +87,7 @@ export function LanguageSwitcher({ className, initialOpen = false }: LanguageSwi
         className="lang-menu__trigger"
         aria-haspopup="listbox"
         aria-expanded={open}
-        aria-controls={open ? menuId : undefined}
+        aria-controls={menuId}
         aria-label={`${t("language.control.label")}: ${active.nativeName}`}
         onClick={() => setOpen((value) => !value)}
       >
@@ -91,37 +96,36 @@ export function LanguageSwitcher({ className, initialOpen = false }: LanguageSwi
           {active.code}
         </span>
       </button>
-      {open ? (
-        <ul
-          id={menuId}
-          role="listbox"
-          aria-label={t("language.menu.label")}
-          className="lang-menu__panel"
-          onKeyDown={(event) => {
-            if (event.key === "ArrowDown" || event.key === "ArrowUp") {
-              event.preventDefault();
-              moveFocus(event.key === "ArrowDown" ? 1 : -1);
-            }
-          }}
-        >
-          {SUPPORTED_LOCALES.map((locale) => {
-            const selected = locale.id === language;
-            return (
-              <li key={locale.id}>
-                <button type="button" role="option" aria-selected={selected} className="lang-menu__option" onClick={() => choose(locale.id)}>
-                  <span className="lang-menu__option-code" aria-hidden="true">
-                    {locale.code}
-                  </span>
-                  <span className="lang-menu__option-name" lang={locale.id}>
-                    {locale.nativeName}
-                  </span>
-                  {selected ? <Icon name="check" className="lang-menu__option-check" /> : null}
-                </button>
-              </li>
-            );
-          })}
-        </ul>
-      ) : null}
+      <ul
+        id={menuId}
+        role="listbox"
+        aria-label={t("language.menu.label")}
+        className="lang-menu__panel"
+        data-open={open ? "true" : "false"}
+        onKeyDown={(event) => {
+          if (event.key === "ArrowDown" || event.key === "ArrowUp") {
+            event.preventDefault();
+            moveFocus(event.key === "ArrowDown" ? 1 : -1);
+          }
+        }}
+      >
+        {SUPPORTED_LOCALES.map((locale) => {
+          const selected = locale.id === language;
+          return (
+            <li key={locale.id}>
+              <button type="button" role="option" aria-selected={selected} className="lang-menu__option" onClick={() => choose(locale.id)}>
+                <span className="lang-menu__option-code" aria-hidden="true">
+                  {locale.code}
+                </span>
+                <span className="lang-menu__option-name" lang={locale.id}>
+                  {locale.nativeName}
+                </span>
+                {selected ? <Icon name="check" className="lang-menu__option-check" /> : null}
+              </button>
+            </li>
+          );
+        })}
+      </ul>
     </div>
   );
 }

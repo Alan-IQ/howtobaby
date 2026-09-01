@@ -26,11 +26,10 @@ export default async function Page() {
 
   return (
     <PageShell
-      eyebrow={<T id="page.feeding.title" />}
+      eyebrow={<T id="domain.feeding.title" />}
       icon="feeding"
       accent="feeding"
-      title={<T id="page.feeding.title" />}
-      printTitle="Feeding"
+      title={<T id="domain.feeding.title" />}
       lede={<T id="page.feeding.lede" />}
       printable
     >

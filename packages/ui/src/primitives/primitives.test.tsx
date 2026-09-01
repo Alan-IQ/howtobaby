@@ -107,3 +107,27 @@ describe("Tabs / Tooltip / Popover", () => {
     expect(html).not.toContain('role="dialog"');
   });
 });
+
+describe("sliding selection (motion state semantics)", () => {
+  it("Segmented prerenders WITHOUT the sliding indicator: static aria-checked styling carries state", () => {
+    const html = renderToStaticMarkup(
+      <Segmented name="m" legend="Mode" value="a" options={[{ value: "a", label: "A" }, { value: "b", label: "B" }]} onChange={() => {}} />,
+    );
+    // State never depends on the animation: aria-checked is present pre-hydration…
+    expect(html).toContain('aria-checked="true"');
+    // …and the sliding indicator only appears after client-side measurement.
+    expect(html).not.toContain("htb-segmented__indicator");
+    expect(html).not.toContain('data-slide');
+  });
+
+  it("Navigation prerenders WITHOUT the sliding indicator: aria-current carries state", () => {
+    const items = [
+      { href: "/", label: "Now" },
+      { href: "/feeding", label: "Feeding", accent: "feeding" as const },
+    ];
+    const html = renderToStaticMarkup(<Navigation items={items} currentHref="/feeding" label="Primary" layout="tabs" />);
+    expect(html).toContain('aria-current="page"');
+    expect(html).not.toContain("htb-nav__indicator");
+    expect(html).toContain('data-layout="tabs"');
+  });
+});

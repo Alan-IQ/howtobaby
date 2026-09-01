@@ -2,13 +2,14 @@
 import { Button } from "@howtobaby/ui";
 
 import { PageShell } from "@/components/PageShell";
+import { T } from "@/i18n/T";
 
 export default function NotFound() {
   return (
-    <PageShell title="Page not found" lede="That address does not exist here. It may have moved, or the link may be incomplete.">
+    <PageShell title={<T id="notFound.title" />} lede={<T id="notFound.lede" />}>
       <div>
         <Button href="/" variant="primary">
-          Back to Now
+          <T id="notFound.backHome" />
         </Button>
       </div>
     </PageShell>

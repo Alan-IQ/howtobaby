@@ -15,24 +15,32 @@ export const SITE = {
 
 /**
  * Primary destinations, in the order the GUI contract fixes them. Semantics only (route, icon,
- * accent, message key): the localized labels live in the app message dictionary, keyed by
- * `nav.<key>.label`, so navigation needs no per-locale config of its own.
+ * accent, message keys): the localized strings live in the app message dictionary, so navigation
+ * needs no per-locale config of its own.
+ *
+ * `labelKey` (`nav.*.label`) is the SHORT navigation label — top and bottom navigation only.
+ * `titleKey` (`domain.*.title`) is the domain's full display title — destination cards on
+ * Now/Home and page titles. They are distinct keys by contract, so "Play & Development" can
+ * never regress to the shortened nav label "Play" on a content surface (docs/GUI_DESIGN.md §2).
  */
 export interface PrimaryDestination {
   readonly href: string;
   readonly key: "now" | "feeding" | "play" | "sleep" | "safety" | "tools";
   readonly icon: IconName;
   readonly accent: DomainAccent;
+  /** SHORT navigation label key (`nav.*.label`) — never a content/destination title. */
   readonly labelKey: AppMessageKey;
+  /** Full domain display-title key (`domain.*.title`) — destination cards and page titles. */
+  readonly titleKey: AppMessageKey;
 }
 
 export const PRIMARY_NAV: readonly PrimaryDestination[] = [
-  { href: "/", key: "now", icon: "home", accent: "brand", labelKey: "nav.now.label" },
-  { href: "/feeding", key: "feeding", icon: "feeding", accent: "feeding", labelKey: "nav.feeding.label" },
-  { href: "/play", key: "play", icon: "play", accent: "play", labelKey: "nav.play.label" },
-  { href: "/sleep", key: "sleep", icon: "sleep", accent: "sleep", labelKey: "nav.sleep.label" },
-  { href: "/safety", key: "safety", icon: "safety", accent: "safety", labelKey: "nav.safety.label" },
-  { href: "/tools", key: "tools", icon: "tools", accent: "tools", labelKey: "nav.tools.label" },
+  { href: "/", key: "now", icon: "home", accent: "brand", labelKey: "nav.now.label", titleKey: "domain.now.title" },
+  { href: "/feeding", key: "feeding", icon: "feeding", accent: "feeding", labelKey: "nav.feeding.label", titleKey: "domain.feeding.title" },
+  { href: "/play", key: "play", icon: "play", accent: "play", labelKey: "nav.play.label", titleKey: "domain.play.title" },
+  { href: "/sleep", key: "sleep", icon: "sleep", accent: "sleep", labelKey: "nav.sleep.label", titleKey: "domain.sleep.title" },
+  { href: "/safety", key: "safety", icon: "safety", accent: "safety", labelKey: "nav.safety.label", titleKey: "domain.safety.title" },
+  { href: "/tools", key: "tools", icon: "tools", accent: "tools", labelKey: "nav.tools.label", titleKey: "domain.tools.title" },
 ];
 
 /** Globally reachable legal/source surface (docs/GUI_DESIGN.md §2.1). Labels via the app dictionary. */

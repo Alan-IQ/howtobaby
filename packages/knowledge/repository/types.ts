@@ -20,6 +20,8 @@ import type {
 } from "../src/compile.ts";
 import type { ContentVersionRecord, GuidanceBlock, Locale, SourceRecord } from "../src/schemas/types.ts";
 
+export type { ClaimEvidenceEntry, CompiledClaim, PublicSourceEntry, RouteEvidenceEntry } from "../src/compile.ts";
+
 export type ClaimId = string;
 export type SourceId = string;
 

@@ -4,16 +4,21 @@ import type { Metadata } from "next";
 import { Card } from "@howtobaby/ui";
 
 import { PageShell } from "@/components/PageShell";
+import { T } from "@/i18n/T";
 
 export const metadata: Metadata = { title: "Privacy" };
 
 export default function Page() {
   return (
-    <PageShell eyebrow="Trust" title="Privacy" lede="Local-first by design." printable>
+    <PageShell eyebrow={<T id="trust.eyebrow" />} title={<T id="trust.privacy.label" />} lede={<T id="page.privacy.lede" />} printable>
       <Card tone="2">
         <div className="prose">
-          <p>Personalization in HowToBaby is local-first: a child profile, when that feature exists, stays on your device and is never sent to a server, placed in a URL, or included in analytics or logs.</p>
-          <p>Today the site stores exactly one thing in your browser: your theme and colour-mode preference. There are no analytics or tracking scripts.</p>
+          <p>
+            <T id="privacy.p1" />
+          </p>
+          <p>
+            <T id="privacy.p2" />
+          </p>
         </div>
       </Card>
     </PageShell>

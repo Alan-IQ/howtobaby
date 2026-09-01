@@ -123,11 +123,29 @@
   letter-spacing: 0.06em;
   line-height: 1;
 }
+/* The panel stays mounted so open AND close both animate: a short slide-down + fade in, and the
+   reverse on close (visibility flips to hidden only when the exit transition ends, keeping it
+   out of the tab order and accessibility tree while closed). Absolutely positioned — opening
+   and closing never shift layout. Motion tokens only; reduced motion makes both instant. */
 .lang-menu__panel {
   position: absolute;
   top: calc(100% + var(--htb-space-2xs));
   right: 0;
   z-index: 50;
+  opacity: 0;
+  transform: translateY(calc(-1 * var(--htb-space-2xs)));
+  visibility: hidden;
+  transition:
+    opacity var(--htb-motion-duration-fast) var(--htb-motion-easing-standard),
+    transform var(--htb-motion-duration-fast) var(--htb-motion-easing-standard),
+    visibility var(--htb-motion-duration-fast) var(--htb-motion-easing-standard);
+}
+.lang-menu__panel[data-open="true"] {
+  opacity: 1;
+  transform: translateY(0);
+  visibility: visible;
+}
+.lang-menu__panel {
   min-width: 176px;
   margin: 0;
   padding: var(--htb-space-2xs);
@@ -437,51 +455,67 @@
   line-height: var(--htb-font-line-height-relaxed);
 }
 
-/* Local content-language override: a quiet text-tier toggle pinned to the card's top corner.
-   Deliberately lighter than the global language control and quieter than the SourceChip: no fill,
-   hairline divider, xs codes. Hidden entirely while the global language is the canonical locale. */
-.guidance-lang-toggle {
-  position: absolute;
-  top: var(--htb-space-sm);
-  inset-inline-end: var(--htb-space-sm);
+/* Local content-language override: ONE quiet single-tap binary toggle. Visible text is the full
+   native name of the language the guidance is CURRENTLY showing in; one activation flips
+   active-global ↔ canonical. Deliberately lighter than the global language control and quieter
+   than the SourceChip. Hidden entirely while the global language is the canonical locale. The
+   same control renders inside the Evidence Drawer, over the same shared state. */
+.content-lang-toggle {
+  appearance: none;
   display: inline-flex;
   align-items: center;
+  min-height: 26px;
+  padding: 0 var(--htb-space-sm);
   border: 1px solid var(--htb-border-subtle);
   border-radius: var(--htb-radius-pill);
   background: transparent;
-}
-.guidance-lang-toggle__option {
-  appearance: none;
-  border: 0;
-  background: transparent;
-  min-height: 26px;
-  padding: 0 var(--htb-space-xs);
-  border-radius: var(--htb-radius-pill);
   font: inherit;
   font-size: var(--htb-font-size-xs);
   font-weight: var(--htb-font-weight-medium);
-  letter-spacing: 0.04em;
+  letter-spacing: 0.02em;
   color: var(--htb-text-muted);
   cursor: pointer;
+  overflow: hidden;
+  transition: color var(--htb-motion-duration-fast) var(--htb-motion-easing-standard);
 }
 @media (pointer: coarse) {
-  .guidance-lang-toggle__option {
+  .content-lang-toggle {
     min-height: 34px;
   }
 }
-.guidance-lang-toggle__option:hover {
+.content-lang-toggle:hover {
   color: var(--htb-text-primary);
 }
-.guidance-lang-toggle__option[aria-pressed="true"] {
-  color: var(--htb-text-primary);
-  font-weight: var(--htb-font-weight-semibold);
-  background: var(--htb-interactive-subtle-hover);
-}
-.guidance-lang-toggle__option:focus-visible {
+.content-lang-toggle:focus-visible {
   outline: 2px solid var(--htb-focus-ring);
   outline-offset: 1px;
+}
+/* Subtle slide between the two states: the incoming native name slides up into place. Driven by
+   the motion tokens, so reduced motion collapses it to an instant swap. */
+.content-lang-toggle__label {
+  display: inline-block;
+  animation: htb-content-lang-swap var(--htb-motion-duration-fast) var(--htb-motion-easing-standard);
+}
+@keyframes htb-content-lang-swap {
+  from {
+    transform: translateY(40%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
 }
 /* The host card anchors the pinned toggle. */
 .guidance-card--localizable {
   position: relative;
+}
+.guidance-card__lang-toggle {
+  position: absolute;
+  top: var(--htb-space-sm);
+  inset-inline-end: var(--htb-space-sm);
+  display: inline-flex;
+}
+.guidance-card__lang-toggle:empty {
+  display: none;
 }

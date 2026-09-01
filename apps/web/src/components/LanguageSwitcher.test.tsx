@@ -29,4 +29,14 @@ describe("LanguageSwitcher", () => {
     expect(html.match(/aria-selected="true"/g)?.length).toBe(1);
     expect(html).toContain("lang-menu__option-check");
   });
+  it("keeps the popover mounted with open/closed state for enter AND exit motion (no layout jump)", () => {
+    // Closed: panel is in the markup but hidden via CSS visibility (data-open="false") so it can
+    // animate open with a slide-down + fade and closed with the reverse transition.
+    const closed = renderToStaticMarkup(<LanguageSwitcher />);
+    expect(closed).toContain('data-open="false"');
+    expect(closed).toContain('aria-expanded="false"');
+    const open = renderToStaticMarkup(<LanguageSwitcher initialOpen />);
+    expect(open).toContain('data-open="true"');
+    expect(open).toContain('aria-expanded="true"');
+  });
 });

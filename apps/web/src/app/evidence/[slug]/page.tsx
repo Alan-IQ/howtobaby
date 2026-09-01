@@ -1,20 +1,24 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 /**
  * Evidence detail route (docs/EVIDENCE_PROVENANCE.md §8, docs/GUI_DESIGN.md §11.5): a trust/audit
- * surface for one claim — its EN/VI text, classification, applicability, source relationships,
- * locators, review state and original-source links. It renders canonical data via the knowledge
- * read model and is never edited independently.
+ * surface for one claim — its canonical text in every registered locale, classification,
+ * applicability, source relationships, locators, review state and original-source links. It
+ * renders canonical data via the knowledge read model and is never edited independently.
+ *
+ * The page follows the ONE global language preference: the view model is prerendered for every
+ * registered locale (loadEvidenceDetailViews) and a client leaf picks the active one — no
+ * hard-coded `"en"` presentation. Canonical identifiers (claim id, domain id) stay verbatim.
  */
 
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
-import { Badge, Card, ReferenceList } from "@howtobaby/ui";
+import { SUPPORTED_LOCALES, type AppLocale } from "@howtobaby/i18n";
 
 import { PageShell } from "@/components/PageShell";
-import { GUIDANCE_CLASS_LABELS, UI_STRINGS, formatDate } from "@/features/evidence/labels";
+import { LocalizedEvidenceDetail } from "@/features/evidence/LocalizedEvidenceDetail";
+import { knowledgeRepository, loadEvidenceDetailViews } from "@/features/evidence/load";
 import { T } from "@/i18n/T";
-import { evidenceSourceViews, knowledgeRepository, referenceEntryForSource } from "@/features/evidence/load";
 
 interface Params {
   slug: string;
@@ -32,15 +36,6 @@ export async function generateMetadata({ params }: { params: Promise<Params> }):
   return { title: `Evidence: ${slug}` };
 }
 
-const REVIEW_STATUS_LABELS: Record<string, string> = {
-  draft: "Draft — not published guidance",
-  "source-verified": "Source-verified",
-  "clinical-review-required": "Awaiting clinical review",
-  "clinically-reviewed": "Clinically reviewed",
-  "release-approved": "Release-approved",
-  superseded: "Superseded",
-};
-
 export default async function Page({ params }: { params: Promise<Params> }) {
   const { slug } = await params;
   const repo = knowledgeRepository();
@@ -48,55 +43,22 @@ export default async function Page({ params }: { params: Promise<Params> }) {
   const evidence = entries.find((entry) => entry.publicSlug === slug);
   if (!evidence) notFound();
 
-  const [enText, viText, sources] = await Promise.all([
-    repo.getText("en", evidence.textKey),
-    repo.getText("vi", evidence.textKey),
-    evidenceSourceViews(evidence, "en"),
-  ]);
-  const impactSources = await Promise.all(evidence.sourceRefs.map((ref) => repo.getSource(ref.sourceId)));
-  const references = impactSources.filter((record) => record !== null).map((record) => referenceEntryForSource(record, "en"));
+  const views = await loadEvidenceDetailViews(evidence);
+  const texts = {} as Record<AppLocale, string | null>;
+  for (const { id } of SUPPORTED_LOCALES) texts[id] = await repo.getText(id, evidence.textKey);
 
   return (
     <PageShell
       eyebrow={<T id="page.evidence.eyebrow" />}
-      title={`Evidence: ${evidence.claimId}`}
+      title={
+        <>
+          <T id="page.evidence.eyebrow" />: {evidence.claimId}
+        </>
+      }
       lede={<T id="page.evidence.lede" />}
       printable
     >
-      <Card icon="document" title={<T id="page.evidence.claim.title" />} titleAs="h2">
-        <div className="prose">
-          <p>{enText}</p>
-          <p lang="vi" className="muted">{viText}</p>
-          <p>
-            <Badge>{GUIDANCE_CLASS_LABELS.en[evidence.guidanceClass as keyof (typeof GUIDANCE_CLASS_LABELS)["en"]] ?? evidence.guidanceClass}</Badge>{" "}
-            <Badge>{evidence.precisionClass}</Badge> <Badge status={evidence.safetyLevel as "info"}>{evidence.safetyLevel}</Badge>
-          </p>
-          <p className="muted">
-            {REVIEW_STATUS_LABELS[evidence.reviewStatus] ?? evidence.reviewStatus} · Reviewed {formatDate(evidence.reviewedAt, "en")} · Domain: {evidence.domain}
-          </p>
-        </div>
-      </Card>
-      <Card icon="globe" title={<T id="page.evidence.sources.title" />} titleAs="h2">
-        <div className="prose">
-          {sources.map((source, index) => {
-            const record = impactSources[index];
-            return (
-              <p key={source.sourceId}>
-                <strong>{source.organization}</strong> — {source.title}
-                <br />
-                {UI_STRINGS.en.metaRole}: {source.relationshipLabel} · {UI_STRINGS.en.metaStatus}: {source.statusLabel}
-                <br />
-                <span className="muted">
-                  {source.meta.map((entry) => `${entry.label}: ${entry.value}`).join(" · ")}
-                  {record?.updatedAt ? <> · Source updated {formatDate(record.updatedAt, "en")}</> : null}
-                </span>
-              </p>
-            );
-          })}
-          <p className="muted">{UI_STRINGS.en.disclaimer} HowToBaby summarizes and interprets; the original wording belongs to the source.</p>
-        </div>
-      </Card>
-      <ReferenceList title={<T id="page.evidence.original.title" />} entries={references} />
+      <LocalizedEvidenceDetail texts={texts} views={views} />
     </PageShell>
   );
 }

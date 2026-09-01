@@ -13,14 +13,20 @@ import type { ClaimEvidenceEntry, SourceRecord } from "@howtobaby/knowledge";
 import { GeneratedKnowledgeRepository } from "@howtobaby/knowledge/repository";
 import type { EvidenceMetaEntry, EvidenceSourceView, ReferenceEntry } from "@howtobaby/ui";
 
+import { SUPPORTED_LOCALES } from "@howtobaby/i18n";
+
 import {
   GUIDANCE_CLASS_LABELS,
+  PRECISION_CLASS_LABELS,
+  REVIEW_STATUS_LABELS,
+  SAFETY_LEVEL_LABELS,
   RELATIONSHIP_LABELS,
   RELATIONSHIP_WHY_LABELS,
   STATUS_LABELS,
   UI_STRINGS,
   formatDate,
   jurisdictionMeta,
+  sourceStatusTone,
   verifiedLabel,
   type UiLocale,
 } from "./labels";
@@ -76,7 +82,7 @@ export async function evidenceSourceViews(evidence: ClaimEvidenceEntry, locale: 
       title: source.title,
       relationshipLabel: RELATIONSHIP_LABELS[locale][ref.relationship],
       statusLabel: STATUS_LABELS[locale][source.status],
-      statusTone: source.status === "current" ? "calm" : "attention",
+      statusTone: sourceStatusTone(source.status),
       meta: sourceMetaRows(ref, source, locale),
       whyLabel: UI_STRINGS[locale].metaWhy,
       whyText: RELATIONSHIP_WHY_LABELS[locale][ref.relationship],
@@ -157,6 +163,74 @@ export async function loadReferenceEntries(route: string, locale: UiLocale): Pro
     entries.push(referenceEntryForSource(source, locale));
   }
   return entries;
+}
+
+/* ---------- Evidence detail (localized per registered locale) ---------- */
+
+/** One supporting-source line on the evidence detail page, fully localized. */
+export interface EvidenceDetailSourceView {
+  sourceId: string;
+  organization: string;
+  /** Exact original source title — never translated. */
+  title: string;
+  /** "Role in this guidance: … · Source status: …". */
+  roleStatusLine: string;
+  /** Joined labeled metadata rows ("Relevant section: … · Applies to: … · Last verified …"). */
+  metaLine: string;
+  /** "Source updated <date>", when the source records an update date. */
+  sourceUpdatedText?: string;
+}
+
+/** The evidence detail trust surface for one claim, localized for one registered locale. */
+export interface EvidenceDetailView {
+  locale: UiLocale;
+  classLabel: string;
+  precisionLabel: string;
+  safetyLabel: string;
+  safetyLevel: string;
+  /** "<review status> · Reviewed <date> · Domain: <canonical id>". */
+  reviewLine: string;
+  sources: EvidenceDetailSourceView[];
+  /** No-endorsement disclaimer plus the original-wording note. */
+  disclaimerLine: string;
+  references: ReferenceEntry[];
+}
+
+/**
+ * Build the evidence detail view for EVERY registered locale from one claim's provenance —
+ * the page then follows the global language with no hard-coded `"en"` presentation anywhere.
+ * Canonical identifiers (claim id, domain id) stay verbatim; their labels localize.
+ */
+export async function loadEvidenceDetailViews(evidence: ClaimEvidenceEntry): Promise<Record<UiLocale, EvidenceDetailView>> {
+  const repo = knowledgeRepository();
+  const records = await Promise.all(evidence.sourceRefs.map((ref) => repo.getSource(ref.sourceId)));
+  const views = {} as Record<UiLocale, EvidenceDetailView>;
+  for (const { id: locale } of SUPPORTED_LOCALES) {
+    const strings = UI_STRINGS[locale];
+    const sources = await evidenceSourceViews(evidence, locale);
+    views[locale] = {
+      locale,
+      classLabel: GUIDANCE_CLASS_LABELS[locale][evidence.guidanceClass as keyof (typeof GUIDANCE_CLASS_LABELS)["en"]] ?? evidence.guidanceClass,
+      precisionLabel: PRECISION_CLASS_LABELS[locale][evidence.precisionClass] ?? evidence.precisionClass,
+      safetyLabel: SAFETY_LEVEL_LABELS[locale][evidence.safetyLevel] ?? evidence.safetyLevel,
+      safetyLevel: evidence.safetyLevel,
+      reviewLine: `${REVIEW_STATUS_LABELS[locale][evidence.reviewStatus] ?? evidence.reviewStatus} · ${strings.reviewedOn} ${formatDate(evidence.reviewedAt, locale)} · ${strings.domainLabel}: ${evidence.domain}`,
+      sources: sources.map((source, index) => {
+        const record = records[index];
+        return {
+          sourceId: source.sourceId,
+          organization: source.organization,
+          title: source.title,
+          roleStatusLine: `${strings.metaRole}: ${source.relationshipLabel} · ${strings.metaStatus}: ${source.statusLabel}`,
+          metaLine: source.meta.map((entry) => `${entry.label}: ${entry.value}`).join(" · "),
+          ...(record?.updatedAt ? { sourceUpdatedText: `${strings.sourceUpdated} ${formatDate(record.updatedAt, locale)}` } : {}),
+        };
+      }),
+      disclaimerLine: `${strings.disclaimer} ${strings.wordingNote}`,
+      references: records.filter((record) => record !== null).map((record) => referenceEntryForSource(record, locale)),
+    };
+  }
+  return views;
 }
 
 export type { SourceRecord };

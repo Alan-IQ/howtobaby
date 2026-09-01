@@ -10,7 +10,7 @@ Calm, modern, warm, trustworthy; dễ scan trên mobile; professional hơn paren
 
 **Now · Feeding · Play & Development · Sleep · Safety · Tools**.
 
-Label điều hướng giữ ngắn gọn: **Play & Development** hiển thị là **Play** (VI: **Chơi**) trong top/bottom navigation; page title của destination vẫn giữ tên đầy đủ. Mọi label điều hướng resolve từ app message dictionary theo ngôn ngữ đang active, không dùng config điều hướng riêng theo locale.
+Label điều hướng giữ ngắn gọn: **Play & Development** hiển thị là **Play** (VI: **Chơi**) CHỈ trong top/bottom navigation. Ở mọi nơi destination xuất hiện như nội dung — page title, destination card trên Now/Home, display name — dùng tên miền đầy đủ (**Play & Development** / **Chơi & Phát triển**). Hai loại này là hai key dictionary tách biệt theo contract (`nav.<domain>.label` vs `domain.<domain>.title`); không bao giờ tái sử dụng navigation label làm display title của domain. Tất cả resolve từ app message dictionary theo ngôn ngữ đang active, không dùng config điều hướng riêng theo locale.
 
 Sources/Methodology/Editorial/Disclaimer/Changelog là trust destinations global.
 
@@ -18,7 +18,9 @@ Sources/Methodology/Editorial/Disclaimer/Changelog là trust destinations global
 
 Một global language preference điều khiển toàn bộ site chrome/page copy. Control ở header là công tắc global duy nhất: một trigger gọn (icon globe phía trên, mã locale đang active phía dưới) mở popover accessible liệt kê mọi locale từ supported-locale registry (`@howtobaby/i18n`) — không hard-code cặp locale nào, thêm locale mới là menu tự có thêm; ngôn ngữ active được đánh dấu bằng selection state + check, không chỉ bằng màu; đặt sau theme control, ngoài cùng bên phải; `<html lang>` luôn theo global language.
 
-Guidance card mặc định theo global language. Khi global language khác canonical locale, card có thêm một LOCAL toggle nhẹ `locale đang active ↔ canonical` chỉ đổi canonical guidance content của card đó và Evidence Drawer của nó — không đổi global preference; ẩn hoàn toàn khi global là canonical; đổi global language sẽ reset/sync mọi local override; content hiển thị khác `<html lang>` phải mang `lang` attribute chính xác. Bản đầy đủ: `GUI_DESIGN.md` §6, §11.9.
+Mọi trang user-facing đang ship đều theo global language — bao gồm cả các trang trust/legal (`/sources`, `/methodology`, `/editorial-policy`, `/disclaimer`, `/privacy`, `/license`, `/changelog`), evidence detail và not-found/error UI; không còn ngoại lệ trang English-only. Không dịch: tiêu đề gốc chính xác của source, tên tổ chức/tên riêng, URL, license identifier như `AGPL-3.0-only`/`CC BY-NC-SA 4.0`, và canonical identifier/ID — nhãn và ngữ cảnh xung quanh vẫn theo locale. Trình bày dữ liệu evidence đi qua presenter/view-model generic theo registry cho mọi locale — không trang nào hard-code trình bày tiếng Anh. Document metadata (`<title>`) giữ canonical prerender locale cho tới khi có locale-prefixed route (Phase 3).
+
+Guidance card mặc định theo global language. Khi global language khác canonical locale, card có thêm một LOCAL control nhẹ — MỘT nút toggle nhị phân duy nhất: một lần chạm/click là đổi canonical content của surface đó giữa `locale đang active ↔ canonical` (không phải chọn một trong hai nút); visible text luôn là tên bản địa đầy đủ của ngôn ngữ ĐANG HIỂN THỊ (`Tiếng Việt`, `English`, sau này ví dụ `Español`) — không dùng mã `EN`/`VI` — kèm `lang` attribute đúng. Card và Evidence Drawer render CÙNG control này trên MỘT state chung: đổi ở card thì drawer đổi theo và ngược lại. Local switch không đổi global preference; đổi global language reset/sync mọi local override; ẩn hoàn toàn khi global là canonical; content khác `<html lang>` phải mang `lang` chính xác. Bản đầy đủ: `GUI_DESIGN.md` §6, §11.9.
 
 ## Theme engine
 
@@ -71,6 +73,10 @@ Hiển thị rõ Official/Evidence synthesis/Typical/Example/Practical/Product h
 
 Letter/A4; print profile riêng, không cố in nguyên glass UI; bỏ controls, giữ hierarchy, tránh gradient bị cắt, source phù hợp bản in.
 
+## Motion
+
+Control có state trượt thay vì đổi tức thời, trong một hệ motion điềm tĩnh: segmented control (theme mode) dùng MỘT selection pill chung trượt giữa các option; bottom/desktop navigation dùng MỘT active indicator chung trượt sang item mới (state tĩnh qua aria-current/tint vẫn là fallback prerender/no-JS); local guidance-language toggle có slide nhẹ khi đổi nhãn; global language popover mở bằng slide-down + fade ngắn, đóng bằng transition ngược, absolutely positioned nên không layout jump. Toàn bộ dùng semantic motion duration/easing token (~120–200 ms, không bounce); keyboard/focus không phụ thuộc animation; `prefers-reduced-motion: reduce` và reduced-motion preference của project đưa token về 0 ms — mọi transition thành gần tức thời. Chi tiết: `GUI_DESIGN.md` §6 Motion.
+
 ## Accessibility
 
 Keyboard, focus, contrast, reduced motion/transparency, no color-only semantics, audio controls có accessible labels.
@@ -86,7 +92,7 @@ Citation nên có ba lớp:
 
 Hỗ trợ `/evidence/<slug>` để xem claim + source + history và `/sources` để browse registry. Đây là read model từ canonical data, không author content lần hai.
 
-External evidence link phải rõ là source gốc, không affiliate tracking. Nếu source vừa thay đổi có thể hiện `Reviewing an update`; không biến trạng thái này thành alert nguy hiểm nếu nội dung không phải emergency.
+External evidence link phải rõ là source gốc, không affiliate tracking. Nếu source vừa thay đổi có thể hiện `Reviewing an update`; không biến trạng thái này thành alert nguy hiểm nếu nội dung không phải emergency. Status trên `/sources` dùng cùng tone mapping với Evidence Drawer: `current` = badge trung tính/điềm tĩnh; `changed-review-required` = caution nhẹ; superseded/retired/unreachable theo cùng cách xử lý non-current.
 
 Print cũng lấy References từ cùng provenance graph và nên mang content version/verification context.
 

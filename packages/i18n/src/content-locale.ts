@@ -33,6 +33,20 @@ export function contentLocaleToggleOptions(globalLocale: string, canonicalLocale
   return globalLocale === canonicalLocale ? undefined : [globalLocale, canonicalLocale];
 }
 
+/**
+ * The locale a single activation of the local toggle switches the surface TO: the canonical
+ * locale while the surface shows the active global locale, and the active global locale while
+ * the surface shows the canonical one. One tap always flips between exactly those two — the
+ * toggle is binary, never a pick-one-of-N control. Only meaningful while the global locale is
+ * non-canonical (while it IS canonical the toggle must not render; this returns undefined).
+ */
+export function toggleContentLocale(globalLocale: AppLocale, contentLocale: AppLocale): AppLocale | undefined;
+export function toggleContentLocale<L extends string>(globalLocale: L, contentLocale: L, canonicalLocale: L): L | undefined;
+export function toggleContentLocale(globalLocale: string, contentLocale: string, canonicalLocale: string = CANONICAL_LOCALE): string | undefined {
+  if (globalLocale === canonicalLocale) return undefined;
+  return contentLocale === canonicalLocale ? globalLocale : canonicalLocale;
+}
+
 /** Create an override for the current global locale. */
 export function contentLocaleOverride<L extends string>(globalLocale: L, locale: L): ContentLocaleOverride<L> {
   return { base: globalLocale, locale };

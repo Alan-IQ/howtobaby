@@ -11,11 +11,10 @@ export const metadata: Metadata = { title: "Tools" };
 export default function Page() {
   return (
     <PageShell
-      eyebrow={<T id="page.tools.title" />}
+      eyebrow={<T id="domain.tools.title" />}
       icon="tools"
       accent="tools"
-      title={<T id="page.tools.title" />}
-      printTitle="Tools"
+      title={<T id="domain.tools.title" />}
       lede={<T id="page.tools.lede" />}
     >
       <Card icon="tools" title={<T id="section.placeholder.title" />} titleAs="h2">

@@ -4,18 +4,39 @@ import type { Metadata } from "next";
 import { Card } from "@howtobaby/ui";
 
 import { PageShell } from "@/components/PageShell";
+import { T } from "@/i18n/T";
 import { SITE } from "@/site";
 
 export const metadata: Metadata = { title: "License" };
 
+// License identifiers (AGPL-3.0-only, CC BY-NC-SA 4.0) stay verbatim inside the localized copy.
 export default function Page() {
   return (
-    <PageShell eyebrow="Trust" title="License" lede="Software, content and brand are licensed separately." printable>
+    <PageShell eyebrow={<T id="trust.eyebrow" />} title={<T id="trust.license.label" />} lede={<T id="page.license.lede" />} printable>
       <Card tone="2">
         <div className="prose">
-          <p><strong>Software</strong> is licensed under AGPL-3.0-only. <strong>Original HowToBaby knowledge, documentation and translations</strong> are licensed under CC BY-NC-SA 4.0 where the project holds the rights.</p>
-          <p>Cited guidance from public-health authorities remains under its original rights — provenance is not relicensing. The {SITE.name} name and logo are not covered by either license.</p>
-          <p><a href={SITE.licenseUrl} rel="noopener">Read the full license map</a> · <a href={SITE.sourceCodeUrl} rel="noopener">Source code</a></p>
+          <p>
+            <strong>
+              <T id="license.software.term" />
+            </strong>{" "}
+            <T id="license.software.rest" />{" "}
+            <strong>
+              <T id="license.content.term" />
+            </strong>{" "}
+            <T id="license.content.rest" />
+          </p>
+          <p>
+            <T id="license.p2" />
+          </p>
+          <p>
+            <a href={SITE.licenseUrl} rel="noopener">
+              <T id="license.readMap" />
+            </a>{" "}
+            ·{" "}
+            <a href={SITE.sourceCodeUrl} rel="noopener">
+              <T id="license.sourceCode" />
+            </a>
+          </p>
         </div>
       </Card>
     </PageShell>

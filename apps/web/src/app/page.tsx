@@ -31,10 +31,10 @@ export default function NowPage() {
       icon="home"
       accent="brand"
       title={<T id="page.home.title" />}
-      printTitle={SITE.tagline}
       lede={<T id="page.home.lede" />}
     >
       <div className="card-grid card-grid--3">
+        {/* Destination cards use the FULL domain display title (titleKey) — never the short nav label. */}
         {PRIMARY_NAV.filter((item) => item.href !== "/").map((item) => {
           const blurbKey = DESTINATION_BLURB_KEYS[item.href];
           return (
@@ -46,7 +46,7 @@ export default function NowPage() {
                 title={
                   <span style={{ display: "inline-flex", alignItems: "center", gap: "var(--htb-space-xs)" }}>
                     <Icon name={item.icon} />
-                    <T id={item.labelKey} />
+                    <T id={item.titleKey} />
                   </span>
                 }
               >

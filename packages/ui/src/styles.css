@@ -585,6 +585,33 @@ select {
   color: var(--htb-text-primary);
   box-shadow: var(--htb-shadow-1);
 }
+/* Sliding selection (hydrated): ONE shared raised pill slides between options. The static
+   per-option fill above keeps identical geometry as the prerender/no-JS fallback, and is
+   switched off while the sliding indicator owns the selection. Motion tokens only — reduced
+   motion collapses the slide to an instant move. */
+.htb-segmented {
+  position: relative;
+}
+.htb-segmented__option {
+  position: relative; /* paints above the sliding indicator */
+  transition: color var(--htb-motion-duration-fast) var(--htb-motion-easing-standard);
+}
+.htb-segmented__indicator {
+  position: absolute;
+  left: 0;
+  top: 0;
+  border-radius: var(--htb-radius-pill);
+  background: var(--htb-surface-1);
+  box-shadow: var(--htb-shadow-1);
+  transition:
+    transform var(--htb-motion-duration-base) var(--htb-motion-easing-standard),
+    width var(--htb-motion-duration-base) var(--htb-motion-easing-standard),
+    height var(--htb-motion-duration-base) var(--htb-motion-easing-standard);
+}
+.htb-segmented[data-slide="true"] .htb-segmented__option[aria-checked="true"] {
+  background: transparent;
+  box-shadow: none;
+}
 
 /* ---------- Navigation ---------- */
 .htb-nav {
@@ -595,6 +622,7 @@ select {
   list-style: none;
 }
 .htb-nav__link {
+  position: relative; /* paints above the shared sliding indicator */
   display: inline-flex;
   align-items: center;
   gap: var(--htb-space-xs);
@@ -631,6 +659,66 @@ select {
 }
 .htb-nav__link[data-accent="tools"][aria-current="page"] {
   color: var(--htb-accent-tools);
+}
+
+/* Shared sliding active indicator (hydrated): ONE element slides between items on route change —
+   the desktop row's soft active pill and the tab bar's short centred accent underline are that
+   indicator. The static per-link styling in this file keeps identical geometry as the
+   prerender/no-JS fallback; the active link itself always keeps aria-current, its tint and its
+   heavier icon/label, so state never depends on the animation. Motion tokens only. */
+nav[data-layout] {
+  position: relative;
+}
+.htb-nav__indicator {
+  position: absolute;
+  left: 0;
+  top: 0;
+  pointer-events: none;
+  transition:
+    transform var(--htb-motion-duration-base) var(--htb-motion-easing-standard),
+    width var(--htb-motion-duration-base) var(--htb-motion-easing-standard),
+    height var(--htb-motion-duration-base) var(--htb-motion-easing-standard),
+    color var(--htb-motion-duration-base) var(--htb-motion-easing-standard),
+    background-color var(--htb-motion-duration-base) var(--htb-motion-easing-standard);
+}
+nav[data-layout="horizontal"] .htb-nav__indicator {
+  border-radius: var(--htb-radius-pill);
+  background: var(--htb-interactive-subtle-hover);
+}
+nav[data-layout="horizontal"][data-slide="true"] .htb-nav__link[aria-current="page"] {
+  background: transparent;
+}
+nav[data-layout="tabs"] .htb-nav__indicator {
+  color: var(--htb-text-primary);
+}
+nav[data-layout="tabs"] .htb-nav__indicator::after {
+  content: "";
+  position: absolute;
+  bottom: 3px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 16px;
+  height: 3px;
+  border-radius: var(--htb-radius-pill);
+  background: currentColor;
+}
+nav[data-layout="tabs"] .htb-nav__indicator[data-accent="feeding"] {
+  color: var(--htb-accent-feeding);
+}
+nav[data-layout="tabs"] .htb-nav__indicator[data-accent="play"] {
+  color: var(--htb-accent-play);
+}
+nav[data-layout="tabs"] .htb-nav__indicator[data-accent="sleep"] {
+  color: var(--htb-accent-sleep);
+}
+nav[data-layout="tabs"] .htb-nav__indicator[data-accent="safety"] {
+  color: var(--htb-accent-safety);
+}
+nav[data-layout="tabs"] .htb-nav__indicator[data-accent="tools"] {
+  color: var(--htb-accent-tools);
+}
+nav[data-layout="tabs"][data-slide="true"] .htb-nav__link[aria-current="page"]::after {
+  display: none;
 }
 
 /* Compact bottom-tab layout (mobile/tablet): equal columns, centred, calm active pill. */
@@ -772,6 +860,7 @@ select {
   .htb-switch,
   .htb-segmented,
   .htb-nav,
+  .htb-nav__indicator,
   .htb-dialog,
   .htb-drawer,
   .htb-print-hidden {
@@ -994,6 +1083,13 @@ button.htb-source-chip:focus-visible {
   color: var(--htb-text-muted);
 }
 
+.htb-evidence-drawer__lang {
+  display: flex;
+  justify-content: flex-end;
+}
+.htb-evidence-drawer__lang:empty {
+  display: none;
+}
 .htb-evidence-drawer__attribution {
   margin: 0 0 var(--htb-space-md);
   font-size: var(--htb-font-size-sm);
