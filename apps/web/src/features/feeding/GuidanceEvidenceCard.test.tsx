@@ -33,7 +33,7 @@ function block(locale: "en" | "vi"): GuidanceBlockView {
             organization: "CDC",
             title: "When, What, and How to Introduce Solid Foods",
             relationshipLabel: locale === "vi" ? "Nguồn chính" : "Primary source",
-            statusLabel: locale === "vi" ? "Hiện hành" : "Current",
+            statusLabel: locale === "vi" ? "Phiên bản hiện hành" : "Current version",
             statusTone: "calm",
             meta: [],
             whyLabel: UI_STRINGS[locale].metaWhy,

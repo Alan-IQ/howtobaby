@@ -78,14 +78,14 @@ export const RELATIONSHIP_WHY_LABELS: Record<UiLocale, Record<SourceRelationship
 /** Public freshness/status signals (EVIDENCE_PROVENANCE.md §14) — including an explicit "Current". */
 export const STATUS_LABELS: Record<UiLocale, Record<SourceStatus, string>> = {
   en: {
-    current: "Current",
+    current: "Current version",
     "changed-review-required": "Reviewing an update",
     superseded: "Superseded",
     retired: "Retired",
     "temporarily-unreachable": "Source temporarily unavailable",
   },
   vi: {
-    current: "Hiện hành",
+    current: "Phiên bản hiện hành",
     "changed-review-required": "Đang rà soát bản cập nhật",
     superseded: "Đã được thay thế",
     retired: "Đã ngừng sử dụng",

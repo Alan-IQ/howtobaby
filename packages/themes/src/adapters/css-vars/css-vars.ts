@@ -102,6 +102,8 @@ export function themeToCss(definition: ThemeDefinition): string {
       [colorTokenVar("surface.glass.solid"), p.canvas],
       [colorTokenVar("surface.glass.border"), p.border],
       [colorTokenVar("surface.glass.highlight"), "transparent"],
+      [colorTokenVar("surface.glass.glow"), "transparent"],
+      [colorTokenVar("surface.glass.seam"), "transparent"],
       [colorTokenVar("text.primary"), p.text],
       [colorTokenVar("text.secondary"), p.textSecondary],
       [colorTokenVar("text.muted"), p.textSecondary],

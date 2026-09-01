@@ -38,6 +38,8 @@ function mapPalette(p: VendorPalette, mode: "light" | "dark"): ColorTokens {
     "surface.glass.solid": p.card,
     "surface.glass.border": p.line,
     "surface.glass.highlight": withAlpha(p.card, mode === "light" ? 0.6 : 0.05),
+    "surface.glass.glow": mode === "light" ? withAlpha(p.card, 0.6) : withAlpha(p.ink, 0.25),
+    "surface.glass.seam": mode === "light" ? p.line : p.lineBold,
 
     "text.primary": p.ink,
     "text.secondary": p.inkSoft,

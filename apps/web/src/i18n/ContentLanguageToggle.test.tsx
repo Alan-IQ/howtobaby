@@ -46,4 +46,19 @@ describe("ContentLanguageToggle", () => {
     const html = markup({ globalLocale: "vi", contentLocale: "vi", label: "x", onToggle: () => {} });
     expect(html.match(/<button/g)?.length).toBe(1);
   });
+
+  it("slider anatomy: both full native names visible, ONE persistent thumb on the displayed one", () => {
+    const html = markup({ globalLocale: "vi", contentLocale: "vi", label: "x", onToggle: () => {} });
+    // Both names visible (active global locale first, canonical second), never as two buttons.
+    expect(html.indexOf("Tiếng Việt")).toBeGreaterThan(-1);
+    expect(html.indexOf("English")).toBeGreaterThan(html.indexOf("Tiếng Việt"));
+    expect(html.match(/content-lang-toggle__thumb/g)?.length).toBe(1);
+    // The thumb rests on the DISPLAYED language via the index custom property…
+    expect(html).toContain("--htb-toggle-index:0");
+    expect(html).toMatch(/data-displayed="true"[^>]*lang="vi"/);
+    // …and slides to the canonical side when the surface is flipped.
+    const flipped = markup({ globalLocale: "vi", contentLocale: "en", label: "x", onToggle: () => {} });
+    expect(flipped).toContain("--htb-toggle-index:1");
+    expect(flipped).toMatch(/data-displayed="true"[^>]*lang="en"/);
+  });
 });

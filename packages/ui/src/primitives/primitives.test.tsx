@@ -109,25 +109,56 @@ describe("Tabs / Tooltip / Popover", () => {
 });
 
 describe("sliding selection (motion state semantics)", () => {
-  it("Segmented prerenders WITHOUT the sliding indicator: static aria-checked styling carries state", () => {
+  it("Segmented always mounts ONE indicator; static aria-checked styling carries state pre-hydration", () => {
     const html = renderToStaticMarkup(
       <Segmented name="m" legend="Mode" value="a" options={[{ value: "a", label: "A" }, { value: "b", label: "B" }]} onChange={() => {}} />,
     );
     // State never depends on the animation: aria-checked is present pre-hydration…
     expect(html).toContain('aria-checked="true"');
-    // …and the sliding indicator only appears after client-side measurement.
-    expect(html).not.toContain("htb-segmented__indicator");
+    // …and exactly ONE persistent indicator element exists from the first render on (hidden via
+    // opacity until the hook positions it — it is repositioned, never remounted).
+    expect(html.match(/htb-segmented__indicator/g)).toHaveLength(1);
     expect(html).not.toContain('data-slide');
+    expect(html).not.toContain('data-visible');
   });
 
-  it("Navigation prerenders WITHOUT the sliding indicator: aria-current carries state", () => {
+  it("tab-bar Navigation positions its persistent CSS indicator from the active index at render time", () => {
+    const items = [
+      { href: "/", label: "Now" },
+      { href: "/feeding", label: "Feeding", accent: "feeding" as const },
+      { href: "/play", label: "Play", accent: "play" as const },
+    ];
+    const html = renderToStaticMarkup(<Navigation items={items} currentHref="/feeding" label="Primary" layout="tabs" />);
+    expect(html).toContain('aria-current="page"');
+    // The indicator is the bar's ::after pseudo-element driven by custom properties present in
+    // the prerendered HTML — no measured span, no hydration dependency, nothing to remount.
+    expect(html).not.toContain("htb-nav__indicator");
+    expect(html).toContain("--htb-nav-count:3");
+    expect(html).toContain("--htb-nav-index:1");
+    expect(html).toContain('data-active="true"');
+    expect(html).toContain('data-active-accent="feeding"');
+  });
+
+  it("tab-bar Navigation keeps the indicator mounted but inactive on routes outside the bar", () => {
     const items = [
       { href: "/", label: "Now" },
       { href: "/feeding", label: "Feeding", accent: "feeding" as const },
     ];
-    const html = renderToStaticMarkup(<Navigation items={items} currentHref="/feeding" label="Primary" layout="tabs" />);
+    const html = renderToStaticMarkup(<Navigation items={items} currentHref="/privacy" label="Primary" layout="tabs" />);
+    expect(html).not.toContain('aria-current="page"');
+    // data-active="false" fades the indicator out in place — it is never removed.
+    expect(html).toContain('data-active="false"');
+    expect(html).toContain("--htb-nav-count:2");
+  });
+
+  it("desktop Navigation always mounts ONE measured indicator; aria-current carries state", () => {
+    const items = [
+      { href: "/", label: "Now" },
+      { href: "/feeding", label: "Feeding", accent: "feeding" as const },
+    ];
+    const html = renderToStaticMarkup(<Navigation items={items} currentHref="/feeding" label="Primary" layout="horizontal" />);
     expect(html).toContain('aria-current="page"');
-    expect(html).not.toContain("htb-nav__indicator");
-    expect(html).toContain('data-layout="tabs"');
+    expect(html.match(/htb-nav__indicator/g)).toHaveLength(1);
+    expect(html).not.toContain('data-slide');
   });
 });

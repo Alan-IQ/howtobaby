@@ -100,6 +100,10 @@ Light mode should feel luminous, not washed out.
 
 ### 4.3 Dark mode
 
+Dark panels keep the same "glass with a defined rim" read as light mode: a thin, restrained
+light edge (glass border + subtle inset top highlight) so cards and evidence panels never look
+flat — never a bright or heavy outline.
+
 Dark mode should remain baby-modern rather than becoming generic black SaaS.
 
 - deep cool-neutral/tinted canvas;
@@ -182,13 +186,26 @@ Desktop: horizontal navigation.
 
 Mobile: compact sticky navigation, segmented tabs, or bottom/scroll-aware pattern as validated by usability. No horizontal page overflow.
 
-The active bottom-navigation item combines a soft domain-accent tint, heavier icon/label, and a
-short centred underline in the domain accent — state is never carried by colour alone, and the
-indicator must not add height or break the bar's equal-column alignment. The underline is ONE
-shared indicator that slides between the equal-width items on route change; the desktop row's
-soft active pill is likewise a shared indicator that slides between items. Both follow the
-Motion contract below, and the statically styled active link (aria-current, tint, weight)
-remains the prerender/no-JS state, so navigation state never depends on the animation.
+The active bottom-navigation item combines a lit-glass pill — a translucent film with a
+hairline DOUBLE rim from the dedicated token pair `surface.glass.glow` (inner 1px) and
+`surface.glass.seam` (outer 1px), whose brightness INVERTS between modes: in light the inner
+ring glares (equal to the glass highlight) over a darker outer seam; in dark the outer seam is
+the thin luminous line and the inner ring recedes darker — glass catching light from outside.
+Both rings stay 1px: delicate, never a thick bright border — heavier
+icon/label in the domain accent, and a short centred underline
+in the domain accent — state is never carried by colour alone, and the indicator must not add
+height or break the bar's equal-column alignment. The desktop row's active pill wears the same
+frosted-glass treatment. The glass pill and the underline are painted by ONE persistent active
+indicator that slides between the equal-width
+items on route change; the desktop row's soft active pill is likewise a persistent shared
+indicator. Indicators are PERSISTENT by contract: they exist from the prerendered HTML on (the
+tab bar's is positioned purely from the active index — no measurement, no hydration dependency),
+are only ever repositioned — never unmounted or remounted on a route change — and on a route
+outside the navigation they fade out in place, keeping their last position and accent so
+returning slides in from where they left. The underline may never mount-and-vanish, and
+icons/labels may not flash on a route change. Both follow the Motion contract below, and
+`aria-current` plus the active link's own colour/weight remain the state carrier, so navigation
+state never depends on the animation.
 
 ### Motion
 
@@ -202,6 +219,12 @@ calm system:
 - the local guidance-language toggle swaps its label with a subtle slide;
 - the global language popover opens with a short slide-down + fade and closes with the reverse
   transition, absolutely positioned so open/close never shifts layout.
+
+Sliding indicators are persistent single elements: they never remount when the selection
+changes (remounting is what causes flicker), they animate with transform/opacity rather than
+layout-affecting properties wherever possible, they fade out in place when nothing is selected,
+and repositioning for a non-selection reason (hydration hand-over, resize, font load) is applied
+WITHOUT animation so the indicator never visibly jumps.
 
 All motion uses the semantic motion duration/easing tokens (fast/base ≈ 120–200 ms, standard
 easing; no bounce or exaggerated animation). Keyboard operability, focus behavior and visible
@@ -233,6 +256,13 @@ Source
 ```
 
 ## 8. Domain pages
+
+Every page — domain and trust/legal alike — renders through ONE shared page-shell/container
+contract: the same content max-width, the same horizontal padding per breakpoint, the same
+vertical spacing rhythm and the same header/body alignment. The page-shell toolbar row reserves
+a constant height whether or not a print action renders, so titles start at the same y on every
+page. No page may ship its own diverging container or spacing system without a documented
+reason.
 
 Common page anatomy:
 
@@ -303,6 +333,12 @@ Visible compact content-class labels:
 These labels describe **what kind of statement this is**. They are not substitutes for source provenance.
 
 ### 11.2 Inline SourceChip
+
+The chip is a quiet hairline pill: transparent fill, subtle border, and on hover a soft tint
+with a stronger border. The engraved feel lives in the TYPE, not the box — a hairline of the
+theme's glass highlight under the ink letterpresses the text into the glass, in light AND dark
+(the dark highlight token is tuned to stay just visible). Never an inset well or engraved
+border, and clearly lighter than any button-tier control.
 
 Health/safety cards/claims with provenance should expose a compact source affordance, for example:
 
@@ -376,10 +412,16 @@ treatment — honest, never alarmist (see §11.8).
 
 ### 11.8 Freshness signals
 
-Keep public states calm and understandable:
+Keep public states calm and understandable, and name them unambiguously — the healthy state is
+a version statement, not a bare adjective:
 
 - `Verified Aug 26, 2026`
+- `Current version` / VI `Phiên bản hiện hành` (never a bare `Current`)
 - `Reviewing an update`
+
+The same status vocabulary (features/evidence STATUS_LABELS) is the ONE source for every surface
+that shows a source status — the /sources registry, the Evidence Drawer badges, evidence detail
+rows — so wording can never drift between surfaces.
 
 A changed source should not visually imply immediate danger unless the claim's safety level independently warrants that treatment.
 
@@ -391,9 +433,19 @@ button, not a pair of options:
 
 - one tap/click flips that surface's canonical content between the active global locale and the
   canonical locale; the user never has to choose one of two buttons;
-- the visible text is always the full native name of the language the content is CURRENTLY
-  displayed in (`Tiếng Việt`, `English`, later e.g. `Español`) — never a short code such as
-  `EN`/`VI` — and carries that language's `lang` attribute;
+- its track wears a whisper-weight version of the header controls' glass (a faint film of the
+  glass surface, a softened hairline ring, a bare inset highlight — the toggle sits ON a card,
+  so it must never carry an opaque fill or a strong border that pops it off its own
+  background), in the card and in the Evidence Drawer alike;
+- placement: on wide/desktop layouts it sits IN FLOW directly under the card title
+  (left-aligned pill row); on mobile (tab-bar widths) it pins to the card's top-right corner
+  beside the eyebrow; in the Evidence Drawer it sits in the header area;
+- it is styled as a compact slider pill: BOTH full native names stay visible (`Tiếng Việt`,
+  `English`, later e.g. `Español`) — never short codes such as `EN`/`VI` — each carrying its own
+  `lang` attribute, with one persistent raised thumb resting on the language the content is
+  CURRENTLY displayed in. Despite the slider look it remains ONE button: a tap anywhere flips
+  the state and the thumb slides across; the accessible name stays
+  `<control label>: <displayed native name>`;
 - it is hidden entirely while the global language IS the canonical locale;
 - the card and its Evidence Drawer render the SAME control over ONE shared content-locale
   state: switching in the card updates the drawer and switching in the drawer updates the card,
@@ -401,8 +453,7 @@ button, not a pair of options:
 - the local switch never touches the global preference; a global language change resets/syncs
   every local override to the new global locale;
 - content rendered in a locale other than `<html lang>` carries an explicit `lang` attribute;
-- the label swap animates with a subtle token-driven slide (see §6 Motion; reduced motion makes
-  it instant);
+- the thumb slide is the state-change motion (see §6 Motion; reduced motion makes it instant);
 - the toggle is visually lighter than the global language control and must not compete with the
   SourceChip;
 - the semantics are generic `canonical ↔ active locale` (owned by `@howtobaby/i18n`,

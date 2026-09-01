@@ -54,7 +54,7 @@ describe("/sources registry presenter", () => {
 
   it("renders Vietnamese presentation under vi — not the English fallback", () => {
     const view = sourceRegistryEntryView(ENTRY, "vi");
-    expect(view.statusLabel).toBe("Hiện hành");
+    expect(view.statusLabel).toBe("Phiên bản hiện hành");
     expect(view.metaLine).toContain("Hoa Kỳ");
     expect(view.metaLine).toContain("26/08/2026");
     expect(view.metaLine).not.toContain("United States");

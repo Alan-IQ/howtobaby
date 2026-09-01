@@ -3,7 +3,7 @@
 
 import type { ReactNode } from "react";
 
-import { slidingIndicatorStyle, useSlidingSelection } from "./useSlidingSelection.ts";
+import { useSlidingIndicator } from "./useSlidingSelection.ts";
 
 export interface SegmentedOption<T extends string> {
   value: T;
@@ -24,22 +24,19 @@ export interface SegmentedProps<T extends string> {
 
 /**
  * Radio-group semantics rendered as a pill segmented control. Selection is shown by ONE shared
- * raised pill that slides between options (motion tokens; reduced motion collapses it to an
- * instant move). Before hydration the same pill is painted statically on the checked option, so
- * state and keyboard behavior never depend on the animation.
+ * raised pill that slides between options — the pill element is always mounted and only ever
+ * repositioned, so switching can never flicker or remount state. Before hydration the same pill
+ * is painted statically on the checked option (identical geometry), and reduced motion collapses
+ * the slide to an instant move via the motion tokens.
  */
 export function Segmented<T extends string>({ name, legend, value, options, onChange, className }: SegmentedProps<T>) {
-  const { containerRef, indicator } = useSlidingSelection<HTMLDivElement>(value, '.htb-segmented__option[aria-checked="true"]');
+  const { containerRef, indicatorRef } = useSlidingIndicator<HTMLDivElement, HTMLSpanElement>({
+    activeSelector: '.htb-segmented__option[aria-checked="true"]',
+    activeKey: value,
+  });
   return (
-    <div
-      ref={containerRef}
-      role="radiogroup"
-      aria-label={legend}
-      className={["htb-segmented", className].filter(Boolean).join(" ")}
-      data-name={name}
-      data-slide={indicator ? "true" : undefined}
-    >
-      {indicator ? <span aria-hidden="true" className="htb-segmented__indicator" style={slidingIndicatorStyle(indicator)} /> : null}
+    <div ref={containerRef} role="radiogroup" aria-label={legend} className={["htb-segmented", className].filter(Boolean).join(" ")} data-name={name}>
+      <span ref={indicatorRef} aria-hidden="true" className="htb-segmented__indicator" />
       {options.map((option) => (
         <button
           key={option.value}

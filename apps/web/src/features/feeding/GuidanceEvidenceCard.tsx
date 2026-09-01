@@ -101,7 +101,7 @@ export function GuidanceEvidenceCardView({
       titleAs="h2"
       className="guidance-card--localizable"
     >
-      <div className="guidance-card__lang-toggle">{languageToggle}</div>
+      <div className="guidance-card__lang-row">{languageToggle}</div>
       <div className="guidance-evidence-card">
         {view.claims.map((claim) => (
           <div key={claim.claimId} className="guidance-evidence-card__claim" lang={contentLang}>

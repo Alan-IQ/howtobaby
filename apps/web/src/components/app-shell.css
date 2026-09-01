@@ -259,6 +259,9 @@
   justify-content: space-between;
   gap: var(--htb-space-sm);
   flex-wrap: wrap;
+  /* Every page reserves the same toolbar height whether or not a print action renders, so the
+     title/lede start at the same y on every page — one shared vertical rhythm site-wide. */
+  min-height: var(--htb-layout-touch-target);
 }
 /* Overline/kicker tier: small, tracked, uppercase — clearly a label, never competing with the title. */
 .page-shell__eyebrow {
@@ -455,67 +458,96 @@
   line-height: var(--htb-font-line-height-relaxed);
 }
 
-/* Local content-language override: ONE quiet single-tap binary toggle. Visible text is the full
-   native name of the language the guidance is CURRENTLY showing in; one activation flips
-   active-global ↔ canonical. Deliberately lighter than the global language control and quieter
-   than the SourceChip. Hidden entirely while the global language is the canonical locale. The
-   same control renders inside the Evidence Drawer, over the same shared state. */
+/* Local content-language override: ONE single-tap binary toggle styled as a compact slider
+   pill. Both full native names stay visible; a raised thumb rests on the language the guidance
+   is CURRENTLY displayed in and slides across on toggle (same raised-pill pattern as the theme
+   segmented control, motion tokens only → reduced motion collapses to instant). Despite the
+   slider look it is ONE button — a tap anywhere flips the state. Hidden entirely while the
+   global language is the canonical locale. The same control renders inside the Evidence Drawer,
+   over the same shared state. */
 .content-lang-toggle {
+  --htb-toggle-index: 0;
   appearance: none;
-  display: inline-flex;
-  align-items: center;
-  min-height: 26px;
-  padding: 0 var(--htb-space-sm);
-  border: 1px solid var(--htb-border-subtle);
+  position: relative;
+  display: inline-grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 1fr;
+  align-items: stretch;
+  min-height: 30px;
+  padding: 3px;
+  /* Whisper-weight glass track: same family as the header glass controls but sitting ON a card,
+     so it carries only a faint film of the glass surface, a softened hairline ring and a bare
+     inset highlight — never an opaque fill or a strong border that would pop it off its own
+     background. (The full-strength glass belongs to controls on the app chrome, not in-card.) */
+  border: 1px solid color-mix(in srgb, var(--htb-surface-glass-border) 55%, transparent);
   border-radius: var(--htb-radius-pill);
-  background: transparent;
+  background: color-mix(in srgb, var(--htb-surface-glass-solid) 30%, transparent);
+  box-shadow: inset 0 1px 0 color-mix(in srgb, var(--htb-surface-glass-highlight) 60%, transparent);
   font: inherit;
-  font-size: var(--htb-font-size-xs);
-  font-weight: var(--htb-font-weight-medium);
-  letter-spacing: 0.02em;
-  color: var(--htb-text-muted);
   cursor: pointer;
-  overflow: hidden;
-  transition: color var(--htb-motion-duration-fast) var(--htb-motion-easing-standard);
 }
 @media (pointer: coarse) {
   .content-lang-toggle {
-    min-height: 34px;
+    min-height: 36px;
   }
-}
-.content-lang-toggle:hover {
-  color: var(--htb-text-primary);
 }
 .content-lang-toggle:focus-visible {
   outline: 2px solid var(--htb-focus-ring);
   outline-offset: 1px;
 }
-/* Subtle slide between the two states: the incoming native name slides up into place. Driven by
-   the motion tokens, so reduced motion collapses it to an instant swap. */
+/* ONE persistent thumb (never remounts) — positioned from the displayed option's index, slides
+   with a transform-only transition. */
+.content-lang-toggle__thumb {
+  position: absolute;
+  top: 3px;
+  bottom: 3px;
+  left: 3px;
+  width: calc((100% - 6px) / 2);
+  border-radius: var(--htb-radius-pill);
+  background: var(--htb-surface-1);
+  box-shadow: var(--htb-shadow-1);
+  transform: translateX(calc(var(--htb-toggle-index) * 100%));
+  transition: transform var(--htb-motion-duration-base) var(--htb-motion-easing-standard);
+  pointer-events: none;
+}
 .content-lang-toggle__label {
-  display: inline-block;
-  animation: htb-content-lang-swap var(--htb-motion-duration-fast) var(--htb-motion-easing-standard);
+  position: relative; /* paints above the thumb */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 var(--htb-space-sm);
+  white-space: nowrap;
+  font-size: var(--htb-font-size-xs);
+  font-weight: var(--htb-font-weight-medium);
+  color: var(--htb-text-muted);
+  transition: color var(--htb-motion-duration-fast) var(--htb-motion-easing-standard);
 }
-@keyframes htb-content-lang-swap {
-  from {
-    transform: translateY(40%);
-    opacity: 0;
-  }
-  to {
-    transform: translateY(0);
-    opacity: 1;
-  }
+.content-lang-toggle:hover .content-lang-toggle__label[data-displayed="false"] {
+  color: var(--htb-text-secondary);
 }
-/* The host card anchors the pinned toggle. */
+.content-lang-toggle__label[data-displayed="true"] {
+  color: var(--htb-text-primary);
+  font-weight: var(--htb-font-weight-semibold);
+}
+/* Desktop/wide: the toggle sits in flow directly under the card title (first card child),
+   left-aligned with the content. Mobile (tab-bar widths): it pins to the card's top-right
+   corner instead, beside the eyebrow. The row collapses entirely while the toggle does not
+   render (global language = canonical). */
+.guidance-card__lang-row {
+  display: flex;
+  margin-top: calc(-1 * var(--htb-space-2xs));
+}
+.guidance-card__lang-row:empty {
+  display: none;
+}
 .guidance-card--localizable {
   position: relative;
 }
-.guidance-card__lang-toggle {
-  position: absolute;
-  top: var(--htb-space-sm);
-  inset-inline-end: var(--htb-space-sm);
-  display: inline-flex;
-}
-.guidance-card__lang-toggle:empty {
-  display: none;
+@media (max-width: 959px) {
+  .guidance-card__lang-row {
+    position: absolute;
+    top: var(--htb-space-sm);
+    inset-inline-end: var(--htb-space-sm);
+    margin-top: 0;
+  }
 }

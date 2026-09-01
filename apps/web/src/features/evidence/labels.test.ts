@@ -42,9 +42,9 @@ describe("EN/VI presentation parity", () => {
     expect(Object.keys(UI_STRINGS.vi).sort()).toEqual(Object.keys(UI_STRINGS.en).sort());
   });
 
-  it("source status labels include an explicit Current in both locales", () => {
-    expect(STATUS_LABELS.en.current).toBe("Current");
-    expect(STATUS_LABELS.vi.current).toBe("Hiện hành");
+  it("names the healthy status unambiguously as a version state in both locales", () => {
+    expect(STATUS_LABELS.en.current).toBe("Current version");
+    expect(STATUS_LABELS.vi.current).toBe("Phiên bản hiện hành");
   });
 });
 

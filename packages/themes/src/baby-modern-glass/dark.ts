@@ -11,8 +11,15 @@ export const babyModernGlassDark: ColorTokens = {
   "surface.2": "#26243a",
   "surface.glass": "linear-gradient(180deg, rgba(44, 42, 66, 0.74), rgba(32, 30, 50, 0.56))",
   "surface.glass.solid": "#26243a",
-  "surface.glass.border": "rgba(255, 255, 255, 0.14)",
-  "surface.glass.highlight": "rgba(255, 255, 255, 0.07)",
+  // Thin light edge so dark panels keep the same "glass with a defined rim" read as light mode:
+  // border slightly brighter than before, highlight raised to a visible (still subtle) top edge.
+  "surface.glass.border": "rgba(255, 255, 255, 0.19)",
+  "surface.glass.highlight": "rgba(255, 255, 255, 0.14)",
+  // Lit selection pill, INVERTED from light mode: the OUTER contour is the thin luminous line
+  // (cool-white, still hairline-light) and the INNER rim recedes darker — glass catching light
+  // from outside in the dark. Keep the seam delicate, never a thick bright border.
+  "surface.glass.glow": "rgba(5, 4, 12, 0.38)",
+  "surface.glass.seam": "rgba(228, 233, 255, 0.44)",
 
   // Hierarchy: secondary dimmed so title/body vs supporting reads clearly apart in the dark;
   // muted stays put — it already sits at the 4.5:1 gate floor on the worst accent-glass stop.
@@ -22,7 +29,7 @@ export const babyModernGlassDark: ColorTokens = {
   "text.on-accent": "#14131f",
   "text.link": "#a9b3f7",
 
-  "border.subtle": "rgba(255, 255, 255, 0.10)",
+  "border.subtle": "rgba(255, 255, 255, 0.13)",
   "border.strong": "rgba(255, 255, 255, 0.38)",
   "focus.ring": "#a9b3f7",
 

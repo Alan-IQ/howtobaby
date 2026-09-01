@@ -21,6 +21,10 @@ export const babyModernGlassLight: ColorTokens = {
   "surface.glass.solid": "#f3f8fc",
   "surface.glass.border": "rgba(91, 139, 178, 0.52)",
   "surface.glass.highlight": "rgba(255, 255, 255, 0.85)",
+  // Lit selection pill: bright INNER rim (equals the glass highlight) + darker OUTER seam
+  // (the pre-token value: glass border at 45% strength). In dark mode the pair inverts.
+  "surface.glass.glow": "rgba(255, 255, 255, 0.85)",
+  "surface.glass.seam": "rgba(91, 139, 178, 0.234)",
 
   // Text hierarchy: primary is a deep ink-navy so main content clearly leads; secondary keeps the
   // supporting blue-grey; muted drops saturation (slate, not blue) as well as luminance so metadata

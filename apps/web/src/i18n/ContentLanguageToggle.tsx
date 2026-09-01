@@ -1,15 +1,15 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 /**
- * The LOCAL content-language control for guidance surfaces (docs/GUI_DESIGN.md §11.9): a single
- * binary toggle button. One tap/click flips the surface's canonical content between the active
- * global locale and the canonical locale — the user never picks from a pair of options.
+ * The LOCAL content-language control for guidance surfaces (docs/GUI_DESIGN.md §11.9): ONE
+ * binary toggle styled as a compact slider pill. BOTH full native names are visible
+ * ("Tiếng Việt" / "English", later e.g. "Español"; never short codes), with a raised thumb
+ * resting on the language the content is CURRENTLY displayed in. It is still a single button:
+ * one tap/click anywhere flips active-global ↔ canonical — the user never picks one of two
+ * independent options, and the thumb slides across (motion tokens; reduced motion → instant).
  *
- * The visible text is always the full native name of the language the content is CURRENTLY
- * showing in ("Tiếng Việt", "English", later e.g. "Español") — never a short code — and carries
- * that language's `lang`. Hidden entirely while the global locale IS the canonical locale. The
- * semantics come from the @howtobaby/i18n registry (toggleContentLocale), so the control is
- * generic over locales, never hard-coded to a pair. Label swaps get a subtle token-driven slide
- * (reduced motion collapses it to an instant change).
+ * Hidden entirely while the global locale IS the canonical locale. Semantics come from the
+ * @howtobaby/i18n registry (contentLocaleToggleOptions/toggleContentLocale), so nothing here is
+ * hard-coded to a locale pair. The accessible name stays "<label>: <displayed native name>".
  */
 
 "use client";
@@ -29,20 +29,31 @@ export interface ContentLanguageToggleProps {
 
 export function ContentLanguageToggle({ globalLocale, contentLocale, label, onToggle, className }: ContentLanguageToggleProps) {
   // No local toggle while the global language IS the canonical locale.
-  if (contentLocaleToggleOptions(globalLocale) === undefined) return null;
+  const options = contentLocaleToggleOptions(globalLocale);
+  if (options === undefined) return null;
   const next = toggleContentLocale(globalLocale, contentLocale);
   if (next === undefined) return null;
   const displayed = localeDefinition(contentLocale);
+  const activeIndex = options.indexOf(contentLocale);
   return (
     <button
       type="button"
       className={["content-lang-toggle", className].filter(Boolean).join(" ")}
+      style={{ "--htb-toggle-index": activeIndex < 0 ? 0 : activeIndex } as React.CSSProperties}
       aria-label={`${label}: ${displayed.nativeName}`}
       onClick={() => onToggle(next)}
     >
-      <span key={contentLocale} className="content-lang-toggle__label" lang={contentLocale}>
-        {displayed.nativeName}
-      </span>
+      <span aria-hidden="true" className="content-lang-toggle__thumb" />
+      {options.map((locale) => (
+        <span
+          key={locale}
+          className="content-lang-toggle__label"
+          data-displayed={locale === contentLocale ? "true" : "false"}
+          lang={locale}
+        >
+          {localeDefinition(locale).nativeName}
+        </span>
+      ))}
     </button>
   );
 }

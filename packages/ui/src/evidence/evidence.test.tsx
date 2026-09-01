@@ -11,7 +11,7 @@ const cdc: EvidenceSourceView = {
   organization: "CDC",
   title: "When, What, and How to Introduce Solid Foods",
   relationshipLabel: "Primary source",
-  statusLabel: "Current",
+  statusLabel: "Current version",
   statusTone: "calm",
   meta: [
     { label: "Relevant section", value: "“When, What, and How to Introduce Solid Foods”", icon: "document" },
@@ -104,7 +104,7 @@ describe("EvidenceDrawer (GUI_DESIGN.md §11.3)", () => {
 
 describe("ReferenceList (GUI_DESIGN.md §11.4)", () => {
   it("deduplicates by source ID and renders provenance per entry", () => {
-    const entry = { sourceId: cdc.sourceId, organization: "CDC", title: cdc.title, verifiedLabel: "Last verified by HowToBaby: Aug 31, 2026", url: cdc.url, statusLabel: "Current" };
+    const entry = { sourceId: cdc.sourceId, organization: "CDC", title: cdc.title, verifiedLabel: "Last verified by HowToBaby: Aug 31, 2026", url: cdc.url, statusLabel: "Current version" };
     const html = renderToStaticMarkup(<ReferenceList entries={[entry, entry]} />);
     expect(html).toContain("Sources used on this page");
     expect(html.match(/htb-reference-list__entry/g)).toHaveLength(1);

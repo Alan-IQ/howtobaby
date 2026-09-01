@@ -17,7 +17,9 @@ export const SEMANTIC_COLOR_TOKENS = [
   "surface.glass",
   "surface.glass.solid", // opaque fallback used when blur is unavailable or transparency is reduced
   "surface.glass.border",
-  "surface.glass.highlight", // inset top light-edge that sells the glass; near-invisible in dark mode
+  "surface.glass.highlight", // inset top light-edge that sells the glass; subtle (but present) in dark mode
+  "surface.glass.glow", // lit selection pill, INNER 1px rim — bright in light mode, quietly dark in dark mode
+  "surface.glass.seam", // lit selection pill, OUTER 1px contour — dark in light mode, thinly luminous in dark mode (the two invert between modes: what is dark in light is the part that lights up in dark)
   // text
   "text.primary",
   "text.secondary",

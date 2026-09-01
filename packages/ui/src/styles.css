@@ -176,6 +176,11 @@ select {
 .htb-card[data-accent] {
   background: var(--htb-card-accent-glass);
   border-color: var(--htb-card-accent-border);
+  /* The identity strip is a real border-top so it melts softly into the 1px side borders at the
+     rounded corners — the approved "curved taper" look. Keep it a border: an inset overlay reads
+     as a detached flat bar and loses the taper. The 1px inset glass highlight directly under the
+     strip is part of the approved look too (the "thin glass edge") — it comes from the glass
+     surface classes; do not override it away. */
   border-top: 3px solid var(--htb-card-accent);
 }
 .htb-card[data-accent="feeding"] {
@@ -600,13 +605,19 @@ select {
   position: absolute;
   left: 0;
   top: 0;
+  opacity: 0; /* hidden until the hook positions it (data-visible) — the static fill covers until then */
+  pointer-events: none;
   border-radius: var(--htb-radius-pill);
   background: var(--htb-surface-1);
   box-shadow: var(--htb-shadow-1);
   transition:
     transform var(--htb-motion-duration-base) var(--htb-motion-easing-standard),
     width var(--htb-motion-duration-base) var(--htb-motion-easing-standard),
-    height var(--htb-motion-duration-base) var(--htb-motion-easing-standard);
+    height var(--htb-motion-duration-base) var(--htb-motion-easing-standard),
+    opacity var(--htb-motion-duration-fast) var(--htb-motion-easing-standard);
+}
+.htb-segmented__indicator[data-visible="true"] {
+  opacity: 1;
 }
 .htb-segmented[data-slide="true"] .htb-segmented__option[aria-checked="true"] {
   background: transparent;
@@ -642,7 +653,11 @@ select {
   color: var(--htb-text-primary);
 }
 .htb-nav__link[aria-current="page"] {
-  background: var(--htb-interactive-subtle-hover);
+  /* Identical paint to the sliding glass indicator (no-JS/prerender fallback). */
+  background: var(--htb-surface-glass);
+  box-shadow:
+    inset 0 0 0 1px var(--htb-surface-glass-glow),
+    0 0 0 1px var(--htb-surface-glass-seam);
   color: var(--htb-text-primary);
 }
 .htb-nav__link[data-accent="feeding"][aria-current="page"] {
@@ -661,11 +676,12 @@ select {
   color: var(--htb-accent-tools);
 }
 
-/* Shared sliding active indicator (hydrated): ONE element slides between items on route change —
-   the desktop row's soft active pill and the tab bar's short centred accent underline are that
-   indicator. The static per-link styling in this file keeps identical geometry as the
-   prerender/no-JS fallback; the active link itself always keeps aria-current, its tint and its
-   heavier icon/label, so state never depends on the animation. Motion tokens only. */
+/* Persistent sliding active indicator (desktop row). The span is always mounted and only ever
+   repositioned by useSlidingIndicator — it never remounts on a route change. It fades out in
+   place on routes outside the nav, and the static per-link background above stays as the
+   pixel-identical no-JS/prerender fallback until the first positioning sets data-slide. The
+   active link always keeps aria-current, its accent colour and heavier weight — state never
+   depends on the animation. Motion tokens only (reduced motion → instant). */
 nav[data-layout] {
   position: relative;
 }
@@ -673,67 +689,120 @@ nav[data-layout] {
   position: absolute;
   left: 0;
   top: 0;
+  opacity: 0;
   pointer-events: none;
+  border-radius: var(--htb-radius-pill);
+  /* Lit-glass pill (approved reference: the SourceChip resting on light glass): a translucent
+     film with a hairline double rim whose brightness INVERTS between modes — in light the inner
+     ring glares (glass highlight) over a darker outer seam; in dark the outer seam is the thin
+     luminous line and the inner ring recedes. Both stay 1px — delicate, never a thick border.
+     Shadows only, no border — identical geometry to the static fallback. */
+  background: var(--htb-surface-glass);
+  box-shadow:
+    inset 0 0 0 1px var(--htb-surface-glass-glow),
+    0 0 0 1px var(--htb-surface-glass-seam);
   transition:
     transform var(--htb-motion-duration-base) var(--htb-motion-easing-standard),
     width var(--htb-motion-duration-base) var(--htb-motion-easing-standard),
     height var(--htb-motion-duration-base) var(--htb-motion-easing-standard),
-    color var(--htb-motion-duration-base) var(--htb-motion-easing-standard),
-    background-color var(--htb-motion-duration-base) var(--htb-motion-easing-standard);
+    opacity var(--htb-motion-duration-fast) var(--htb-motion-easing-standard);
 }
-nav[data-layout="horizontal"] .htb-nav__indicator {
-  border-radius: var(--htb-radius-pill);
-  background: var(--htb-interactive-subtle-hover);
+.htb-nav__indicator[data-visible="true"] {
+  opacity: 1;
 }
 nav[data-layout="horizontal"][data-slide="true"] .htb-nav__link[aria-current="page"] {
+  /* The sliding indicator owns the pill from the first positioning on — clear BOTH fallback
+     layers (fill AND ring), or the two would double-paint. */
   background: transparent;
-}
-nav[data-layout="tabs"] .htb-nav__indicator {
-  color: var(--htb-text-primary);
-}
-nav[data-layout="tabs"] .htb-nav__indicator::after {
-  content: "";
-  position: absolute;
-  bottom: 3px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 16px;
-  height: 3px;
-  border-radius: var(--htb-radius-pill);
-  background: currentColor;
-}
-nav[data-layout="tabs"] .htb-nav__indicator[data-accent="feeding"] {
-  color: var(--htb-accent-feeding);
-}
-nav[data-layout="tabs"] .htb-nav__indicator[data-accent="play"] {
-  color: var(--htb-accent-play);
-}
-nav[data-layout="tabs"] .htb-nav__indicator[data-accent="sleep"] {
-  color: var(--htb-accent-sleep);
-}
-nav[data-layout="tabs"] .htb-nav__indicator[data-accent="safety"] {
-  color: var(--htb-accent-safety);
-}
-nav[data-layout="tabs"] .htb-nav__indicator[data-accent="tools"] {
-  color: var(--htb-accent-tools);
-}
-nav[data-layout="tabs"][data-slide="true"] .htb-nav__link[aria-current="page"]::after {
-  display: none;
+  box-shadow: none;
 }
 
 /* Compact bottom-tab layout (mobile/tablet): equal columns, centred, calm active pill. */
 .htb-nav--tabs {
+  --htb-nav-tab-gap: 2px;
+  /* Defaults so the custom properties always resolve; the real values are set inline on the ul
+     at render time (--htb-nav-index = active item index, --htb-nav-count = item count). */
+  --htb-nav-count: 1;
+  --htb-nav-index: 0;
+  position: relative;
   display: grid;
   grid-auto-flow: column;
   grid-auto-columns: 1fr;
-  gap: 2px;
+  gap: var(--htb-nav-tab-gap);
   width: 100%;
   max-width: 560px;
   margin-inline: auto;
 }
+/* The tab bar's ONE persistent active indicator, drawn by TWO stacked pseudo-elements that
+   share the same one-column geometry and transform (positioned from the active index —
+   --htb-nav-index/--htb-nav-count, set at render time and present in the prerendered HTML; no
+   measurement, no hydration dependency, no remount):
+   - ::before is the lit-glass pill (milky translucent film + luminous glass-highlight rim +
+     faint outer seam — the glass edge "lights up" in both modes);
+   - ::after is the short centred accent underline (a 16×3 background-image layer near the
+     bottom edge, coloured per domain accent).
+   Route changes slide both with a transform-only transition; routes outside the bar fade them
+   out in place (data-active="false", last index + accent kept). Motion tokens only — reduced
+   motion → instant. */
+.htb-nav--tabs::before,
+.htb-nav--tabs::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 0;
+  width: calc((100% - (var(--htb-nav-count, 1) - 1) * var(--htb-nav-tab-gap)) / var(--htb-nav-count, 1));
+  transform: translateX(calc(var(--htb-nav-index, 0) * (100% + var(--htb-nav-tab-gap))));
+  border-radius: var(--htb-radius-md);
+  opacity: 0;
+  pointer-events: none;
+  transition:
+    transform var(--htb-motion-duration-base) var(--htb-motion-easing-standard),
+    color var(--htb-motion-duration-base) var(--htb-motion-easing-standard),
+    opacity var(--htb-motion-duration-fast) var(--htb-motion-easing-standard);
+}
+.htb-nav--tabs::before {
+  /* Lit-glass pill: milky translucent film + luminous glass-highlight rim + faint outer seam. */
+  background: var(--htb-surface-glass);
+  box-shadow:
+    inset 0 0 0 1px var(--htb-surface-glass-glow),
+    0 0 0 1px var(--htb-surface-glass-seam);
+}
+.htb-nav--tabs::after {
+  color: var(--htb-text-primary);
+  background-image: linear-gradient(currentColor, currentColor);
+  background-size: 16px 3px;
+  background-position: center calc(100% - 3px);
+  background-repeat: no-repeat;
+}
+.htb-nav--tabs[data-active="true"]::before,
+.htb-nav--tabs[data-active="true"]::after {
+  opacity: 1;
+}
+.htb-nav--tabs[data-active-accent="feeding"]::after {
+  color: var(--htb-accent-feeding);
+}
+.htb-nav--tabs[data-active-accent="play"]::after {
+  color: var(--htb-accent-play);
+}
+.htb-nav--tabs[data-active-accent="sleep"]::after {
+  color: var(--htb-accent-sleep);
+}
+.htb-nav--tabs[data-active-accent="safety"]::after {
+  color: var(--htb-accent-safety);
+}
+.htb-nav--tabs[data-active-accent="tools"]::after {
+  color: var(--htb-accent-tools);
+}
+.htb-nav--tabs[data-active-accent="brand"]::after {
+  color: var(--htb-text-primary);
+}
 .htb-nav--tabs li {
   display: grid;
   min-width: 0;
+  position: relative;
+  z-index: 1; /* links and their content paint above the sliding indicator */
 }
 .htb-nav--tabs .htb-nav__link {
   display: flex;
@@ -754,48 +823,29 @@ nav[data-layout="tabs"][data-slide="true"] .htb-nav__link[aria-current="page"]::
   width: 22px;
   height: 22px;
 }
-/* Active: soft tinted pill + heavier icon/label, plus a short centred underline in the domain
-   accent (shape + weight + tint together — never colour alone). The underline is absolutely
-   positioned inside the link, so the bar's height and equal-column alignment are untouched. */
+/* Active link state carried by the link itself (never by the animation): heavier icon/label and
+   the accent ink from the shared [data-accent][aria-current] rules above. The tint pill and the
+   short centred underline are painted by the bar's persistent ::after indicator — the link adds
+   no background of its own, so nothing mounts, swaps or flashes on a route change. The tab bar
+   ignores the link hover fill (touch-first surface; the indicator is the selection visual). */
 .htb-nav--tabs .htb-nav__link {
   position: relative;
+  transition:
+    color var(--htb-motion-duration-base) var(--htb-motion-easing-standard),
+    background-color var(--htb-motion-duration-fast) var(--htb-motion-easing-standard);
+}
+.htb-nav--tabs .htb-nav__link:hover,
+.htb-nav--tabs .htb-nav__link[aria-current="page"] {
+  background: transparent;
 }
 .htb-nav--tabs .htb-nav__link[aria-current="page"] {
-  background: var(--htb-interactive-subtle-hover);
   font-weight: var(--htb-font-weight-semibold);
 }
-.htb-nav--tabs .htb-nav__link[aria-current="page"]::after {
-  content: "";
-  position: absolute;
-  bottom: 3px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 16px;
-  height: 3px;
-  border-radius: var(--htb-radius-pill);
-  /* currentColor = the active link's domain accent (or primary ink for brand/home). */
-  background: currentColor;
+.htb-nav--tabs .htb-nav__link .htb-icon {
+  transition: stroke-width var(--htb-motion-duration-base) var(--htb-motion-easing-standard);
 }
 .htb-nav--tabs .htb-nav__link[aria-current="page"] .htb-icon {
   stroke-width: 2.1;
-}
-.htb-nav--tabs .htb-nav__link[data-accent="feeding"][aria-current="page"] {
-  background: var(--htb-accent-feeding-soft);
-}
-.htb-nav--tabs .htb-nav__link[data-accent="play"][aria-current="page"] {
-  background: var(--htb-accent-play-soft);
-}
-.htb-nav--tabs .htb-nav__link[data-accent="sleep"][aria-current="page"] {
-  background: var(--htb-accent-sleep-soft);
-}
-.htb-nav--tabs .htb-nav__link[data-accent="safety"][aria-current="page"] {
-  background: var(--htb-accent-safety-soft);
-}
-.htb-nav--tabs .htb-nav__link[data-accent="tools"][aria-current="page"] {
-  background: var(--htb-accent-tools-soft);
-}
-.htb-nav--tabs .htb-nav__link[data-accent="brand"][aria-current="page"] {
-  background: var(--htb-accent-brand-soft);
 }
 .htb-nav--tabs .htb-nav__label {
   max-width: 100%;
@@ -1039,8 +1089,10 @@ nav[data-layout="tabs"][data-slide="true"] .htb-nav__link[aria-current="page"]::
   font-weight: var(--htb-font-weight-medium);
   line-height: 1.4;
   text-align: start;
-  /* Extremely subtle text lift off the glass surface: a hairline of the theme's glass highlight
-     under the ink. Not a glow, not emphasis — the chip stays quiet provenance metadata. */
+  /* The engraved feel lives in the TYPE, not the box (approved look — do not add an inset
+     well/border again): a hairline of the theme's glass highlight under the ink lets the text
+     read letterpressed into the glass in BOTH colour modes (the dark theme's highlight token is
+     tuned to stay just visible). Not a glow, not emphasis — quiet provenance metadata. */
   text-shadow: 0 1px 0 var(--htb-surface-glass-highlight);
 }
 /* Touch screens keep a comfortable target without changing the resting look elsewhere. */
