@@ -251,15 +251,15 @@ The detailed gates live in [`docs/IMPLEMENTATION_ROADMAP.md`](docs/IMPLEMENTATIO
 Requirements: Node.js `>= 22.18` (`.nvmrc`) and pnpm 11 — run `corepack enable` once and pnpm resolves to the version pinned in `package.json` → `packageManager`.
 
 ```bash
-pnpm install --frozen-lockfile                 # install (also generates the theme reference CSS)
+corepack enable && pnpm install --frozen-lockfile   # initial setup (also generates the theme reference CSS)
 pnpm dev                                       # build derived knowledge, then the Next.js dev server
-pnpm build && pnpm --filter @howtobaby/web start   # production build (static-first, server-capable) + local server
-pnpm build:static                              # DEPLOY_TARGET=static export → apps/web/out (what production deploys)
 pnpm validate                                  # every CI gate in CI order: check, lint, test, determinism, both builds
-pnpm clean:local                               # remove node_modules + rebuildable build output (cross-platform)
+pnpm build:static                              # DEPLOY_TARGET=static export → apps/web/out (what production deploys)
+pnpm clean:modules | clean:build | clean:local # cross-platform cleanup of node_modules / build output / both
+pnpm store path                                # pnpm's machine-local package store
 ```
 
-The full command reference, the individual gates, the local cleanup workflow (`pnpm clean:modules`, `pnpm clean:build`, `pnpm clean:local`) and a note on pnpm's workspace `node_modules` layout live in [`CONTRIBUTING.md`](CONTRIBUTING.md); production deployment is described in [`DEPLOYMENT_HAWKHOST.md`](DEPLOYMENT_HAWKHOST.md).
+Every `node_modules` in the monorepo — one at the root plus one per workspace package, which is how pnpm resolves imports per package — is disposable and mostly links into pnpm's machine-local store; the repo stays on pnpm's default project virtual store because Next.js 16 Turbopack cannot build from a global one (details in CONTRIBUTING). The full command reference, the validation gates, the cleanup/migration workflow, the optional Dropbox ignore helper (`pnpm setup:dropbox -- "<Dropbox root>"`) and `pnpm store prune` notes live in [`CONTRIBUTING.md`](CONTRIBUTING.md); production deployment is described in [`DEPLOYMENT_HAWKHOST.md`](DEPLOYMENT_HAWKHOST.md).
 
 ## Privacy and safety
 

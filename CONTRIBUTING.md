@@ -37,15 +37,38 @@ A source URL alone is not enough. Health/safety content changes must preserve cl
 - pnpm `11`, pinned in `package.json` → `packageManager`. Run `corepack enable` once; every `pnpm` invocation then resolves to the pinned version automatically (no global pnpm install needed). If Corepack is missing, `npm install -g corepack` restores it.
 - Package scripts run through pnpm's POSIX shell emulator (`shellEmulator: true` in `pnpm-workspace.yaml`), so env-prefixed scripts like `DEPLOY_TARGET=static next build` work on Windows too. pnpm also enforces the supply-chain policy there (`minimumReleaseAge: 1440`): a dependency release younger than 24 hours cannot be resolved into the lockfile — if an install fails on a brand-new release, wait out the window or pick an older version instead of relaxing the policy.
 
-### Everyday commands
+### Local workflow
 
 ```bash
+# Initial setup (once per clone)
+corepack enable                       # pnpm resolves to the pinned version from package.json → packageManager
 pnpm install --frozen-lockfile        # install exactly what pnpm-lock.yaml pins; postinstall writes packages/ui/src/theme-tokens.generated.css
+
+# Run locally
 pnpm dev                              # build:knowledge (derived read models), then the Next.js dev server for apps/web
+
+# Validation
+pnpm validate                         # every CI gate, in CI order (see "Validation gates")
+
+# Static-production test
+pnpm build:static                     # build:knowledge + DEPLOY_TARGET=static export → apps/web/out (the profile production deploys)
+
+# Cleanup / migration (see "Cleaning up")
+pnpm clean:modules                    # root + every workspace node_modules
+pnpm clean:build                      # rebuildable build output and caches
+pnpm clean:local                      # both — a full, safe local reset
+
+# Global store
+pnpm store path                       # where pnpm keeps packages on THIS machine (machine-local, never synced)
+pnpm store prune                      # optional, occasional: drop packages no project references any more
+```
+
+Other everyday commands:
+
+```bash
 pnpm build                            # build:knowledge + default profile: static-first, server-capable (.next)
 pnpm --filter @howtobaby/web start    # serve that default-profile build locally (next start) — server-capable verification
-pnpm build:static                     # build:knowledge + DEPLOY_TARGET=static export → apps/web/out (the profile production deploys)
-pnpm validate                         # every CI gate, in CI order (see below)
+pnpm setup:dropbox -- "<Dropbox root>"   # optional: keep Dropbox from syncing node_modules/.next/out/coverage (see below)
 ```
 
 `pnpm --filter @howtobaby/web start` serves the default build only; the static export in `apps/web/out` is plain files — open it with any static file server.
@@ -85,7 +108,37 @@ node scripts/clean.ts local --dry-run # list what would be removed without delet
 
 The scripts never touch canonical YAML/Markdown/JSON, source code, docs, tests, `.git`, `.github`, or `evidence/` (including the Evidence Watch cache); `scripts/lib/clean.ts` checks every path against an allowlist of disposable names and a denylist of protected roots before removing it. After `clean:modules`/`clean:local`, run `pnpm install --frozen-lockfile` again; after `clean:build`, the next `pnpm dev`/`pnpm build` regenerates everything (or run `pnpm gen:theme-css` for the theme reference CSS alone).
 
-About the many `node_modules` folders: a pnpm workspace has one `node_modules` at the root plus one per workspace package (`apps/*`, `packages/*`, `tools/*`) — that is normal, not duplication. pnpm keeps a single copy of every package version in its content-addressable global store and hard-links it into the root virtual store (`node_modules/.pnpm`); workspace `node_modules` folders mostly contain symlinks into that virtual store, so their on-disk footprint is small. `pnpm store path` shows where the global store lives. `pnpm store prune` removes unreferenced packages from that global store; it is an optional, occasional housekeeping step (for example after removing several projects), not part of the routine cleanup — it affects every pnpm project on the machine and only forces re-downloads later.
+pnpm 11 checks `node_modules` against the lockfile before every `pnpm run` (`verifyDepsBeforeRun`, default `install`) and re-syncs it first when it is out of date — after a pnpm config change it may ask to purge and reinstall `node_modules` before your script even starts. That is harmless; to skip the pre-run install entirely, call the cleanup directly: `node scripts/clean.ts modules` (same code, no dependencies).
+
+### Virtual store and the many `node_modules`
+
+About the many `node_modules` folders: a pnpm workspace has one `node_modules` at the root plus one per workspace package (`apps/*`, `packages/*`, `tools/*`) — that is how pnpm resolves imports per package, not duplication. pnpm keeps ONE copy of every package version in its content-addressable, machine-local **store** (`pnpm store path`) and hard-links it into the project's virtual store `node_modules/.pnpm`; the workspace `node_modules` folders mostly contain symlinks/junctions into that virtual store, so their own footprint is small. Everything under any `node_modules` is disposable (`pnpm clean:modules` + `pnpm install --frozen-lockfile` recreates it) and must never be committed or synced.
+
+The repo deliberately stays on the default **project** virtual store and does not set `virtualStoreType: global` (pnpm ≥ 11.23's canonical name for the global virtual store). Verified 2026-09-01 with pnpm 11.24 + Next.js 16.3: with the global store, `next` resolves to `<pnpm store path>/links/…` outside the workspace root and Turbopack aborts the build (`Could not find the Next.js package (next/package.json)` — "files outside of the workspace root are not compiled"). On Windows the store usually sits on another drive than the clone, so no `turbopack.root` can cover both; `next build --webpack` works but trading the default bundler for a smaller `node_modules` is not worth it. `nodeLinker` stays the default isolated layout and the repo does not use PnP. If you enable the global store locally anyway (e.g. `pnpm install --config.virtual-store-type=global`, or a future toolchain where Turbopack supports it), the migration is:
+
+```bash
+pnpm clean:modules                    # or: node scripts/clean.ts modules
+pnpm install --frozen-lockfile
+pnpm store path                       # the central virtual store is <this path>/links
+```
+
+`storeDir` is never pinned in the repo (it would hard-code one machine's path); `pnpm store path` prints the real location. `pnpm store prune` is optional, occasional housekeeping — it affects every pnpm project on the machine and only forces re-downloads later. CI needs nothing extra: `pnpm/action-setup` plus the pnpm cache handle the store on the runner.
+
+### Dropbox and other syncing folders
+
+If the clone lives inside Dropbox, keep Dropbox from syncing disposable artifacts. Dropbox honours a `rules.dropboxignore` file at the Dropbox **root** (gitignore-style, recursive `**` globs). The helper writes one clearly marked `howtobaby/dev` block with the generic development rules `**/node_modules/`, `**/.next/`, `**/out/`, `**/coverage/`; everything you wrote yourself outside that block is preserved, and re-running never duplicates rules:
+
+```bash
+pnpm setup:dropbox -- "C:\Users\<user>\Dropbox"      # Windows (any shell)
+pnpm setup:dropbox -- "$HOME/Dropbox"                  # macOS / Linux
+powershell -ExecutionPolicy Bypass -File scripts\setup-dropbox-ignore.ps1 "C:\Users\<user>\Dropbox"   # Windows, without pnpm
+```
+
+Notes:
+
+- The Dropbox root is a **required** argument — the helper verifies it exists and never guesses it (Dropbox may live on any drive or under a team folder).
+- `rules.dropboxignore` is **local-only**: Dropbox does not sync it, so run the helper on every machine that syncs the repo. Never commit your `rules.dropboxignore` to the repository.
+- Rules apply **going forward only**. Folders Dropbox already synced stay synced until you remove and recreate them: `pnpm clean:local`, then `pnpm install --frozen-lockfile` (and the next `pnpm build`).
 
 ## Coding conventions
 

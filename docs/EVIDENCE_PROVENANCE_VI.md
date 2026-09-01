@@ -82,16 +82,16 @@ Official guidance · CDC · WHO
 
 Khi click, hiển thị:
 
-- organization;
-- title source;
-- relationship;
-- section/page locator;
-- jurisdiction/scope;
-- phiên bản nguồn hiện tại (`updatedAt ?? publishedAt`; bỏ hàng này nếu authority không cung cấp ngày) — đặt sau jurisdiction/scope và trước ngày HowToBaby kiểm chứng;
-- last verified by HowToBaby;
-- source status CHỈ khi source không còn `current` (đang rà soát bản cập nhật / superseded / retired / tạm không truy cập được) — source `current` lành mạnh không hiện badge trạng thái;
-- **View original source**;
-- interpretation/conflict note khi cần.
+organization, exact source title, relationship (role badge), rồi metadata **theo đúng thứ tự**:
+
+1. **Phần liên quan** — section/page locator khi hữu ích;
+2. **Áp dụng cho / Phạm vi** — jurisdiction/scope;
+3. **metadata phát hành/phiên bản nguồn** — theo hợp đồng ngày nguồn (§10): `Phát hành` + `Cập nhật`, chỉ `Phát hành`, `Phiên bản nguồn hiện tại`, hoặc không có gì;
+4. **HowToBaby kiểm chứng lần cuối** — `lastVerifiedAt`, luôn đứng sau ngày của nguồn;
+5. **Vì sao dùng nguồn này** — suy từ relationship canonical;
+6. link **Xem nguồn gốc**.
+
+Badge trạng thái CHỈ render khi source không còn `current` (đang rà soát bản cập nhật / superseded / retired / tạm không truy cập được); source `current` lành mạnh không có status UI. Interpretation/conflict note đi sau khi cần.
 
 ### C. References cuối page
 
@@ -157,13 +157,34 @@ Ba trường ngày trong `SourceRecord` mang ba nghĩa khác nhau, không đư�
 
 - `publishedAt` = ngày xuất bản, chỉ khi authority cung cấp và xác định được;
 - `updatedAt` = ngày revision/cập nhật hiện tại của nguồn, chỉ khi authority cung cấp (CDC "last reviewed/updated", ngày revision fact sheet WHO, …) — mỗi authority gọi tên ngày khác nhau nên không gọi mọi ngày là "Published";
-- `lastVerifiedAt` = ngày maintainer HowToBaby thực sự mở và kiểm tra nguồn — hoàn toàn khác với ngày phiên bản nguồn.
+- `lastVerifiedAt` = ngày maintainer/review workflow của HowToBaby thực sự mở, kiểm tra và xác nhận nguồn — hoàn toàn khác với ngày của nguồn; **không phải** thời điểm crawl/fetch (snapshot Evidence Watch có `fetchedAt` riêng) và **không phải** thời điểm deploy/build.
 
-Phiên bản nguồn hiển thị cho user = `updatedAt ?? publishedAt`; không có cả hai thì bỏ hàng, không bịa ngày. Hai trường này được sao đúng từ trang nguồn gốc vào YAML canonical và đi nguyên vẹn qua mọi read model dẫn xuất (`knowledge.sqlite`, `source-public-index.json`, `PublicSourceEntry`).
+`publishedAt` và `updatedAt` là **hai metadata upstream khác nhau**, không bao giờ suy đoán từ nhau: thiếu `publishedAt` không lấy `updatedAt` bù, thiếu `updatedAt` không lấy `publishedAt` bù, và không đoán từ crawl, dòng copyright hay ngày deploy. Cả hai được sao đúng từ trang nguồn gốc vào YAML canonical và đi nguyên vẹn qua mọi read model dẫn xuất (`knowledge.sqlite`, `source-public-index.json`, `PublicSourceEntry`) tới evidence presenters — không UI layer nào giữ bản sao ngày nguồn riêng.
+
+### Hợp đồng provenance ngày nguồn
+
+Mọi surface hiện ngày nguồn (Evidence Drawer, `/sources`, `/evidence/[slug]`, References) render cùng một ma trận từ cùng trường canonical:
+
+| Trường canonical | EN | VI |
+| --- | --- | --- |
+| A. có cả `publishedAt` **và** `updatedAt` | `Published: <publishedAt>` rồi `Updated: <updatedAt>` | `Phát hành: <publishedAt>` rồi `Cập nhật: <updatedAt>` |
+| B. chỉ `publishedAt` | `Published: <publishedAt>` | `Phát hành: <publishedAt>` |
+| C. chỉ `updatedAt` | `Current source version: <updatedAt>` | `Phiên bản nguồn hiện tại: <updatedAt>` |
+| D. không có cả hai | bỏ hẳn metadata phiên bản nguồn | bỏ hẳn metadata phiên bản nguồn |
+
+Quy tắc:
+
+- case C không bao giờ trình bày `updatedAt` như ngày phát hành; case B không trình bày `publishedAt` như ngày cập nhật;
+- case D tuyệt đối không infer/guess/thay thế ngày (không crawl time, không năm copyright, không ngày deploy);
+- sau metadata ngày nguồn — và chỉ sau đó — mới tới **Last verified by HowToBaby: <lastVerifiedAt>** / VI **HowToBaby kiểm chứng lần cuối: <lastVerifiedAt>**: ngày maintainer/review workflow HowToBaby thực sự xác nhận nguồn (không phải crawl/fetch time, không phải deploy time);
+- ngày là calendar date (`YYYY-MM-DD` trong YAML), hiển thị `Apr 14, 2026` (EN) và `14/04/2026` (VI);
+- surface dạng list (`/sources`, References) nối các hàng trên một dòng (`Phát hành: 10/01/2025 · Cập nhật: 14/04/2026 · HowToBaby kiểm chứng lần cuối: 31/08/2026`), không bịa biến thể ngắn hơn.
+
+Regression tests phủ cả bốn case cộng các trạng thái non-current (`apps/web/src/features/evidence/labels.test.ts`, `load.test.ts`, `presenters.test.ts`, `packages/ui/src/evidence/evidence.test.tsx`).
 
 Public UI:
 
-- source `current` lành mạnh — **không có badge trạng thái**; thông tin tin cậy là hàng `Current source version: Apr 14, 2026` / VI `Phiên bản nguồn hiện tại: 14/04/2026` cộng **Last verified by HowToBaby: [date]** / VI **HowToBaby kiểm chứng lần cuối: [date]**;
+- source `current` lành mạnh — **không có badge trạng thái**; thông tin tin cậy là metadata ngày nguồn (hợp đồng trên) cộng **Last verified by HowToBaby: [date]** / VI **HowToBaby kiểm chứng lần cuối: [date]**;
 - **Reviewing an update** / VI **Đang rà soát bản cập nhật**;
 - **Superseded**, **Retired**, **Source temporarily unavailable** — hiện thật, không âm thầm xóa citation.
 

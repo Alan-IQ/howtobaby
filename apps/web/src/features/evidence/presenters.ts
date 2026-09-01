@@ -10,7 +10,7 @@
 
 import type { PublicSourceEntry } from "@howtobaby/knowledge/repository";
 
-import { jurisdictionMeta, publicStatusLabel, sourceStatusTone, sourceTypeLabel, sourceVersionLabel, verifiedLabel, type SourceStatusTone, type UiLocale } from "./labels";
+import { jurisdictionMeta, publicStatusLabel, sourceStatusTone, sourceTypeLabel, sourceDateLabel, verifiedLabel, type SourceStatusTone, type UiLocale } from "./labels";
 
 export interface SourceRegistryEntryView {
   sourceId: string;
@@ -18,8 +18,9 @@ export interface SourceRegistryEntryView {
   /** Exact original source title — never translated. */
   title: string;
   /**
-   * Localized "<jurisdiction> · <source type> · Current source version: <date> · Last verified by
-   * HowToBaby: <date>" — the source-version segment is omitted when the authority gives no date.
+   * Localized "<jurisdiction> · <source type> · Published: <date> · Updated: <date> · Last verified
+   * by HowToBaby: <date>" — the source-date segment follows the `sourceDateMeta` matrix and is
+   * omitted entirely when the authority gives no date.
    */
   metaLine: string;
   /** Public status label for a NON-current source; absent for a healthy `current` source (no badge). */
@@ -33,7 +34,7 @@ export interface SourceRegistryEntryView {
 export function sourceRegistryEntryView(entry: PublicSourceEntry, locale: UiLocale): SourceRegistryEntryView {
   const jurisdiction = jurisdictionMeta(entry, locale);
   const statusLabel = publicStatusLabel(entry.status, locale);
-  const segments = [jurisdiction.value, sourceTypeLabel(entry.sourceType, locale), sourceVersionLabel(entry, locale), verifiedLabel(entry.lastVerifiedAt, locale)];
+  const segments = [jurisdiction.value, sourceTypeLabel(entry.sourceType, locale), sourceDateLabel(entry, locale), verifiedLabel(entry.lastVerifiedAt, locale)];
   return {
     sourceId: entry.sourceId,
     organization: entry.organization,

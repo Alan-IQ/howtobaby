@@ -6,8 +6,8 @@
  * comes from the canonical translation bundles via the KnowledgeRepository. Vietnamese UI labels
  * here mirror the canonical evidence vocabulary so both locales present the same meaning.
  *
- * Every drawer metadata line is labeled (e.g. "Applies to: United States", "Current source
- * version: …", "Last verified by HowToBaby: …") so parents never see bare values whose meaning they have to guess, and the
+ * Every drawer metadata line is labeled (e.g. "Applies to: United States", "Published: …",
+ * "Updated: …", "Last verified by HowToBaby: …") so parents never see bare values whose meaning they have to guess, and the
  * "why this source is used" line is derived from canonical relationship metadata — never
  * hard-coded medical prose in a component.
  */
@@ -78,7 +78,7 @@ export const RELATIONSHIP_WHY_LABELS: Record<UiLocale, Record<SourceRelationship
 /**
  * Public status labels for NON-current lifecycle states (EVIDENCE_PROVENANCE.md §14). A healthy
  * `current` source is a machine lifecycle state and carries no public badge: its trust signal
- * is the source-version date plus HowToBaby's verification date (see `sourceVersionMeta`).
+ * is the source-date metadata plus HowToBaby's verification date (see `sourceDateMeta`).
  * `current` stays in SourceStatus and the canonical model; only its presentation is silent.
  */
 export type PublicSourceStatus = Exclude<SourceStatus, "current">;
@@ -114,26 +114,46 @@ export function sourceStatusTone(status: SourceStatus): SourceStatusTone {
   return status === "current" ? "calm" : "attention";
 }
 
+/** One labeled source-date row ("Published", "Updated" or "Current source version"). */
+export interface SourceDateMeta {
+  label: string;
+  value: string;
+}
+
 /**
- * The source's current version date as the authority states it: `updatedAt` (current
- * revision/update date) first, then `publishedAt` (publication date); `undefined` when the
- * authority provides neither — the row is omitted, never invented (EVIDENCE_PROVENANCE.md §14).
- * Distinct from `lastVerifiedAt`, which is HowToBaby's own verification date.
+ * Source publication/version metadata as the authority states it (EVIDENCE_PROVENANCE.md §14).
+ * `publishedAt` and `updatedAt` are DIFFERENT upstream facts and are never inferred from each
+ * other; the presentation matrix is:
+ *
+ * - both dates      → `Published: <publishedAt>` + `Updated: <updatedAt>`
+ * - publishedAt only → `Published: <publishedAt>`
+ * - updatedAt only   → `Current source version: <updatedAt>`
+ * - neither          → no rows at all (a date is never invented)
+ *
+ * Every row is distinct from `lastVerifiedAt`, which is HowToBaby's own verification date and
+ * always renders AFTER these rows (see `verifiedLabel`).
  */
-export function sourceVersionDate(source: Pick<SourceRecord, "publishedAt" | "updatedAt">): string | undefined {
-  return source.updatedAt ?? source.publishedAt;
+export function sourceDateMeta(source: Pick<SourceRecord, "publishedAt" | "updatedAt">, locale: UiLocale): SourceDateMeta[] {
+  const strings = UI_STRINGS[locale];
+  const { publishedAt, updatedAt } = source;
+  if (publishedAt !== undefined && updatedAt !== undefined) {
+    return [
+      { label: strings.metaPublished, value: formatDate(publishedAt, locale) },
+      { label: strings.metaUpdated, value: formatDate(updatedAt, locale) },
+    ];
+  }
+  if (publishedAt !== undefined) return [{ label: strings.metaPublished, value: formatDate(publishedAt, locale) }];
+  if (updatedAt !== undefined) return [{ label: strings.metaSourceVersion, value: formatDate(updatedAt, locale) }];
+  return [];
 }
 
-/** Labeled "Current source version: <date>" row, or `undefined` when there is no source date. */
-export function sourceVersionMeta(source: Pick<SourceRecord, "publishedAt" | "updatedAt">, locale: UiLocale): { label: string; value: string } | undefined {
-  const date = sourceVersionDate(source);
-  return date === undefined ? undefined : { label: UI_STRINGS[locale].metaSourceVersion, value: formatDate(date, locale) };
-}
-
-/** "Current source version: <date>" as one line, or `undefined` when there is no source date. */
-export function sourceVersionLabel(source: Pick<SourceRecord, "publishedAt" | "updatedAt">, locale: UiLocale): string | undefined {
-  const meta = sourceVersionMeta(source, locale);
-  return meta === undefined ? undefined : `${meta.label}: ${meta.value}`;
+/**
+ * The same matrix joined as one compact line ("Published: Jan 10, 2025 · Updated: Apr 14, 2026")
+ * for list surfaces (/sources rows, page References); `undefined` when there is no source date.
+ */
+export function sourceDateLabel(source: Pick<SourceRecord, "publishedAt" | "updatedAt">, locale: UiLocale): string | undefined {
+  const rows = sourceDateMeta(source, locale);
+  return rows.length === 0 ? undefined : rows.map((row) => `${row.label}: ${row.value}`).join(" · ");
 }
 
 /** Review-status labels for the evidence detail trust surface (EVIDENCE_PROVENANCE.md §5). */
@@ -222,7 +242,11 @@ export const UI_STRINGS: Record<UiLocale, {
   metaAppliesTo: string;
   metaScope: string;
   metaStatus: string;
-  /** Label for the authority's current source-version date (`updatedAt ?? publishedAt`). */
+  /** Authority's publication date (`publishedAt`). */
+  metaPublished: string;
+  /** Authority's update/revision date (`updatedAt`) — shown alongside `metaPublished`. */
+  metaUpdated: string;
+  /** `updatedAt` when the authority provides NO publication date (never derived from publishedAt). */
   metaSourceVersion: string;
   metaLastVerified: string;
   metaWhy: string;
@@ -247,6 +271,8 @@ export const UI_STRINGS: Record<UiLocale, {
     metaAppliesTo: "Applies to",
     metaScope: "Scope",
     metaStatus: "Source status",
+    metaPublished: "Published",
+    metaUpdated: "Updated",
     metaSourceVersion: "Current source version",
     metaLastVerified: "Last verified by HowToBaby",
     metaWhy: "Why this source is used",
@@ -271,6 +297,8 @@ export const UI_STRINGS: Record<UiLocale, {
     metaAppliesTo: "Áp dụng cho",
     metaScope: "Phạm vi",
     metaStatus: "Trạng thái nguồn",
+    metaPublished: "Phát hành",
+    metaUpdated: "Cập nhật",
     metaSourceVersion: "Phiên bản nguồn hiện tại",
     metaLastVerified: "HowToBaby kiểm chứng lần cuối",
     metaWhy: "Vì sao dùng nguồn này",
@@ -290,7 +318,11 @@ export function formatDate(date: string, locale: UiLocale): string {
   return `${months[m - 1]} ${d}, ${y}`;
 }
 
-/** "Last verified by HowToBaby: <date>" — HowToBaby's verification, never the source's own date. */
+/**
+ * "Last verified by HowToBaby: <date>" — the date HowToBaby's maintainer/review workflow actually
+ * confirmed the source (`lastVerifiedAt`): never the source's own date, never a crawl/fetch time
+ * and never a deploy time.
+ */
 export function verifiedLabel(date: string, locale: UiLocale): string {
   return `${UI_STRINGS[locale].metaLastVerified}: ${formatDate(date, locale)}`;
 }

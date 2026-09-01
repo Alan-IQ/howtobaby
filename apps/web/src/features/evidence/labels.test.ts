@@ -2,7 +2,7 @@
 /**
  * EN/VI presentation-parity guards for the evidence UI vocabulary: both locales must expose the
  * same label sets (no meaning available in one language only), a healthy `current` source must
- * carry no public status badge (its trust signal is the source-version + verification dates),
+ * carry no public status badge (its trust signal is the source-date + verification rows),
  * and metadata helpers must emit labeled rows, never bare values.
  */
 
@@ -18,9 +18,8 @@ import {
   UI_STRINGS,
   jurisdictionMeta,
   publicStatusLabel,
-  sourceVersionDate,
-  sourceVersionLabel,
-  sourceVersionMeta,
+  sourceDateLabel,
+  sourceDateMeta,
   verifiedLabel,
 } from "./labels";
 
@@ -62,27 +61,44 @@ describe("EN/VI presentation parity", () => {
   });
 });
 
-describe("source-version date (updatedAt ?? publishedAt, never invented)", () => {
-  it("prefers the authority's updatedAt over publishedAt", () => {
-    expect(sourceVersionDate({ publishedAt: "2025-01-10", updatedAt: "2026-04-14" })).toBe("2026-04-14");
-    expect(sourceVersionMeta({ publishedAt: "2025-01-10", updatedAt: "2026-04-14" }, "en")).toEqual({ label: "Current source version", value: "Apr 14, 2026" });
-    expect(sourceVersionLabel({ updatedAt: "2026-04-14" }, "vi")).toBe("Phiên bản nguồn hiện tại: 14/04/2026");
+describe("source date matrix (publishedAt / updatedAt are distinct upstream facts, never inferred)", () => {
+  it("A. both dates → Published + Updated rows, in that order, in both locales", () => {
+    const both = { publishedAt: "2025-01-10", updatedAt: "2026-04-14" };
+    expect(sourceDateMeta(both, "en")).toEqual([
+      { label: "Published", value: "Jan 10, 2025" },
+      { label: "Updated", value: "Apr 14, 2026" },
+    ]);
+    expect(sourceDateMeta(both, "vi")).toEqual([
+      { label: "Phát hành", value: "10/01/2025" },
+      { label: "Cập nhật", value: "14/04/2026" },
+    ]);
+    expect(sourceDateLabel(both, "en")).toBe("Published: Jan 10, 2025 · Updated: Apr 14, 2026");
+    expect(sourceDateLabel(both, "vi")).toBe("Phát hành: 10/01/2025 · Cập nhật: 14/04/2026");
   });
 
-  it("falls back to publishedAt when there is no updatedAt", () => {
-    expect(sourceVersionDate({ publishedAt: "2026-08-04" })).toBe("2026-08-04");
-    expect(sourceVersionLabel({ publishedAt: "2026-08-04" }, "en")).toBe("Current source version: Aug 4, 2026");
+  it("B. publishedAt only → a single Published row (no Updated, no Current source version)", () => {
+    expect(sourceDateMeta({ publishedAt: "2026-08-04" }, "en")).toEqual([{ label: "Published", value: "Aug 4, 2026" }]);
+    expect(sourceDateLabel({ publishedAt: "2026-08-04" }, "vi")).toBe("Phát hành: 04/08/2026");
+    expect(sourceDateLabel({ publishedAt: "2026-08-04" }, "en")).not.toContain("Updated");
+    expect(sourceDateLabel({ publishedAt: "2026-08-04" }, "en")).not.toContain("Current source version");
   });
 
-  it("omits the row entirely when the authority provides neither date", () => {
-    expect(sourceVersionDate({})).toBeUndefined();
-    expect(sourceVersionMeta({}, "en")).toBeUndefined();
-    expect(sourceVersionLabel({}, "vi")).toBeUndefined();
+  it("C. updatedAt only → Current source version (never presented as a publication date)", () => {
+    expect(sourceDateMeta({ updatedAt: "2026-04-14" }, "en")).toEqual([{ label: "Current source version", value: "Apr 14, 2026" }]);
+    expect(sourceDateLabel({ updatedAt: "2026-04-14" }, "vi")).toBe("Phiên bản nguồn hiện tại: 14/04/2026");
+    expect(sourceDateLabel({ updatedAt: "2026-04-14" }, "en")).not.toContain("Published");
   });
 
-  it("never conflates the source version with HowToBaby's verification date", () => {
+  it("D. neither → no rows and no label; a date is never invented", () => {
+    expect(sourceDateMeta({}, "en")).toEqual([]);
+    expect(sourceDateMeta({}, "vi")).toEqual([]);
+    expect(sourceDateLabel({}, "en")).toBeUndefined();
+    expect(sourceDateLabel({}, "vi")).toBeUndefined();
+  });
+
+  it("never conflates source dates with HowToBaby's verification date", () => {
     const source = { ...baseSource, updatedAt: "2026-04-14" };
-    expect(sourceVersionLabel(source, "en")).toBe("Current source version: Apr 14, 2026");
+    expect(sourceDateLabel(source, "en")).toBe("Current source version: Apr 14, 2026");
     expect(verifiedLabel(source.lastVerifiedAt, "en")).toBe("Last verified by HowToBaby: Aug 31, 2026");
   });
 });

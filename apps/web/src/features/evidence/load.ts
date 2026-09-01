@@ -27,8 +27,8 @@ import {
   jurisdictionMeta,
   publicStatusLabel,
   sourceStatusTone,
-  sourceVersionLabel,
-  sourceVersionMeta,
+  sourceDateLabel,
+  sourceDateMeta,
   verifiedLabel,
   type UiLocale,
 } from "./labels";
@@ -60,8 +60,9 @@ function relevantSectionValue(entry: ClaimEvidenceEntry["sourceRefs"][number], l
 
 /**
  * Labeled metadata rows for one source reference (GUI_DESIGN.md §11.3), in the required order:
- * relevant section → jurisdiction/scope → current source version (omitted when the authority
- * gives no date) → last verified by HowToBaby. Every row carries an explicit label with a small
+ * relevant section → jurisdiction/scope → source publication/version rows (the
+ * `sourceDateMeta` matrix: Published + Updated, Published only, Current source version, or
+ * nothing when the authority gives no date) → last verified by HowToBaby. Every row carries an explicit label with a small
  * decorative icon anchor and every value derives from canonical metadata. Role renders as a
  * badge; a status badge appears only for non-current sources; and "why this source is used" is
  * its own secondary block — all fed from the same canonical graph, never prose hard-coded in a
@@ -73,8 +74,7 @@ export function sourceMetaRows(ref: ClaimEvidenceEntry["sourceRefs"][number], so
   const section = relevantSectionValue(ref, locale);
   if (section !== undefined) meta.push({ label: strings.metaRelevantSection, value: section, icon: "document" });
   meta.push({ ...jurisdictionMeta(source, locale), icon: "globe" });
-  const version = sourceVersionMeta(source, locale);
-  if (version !== undefined) meta.push({ ...version, icon: "document" });
+  for (const row of sourceDateMeta(source, locale)) meta.push({ ...row, icon: "document" });
   meta.push({ label: strings.metaLastVerified, value: formatDate(source.lastVerifiedAt, locale), icon: "calendar" });
   return meta;
 }
@@ -110,7 +110,7 @@ export function referenceEntryForSource(source: SourceRecord, locale: UiLocale):
     sourceId: source.id,
     organization: source.organization,
     title: source.title,
-    ...optional("versionLabel", sourceVersionLabel(source, locale)),
+    ...optional("sourceDateLabel", sourceDateLabel(source, locale)),
     verifiedLabel: verifiedLabel(source.lastVerifiedAt, locale),
     url: source.canonicalUrl,
     ...optional("statusLabel", publicStatusLabel(source.status, locale)),
@@ -187,7 +187,7 @@ export interface EvidenceDetailSourceView {
   title: string;
   /** "Role in this guidance: …", plus " · Source status: …" only for a non-current source. */
   roleStatusLine: string;
-  /** Joined labeled metadata rows ("Relevant section: … · Applies to: … · Current source version: … · Last verified …"). */
+  /** Joined labeled metadata rows ("Relevant section: … · Applies to: … · Published: … · Updated: … · Last verified …"). */
   metaLine: string;
 }
 

@@ -110,6 +110,17 @@ describe("reverse evidence indexes", () => {
     expect(json.find((s) => s["sourceId"] === "who-complementary-feeding")!["publishedAt"]).toBe("2026-08-04");
   });
 
+  it("keeps publishedAt and updatedAt both when the authority states both — even when equal — never deriving one from the other", () => {
+    const registry = DATED_REGISTRY.replace("    updatedAt: 2026-04-14\n", "    publishedAt: 2026-04-14\n    updatedAt: 2026-04-14\n");
+    const { knowledge, dir } = loadFixture({ "sources/registry.yaml": registry });
+    cleanupFixture(dir);
+    const cdc = compileKnowledge(knowledge).publicSources.find((s) => s.sourceId === "cdc-introduction-solid-foods")!;
+    expect(cdc.publishedAt).toBe("2026-04-14");
+    expect(cdc.updatedAt).toBe("2026-04-14");
+    const who = compileKnowledge(knowledge).publicSources.find((s) => s.sourceId === "who-complementary-feeding")!;
+    expect(who.updatedAt).toBeUndefined(); // publishedAt only: updatedAt is not invented from it
+  });
+
   it("stable JSON serialization sorts keys recursively", () => {
     const artifacts = generatedJsonArtifacts(compiled);
     const text = artifacts.get("claim-evidence-index.json")!;

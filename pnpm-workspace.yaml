@@ -16,3 +16,12 @@ allowBuilds:
 # Run package scripts through pnpm's POSIX shell emulator so env-prefixed scripts
 # (e.g. `DEPLOY_TARGET=static next build`) behave identically on Windows and Linux/CI.
 shellEmulator: true
+
+# Virtual store: deliberately the default PROJECT store (`node_modules/.pnpm`), NOT `virtualStoreType: global`.
+# Verified 2026-09-01 with pnpm 11.24 + Next.js 16.3: Turbopack refuses to compile packages outside the
+# workspace root ("Could not find the Next.js package (next/package.json)… files outside of the workspace
+# root are not compiled"), and the global virtual store lives under `<pnpm store path>/links` — on
+# Windows usually another drive, so no `turbopack.root` can cover both. `next build --webpack` does work
+# with the global store, but switching bundlers is not worth it. Re-evaluate when Turbopack supports
+# external virtual stores; see CONTRIBUTING.md "Virtual store and the many node_modules".
+# `storeDir` is never pinned here (machine-specific); `pnpm store path` shows the real location.

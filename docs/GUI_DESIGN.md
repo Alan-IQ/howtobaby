@@ -355,18 +355,20 @@ Rules:
 
 ### 11.3 EvidenceDrawer
 
-`EvidenceDrawer` is the default detailed provenance surface. It should show:
+`EvidenceDrawer` is the default detailed provenance surface. It shows the HowToBaby claim/context being supported, then for each source the organization, the exact title and the relationship badge (primary/direct support/corroborating/contextual/conflicting), followed by the metadata **in this fixed order**:
 
-- HowToBaby claim/context being supported;
-- source organization and exact title;
-- relationship: primary/direct support/corroborating/contextual/conflicting;
-- locator such as section/heading/page when available;
-- jurisdiction/context (`Applies to: United States` / `Scope: Global`);
-- current source version (`Current source version: Apr 14, 2026` / VI `Phiên bản nguồn hiện tại: 14/04/2026`) — derived as `updatedAt ?? publishedAt`, omitted when the authority provides no date, placed after jurisdiction/scope and before the HowToBaby verification date;
-- last verified by HowToBaby date;
-- status badge only for a non-current source (reviewing an update, superseded, retired, temporarily unavailable); a healthy `current` source carries no status badge;
-- **View original source** action;
-- concise interpretation/uncertainty/conflict note when needed.
+1. `Relevant section` / VI `Phần liên quan` — locator such as section/heading/page, when available;
+2. `Applies to: United States` / `Scope: Global` (VI `Áp dụng cho` / `Phạm vi`);
+3. source publication/version metadata — the conditional matrix from EVIDENCE_PROVENANCE.md §14:
+   - both dates → `Published: Jan 10, 2025` + `Updated: Apr 14, 2026` (VI `Phát hành` + `Cập nhật`);
+   - `publishedAt` only → `Published: …` (VI `Phát hành`);
+   - `updatedAt` only → `Current source version: Apr 14, 2026` (VI `Phiên bản nguồn hiện tại: 14/04/2026`);
+   - neither → no source-version rows at all (never an inferred date);
+4. `Last verified by HowToBaby: Aug 31, 2026` / VI `HowToBaby kiểm chứng lần cuối: 31/08/2026` — HowToBaby's own review confirmation, never a crawl or deploy time;
+5. `Why this source is used` / VI `Vì sao dùng nguồn này` — derived from the canonical relationship;
+6. **View original source** / VI **Xem nguồn gốc** action.
+
+A status badge is rendered only when a status needs attention (`changed-review-required`, `superseded`, `retired`, `temporarily-unreachable`); a healthy `current` source carries no status UI. A concise interpretation/uncertainty/conflict note follows when needed.
 
 The drawer must not imply that CDC/AAP/WHO/FDA reviewed or endorsed HowToBaby.
 
@@ -381,12 +383,15 @@ Each entry may show:
 ```text
 CDC
 When, What, and How to Introduce Solid Foods
-Current source version: Apr 14, 2026 · Last verified by HowToBaby: Aug 31, 2026 · View original source ↗
+Published: Jan 10, 2025 · Updated: Apr 14, 2026 · Last verified by HowToBaby: Aug 31, 2026 · View original source ↗
 ```
 
-The source-version segment is omitted when the authority provides no date; a non-current status
-(e.g. `Reviewing an update`) is appended after the verification date, while a healthy `current`
-source shows no status text.
+The source-date segment follows the same conditional matrix as the drawer (`Published` +
+`Updated`, `Published` only, `Current source version`, or omitted when the authority provides no
+date) and always precedes the HowToBaby verification date; a non-current status (e.g. `Reviewing
+an update`) is appended after the verification date, while a healthy `current` source shows no
+status text. References stay one line per source — the joined form is the compact variant, no
+extra rows.
 
 ### 11.5 Evidence detail page
 
@@ -419,13 +424,19 @@ treatment — honest, never alarmist (see §11.8).
 ### 11.8 Freshness signals
 
 Keep public states calm and understandable. A healthy `current` source is a machine lifecycle
-state, not a public claim: it renders **no** status badge/chip. Its trust information is two
-labeled dates, always in this order:
+state, not a public claim: it renders **no** status badge/chip. Its trust information is labeled
+dates, always in this order:
 
-- `Current source version: Apr 14, 2026` / VI `Phiên bản nguồn hiện tại: 14/04/2026` — the
-  authority's own version date, derived as `updatedAt ?? publishedAt` and omitted when the
-  authority provides neither (never an invented date, never labeled "Published" for every source);
-- `Last verified by HowToBaby: Aug 31, 2026` — HowToBaby's verification, a different fact.
+- the authority's own dates per the source date provenance contract (EVIDENCE_PROVENANCE.md §14):
+  `Published: …` + `Updated: …` when both exist, `Published: …` alone, `Current source version: …`
+  when only `updatedAt` exists (VI `Phát hành` / `Cập nhật` / `Phiên bản nguồn hiện tại`), and
+  nothing at all when the authority provides neither — never an invented date, never `Published`
+  for a date the authority did not call a publication date;
+- `Last verified by HowToBaby: Aug 31, 2026` / VI `HowToBaby kiểm chứng lần cuối: 31/08/2026` —
+  HowToBaby's verification, a different fact.
+
+Status UI is conditional: it renders only when a state needs attention —
+`changed-review-required`, `superseded`, `retired`, `temporarily-unreachable`.
 
 Non-current states stay visible with the same attention treatment on every surface:
 

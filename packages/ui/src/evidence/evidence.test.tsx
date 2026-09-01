@@ -15,7 +15,8 @@ const cdc: EvidenceSourceView = {
   meta: [
     { label: "Relevant section", value: "“When, What, and How to Introduce Solid Foods”", icon: "document" },
     { label: "Applies to", value: "United States", icon: "globe" },
-    { label: "Current source version", value: "Apr 14, 2026", icon: "document" },
+    { label: "Published", value: "Jan 10, 2025", icon: "document" },
+    { label: "Updated", value: "Apr 14, 2026", icon: "document" },
     { label: "Last verified by HowToBaby", value: "Aug 31, 2026", icon: "calendar" },
   ],
   whyLabel: "Why this source is used",
@@ -54,7 +55,9 @@ describe("EvidenceDrawer (GUI_DESIGN.md §11.3)", () => {
       "Relevant section",
       "Applies to",
       "United States",
-      "Current source version",
+      "Published",
+      "Jan 10, 2025",
+      "Updated",
       "Apr 14, 2026",
       "Last verified by HowToBaby",
       "Aug 31, 2026",
@@ -106,11 +109,11 @@ describe("EvidenceDrawer (GUI_DESIGN.md §11.3)", () => {
 
 describe("ReferenceList (GUI_DESIGN.md §11.4)", () => {
   it("deduplicates by source ID and renders provenance per entry", () => {
-    const entry = { sourceId: cdc.sourceId, organization: "CDC", title: cdc.title, versionLabel: "Current source version: Apr 14, 2026", verifiedLabel: "Last verified by HowToBaby: Aug 31, 2026", url: cdc.url };
+    const entry = { sourceId: cdc.sourceId, organization: "CDC", title: cdc.title, sourceDateLabel: "Published: Jan 10, 2025 · Updated: Apr 14, 2026", verifiedLabel: "Last verified by HowToBaby: Aug 31, 2026", url: cdc.url };
     const html = renderToStaticMarkup(<ReferenceList entries={[entry, entry]} />);
     expect(html).toContain("Sources used on this page");
     expect(html.match(/htb-reference-list__entry/g)).toHaveLength(1);
-    expect(html).toContain("Current source version: Apr 14, 2026");
+    expect(html).toContain("Published: Jan 10, 2025 · Updated: Apr 14, 2026");
     expect(html).toContain("Last verified by HowToBaby: Aug 31, 2026");
     expect(html).not.toContain("htb-reference-list__status"); // current source: no status text
     const reviewing = renderToStaticMarkup(<ReferenceList entries={[{ ...entry, statusLabel: "Reviewing an update" }]} />);

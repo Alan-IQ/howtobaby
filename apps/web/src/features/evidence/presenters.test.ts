@@ -70,12 +70,13 @@ describe("/sources registry presenter", () => {
     }
   });
 
-  it("places the source-version segment (updatedAt ?? publishedAt) before HowToBaby's verification, or omits it", () => {
-    const updated = sourceRegistryEntryView({ ...ENTRY, publishedAt: "2025-01-10", updatedAt: "2026-04-14" }, "en").metaLine;
-    expect(updated).toContain("Current source version: Apr 14, 2026 · Last verified by HowToBaby: Aug 26, 2026");
-    expect(updated).not.toContain("Jan 10, 2025");
-    expect(sourceRegistryEntryView({ ...ENTRY, publishedAt: "2026-08-04" }, "en").metaLine).toContain("Current source version: Aug 4, 2026");
-    expect(sourceRegistryEntryView(ENTRY, "en").metaLine).not.toContain("Current source version");
+  it("renders the source-date matrix before HowToBaby's verification, or omits it", () => {
+    const both = sourceRegistryEntryView({ ...ENTRY, publishedAt: "2025-01-10", updatedAt: "2026-04-14" }, "en").metaLine;
+    expect(both).toContain("Published: Jan 10, 2025 · Updated: Apr 14, 2026 · Last verified by HowToBaby: Aug 26, 2026");
+    expect(sourceRegistryEntryView({ ...ENTRY, publishedAt: "2026-08-04" }, "en").metaLine).toContain("Published: Aug 4, 2026 · Last verified");
+    expect(sourceRegistryEntryView({ ...ENTRY, updatedAt: "2026-04-14" }, "en").metaLine).toContain("Current source version: Apr 14, 2026 · Last verified");
+    const none = sourceRegistryEntryView(ENTRY, "en").metaLine;
+    for (const label of ["Published", "Updated", "Current source version"]) expect(none).not.toContain(label);
   });
 });
 

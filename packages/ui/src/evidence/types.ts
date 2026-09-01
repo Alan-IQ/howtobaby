@@ -33,14 +33,14 @@ export interface EvidenceSourceView {
   /**
    * Localized public status rendered as a compact badge — present only for a NON-current source
    * (reviewing an update, superseded, retired, temporarily unavailable). A healthy `current`
-   * source carries no badge: its trust information is the source-version and verification rows.
+   * source carries no badge: its trust information is the source-date and verification rows.
    */
   statusLabel?: string;
   /** "attention" uses the caution tint for non-current states; never the only signal. */
   statusTone?: "calm" | "attention";
   /**
-   * Labeled metadata rows in display order (relevant section, applies-to/scope, current source
-   * version, last verified by HowToBaby) — all caller-localized and derived from canonical
+   * Labeled metadata rows in display order (relevant section, applies-to/scope, source
+   * publication/version rows, last verified by HowToBaby) — all caller-localized and derived from canonical
    * metadata upstream.
    */
   meta: EvidenceMetaEntry[];
@@ -59,8 +59,11 @@ export interface ReferenceEntry {
   sourceId: string;
   organization: string;
   title: string;
-  /** "Current source version: <date>" — omitted when the authority records no source date. */
-  versionLabel?: string;
+  /**
+   * Source publication/version metadata as one compact line ("Published: … · Updated: …",
+   * "Published: …" or "Current source version: …") — omitted when the authority records no date.
+   */
+  sourceDateLabel?: string;
   verifiedLabel: string;
   url: string;
   /** Public status for a NON-current source only; a healthy `current` source shows none. */

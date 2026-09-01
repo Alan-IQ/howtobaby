@@ -76,11 +76,11 @@ Date fields carry three distinct meanings and must never be conflated:
 
 - `publishedAt` — the publication date, only when the authority provides one and it can be determined;
 - `updatedAt` — the source's current revision/update date, only when the authority provides one (CDC "last reviewed/updated", WHO fact-sheet revision date, …). Authorities label these dates differently, so HowToBaby never calls every date "Published";
-- `lastVerifiedAt` — the date a HowToBaby maintainer actually opened and checked the source. This is HowToBaby's verification, entirely separate from the source-version dates.
+- `lastVerifiedAt` — the date HowToBaby's maintainer/review workflow actually opened, checked and confirmed the source. This is HowToBaby's verification, entirely separate from the source dates: it is **not** a crawl/fetch time (Evidence Watch snapshots record their own `fetchedAt`) and **not** a deploy/build time.
 
-The **current source version** shown to users is derived deterministically as `updatedAt ?? publishedAt`; when the authority provides neither, the row is omitted — a date is never invented. Both fields are copied verbatim from the original source page into canonical YAML and propagate unchanged through every derived read model (`knowledge.sqlite`, `source-public-index.json`, `PublicSourceEntry`).
+`publishedAt` and `updatedAt` are **different upstream facts** and are never inferred from each other: a missing `publishedAt` is never filled from `updatedAt`, a missing `updatedAt` never from `publishedAt`, and neither is ever guessed from a crawl, a copyright line or a deploy. Both are copied verbatim from the original source page into canonical YAML and propagate unchanged through every derived read model (`knowledge.sqlite`, `source-public-index.json`, `PublicSourceEntry`) to the evidence presenters — no UI layer keeps its own copy of source dates. Their public presentation follows one deterministic matrix (§14, "Source date provenance contract").
 
-`status: current` is a machine lifecycle state used by validation and Evidence Watch. A healthy `current` source carries **no** public badge; the source-version date plus `lastVerifiedAt` are its public trust information (§14).
+`status: current` is a machine lifecycle state used by validation and Evidence Watch. A healthy `current` source carries **no** public badge; the source date rows plus `lastVerifiedAt` are its public trust information (§14).
 
 `approvalLevel`/`approvedScopes` are the machine-checkable approval boundary: build validation
 only accepts a `primary`/`direct-support` relationship when the source is `approved-primary` and
@@ -193,19 +193,16 @@ The default scan path remains clean. Organization names are interactive when evi
 
 ### Layer B — Evidence Drawer
 
-Opening the source chip should show, for each supporting source:
+Opening the source chip should show, for each supporting source, the organization, the exact source title, the relationship to the claim (role badge), then the metadata **in this order**:
 
-- organization;
-- source title;
-- relationship to the claim;
-- source locator when useful;
-- jurisdiction/context;
-- current source version (`updatedAt ?? publishedAt`; omitted when the authority gives no date) — shown after jurisdiction/scope and before the HowToBaby verification date;
-- last verified by HowToBaby date;
-- status only for a non-current source (reviewing an update / superseded / retired / temporarily unavailable) — a healthy `current` source shows no status badge;
-- **View original** link;
-- concise HowToBaby interpretation note where necessary;
-- meaningful conflict/uncertainty note.
+1. **Relevant section** — source locator, when useful;
+2. **Applies to / Scope** — jurisdiction/context;
+3. **source publication/version metadata** — per the source date provenance contract (§14): `Published` + `Updated`, `Published` only, `Current source version`, or nothing;
+4. **Last verified by HowToBaby** — `lastVerifiedAt`, always after the source dates;
+5. **Why this source is used** — derived from the canonical relationship;
+6. **View original source** link.
+
+A status badge is rendered only for a non-current source (reviewing an update / superseded / retired / temporarily unavailable); a healthy `current` source shows no status UI at all. A concise HowToBaby interpretation note and a meaningful conflict/uncertainty note follow where necessary.
 
 Do not imply the authority reviewed or endorsed HowToBaby.
 
@@ -268,7 +265,7 @@ Shows the authorities and exact source records currently used by HowToBaby, grou
 Useful metadata:
 
 - source count;
-- current source version (`updatedAt ?? publishedAt`, when available);
+- source publication/version metadata (same contract as §14: `Published`/`Updated`, `Published`, `Current source version`, or omitted);
 - last verification date (HowToBaby);
 - status — rendered only for non-current sources, with the same attention treatment as the Evidence Drawer;
 - topics/claims using the source;
@@ -364,7 +361,7 @@ Public UI should normally show simple trust signals rather than internal workflo
 
 Recommended display:
 
-- healthy `current` source — **no status badge**. Its trust information is the source-version metadata row (`Current source version: Apr 14, 2026` / VI `Phiên bản nguồn hiện tại: 14/04/2026`, derived as `updatedAt ?? publishedAt`, omitted when the authority provides no date) plus **Last verified by HowToBaby: [date]**;
+- healthy `current` source — **no status badge**. Its trust information is the source date metadata (contract below) plus **Last verified by HowToBaby: [date]** / VI **HowToBaby kiểm chứng lần cuối: [date]**;
 - **Reviewing an update** / VI **Đang rà soát bản cập nhật** — monitored source changed and the relevant claim is being re-reviewed;
 - **Superseded** — normally not shown as current advice; visible in history when useful;
 - **Retired** and **Source temporarily unavailable** — shown honestly rather than silently removing the evidence.
@@ -374,6 +371,27 @@ Every non-current state uses the same semantic attention treatment and the same 
 Internal states remain more granular.
 
 A changed source does not automatically mean the existing recommendation is wrong. Wording should avoid unnecessary alarm.
+
+### Source date provenance contract
+
+`publishedAt` and `updatedAt` are distinct upstream metadata (§2) and are never inferred from each other. Every surface that shows source dates (Evidence Drawer, `/sources`, `/evidence/[slug]`, page References) renders the same deterministic matrix from the same canonical fields:
+
+| Canonical fields | EN presentation | VI presentation |
+| --- | --- | --- |
+| A. `publishedAt` **and** `updatedAt` | `Published: <publishedAt>` then `Updated: <updatedAt>` | `Phát hành: <publishedAt>` then `Cập nhật: <updatedAt>` |
+| B. `publishedAt` only | `Published: <publishedAt>` | `Phát hành: <publishedAt>` |
+| C. `updatedAt` only | `Current source version: <updatedAt>` | `Phiên bản nguồn hiện tại: <updatedAt>` |
+| D. neither | source-version metadata omitted entirely | bỏ hẳn metadata phiên bản nguồn |
+
+Rules:
+
+- case C never presents `updatedAt` as a publication date, and case B never presents `publishedAt` as an update;
+- case D never infers, guesses or substitutes a date (no crawl time, no copyright year, no deploy date);
+- after the source date metadata — and only after it — comes **Last verified by HowToBaby: <lastVerifiedAt>** / VI **HowToBaby kiểm chứng lần cuối: <lastVerifiedAt>**, the date the HowToBaby maintainer/review workflow actually confirmed the source (never a crawl/fetch time, never a deploy time);
+- dates are calendar dates (`YYYY-MM-DD` in YAML), formatted `Apr 14, 2026` in EN and `14/04/2026` in VI;
+- list surfaces (`/sources`, References) join the same rows on one line (`Published: Jan 10, 2025 · Updated: Apr 14, 2026 · Last verified by HowToBaby: Aug 31, 2026`) rather than inventing a shorter variant.
+
+Regression tests cover all four cases plus the non-current status states (`apps/web/src/features/evidence/labels.test.ts`, `load.test.ts`, `presenters.test.ts`, `packages/ui/src/evidence/evidence.test.tsx`).
 
 ## 15. Source disagreement
 

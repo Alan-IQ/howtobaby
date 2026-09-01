@@ -79,9 +79,10 @@ export interface PublicSourceEntry {
   /**
    * Source-version dates as the authority states them (EVIDENCE_PROVENANCE.md §2/§14):
    * `publishedAt` = publication date, `updatedAt` = the source's current revision/update date.
-   * Public surfaces derive "current source version" as `updatedAt ?? publishedAt` and omit it
-   * when neither is recorded — never an invented date. Both are distinct from `lastVerifiedAt`,
-   * which is HowToBaby's own verification date.
+   * They are DIFFERENT upstream facts, copied verbatim from the canonical record and never derived
+   * from each other (even when equal); public surfaces present them through one conditional matrix
+   * (Published + Updated / Published / Current source version / omitted — never an invented date).
+   * Both are distinct from `lastVerifiedAt`, which is HowToBaby's own verification date.
    */
   publishedAt?: string;
   updatedAt?: string;
@@ -222,7 +223,7 @@ export function compileKnowledge(knowledge: CanonicalKnowledge): CompiledKnowled
     sourceType: source.sourceType,
     status: source.status,
     ...(source.publishedAt !== undefined ? { publishedAt: source.publishedAt } : {}),
-    ...(source.updatedAt !== undefined && source.updatedAt !== source.publishedAt ? { updatedAt: source.updatedAt } : {}),
+    ...(source.updatedAt !== undefined ? { updatedAt: source.updatedAt } : {}),
     lastVerifiedAt: source.lastVerifiedAt,
     claimCount: sourceClaimMap.get(source.id)?.size ?? 0,
   }));
