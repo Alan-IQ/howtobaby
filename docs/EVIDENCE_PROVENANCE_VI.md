@@ -85,17 +85,29 @@ Khi click, hiển thị:
 organization, exact source title, relationship (role badge), rồi metadata **theo đúng thứ tự**:
 
 1. **Phần liên quan** — section/page locator khi hữu ích;
-2. **Áp dụng cho / Phạm vi** — jurisdiction/scope;
-3. **metadata phát hành/phiên bản nguồn** — theo hợp đồng ngày nguồn (§10): chỉ `Phát hành`, `Phiên bản nguồn hiện tại`, `Phát hành` + `Cập nhật` (chỉ khi cập nhật muộn hơn), hoặc không có gì;
+2. **Phạm vi áp dụng** — jurisdiction/scope;
+3. **metadata phát hành/phiên bản nguồn** — theo hợp đồng ngày nguồn (§10): chỉ `Ngày xuất bản`, `Phiên bản tài liệu hiện tại`, `Ngày xuất bản` + `Ngày cập nhật` (chỉ khi cập nhật muộn hơn), hoặc không có gì;
 4. **HowToBaby kiểm chứng lần cuối** — `lastVerifiedAt`, luôn đứng sau ngày của nguồn;
-5. **Vì sao dùng nguồn này** — suy từ relationship canonical;
-6. link **Xem nguồn gốc**.
+5. **Vì sao HowToBaby sử dụng tài liệu này** — suy từ relationship canonical;
+6. link **Xem tài liệu gốc**.
 
 Badge trạng thái CHỈ render khi source không còn `current` (đang rà soát bản cập nhật / superseded / retired / tạm không truy cập được); source `current` lành mạnh không có status UI. Interpretation/conflict note đi sau khi cần.
 
 ### C. References cuối page
 
 Mỗi guidance page có **Sources used on this page**, nhưng list này phải auto-generate từ claims đang render, không maintain riêng bằng tay.
+
+### Quy ước thuật ngữ tiếng Việt public
+
+Model kỹ thuật vẫn dùng `SourceRecord`, `ClaimSourceRef`, `SourceLocator`, source ID và route `/sources`. Khi hiển thị cho phụ huynh bằng tiếng Việt, dùng **tài liệu** thay cho một chữ **nguồn** đứng riêng:
+
+- drawer title → **Tài liệu tham khảo cho hướng dẫn này**; References → **Tài liệu tham khảo trên trang này**
+- `/sources` giữ nguyên route; title/heading VI → **Tài liệu tham khảo** / **Danh mục tài liệu tham khảo**
+- relationship: `primary` → **Tài liệu chính**, `direct-support` → **Tài liệu hỗ trợ trực tiếp**, `corroborating` → **Tài liệu đối chiếu**, `contextual` → **Tài liệu bổ trợ**, `conflicting` → **Tài liệu có khuyến nghị khác**
+- `Source status` → **Trạng thái tài liệu**; `Source temporarily unavailable` → **Tài liệu hiện tạm thời không truy cập được**
+- `Why this source is used` → **Vì sao HowToBaby sử dụng tài liệu này**; `View original source` → **Xem tài liệu gốc**
+
+Không global replace `nguồn` → `tài liệu` trong technical prose: `source of truth` (**nguồn chuẩn**), `data source` (**nguồn dữ liệu**), source index, canonical provenance graph giữ nguyên. Đây là thay đổi wording cho phụ huynh, không phải rename data model.
 
 ## 5. Có nên link source gốc? Có
 
@@ -167,16 +179,16 @@ Mọi surface hiện ngày nguồn (Evidence Drawer, `/sources`, `/evidence/[slu
 
 | Trường canonical | EN | VI |
 | --- | --- | --- |
-| A. chỉ `publishedAt` | `Published: <publishedAt>` | `Phát hành: <publishedAt>` |
-| B. chỉ `updatedAt` | `Current source version: <updatedAt>` | `Phiên bản nguồn hiện tại: <updatedAt>` |
-| C. có cả hai, `updatedAt === publishedAt` | chỉ `Published: <publishedAt>` | chỉ `Phát hành: <publishedAt>` |
-| D. có cả hai, `updatedAt > publishedAt` | `Published: <publishedAt>` rồi `Updated: <updatedAt>` | `Phát hành: <publishedAt>` rồi `Cập nhật: <updatedAt>` |
+| A. chỉ `publishedAt` | `Published: <publishedAt>` | `Ngày xuất bản: <publishedAt>` |
+| B. chỉ `updatedAt` | `Current source version: <updatedAt>` | `Phiên bản tài liệu hiện tại: <updatedAt>` |
+| C. có cả hai, `updatedAt === publishedAt` | chỉ `Published: <publishedAt>` | chỉ `Ngày xuất bản: <publishedAt>` |
+| D. có cả hai, `updatedAt > publishedAt` | `Published: <publishedAt>` rồi `Updated: <updatedAt>` | `Ngày xuất bản: <publishedAt>` rồi `Ngày cập nhật: <updatedAt>` |
 | E. không có cả hai | bỏ hẳn metadata ngày nguồn | bỏ hẳn metadata ngày nguồn |
 
 Quy tắc:
 
 - case B không bao giờ trình bày `updatedAt` như ngày phát hành; case A không trình bày `publishedAt` như ngày cập nhật;
-- case C là một phiên bản nguồn duy nhất: không lặp cùng một ngày thành `Cập nhật`/thông tin phiên bản;
+- case C là một phiên bản nguồn duy nhất: không lặp cùng một ngày thành `Ngày cập nhật`/thông tin phiên bản;
 - case E tuyệt đối không infer/guess/thay thế ngày (không crawl time, không năm copyright, không ngày deploy);
 - `sourceDateMeta()` (`apps/web/src/features/evidence/labels.ts`) là nguồn trình bày duy nhất của ma trận này; consumer chỉ render các hàng nó trả về, không branch lại trên trường thô;
 - validation canonical (`packages/knowledge/src/validate.ts`, `pnpm validate:knowledge`) fail khi `publishedAt`/`updatedAt` không phải calendar date hợp lệ, nằm trong tương lai, hoặc `updatedAt < publishedAt` (`source-date-order`); hai ngày bằng nhau là hợp lệ. UI không bao giờ che metadata canonical sai — phải sửa ở source registry;

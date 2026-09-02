@@ -212,6 +212,30 @@ Every guidance page should provide a deduplicated **Sources used on this page** 
 
 A page-level reference list is generated from claim provenance, not manually maintained separately.
 
+### Vietnamese public evidence vocabulary
+
+The canonical provenance model remains source-oriented (`SourceRecord`, `ClaimSourceRef`, `SourceLocator`, source IDs and `/sources`). Vietnamese parent-facing presentation is document-oriented and MUST NOT rename the underlying model.
+
+Use:
+
+- `Sources` → `Tài liệu tham khảo`
+- `Original source` → `Tài liệu gốc`
+- `Primary source` → `Tài liệu chính`
+- `Direct support` → `Tài liệu hỗ trợ trực tiếp`
+- `Corroborating source` → `Tài liệu đối chiếu`
+- `Contextual source` → `Tài liệu bổ trợ`
+- `Conflicting source/view` → `Tài liệu có khuyến nghị khác`
+- `Current source version` → `Phiên bản tài liệu hiện tại`
+- `Source status` → `Trạng thái tài liệu`
+- `Why this source is used` → `Vì sao HowToBaby sử dụng tài liệu này`
+- `View original source` → `Xem tài liệu gốc`
+- `/sources` page heading → `Tài liệu tham khảo`
+- page References heading → `Tài liệu tham khảo trên trang này`
+
+Do not mechanically replace technical `source` terminology. `SourceRecord`, `SourceLocator`, `sourceId`, source relationships, source indexes, `source of truth`, `data source`, and the `/sources` route retain their existing technical identity.
+
+The source-date contract (§14) is unchanged except for Vietnamese presentation: only `publishedAt` → `Ngày xuất bản`; only `updatedAt` → `Phiên bản tài liệu hiện tại`; equal published/updated → only `Ngày xuất bản`; later update → `Ngày xuất bản` + `Ngày cập nhật`; neither → omit.
+
 ## 7. Original-source links
 
 Yes: parents should be able to open the original authority.
@@ -378,10 +402,10 @@ A changed source does not automatically mean the existing recommendation is wron
 
 | Canonical fields | EN presentation | VI presentation |
 | --- | --- | --- |
-| A. `publishedAt` only | `Published: <publishedAt>` | `Phát hành: <publishedAt>` |
-| B. `updatedAt` only | `Current source version: <updatedAt>` | `Phiên bản nguồn hiện tại: <updatedAt>` |
-| C. both, `updatedAt === publishedAt` | `Published: <publishedAt>` only | `Phát hành: <publishedAt>` only |
-| D. both, `updatedAt > publishedAt` | `Published: <publishedAt>` then `Updated: <updatedAt>` | `Phát hành: <publishedAt>` then `Cập nhật: <updatedAt>` |
+| A. `publishedAt` only | `Published: <publishedAt>` | `Ngày xuất bản: <publishedAt>` |
+| B. `updatedAt` only | `Current source version: <updatedAt>` | `Phiên bản tài liệu hiện tại: <updatedAt>` |
+| C. both, `updatedAt === publishedAt` | `Published: <publishedAt>` only | `Ngày xuất bản: <publishedAt>` only |
+| D. both, `updatedAt > publishedAt` | `Published: <publishedAt>` then `Updated: <updatedAt>` | `Ngày xuất bản: <publishedAt>` then `Ngày cập nhật: <updatedAt>` |
 | E. neither | source-date metadata omitted entirely | bỏ hẳn metadata ngày nguồn |
 
 Rules:

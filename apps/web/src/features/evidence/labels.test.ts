@@ -71,7 +71,7 @@ describe("source date matrix (publishedAt / updatedAt are distinct upstream fact
 
   it("B. updatedAt only → Current source version (never presented as a publication date)", () => {
     expect(sourceDateMeta({ updatedAt: "2026-04-14" }, "en")).toEqual([{ label: "Current source version", value: "Apr 14, 2026" }]);
-    expect(sourceDateLabel({ updatedAt: "2026-04-14" }, "vi")).toBe("Phiên bản nguồn hiện tại: 14/04/2026");
+    expect(sourceDateLabel({ updatedAt: "2026-04-14" }, "vi")).toBe("Phiên bản tài liệu hiện tại: 14/04/2026");
     expect(sourceDateLabel({ updatedAt: "2026-04-14" }, "en")).not.toContain("Published");
   });
 

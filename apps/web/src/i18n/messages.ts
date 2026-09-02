@@ -225,7 +225,7 @@ export const MESSAGES = defineMessages({
       "Phần mềm: AGPL-3.0-only · Nội dung gốc: CC BY-NC-SA 4.0 · Tên và logo HowToBaby không thuộc phạm vi của các giấy phép này.",
 
     "trust.eyebrow": "Minh bạch",
-    "trust.sources.label": "Nguồn tham khảo",
+    "trust.sources.label": "Tài liệu tham khảo",
     "trust.methodology.label": "Phương pháp biên soạn",
     "trust.editorialPolicy.label": "Chính sách biên tập",
     "trust.disclaimer.label": "Miễn trừ trách nhiệm y tế",
@@ -244,20 +244,20 @@ export const MESSAGES = defineMessages({
     "page.home.blurb.tools": "Các tiện ích thiết thực: công cụ tính, lịch sinh hoạt và âm thanh giúp thư giãn.",
     "page.home.how.title": "HowToBaby hoạt động như thế nào",
     "page.home.how.p1":
-      "HowToBaby sắp xếp các hướng dẫn chính thức từ các cơ quan y tế công cộng theo độ tuổi và bối cảnh, giữ từng nội dung luôn gắn với nguồn, rồi chuyển thành những việc cha mẹ có thể áp dụng trong thực tế — mà không diễn giải chính xác hơn mức nguồn cho phép.",
+      "HowToBaby sắp xếp các hướng dẫn chính thức từ các cơ quan y tế công cộng theo độ tuổi và bối cảnh, giữ từng nội dung luôn gắn với tài liệu gốc, rồi chuyển thành những việc cha mẹ có thể áp dụng trong thực tế — mà không diễn giải chính xác hơn mức tài liệu gốc cho phép.",
     "page.home.how.p2":
-      "Hiện HowToBaby đã có một số ít hướng dẫn chính thức dựa trên bằng chứng; phần Ăn uống là nơi đầu tiên được triển khai. Mỗi nội dung đều liên kết đến nguồn ban đầu. Tính năng duyệt theo độ tuổi, trang Hiện tại được cá nhân hóa và các mảng còn lại sẽ được bổ sung khi nội dung hoàn tất quy trình kiểm chứng và rà soát.",
+      "Hiện HowToBaby đã có một số ít hướng dẫn chính thức dựa trên bằng chứng; phần Ăn uống là nơi đầu tiên được triển khai. Mỗi nội dung đều liên kết đến tài liệu gốc. Tính năng duyệt theo độ tuổi, trang Hiện tại được cá nhân hóa và các mảng còn lại sẽ được bổ sung khi nội dung hoàn tất quy trình kiểm chứng và rà soát.",
 
     "section.placeholder.title": "Nội dung sẽ có trong mục này",
     "section.placeholder.note":
-      "Mục này đã có sẵn trong HowToBaby. Nội dung hướng dẫn chỉ được xuất bản sau khi hoàn tất quy trình biên soạn, kiểm chứng nguồn và rà soát — không đưa nội dung chưa được duyệt đến người dùng.",
+      "Mục này đã có sẵn trong HowToBaby. Nội dung hướng dẫn chỉ được xuất bản sau khi hoàn tất quy trình biên soạn, kiểm chứng tài liệu và rà soát — không đưa nội dung chưa được duyệt đến người dùng.",
 
     "page.feeding.lede":
-      "Hướng dẫn ăn uống theo từng giai đoạn và mức độ sẵn sàng của bé, với nguồn tham khảo rõ ràng cho từng nội dung.",
+      "Hướng dẫn ăn uống theo từng giai đoạn và mức độ sẵn sàng của bé, với tài liệu tham khảo rõ ràng cho từng nội dung.",
     "page.feeding.hold.p1":
-      "Bú mẹ hoặc dùng sữa công thức, bắt đầu ăn dặm, kết cấu thức ăn, cho ăn theo tín hiệu của bé, làm quen với thực phẩm dễ gây dị ứng và an toàn khi ăn uống — được sắp xếp theo giai đoạn và mức độ sẵn sàng thay vì chỉ dựa vào một mốc tuổi; mỗi nội dung đều liên kết đến nguồn ban đầu.",
+      "Bú mẹ hoặc dùng sữa công thức, bắt đầu ăn dặm, kết cấu thức ăn, cho ăn theo tín hiệu của bé, làm quen với thực phẩm dễ gây dị ứng và an toàn khi ăn uống — được sắp xếp theo giai đoạn và mức độ sẵn sàng thay vì chỉ dựa vào một mốc tuổi; mỗi nội dung đều liên kết đến tài liệu gốc.",
     "page.feeding.hold.p2":
-      "Nội dung chỉ xuất hiện tại đây sau khi đã qua quy trình biên soạn, kiểm chứng nguồn và rà soát — không đăng nội dung chưa được duyệt. Phần Ăn uống đầy đủ sẽ được triển khai ở giai đoạn sau.",
+      "Nội dung chỉ xuất hiện tại đây sau khi đã qua quy trình biên soạn, kiểm chứng tài liệu và rà soát — không đăng nội dung chưa được duyệt. Phần Ăn uống đầy đủ sẽ được triển khai ở giai đoạn sau.",
     "guidance.feeding.eyebrow": "Bắt đầu ăn dặm",
 
     "page.play.lede":
@@ -281,32 +281,32 @@ export const MESSAGES = defineMessages({
 
     "page.evidence.eyebrow": "Bằng chứng",
     "page.evidence.lede":
-      "Nội dung này nói gì, những nguồn ban đầu nào hỗ trợ và HowToBaby kiểm chứng lần cuối khi nào.",
+      "Nội dung này nói gì, những tài liệu gốc nào hỗ trợ và HowToBaby kiểm chứng lần cuối khi nào.",
     "page.evidence.claim.title": "Nội dung",
-    "page.evidence.sources.title": "Nguồn hỗ trợ",
-    "page.evidence.original.title": "Nguồn ban đầu",
+    "page.evidence.sources.title": "Tài liệu tham khảo",
+    "page.evidence.original.title": "Tài liệu gốc",
 
-    "page.sources.lede": "Danh mục các nguồn ban đầu mà HowToBaby sử dụng để xây dựng nội dung hướng dẫn.",
+    "page.sources.lede": "Danh mục tài liệu tham khảo mà HowToBaby sử dụng để xây dựng nội dung hướng dẫn.",
     "sources.usedByClaims.one": "Được dùng cho 1 nội dung hướng dẫn đã xuất bản",
     "sources.usedByClaims.many": "Được dùng cho {count} nội dung hướng dẫn đã xuất bản",
     "sources.generatedNote":
-      "Mỗi nguồn ở trên được quản lý dưới dạng dữ liệu đã qua rà soát trong kho mã nguồn công khai. Trang này được tạo tự động từ dữ liệu đó, không chỉnh sửa thủ công.",
+      "Mỗi tài liệu ở trên được quản lý dưới dạng dữ liệu đã qua rà soát trong kho mã nguồn công khai. Trang này được tạo tự động từ dữ liệu đó, không chỉnh sửa thủ công.",
     "sources.browseRepository": "Xem kho mã nguồn",
 
     "page.methodology.lede":
-      "Cách HowToBaby chuyển một nguồn ban đầu thành nội dung hướng dẫn, đồng thời quản lý việc kiểm chứng và rà soát theo thời gian.",
+      "Cách HowToBaby chuyển một tài liệu gốc thành nội dung hướng dẫn, đồng thời quản lý việc kiểm chứng và rà soát theo thời gian.",
     "methodology.p1":
-      "HowToBaby diễn giải, trích dẫn và liên kết đến nguồn. Mỗi nội dung được phân loại — hướng dẫn chính thức, tổng hợp bằng chứng, xu hướng thường gặp, kế hoạch mẫu, cách áp dụng thực tế hoặc gợi ý của HowToBaby — rồi gắn với một hay nhiều nguồn cùng vị trí liên quan trong nguồn và được rà soát trước khi xuất bản. Những từ thể hiện mức độ chắc chắn như “khoảng”, “có thể” hoặc “khi đã sẵn sàng” phải được giữ nguyên, không bị diễn giải thành một mốc chính xác hơn nguồn cho phép.",
+      "HowToBaby diễn giải, trích dẫn và liên kết đến tài liệu gốc. Mỗi nội dung được phân loại — hướng dẫn chính thức, tổng hợp bằng chứng, xu hướng thường gặp, kế hoạch mẫu, cách áp dụng thực tế hoặc gợi ý của HowToBaby — rồi gắn với một hay nhiều tài liệu cùng vị trí liên quan trong tài liệu đó và được rà soát trước khi xuất bản. Những từ thể hiện mức độ chắc chắn như “khoảng”, “có thể” hoặc “khi đã sẵn sàng” phải được giữ nguyên, không bị diễn giải thành một mốc chính xác hơn mức tài liệu gốc cho phép.",
     "methodology.p2":
-      "Nguồn, lịch sử kiểm chứng và trạng thái rà soát được theo dõi trong mô hình dữ liệu chuẩn. Khi một thay đổi ở nguồn được ghi nhận, các nội dung phụ thuộc vào nguồn đó sẽ được đánh dấu để rà soát lại; hệ thống không tự viết lại hướng dẫn. Tự động theo dõi thay đổi nguồn sẽ được triển khai ở giai đoạn sau.",
+      "Tài liệu gốc, lịch sử kiểm chứng và trạng thái rà soát được theo dõi trong mô hình dữ liệu chuẩn. Khi một thay đổi ở tài liệu gốc được ghi nhận, các nội dung phụ thuộc vào tài liệu đó sẽ được đánh dấu để rà soát lại; hệ thống không tự viết lại hướng dẫn. Tự động theo dõi thay đổi tài liệu gốc sẽ được triển khai ở giai đoạn sau.",
     "methodology.note": "Tài liệu phương pháp đầy đủ được cập nhật cùng với hệ thống bằng chứng trong quá trình triển khai.",
 
     "page.editorialPolicy.lede":
       "Ai biên soạn và rà soát nội dung HowToBaby, cùng những điều kiện bắt buộc trước khi xuất bản.",
     "editorialPolicy.p1":
-      "Nội dung tiếng Anh được biên soạn và rà soát trước. Bản tiếng Việt phải giữ nguyên ý nghĩa, số liệu, câu phủ định, mức độ khẩn cấp và các mốc tuổi. Nội dung được phân loại là hướng dẫn chính thức phải có nguồn chính đã được phê duyệt hỗ trợ trực tiếp. Nếu các nguồn có điểm khác nhau, HowToBaby phải trình bày rõ thay vì làm mờ bằng cách gộp hoặc lấy trung bình.",
+      "Nội dung tiếng Anh được biên soạn và rà soát trước. Bản tiếng Việt phải giữ nguyên ý nghĩa, số liệu, câu phủ định, mức độ khẩn cấp và các mốc tuổi. Nội dung được phân loại là hướng dẫn chính thức phải có tài liệu chính đã được phê duyệt hỗ trợ trực tiếp. Nếu các tài liệu đưa ra khuyến nghị khác nhau, HowToBaby phải trình bày rõ thay vì làm mờ bằng cách gộp hoặc lấy trung bình.",
     "editorialPolicy.p2":
-      "AI có thể hỗ trợ tìm nguồn, soạn thảo hoặc dịch thuật, nhưng nội dung chỉ trở thành bản chuẩn sau khi hoàn tất việc kiểm chứng nguồn và rà soát bởi con người theo yêu cầu.",
+      "AI có thể hỗ trợ tìm tài liệu, soạn thảo hoặc dịch thuật, nhưng nội dung chỉ trở thành bản chuẩn sau khi hoàn tất việc kiểm chứng tài liệu và rà soát bởi con người theo yêu cầu.",
 
     "page.disclaimer.lede": "HowToBaby cung cấp gì — và những gì HowToBaby không thay thế.",
     "disclaimer.p1.lead": "HowToBaby là nguồn tham khảo thiết thực dành cho cha mẹ.",
@@ -327,7 +327,7 @@ export const MESSAGES = defineMessages({
     "license.content.term": "Nội dung kiến thức, tài liệu và bản dịch gốc do HowToBaby tự tạo",
     "license.content.rest": "được cấp phép theo CC BY-NC-SA 4.0 tại những phần HowToBaby có quyền cấp phép.",
     "license.p2":
-      "Nội dung được trích dẫn từ các cơ quan y tế công cộng vẫn thuộc các quyền và điều khoản của nguồn ban đầu; việc ghi nguồn không có nghĩa HowToBaby cấp phép lại nội dung đó. Tên và logo HowToBaby không thuộc phạm vi của hai giấy phép trên.",
+      "Nội dung được trích dẫn từ các cơ quan y tế công cộng vẫn thuộc các quyền và điều khoản của tài liệu gốc; việc ghi nguồn không có nghĩa HowToBaby cấp phép lại nội dung đó. Tên và logo HowToBaby không thuộc phạm vi của hai giấy phép trên.",
     "license.readMap": "Xem chi tiết phạm vi giấy phép",
     "license.sourceCode": "Mã nguồn",
 

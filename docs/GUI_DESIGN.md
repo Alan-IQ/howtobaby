@@ -188,6 +188,43 @@ literal one-to-one terminology. Short controls should prefer familiar Vietnamese
 evidence/safety copy may use more explicit wording when clarity matters. Exact source titles,
 proper names, URLs, license identifiers and canonical IDs remain untranslated as defined above.
 
+### Vietnamese parent-facing evidence terminology
+
+Vietnamese evidence/provenance presentation uses document-oriented wording for parents.
+
+- Generic user-facing `source` → `tài liệu`.
+- Collections/headings use `Tài liệu tham khảo`.
+- `Original source` → `Tài liệu gốc`.
+- Relationship labels:
+  - `Primary source` → `Tài liệu chính`
+  - `Direct support` → `Tài liệu hỗ trợ trực tiếp`
+  - `Corroborating source` → `Tài liệu đối chiếu`
+  - `Contextual source` → `Tài liệu bổ trợ`
+  - `Conflicting source/view` → `Tài liệu có khuyến nghị khác`
+- `Current source version` → `Phiên bản tài liệu hiện tại`.
+- `Source status` → `Trạng thái tài liệu`.
+- `Source temporarily unavailable` → `Tài liệu hiện tạm thời không truy cập được`.
+- `Why this source is used` → `Vì sao HowToBaby sử dụng tài liệu này`.
+- `View original source` → `Xem tài liệu gốc`.
+
+Evidence Drawer Vietnamese presentation therefore reads naturally, for example:
+
+```text
+Tài liệu tham khảo cho hướng dẫn này
+
+CDC · Tài liệu chính
+<exact upstream title>
+
+Phần liên quan: …
+Phạm vi áp dụng: Hoa Kỳ
+Phiên bản tài liệu hiện tại: 14/04/2026
+HowToBaby kiểm chứng lần cuối: 31/08/2026
+Vì sao HowToBaby sử dụng tài liệu này: …
+Xem tài liệu gốc
+```
+
+The exact upstream title remains untranslated. Internal component/model names such as `SourceChip`, `SourceRecord`, `/sources`, source IDs, and provenance schema identifiers are unchanged. This is a presentation-language rule, not a data-model rename; §11 renders Vietnamese wording per this contract.
+
 ### Primary navigation
 
 Desktop: horizontal navigation.
@@ -366,16 +403,16 @@ Rules:
 `EvidenceDrawer` is the default detailed provenance surface. It shows the HowToBaby claim/context being supported, then for each source the organization, the exact title and the relationship badge (primary/direct support/corroborating/contextual/conflicting), followed by the metadata **in this fixed order**:
 
 1. `Relevant section` / VI `Phần liên quan` — locator such as section/heading/page, when available;
-2. `Applies to: United States` / `Scope: Global` (VI `Áp dụng cho` / `Phạm vi`);
+2. `Applies to: United States` / `Scope: Global` (VI `Phạm vi áp dụng`);
 3. source publication/version metadata — the conditional matrix from EVIDENCE_PROVENANCE.md §14:
-   - `publishedAt` only → `Published: …` (VI `Phát hành`);
-   - `updatedAt` only → `Current source version: Apr 14, 2026` (VI `Phiên bản nguồn hiện tại: 14/04/2026`);
+   - `publishedAt` only → `Published: …` (VI `Ngày xuất bản`);
+   - `updatedAt` only → `Current source version: Apr 14, 2026` (VI `Phiên bản tài liệu hiện tại: 14/04/2026`);
    - both and equal → `Published: …` only (the same date is never repeated as `Updated`);
-   - both and `updatedAt` later → `Published: Jan 10, 2025` + `Updated: Apr 14, 2026` (VI `Phát hành` + `Cập nhật`);
+   - both and `updatedAt` later → `Published: Jan 10, 2025` + `Updated: Apr 14, 2026` (VI `Ngày xuất bản` + `Ngày cập nhật`);
    - neither → no source-date rows at all (never an inferred date);
 4. `Last verified by HowToBaby: Aug 31, 2026` / VI `HowToBaby kiểm chứng lần cuối: 31/08/2026` — HowToBaby's own review confirmation, never a crawl or deploy time;
-5. `Why this source is used` / VI `Vì sao dùng nguồn này` — derived from the canonical relationship;
-6. **View original source** / VI **Xem nguồn gốc** action.
+5. `Why this source is used` / VI `Vì sao HowToBaby sử dụng tài liệu này` — derived from the canonical relationship;
+6. **View original source** / VI **Xem tài liệu gốc** action.
 
 A status badge is rendered only when a status needs attention (`changed-review-required`, `superseded`, `retired`, `temporarily-unreachable`); a healthy `current` source carries no status UI. A concise interpretation/uncertainty/conflict note follows when needed.
 
@@ -439,7 +476,7 @@ dates, always in this order:
 - the authority's own dates per the source date provenance contract (EVIDENCE_PROVENANCE.md §14):
   `Published: …` alone (also when `updatedAt` equals `publishedAt`), `Current source version: …`
   when only `updatedAt` exists, `Published: …` + `Updated: …` only when the update is later (VI
-  `Phát hành` / `Cập nhật` / `Phiên bản nguồn hiện tại`), and nothing at all when the authority
+  `Ngày xuất bản` / `Ngày cập nhật` / `Phiên bản tài liệu hiện tại`), and nothing at all when the authority
   provides neither — never an invented date, never `Published`
   for a date the authority did not call a publication date;
 - `Last verified by HowToBaby: Aug 31, 2026` / VI `HowToBaby kiểm chứng lần cuối: 31/08/2026` —

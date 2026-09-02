@@ -54,7 +54,7 @@ describe("/sources registry presenter", () => {
 
   it("renders Vietnamese presentation under vi — not the English fallback", () => {
     const view = sourceRegistryEntryView({ ...ENTRY, updatedAt: "2026-04-14" }, "vi");
-    expect(view.metaLine).toContain("Phiên bản nguồn hiện tại: 14/04/2026");
+    expect(view.metaLine).toContain("Phiên bản tài liệu hiện tại: 14/04/2026");
     expect(view.metaLine).toContain("Hoa Kỳ");
     expect(view.metaLine).toContain("26/08/2026");
     expect(view.metaLine).not.toContain("United States");

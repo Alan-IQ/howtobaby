@@ -258,19 +258,31 @@ Vietnamese must preserve age boundaries, approximate/range language, negation, u
 
 ### Vietnamese writing quality
 
-Semantic parity is necessary but not sufficient. Parent-facing Vietnamese must read as natural, professional Vietnamese rather than as an English sentence translated word by word.
+Semantic parity is necessary but not sufficient. Parent-facing Vietnamese must read as natural, professional Vietnamese written for Vietnamese-speaking parents, not as English syntax translated word by word.
 
 - Translate from the canonical English meaning and context, not by polishing a previous machine-like Vietnamese rendering.
-- Sentence structure may be reordered, split or combined when needed for idiomatic Vietnamese, provided the medical/editorial meaning is unchanged.
-- Prefer familiar parent-facing language. Use technical terminology only when it materially improves accuracy, and keep it understandable to a non-clinical reader.
-- Avoid English calques and one-to-one glossary thinking. Terms such as `source`, `claim`, `readiness`, `practical`, and `development` must be translated according to context rather than forced into one Vietnamese word everywhere.
-- For parent-facing copy, `source` is normally `nguồn`; use a more specific form such as `nguồn ban đầu`, `nguồn chính`, or `nguồn tham khảo` only when the distinction is useful.
+- Sentence structure may be reordered, split, or combined when needed for idiomatic Vietnamese, provided the medical/editorial meaning remains unchanged.
+- Prefer familiar parent-facing language. Use technical terminology only when it materially improves accuracy and remains understandable to a non-clinical reader.
+- Avoid English calques and one-to-one glossary thinking. Terms such as `source`, `claim`, `readiness`, `practical`, and `development` must be translated according to context.
+- In **parent-facing Vietnamese evidence/provenance copy**, the generic concept `source` defaults to **`tài liệu`**, not bare **`nguồn`**:
+  - `Sources` → `Tài liệu tham khảo`
+  - `Original source` → `Tài liệu gốc`
+  - `Primary source` → `Tài liệu chính`
+  - `Direct support` → `Tài liệu hỗ trợ trực tiếp`
+  - `Corroborating source` → `Tài liệu đối chiếu`
+  - `Contextual source` → `Tài liệu bổ trợ`
+  - `Conflicting source/view` → `Tài liệu có khuyến nghị khác`
+  - `Current source version` → `Phiên bản tài liệu hiện tại`
+  - `View original source` → `Xem tài liệu gốc`
+  - `Why this source is used` → `Vì sao HowToBaby sử dụng tài liệu này`
+- This parent-facing rule MUST NOT be applied as a global search-and-replace. Internal identifiers and technical concepts such as `SourceRecord`, `SourceLocator`, `sourceId`, `sourceRefs`, `source of truth`, and `data source` retain their technical meaning/identifier; Vietnamese technical prose may still use `nguồn dữ liệu`, `nguồn chuẩn`, or another context-appropriate term.
+- Exact upstream titles, organization names, URLs, canonical IDs, schema identifiers, and the `/sources` route are not translated or renamed by this rule.
 - `readiness` should normally read as `dấu hiệu sẵn sàng` or `mức độ sẵn sàng của bé` according to context. `developmental readiness` should use natural wording such as `sẵn sàng về mặt phát triển`, never a literal calque such as `sẵn sàng về phát triển`.
 - `practical` should be rendered by meaning — for example `thiết thực`, `dễ áp dụng`, or `áp dụng thực tế` — rather than by a fixed dictionary substitution.
 - Never add reassurance, certainty, advice, urgency, or medical meaning that the canonical English does not contain.
 - Review Vietnamese in two separate passes: first as standalone native Vietnamese for fluency/clarity, then against English for semantic parity.
 
-A translation that is semantically correct but visibly machine-like is not release-ready. A fluent translation that loses a qualifier, negation, quantity, age boundary, contraindication, or stop condition is also not release-ready.
+A translation that is semantically correct but visibly machine-like is not release-ready. A fluent translation that loses a qualifier, negation, quantity, age boundary, contraindication, applicability condition, or stop condition is also not release-ready.
 
 ## 11. Content coverage validation
 

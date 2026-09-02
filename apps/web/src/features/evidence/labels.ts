@@ -46,11 +46,11 @@ export const RELATIONSHIP_LABELS: Record<UiLocale, Record<SourceRelationship, st
     conflicting: "Conflicting view",
   },
   vi: {
-    primary: "Nguồn chính",
-    "direct-support": "Nguồn hỗ trợ trực tiếp",
-    corroborating: "Nguồn đối chiếu",
-    contextual: "Nguồn cung cấp bối cảnh",
-    conflicting: "Nguồn có quan điểm khác",
+    primary: "Tài liệu chính",
+    "direct-support": "Tài liệu hỗ trợ trực tiếp",
+    corroborating: "Tài liệu đối chiếu",
+    contextual: "Tài liệu bổ trợ",
+    conflicting: "Tài liệu có khuyến nghị khác",
   },
 };
 
@@ -69,9 +69,9 @@ export const RELATIONSHIP_WHY_LABELS: Record<UiLocale, Record<SourceRelationship
   vi: {
     primary: "Khuyến nghị này dựa trên hướng dẫn chính thức do tổ chức này công bố.",
     "direct-support": "Hướng dẫn do tổ chức này công bố hỗ trợ trực tiếp cho nội dung này.",
-    corroborating: "Đây là một cơ quan độc lập có hướng dẫn nhất quán với nguồn chính.",
-    contextual: "Nguồn này cung cấp thông tin nền cần thiết để hiểu hướng dẫn.",
-    conflicting: "Hướng dẫn của tổ chức này có điểm khác với nguồn chính; HowToBaby giữ phần khác biệt đó hiển thị rõ.",
+    corroborating: "Đây là một cơ quan độc lập có hướng dẫn nhất quán với tài liệu chính.",
+    contextual: "Tài liệu này cung cấp thông tin nền cần thiết để hiểu hướng dẫn.",
+    conflicting: "Hướng dẫn của tổ chức này có điểm khác với tài liệu chính; HowToBaby giữ phần khác biệt đó hiển thị rõ.",
   },
 };
 
@@ -92,8 +92,8 @@ export const STATUS_LABELS: Record<UiLocale, Record<PublicSourceStatus, string>>
   vi: {
     "changed-review-required": "Đang rà soát bản cập nhật",
     superseded: "Đã được thay thế",
-    retired: "Không còn sử dụng",
-    "temporarily-unreachable": "Tạm thời không truy cập được nguồn",
+    retired: "Đã ngừng sử dụng",
+    "temporarily-unreachable": "Tài liệu hiện tạm thời không truy cập được",
   },
 };
 
@@ -170,7 +170,7 @@ export const REVIEW_STATUS_LABELS: Record<UiLocale, Record<string, string>> = {
   },
   vi: {
     draft: "Bản nháp — chưa xuất bản",
-    "source-verified": "Đã kiểm chứng nguồn",
+    "source-verified": "Đã kiểm chứng tài liệu",
     "clinical-review-required": "Chờ rà soát chuyên môn y tế",
     "clinically-reviewed": "Đã qua rà soát chuyên môn y tế",
     "release-approved": "Đã duyệt để xuất bản",
@@ -187,9 +187,9 @@ export const PRECISION_CLASS_LABELS: Record<UiLocale, Record<string, string>> = 
     "product-heuristic": "Product heuristic",
   },
   vi: {
-    "source-exact": "Chính xác theo nguồn",
-    "source-approximate": "Xấp xỉ theo nguồn",
-    "source-range": "Khoảng giá trị theo nguồn",
+    "source-exact": "Chính xác theo tài liệu gốc",
+    "source-approximate": "Xấp xỉ theo tài liệu gốc",
+    "source-range": "Khoảng giá trị theo tài liệu gốc",
     "product-heuristic": "Gợi ý của HowToBaby",
   },
 };
@@ -286,29 +286,29 @@ export const UI_STRINGS: Record<UiLocale, {
   },
   vi: {
     languageLegend: "Ngôn ngữ",
-    sourcesDrawerTitle: "Nguồn tham khảo cho hướng dẫn này",
-    drawerAttribution: "Hướng dẫn này do HowToBaby biên soạn dựa trên các nguồn ban đầu được liệt kê bên dưới. Cách diễn đạt là của HowToBaby, không phải trích dẫn nguyên văn từ các tổ chức này.",
+    sourcesDrawerTitle: "Tài liệu tham khảo cho hướng dẫn này",
+    drawerAttribution: "Hướng dẫn này do HowToBaby biên soạn dựa trên các tài liệu gốc được liệt kê bên dưới. Cách diễn đạt là của HowToBaby, không phải trích dẫn nguyên văn từ các tổ chức này.",
     claimLabel: "Hướng dẫn của HowToBaby",
-    openSources: "Xem nguồn tham khảo của hướng dẫn này",
-    viewOriginal: "Xem nguồn ban đầu",
-    disclaimer: "Các tổ chức dưới đây là đơn vị công bố nguồn ban đầu; họ không tham gia rà soát và không xác nhận hay chứng thực nội dung của HowToBaby.",
+    openSources: "Xem tài liệu tham khảo của hướng dẫn này",
+    viewOriginal: "Xem tài liệu gốc",
+    disclaimer: "Các tổ chức dưới đây là đơn vị công bố tài liệu gốc; họ không tham gia rà soát và không xác nhận hay chứng thực nội dung của HowToBaby.",
     close: "Đóng",
-    referencesTitle: "Nguồn tham khảo trên trang này",
-    metaRole: "Vai trò của nguồn",
-    metaRelevantSection: "Phần liên quan trong nguồn",
+    referencesTitle: "Tài liệu tham khảo trên trang này",
+    metaRole: "Vai trò của tài liệu",
+    metaRelevantSection: "Phần liên quan",
     metaAppliesTo: "Phạm vi áp dụng",
     metaScope: "Phạm vi",
-    metaStatus: "Trạng thái nguồn",
+    metaStatus: "Trạng thái tài liệu",
     metaPublished: "Ngày xuất bản",
     metaUpdated: "Ngày cập nhật",
-    metaSourceVersion: "Phiên bản nguồn hiện tại",
+    metaSourceVersion: "Phiên bản tài liệu hiện tại",
     metaLastVerified: "HowToBaby kiểm chứng lần cuối",
-    metaWhy: "Vì sao HowToBaby dùng nguồn này",
+    metaWhy: "Vì sao HowToBaby sử dụng tài liệu này",
     jurisdictionUS: "Hoa Kỳ",
     jurisdictionGlobal: "Toàn cầu",
     reviewedOn: "Ngày rà soát",
     domainLabel: "Chủ đề",
-    wordingNote: "HowToBaby tóm tắt và diễn giải; nội dung nguyên văn thuộc về nguồn ban đầu.",
+    wordingNote: "HowToBaby tóm tắt và diễn giải; nội dung nguyên văn thuộc về tài liệu gốc.",
   },
 };
 

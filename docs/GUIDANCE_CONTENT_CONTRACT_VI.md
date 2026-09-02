@@ -76,30 +76,51 @@ Các sự kiện giấc ngủ có thể tạo khung thời gian cho lịch mẫu
 
 ## Hợp đồng dịch thuật
 
-Pipeline:
+Pipeline vẫn là:
 
 ```text
-English authoring → source verification → review → Vietnamese translation → parity validation → release
+English canonical → kiểm chứng tài liệu → review → dịch tiếng Việt → kiểm tra parity → release
 ```
 
-Bản tiếng Việt phải giữ nguyên ý nghĩa y khoa và mức độ chắc chắn của bản tiếng Anh chuẩn, bao gồm: mốc tuổi, khoảng/xấp xỉ, số lượng, câu phủ định, mức độ khẩn cấp, chống chỉ định, điều kiện áp dụng và điều kiện dừng.
+Bản tiếng Việt phải giữ nguyên các mốc tuổi, khoảng/xấp xỉ, phủ định, mức độ khẩn cấp, số lượng, chống chỉ định, điều kiện áp dụng và điều kiện dừng.
 
-### Tiêu chuẩn văn phong tiếng Việt
+### Chất lượng câu chữ tiếng Việt
 
-Bảo toàn ý nghĩa **không đồng nghĩa với dịch sát cấu trúc câu tiếng Anh**. Nội dung hướng tới cha mẹ phải đọc như tiếng Việt được biên soạn tự nhiên, rõ ràng và chuyên nghiệp:
+Đúng nghĩa là bắt buộc nhưng chưa đủ. Nội dung dành cho phụ huynh phải đọc tự nhiên, rõ ràng và chuyên nghiệp như được biên soạn trực tiếp bằng tiếng Việt, không mang cấu trúc của một câu tiếng Anh được dịch từng chữ.
 
-- dịch từ bản tiếng Anh chuẩn và ngữ cảnh của nội dung, không “sửa câu” dựa trên một bản dịch máy có sẵn;
-- được phép đổi trật tự từ, tách/gộp câu và thay cấu trúc ngữ pháp khi cần để tiếng Việt tự nhiên hơn, miễn không làm thay đổi ý nghĩa;
-- ưu tiên từ ngữ quen thuộc với cha mẹ; chỉ dùng thuật ngữ chuyên môn khi cần cho độ chính xác, và diễn đạt sao cho người không có nền tảng y khoa vẫn hiểu;
-- tránh calque tiếng Anh và các cụm nghe như dịch từng chữ, ví dụ không cố ép mỗi từ `source`, `claim`, `readiness`, `practical` vào một bản dịch cố định ở mọi ngữ cảnh;
-- `source` thường là **nguồn**; chỉ dùng **nguồn ban đầu**, **nguồn chính**, **nguồn tham khảo** hoặc cách gọi cụ thể hơn khi ngữ cảnh thực sự cần phân biệt;
-- `readiness` trong nội dung dành cho cha mẹ nên diễn đạt là **dấu hiệu sẵn sàng** hoặc **mức độ sẵn sàng của bé** tùy câu;
-- `developmental readiness` nên ưu tiên **sẵn sàng về mặt phát triển** hoặc một câu tự nhiên tương đương, không dùng cấu trúc gượng như “sẵn sàng về phát triển”;
-- `practical` nên dịch theo ý nghĩa cụ thể như **thiết thực**, **dễ áp dụng** hoặc **áp dụng thực tế**, không mặc định dùng một từ tương ứng duy nhất;
-- không thêm lời trấn an, mức độ chắc chắn, lời khuyên hay sắc thái mà bản tiếng Anh không có;
-- sau khi dịch, phải đọc lại bản tiếng Việt độc lập như một văn bản tiếng Việt, sau đó mới đối chiếu semantic parity với bản tiếng Anh.
+- Dịch từ ý nghĩa và ngữ cảnh của bản English canonical, không sửa chắp vá một bản Việt máy móc có sẵn.
+- Có thể đổi trật tự, tách hoặc gộp câu để tiếng Việt tự nhiên hơn, miễn không thay đổi ý nghĩa y khoa/biên tập.
+- Ưu tiên cách nói quen thuộc với phụ huynh; chỉ dùng thuật ngữ chuyên môn khi thực sự cần cho độ chính xác.
+- Không ép mỗi từ tiếng Anh thành một từ tiếng Việt cố định trong mọi ngữ cảnh.
+- `readiness` trong nội dung dành cho cha mẹ nên diễn đạt là **dấu hiệu sẵn sàng** hoặc **mức độ sẵn sàng của bé** tùy câu; `developmental readiness` nên diễn đạt tự nhiên như **sẵn sàng về mặt phát triển**, tránh kiểu dịch `sẵn sàng về phát triển`.
+- `practical` nên dịch theo ý nghĩa cụ thể như **thiết thực**, **dễ áp dụng** hoặc **áp dụng thực tế**, không mặc định dùng một từ tương ứng duy nhất.
+- Không thêm lời trấn an, mức độ chắc chắn, lời khuyên hay sắc thái mà bản tiếng Anh không có.
 
-Naturalness review và semantic-parity review là hai yêu cầu riêng: một bản dịch chỉ đúng nghĩa nhưng gượng gạo vẫn chưa đạt; một bản dịch trôi chảy nhưng làm mất qualifier, negation hoặc mốc tuổi cũng không đạt.
+### Quy ước `source` trong nội dung dành cho phụ huynh
+
+Trong **parent-facing UI/copy**, `source` mặc định dùng **tài liệu**, không dùng một chữ **nguồn** đứng riêng:
+
+- Sources → **Tài liệu tham khảo**
+- Original source → **Tài liệu gốc**
+- Primary source → **Tài liệu chính**
+- Direct support → **Tài liệu hỗ trợ trực tiếp**
+- Corroborating source → **Tài liệu đối chiếu**
+- Contextual source → **Tài liệu bổ trợ**
+- Conflicting source/view → **Tài liệu có khuyến nghị khác**
+- Current source version → **Phiên bản tài liệu hiện tại**
+- View original source → **Xem tài liệu gốc**
+- Why this source is used → **Vì sao HowToBaby sử dụng tài liệu này**
+
+Không search/replace máy móc toàn repository. Các thuật ngữ kỹ thuật và identifier như `SourceRecord`, `SourceLocator`, `sourceId`, `sourceRefs`, `source of truth`, `data source` vẫn giữ đúng nghĩa kỹ thuật; trong technical prose có thể dùng **nguồn dữ liệu**, **nguồn chuẩn** hoặc giữ English khi phù hợp.
+
+Không đổi exact upstream title, tên tổ chức, URL, canonical ID, schema identifier hay route `/sources`.
+
+Mỗi bản dịch cần được review hai lượt:
+
+1. đọc riêng như một đoạn tiếng Việt để kiểm tra độ tự nhiên, rõ nghĩa;
+2. đối chiếu English canonical để kiểm tra semantic parity.
+
+Naturalness review và semantic-parity review là hai yêu cầu riêng: một bản dịch chỉ đúng nghĩa nhưng gượng gạo vẫn chưa đạt; một bản dịch trôi chảy nhưng làm mất qualifier, negation, số lượng, mốc tuổi, chống chỉ định, điều kiện áp dụng hoặc điều kiện dừng cũng không đạt.
 
 ## Thứ tự ưu tiên và quản trị nguồn
 
