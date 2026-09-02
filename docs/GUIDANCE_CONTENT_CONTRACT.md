@@ -254,7 +254,23 @@ Pipeline:
 English authoring → source verification → review → Vietnamese translation → parity validation → release
 ```
 
-Vietnamese must preserve age boundaries, approximate/range language, negation, urgency, quantities, contraindications, stop conditions, and evidence labels.
+Vietnamese must preserve age boundaries, approximate/range language, negation, urgency, quantities, contraindications, stop conditions, applicability conditions, and evidence meaning.
+
+### Vietnamese writing quality
+
+Semantic parity is necessary but not sufficient. Parent-facing Vietnamese must read as natural, professional Vietnamese rather than as an English sentence translated word by word.
+
+- Translate from the canonical English meaning and context, not by polishing a previous machine-like Vietnamese rendering.
+- Sentence structure may be reordered, split or combined when needed for idiomatic Vietnamese, provided the medical/editorial meaning is unchanged.
+- Prefer familiar parent-facing language. Use technical terminology only when it materially improves accuracy, and keep it understandable to a non-clinical reader.
+- Avoid English calques and one-to-one glossary thinking. Terms such as `source`, `claim`, `readiness`, `practical`, and `development` must be translated according to context rather than forced into one Vietnamese word everywhere.
+- For parent-facing copy, `source` is normally `nguồn`; use a more specific form such as `nguồn ban đầu`, `nguồn chính`, or `nguồn tham khảo` only when the distinction is useful.
+- `readiness` should normally read as `dấu hiệu sẵn sàng` or `mức độ sẵn sàng của bé` according to context. `developmental readiness` should use natural wording such as `sẵn sàng về mặt phát triển`, never a literal calque such as `sẵn sàng về phát triển`.
+- `practical` should be rendered by meaning — for example `thiết thực`, `dễ áp dụng`, or `áp dụng thực tế` — rather than by a fixed dictionary substitution.
+- Never add reassurance, certainty, advice, urgency, or medical meaning that the canonical English does not contain.
+- Review Vietnamese in two separate passes: first as standalone native Vietnamese for fluency/clarity, then against English for semantic parity.
+
+A translation that is semantically correct but visibly machine-like is not release-ready. A fluent translation that loses a qualifier, negation, quantity, age boundary, contraindication, or stop condition is also not release-ready.
 
 ## 11. Content coverage validation
 

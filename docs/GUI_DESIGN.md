@@ -180,6 +180,14 @@ registered locale — no page hard-codes an English presentation or branches on 
 Document metadata (`<title>`) stays in the canonical prerender locale until locale-prefixed
 public routes land; those are a Phase 3 routing concern.
 
+### Vietnamese copy quality
+
+All Vietnamese user-facing copy follows `GUIDANCE_CONTENT_CONTRACT.md` §10. UI copy must be
+concise, native-sounding and professional; it must not mirror English word order or rely on
+literal one-to-one terminology. Short controls should prefer familiar Vietnamese labels, while
+evidence/safety copy may use more explicit wording when clarity matters. Exact source titles,
+proper names, URLs, license identifiers and canonical IDs remain untranslated as defined above.
+
 ### Primary navigation
 
 Desktop: horizontal navigation.

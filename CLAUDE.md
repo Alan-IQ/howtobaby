@@ -87,7 +87,8 @@ Priority order:
 - NEVER invent a source, quote, guideline, age threshold, evidence grade, contraindication, emergency instruction, or source update date.
 - Preserve qualifiers such as `about`, `may`, `when ready`, `not recommended`, scope limitations, uncertainty, and jurisdiction. **No invented precision.**
 - Age selects candidate guidance; age alone does not prove readiness, suitability, diagnosis, or developmental status.
-- English canonical content is authored/reviewed first. Vietnamese must preserve semantic parity, including quantities, negation, urgency, age boundaries, qualifiers, contraindications, and stop conditions.
+- English canonical content is authored/reviewed first. Vietnamese must preserve semantic parity, including quantities, negation, urgency, age boundaries, qualifiers, contraindications, stop conditions, applicability conditions, and evidence meaning.
+- Vietnamese user-facing copy must also read as natural, professional native Vietnamese according to `GUIDANCE_CONTENT_CONTRACT.md` §10. Do not translate English sentence structure word-for-word, do not polish a machine-like Vietnamese sentence without checking the canonical English, and do not force one English term to one Vietnamese term in every context. Restructure sentences freely when needed for idiomatic Vietnamese as long as semantic parity is preserved.
 - `official-guidance` requires approved direct/primary support according to `GUIDANCE_CONTENT_CONTRACT.md` and `EVIDENCE_PROVENANCE.md`.
 - Source disagreement must remain visible when materially relevant; NEVER silently average conflicting guidance.
 - Evidence labels, inline source chips, Evidence Drawer, page references, print citations, and guidance-linked Tool citations come from one canonical provenance graph. Do not maintain parallel manual citation lists.

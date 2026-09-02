@@ -53,10 +53,10 @@ describe("Evidence Drawer metadata rows", () => {
       "Last verified by HowToBaby: Aug 31, 2026",
     ]);
     expect(sourceMetaRows(ref, cdc, "vi").map((row) => `${row.label}: ${row.value}`)).toEqual([
-      "Phần liên quan: “When, What, and How to Introduce Solid Foods”",
-      "Áp dụng cho: Hoa Kỳ",
-      "Phát hành: 10/01/2025",
-      "Cập nhật: 14/04/2026",
+      "Phần liên quan trong nguồn: “When, What, and How to Introduce Solid Foods”",
+      "Phạm vi áp dụng: Hoa Kỳ",
+      "Ngày xuất bản: 10/01/2025",
+      "Ngày cập nhật: 14/04/2026",
       "HowToBaby kiểm chứng lần cuối: 31/08/2026",
     ]);
   });
