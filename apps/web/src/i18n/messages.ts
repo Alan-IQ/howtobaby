@@ -57,7 +57,7 @@ export const MESSAGES = defineMessages({
     "footer.trust.label": "Trust and legal",
     "footer.external.icon": "opens external site",
     "footer.disclaimer":
-      "HowToBaby is a practical parent reference, not a medical record, diagnosis engine, developmental screening test, emergency service, or substitute for pediatric care.",
+      "HowToBaby is a practical parent reference, not a medical record, diagnostic tool, developmental screening test, emergency service, or substitute for pediatric care.",
     "footer.licenses": "Software AGPL-3.0-only · Original content CC BY-NC-SA 4.0 · HowToBaby name and logo are not covered by those licenses.",
 
     // Trust/legal link labels + shared eyebrow.
@@ -73,7 +73,7 @@ export const MESSAGES = defineMessages({
 
     // Now (home).
     "page.home.title": "Know what your child needs. Right now.",
-    "page.home.lede": "Evidence-to-action guidance and practical tools for parents — organized around your child’s current stage.",
+    "page.home.lede": "Evidence-based guidance and practical tools for parents, organized around your child’s current stage.",
     "page.home.blurb.feeding": "What, how and when to feed, by stage and readiness.",
     "page.home.blurb.play": "Play ideas and development context for the current stage.",
     "page.home.blurb.sleep": "Sleep patterns, safe-sleep basics and example routines.",
@@ -83,38 +83,38 @@ export const MESSAGES = defineMessages({
     "page.home.how.p1":
       "HowToBaby organizes approved guidance from public-health authorities by age and context, keeps each statement linked to its source, and turns it into practical actions — without inventing precision the source does not have.",
     "page.home.how.p2":
-      "A first, small set of evidence-backed official guidance is already published — Feeding carries the first of it — and each statement links to its original source. Every stage can already be browsed by age, and an optional local profile shows where your child is today; the personalized Now view and the remaining domains are added as their content passes the evidence and review pipeline.",
+      "HowToBaby now includes its first evidence-backed guidance, beginning with Feeding; each statement links to its original source. You can browse every age stage without creating a profile. If you choose to add one, the child profile stored on your device shows which stage your child is in today. Additional personalization on Now and the remaining topics will be added as their content completes evidence checks and review.",
 
     // Shared destination scaffolding.
-    "section.placeholder.title": "What this section will hold",
+    "section.placeholder.title": "What will be added here",
     "section.placeholder.note":
-      "This destination is part of the application shell. Its guidance is published only after the content, evidence and review pipeline for it is in place — never as unreviewed text.",
+      "This section is already part of HowToBaby, but guidance appears here only after it has been written, checked against its sources, and reviewed. Unreviewed guidance is never published.",
 
     // Feeding.
     "page.feeding.lede": "Feeding guidance by stage and readiness, with the source behind every statement.",
     "page.feeding.hold.p1":
-      "Milk feeding, starting solids, textures, responsive feeding, allergen introduction and feeding safety — organized by stage and readiness rather than by a single age cut-off, with each claim linked to its original source.",
+      "Breastfeeding and formula feeding, starting solids, food textures, responsive feeding, allergen introduction, and feeding safety — organized by stage and readiness rather than a single age cut-off, with each statement linked to its original source.",
     "page.feeding.hold.p2":
-      "Guidance appears here only after it has passed the content, evidence and review pipeline — never as unreviewed text. The full feeding domain migrates in a later phase.",
+      "Guidance appears here only after it has been written, checked against its sources, and reviewed. Unreviewed guidance is never published. More Feeding guidance will be added in a later phase.",
     "guidance.feeding.eyebrow": "Starting solids",
 
     // Play & Development.
     "page.play.lede": "Age-relevant play ideas and development context, without pass/fail milestones.",
     "page.play.hold.p1":
-      "Stage maps, milestone context, activities and variations, and corrected-age handling, presented as context for play and connection — not as a screening test.",
+      "Developmental stages, milestone context, activities and variations, and how corrected age is used — presented to support play and connection, not as a screening test.",
 
     // Sleep.
     "page.sleep.lede": "Typical sleep patterns, safe-sleep basics and editable example routines.",
     "page.sleep.hold.p1":
-      "Official duration guidance, safe-sleep guidance, responsive newborn mode, nap and wake-window heuristics labelled as heuristics, and example plans you can adjust.",
+      "Official sleep-duration guidance, safe-sleep guidance, responsive approaches for newborns, clearly labeled estimates for nap counts and wake windows, and adjustable example schedules.",
 
     // Safety.
     "page.safety.lede": "Age-relevant safety priorities, ranked by severity and kept visible in every theme.",
     "page.safety.hold.p1":
-      "Safety guidance for the actual child’s current stage. Browsing another stage never hides or unlocks safety guidance that applies to your child.",
+      "Safety guidance always follows your child’s current age. Browsing another stage never hides guidance that applies to your child and never makes guidance for another age apply automatically.",
 
     // Tools.
-    "page.tools.lede": "Practical utilities for parents. A tool is a utility first; it carries no health claim just for living here.",
+    "page.tools.lede": "Practical tools for parents. A tool is a utility first; being included in HowToBaby does not imply a health benefit.",
     "page.tools.hold.p1":
       "Grouped by purpose — Soothe & Sound, Plan & Routine, Calculate, Print & Share — with clear labels showing whether a tool is purely utility or linked to guidance.",
 
@@ -126,7 +126,7 @@ export const MESSAGES = defineMessages({
     "page.evidence.original.title": "Original sources",
 
     // Sources trust page.
-    "page.sources.lede": "The registry of original authorities HowToBaby guidance is built from.",
+    "page.sources.lede": "The original sources HowToBaby uses to build its guidance.",
     "sources.usedByClaims.one": "Used by 1 published claim",
     "sources.usedByClaims.many": "Used by {count} published claims",
     "sources.generatedNote":
@@ -151,9 +151,9 @@ export const MESSAGES = defineMessages({
     // Medical disclaimer trust page.
     "page.disclaimer.lede": "What HowToBaby is — and is not.",
     "disclaimer.p1.lead": "HowToBaby is a practical parent reference.",
-    "disclaimer.p1.rest": "It is not a medical record, a diagnosis engine, a developmental screening test, an emergency service, or a substitute for pediatric care.",
+    "disclaimer.p1.rest": "It is not a medical record, diagnostic tool, developmental screening test, emergency service, or substitute for pediatric care.",
     "disclaimer.p2":
-      "Age selects candidate guidance; it does not prove readiness, suitability or developmental status. Always follow the advice of your child’s clinician, and contact local emergency services in an emergency.",
+      "Age helps HowToBaby select guidance that may be relevant to your child, but age alone cannot tell whether your child is ready, whether a particular recommendation is right for them, or how they are developing. Always follow the advice of your child’s clinician, and contact local emergency services in an emergency.",
 
     // Privacy trust page.
     "page.privacy.lede": "Local-first by design.",
@@ -178,7 +178,7 @@ export const MESSAGES = defineMessages({
     "changelog.p1":
       "When published guidance changes meaning, or a correction is made, it is recorded here with the date and the affected content. This page is generated from the content version history once guidance is published.",
     "changelog.status":
-      "Current release: the application shell, the theme engine, the first evidence-backed guidance, browsing by age with an optional local child profile — with the remaining domains being added phase by phase.",
+      "Current release: the core site experience, theme system, the first evidence-backed guidance, age-based browsing, and an optional child profile stored on your device. Additional topics are being added phase by phase.",
 
     // Not found / common error UI.
     "notFound.title": "Page not found",
@@ -190,24 +190,24 @@ export const MESSAGES = defineMessages({
 
     // Child profile (local-only, optional; PROJECT_PROFILE §6).
     "profile.title": "Your child",
-    "profile.lede": "Optional. Stays on this device only — it is never sent to a server and never appears in a link.",
+    "profile.lede": "Optional. This information stays on this device, is never sent to a server, and never appears in the URL.",
     "profile.dob.label": "Date of birth",
     "profile.edd.label": "Estimated due date (optional)",
-    "profile.edd.hint": "Used only to decide whether Play & Development guidance follows a corrected age. It is not a diagnosis.",
+    "profile.edd.hint": "Used only to decide when Play & Development guidance should use corrected age. This information is not used for diagnosis.",
     "profile.name.label": "Name (optional, display only)",
     "profile.save": "Save on this device",
-    "profile.remove": "Remove",
+    "profile.remove": "Remove profile",
     "profile.edit": "Edit",
     "profile.cancel": "Cancel",
-    "profile.error.dob-required": "Enter a date of birth.",
+    "profile.error.dob-required": "Enter your child’s date of birth.",
     "profile.error.dob-invalid": "That is not a valid date.",
     "profile.error.dob-future": "The date of birth cannot be after today.",
     "profile.error.edd-invalid": "That due date is not a valid date.",
     "profile.error.name-too-long": "The name can be at most 40 characters.",
-    "profile.persistence.unavailable": "This browser could not save the profile, so it applies to this visit only.",
+    "profile.persistence.unavailable": "This browser could not save the profile. It will work for this visit, but it will not be saved after you reload the page.",
     "profile.persistence.clearFailed":
-      "The profile is removed for this visit only: this browser would not delete the saved copy, so it may come back the next time you open HowToBaby.",
-    "profile.empty": "No profile yet. Every stage can be browsed without one.",
+      "HowToBaby could not remove the saved profile from this browser. The profile will not be used for this visit, but it may appear again after you reload the page.",
+    "profile.empty": "No profile yet. You can still browse every stage without one.",
     "profile.saved.dob": "Date of birth",
     "profile.saved.edd": "Estimated due date",
 
@@ -216,17 +216,17 @@ export const MESSAGES = defineMessages({
     "summary.age.label": "Age today",
     "summary.correctedAge.label": "Corrected age",
     "summary.corrected.note":
-      "Born {early} before the due date, so Play & Development guidance follows the corrected age until 24 months from birth. This is a way of choosing guidance, not a diagnosis.",
-    "summary.corrected.limit": "Born {early} before the due date. From 24 months after birth, Play & Development guidance follows the age counted from birth.",
-    "summary.beforeBirth": "The date of birth is after today's date on this device.",
-    "summary.outOfScope": "HowToBaby currently covers birth to under 5 years.",
+      "Your child was born {early} before the due date, so Play & Development guidance uses corrected age until 24 months after birth. This is only a rule for selecting guidance, not a diagnosis.",
+    "summary.corrected.limit": "Your child was born {early} before the due date. From 24 months after birth, Play & Development guidance uses chronological age.",
+    "summary.beforeBirth": "The date of birth you entered is after today’s date on this device.",
+    "summary.outOfScope": "HowToBaby currently covers children from birth until their fifth birthday.",
     "summary.stage.label": "Current stage by topic",
-    "summary.stage.unresolved": "Not resolved yet",
-    "summary.safeSleep.inScope": "Infant safe-sleep guidance applies (under 12 months).",
+    "summary.stage.unresolved": "Not determined",
+    "summary.safeSleep.inScope": "Safe-sleep guidance for infants under 12 months still applies to your child.",
 
     // Browse by age / stage navigation.
     "browse.byAge.title": "Browse by age",
-    "browse.byAge.lede": "Every stage is open to everyone — no profile needed. Age is used to pick relevant guidance; it is not a measure of your child's development.",
+    "browse.byAge.lede": "You can browse every stage without a profile. Age helps select guidance that may be relevant; it is not a measure of your child’s development.",
     "stage.nav.label": "Stages",
     "stage.nav.actualMarker": "your child's current stage",
     "stage.nav.scrollBack": "Earlier stages",
@@ -234,39 +234,39 @@ export const MESSAGES = defineMessages({
     "stage.prev": "Previous stage",
     "stage.next": "Next stage",
     "stage.eyebrow.browsing": "Browsing",
-    "stage.empty.title": "No published guidance for this stage yet",
-    "stage.empty.note": "Guidance appears here only after it has been written, checked against its sources and reviewed — never as unreviewed text.",
+    "stage.empty.title": "No guidance has been published for this stage yet",
+    "stage.empty.note": "Guidance appears here only after it has been written, checked against its sources, and reviewed. Unreviewed guidance is never published.",
 
     // Why this stage.
-    "why.title": "Why this stage",
+    "why.title": "Why this stage?",
     "why.range": "This stage covers {range}.",
-    "why.range.approx": "In the source wording this stage starts at “about {min} months” — an editorial age band, not a readiness threshold.",
-    "why.noProfile": "You are browsing this stage directly. Add a date of birth on Now to see where your child is today — browsing never changes that.",
-    "why.basis.chronological": "Your child's stage here is based on the age counted from birth: {age}.",
-    "why.basis.corrected": "Your child's stage here is based on the corrected age: {age} (born {early} before the due date).",
-    "why.basis.correctedBeforeDue": "Your child's corrected age has not started yet ({time}), so no stage applies here until then.",
+    "why.range.approx": "The source uses “about {min} months” as the starting point. This age range is used to organize content, not as a readiness threshold.",
+    "why.noProfile": "You are viewing this stage directly. Add your child’s date of birth on Now to see which stage applies today. Viewing another stage never changes the profile.",
+    "why.basis.chronological": "In this topic, your child’s stage is based on age from birth: {age}.",
+    "why.basis.corrected": "In this topic, your child’s stage is based on corrected age: {age} (born {early} before the due date).",
+    "why.basis.correctedBeforeDue": "It is {time}, so no corrected-age stage applies in this topic yet.",
     "why.relation.actual": "This is your child's current stage.",
     "why.relation.earlier": "Your child has already passed this stage (current stage: {stage}).",
     "why.relation.later":
-      "This stage comes after your child's current stage ({stage}). Reading ahead does not bring forward guidance meant for an older child, and safety guidance always stays with your child's actual age today.",
+      "Your child has not reached this stage yet (current stage: {stage}). Reading ahead does not make guidance for older children apply early; safety guidance still follows your child’s current age.",
     "why.relation.unresolved": "Your child's stage here is not resolved yet.",
-    "why.preview": "Preview on {date}: {stage}.",
-    "why.disclaimer": "Age is used to pick relevant guidance. It does not prove readiness, suitability or how your child is developing.",
+    "why.preview": "On {date}, your child is in {stage}.",
+    "why.disclaimer": "Age helps HowToBaby select guidance that may be relevant to your child, but age alone cannot tell whether your child is ready or how they are developing.",
 
     // Preview plan date (session only).
-    "preview.title": "Preview another date",
-    "preview.lede": "See which stages would apply on a date you choose. Safety guidance always follows your child's actual age today.",
-    "preview.date.label": "Date to preview",
+    "preview.title": "View another date",
+    "preview.lede": "Choose a date to see which stage your child is in then. Safety guidance always follows your child’s current age.",
+    "preview.date.label": "Date to view",
     "preview.age.label": "Age on that date",
-    "preview.beforeBirth": "Before the date of birth",
+    "preview.beforeBirth": "Before your child’s date of birth",
     "preview.clear": "Back to today",
-    "preview.banner": "Previewing {date} — this is not today. Safety guidance follows your child's actual age today.",
-    "preview.needsProfile": "Add a date of birth to preview another date.",
+    "preview.banner": "You’re viewing {date}, not today. Safety guidance still follows your child’s current age.",
+    "preview.needsProfile": "Add your child’s date of birth to view another date.",
 
     // Safety context (actual child only).
-    "safety.context.title": "Safety guidance and your child's age",
-    "safety.context.noProfile": "Safety guidance is organized by a child's actual age. Without a profile you can still read every safety topic; nothing here changes with the stage you are browsing.",
-    "safety.context.actual": "Safety guidance for your child follows their actual age today: {age}. Browsing other stages or previewing another date does not change it.",
+    "safety.context.title": "Safety by age",
+    "safety.context.noProfile": "Safety guidance is organized by age from birth. Without a profile, you can still browse every safety topic; the guidance here does not change with the stage you are viewing elsewhere.",
+    "safety.context.actual": "Today your child is {age}. Safety guidance always follows your child’s current age from birth. Viewing another stage or another date does not change that.",
   },
   vi: {
     "app.skipToContent": "Chuyển đến nội dung chính",
@@ -326,28 +326,28 @@ export const MESSAGES = defineMessages({
     "page.home.how.p1":
       "HowToBaby sắp xếp các hướng dẫn chính thức từ các cơ quan y tế công cộng theo độ tuổi và bối cảnh, giữ từng nội dung luôn gắn với tài liệu gốc, rồi chuyển thành những việc cha mẹ có thể áp dụng trong thực tế — mà không diễn giải chính xác hơn mức tài liệu gốc cho phép.",
     "page.home.how.p2":
-      "HowToBaby hiện đã có những hướng dẫn chính thức đầu tiên dựa trên bằng chứng, bắt đầu từ mục Ăn uống; mỗi nội dung đều liên kết đến tài liệu gốc. Bạn có thể xem mọi giai đoạn theo độ tuổi mà không cần tạo hồ sơ. Nếu muốn, hồ sơ lưu trên thiết bị sẽ cho biết hôm nay bé đang ở giai đoạn nào. Các phần cá nhân hóa khác của trang Hiện tại và những chủ đề còn lại sẽ tiếp tục được bổ sung khi nội dung hoàn tất kiểm chứng và rà soát.",
+      "HowToBaby hiện đã có những hướng dẫn đầu tiên dựa trên bằng chứng, bắt đầu từ mục Ăn uống; mỗi nội dung đều liên kết đến tài liệu gốc. Bạn có thể xem mọi giai đoạn theo độ tuổi mà không cần tạo hồ sơ. Nếu muốn, hồ sơ của bé được lưu trên thiết bị sẽ cho biết hôm nay bé đang ở giai đoạn nào. Các phần cá nhân hóa khác của trang Hiện tại và những chủ đề còn lại sẽ tiếp tục được bổ sung khi nội dung hoàn tất kiểm chứng và rà soát.",
 
-    "section.placeholder.title": "Nội dung sẽ có trong mục này",
+    "section.placeholder.title": "Nội dung sẽ được bổ sung tại đây",
     "section.placeholder.note":
-      "Mục này đã có sẵn trong HowToBaby. Nội dung hướng dẫn chỉ được xuất bản sau khi hoàn tất quy trình biên soạn, kiểm chứng tài liệu và rà soát — không đưa nội dung chưa được duyệt đến người dùng.",
+      "Mục này đã có sẵn trong HowToBaby, nhưng hướng dẫn chỉ được hiển thị sau khi hoàn tất biên soạn, kiểm chứng tài liệu và rà soát. HowToBaby không đăng nội dung chưa được duyệt.",
 
     "page.feeding.lede":
       "Hướng dẫn ăn uống theo từng giai đoạn và mức độ sẵn sàng của bé, với tài liệu tham khảo rõ ràng cho từng nội dung.",
     "page.feeding.hold.p1":
-      "Bú mẹ hoặc dùng sữa công thức, bắt đầu ăn dặm, kết cấu thức ăn, cho ăn theo tín hiệu của bé, làm quen với thực phẩm dễ gây dị ứng và an toàn khi ăn uống — được sắp xếp theo giai đoạn và mức độ sẵn sàng thay vì chỉ dựa vào một mốc tuổi; mỗi nội dung đều liên kết đến tài liệu gốc.",
+      "Bú mẹ hoặc dùng sữa công thức, bắt đầu ăn dặm, kết cấu thức ăn, cho ăn theo tín hiệu của bé, làm quen với thực phẩm có khả năng gây dị ứng và an toàn khi ăn uống — được sắp xếp theo giai đoạn và mức độ sẵn sàng thay vì chỉ dựa vào một mốc tuổi; mỗi nội dung đều liên kết đến tài liệu gốc.",
     "page.feeding.hold.p2":
-      "Nội dung chỉ xuất hiện tại đây sau khi đã qua quy trình biên soạn, kiểm chứng tài liệu và rà soát — không đăng nội dung chưa được duyệt. Phần Ăn uống đầy đủ sẽ được triển khai ở giai đoạn sau.",
+      "Nội dung chỉ xuất hiện tại đây sau khi hoàn tất biên soạn, kiểm chứng tài liệu và rà soát. HowToBaby không đăng nội dung chưa được duyệt. Các hướng dẫn Ăn uống còn lại sẽ được bổ sung ở giai đoạn sau.",
     "guidance.feeding.eyebrow": "Bắt đầu ăn dặm",
 
     "page.play.lede":
       "Gợi ý trò chơi và thông tin phát triển phù hợp theo độ tuổi, không biến các cột mốc phát triển thành bài kiểm tra đạt hay không đạt.",
     "page.play.hold.p1":
-      "Các giai đoạn phát triển, thông tin giúp hiểu các cột mốc, hoạt động và biến thể, cùng cách áp dụng tuổi hiệu chỉnh — được trình bày để hỗ trợ việc chơi và gắn kết với bé, không dùng như một bài sàng lọc.",
+      "Các giai đoạn phát triển, thông tin giúp hiểu các cột mốc, hoạt động và biến thể, cùng cách sử dụng tuổi hiệu chỉnh — được trình bày để hỗ trợ việc chơi và gắn kết với bé, không dùng như một bài sàng lọc.",
 
     "page.sleep.lede": "Nếp ngủ thường gặp, nguyên tắc ngủ an toàn và lịch sinh hoạt tham khảo có thể điều chỉnh.",
     "page.sleep.hold.p1":
-      "Khuyến nghị chính thức về thời lượng ngủ, hướng dẫn ngủ an toàn, cách tiếp cận theo tín hiệu của trẻ sơ sinh, các ước lượng về số giấc ngày và khoảng thời gian thức được ghi rõ là thông tin tham khảo, cùng các lịch mẫu có thể điều chỉnh.",
+      "Khuyến nghị chính thức về thời lượng ngủ, hướng dẫn ngủ an toàn, cách đáp ứng tín hiệu ngủ của trẻ sơ sinh, các ước lượng tham khảo về số giấc ngủ ban ngày và khoảng thời gian thức, cùng các lịch mẫu có thể điều chỉnh.",
 
     "page.safety.lede":
       "Các ưu tiên an toàn theo độ tuổi, được sắp xếp theo mức độ nghiêm trọng và luôn dễ nhận biết ở mọi giao diện.",
@@ -355,7 +355,7 @@ export const MESSAGES = defineMessages({
       "Hướng dẫn an toàn luôn dựa trên tuổi hiện tại của bé. Việc xem một giai đoạn khác không làm ẩn hướng dẫn đang áp dụng cho bé và cũng không khiến hướng dẫn dành cho độ tuổi khác tự động áp dụng.",
 
     "page.tools.lede":
-      "Các công cụ thiết thực dành cho cha mẹ. Một công cụ trước hết chỉ là tiện ích; việc xuất hiện trong HowToBaby không có nghĩa HowToBaby đang khẳng định công cụ đó có tác dụng đối với sức khỏe.",
+      "Các công cụ thiết thực dành cho cha mẹ. Một công cụ trước hết chỉ là tiện ích; việc xuất hiện trong HowToBaby không có nghĩa HowToBaby khẳng định công cụ đó có tác dụng đối với sức khỏe.",
     "page.tools.hold.p1":
       "Được nhóm theo mục đích — Âm thanh thư giãn, Lập kế hoạch & lịch sinh hoạt, Tính toán, In & chia sẻ — với nhãn rõ ràng cho biết công cụ chỉ là tiện ích hay có liên kết đến nội dung hướng dẫn.",
 
@@ -366,7 +366,7 @@ export const MESSAGES = defineMessages({
     "page.evidence.sources.title": "Tài liệu tham khảo",
     "page.evidence.original.title": "Tài liệu gốc",
 
-    "page.sources.lede": "Danh mục tài liệu tham khảo mà HowToBaby sử dụng để xây dựng nội dung hướng dẫn.",
+    "page.sources.lede": "Danh mục tài liệu gốc mà HowToBaby sử dụng để xây dựng nội dung hướng dẫn.",
     "sources.usedByClaims.one": "Được dùng cho 1 nội dung hướng dẫn đã xuất bản",
     "sources.usedByClaims.many": "Được dùng cho {count} nội dung hướng dẫn đã xuất bản",
     "sources.generatedNote":
@@ -393,7 +393,7 @@ export const MESSAGES = defineMessages({
     "disclaimer.p1.rest":
       "HowToBaby không phải hồ sơ y tế, công cụ chẩn đoán, bài kiểm tra sàng lọc phát triển hay dịch vụ cấp cứu, và không thay thế việc chăm sóc nhi khoa.",
     "disclaimer.p2":
-      "Độ tuổi chỉ giúp xác định những hướng dẫn có thể phù hợp; không chứng minh bé đã sẵn sàng, nội dung đó phù hợp với bé hay tình trạng phát triển của bé. Hãy luôn làm theo lời khuyên của bác sĩ hoặc nhân viên y tế đang chăm sóc bé. Trong tình huống khẩn cấp, hãy liên hệ dịch vụ cấp cứu tại nơi bạn ở.",
+      "Độ tuổi giúp HowToBaby chọn những hướng dẫn có thể phù hợp với bé, nhưng không thể chỉ dựa vào tuổi để biết bé đã sẵn sàng, một khuyến nghị cụ thể có phù hợp với bé hay bé đang phát triển như thế nào. Hãy luôn làm theo lời khuyên của bác sĩ hoặc nhân viên y tế đang chăm sóc bé. Trong tình huống khẩn cấp, hãy liên hệ dịch vụ cấp cứu tại nơi bạn ở.",
 
     "page.privacy.lede": "Thiết kế ưu tiên dữ liệu lưu trên thiết bị.",
     "privacy.p1":
@@ -415,7 +415,7 @@ export const MESSAGES = defineMessages({
     "changelog.p1":
       "Khi một hướng dẫn đã xuất bản thay đổi về ý nghĩa hoặc cần đính chính, HowToBaby ghi lại ngày thay đổi và phần nội dung bị ảnh hưởng tại đây. Trang này sẽ được tạo từ lịch sử phiên bản nội dung khi hệ thống changelog hoàn chỉnh được triển khai.",
     "changelog.status":
-      "Bản hiện tại gồm khung ứng dụng, hệ thống giao diện, những hướng dẫn dựa trên bằng chứng đầu tiên, tính năng xem theo độ tuổi và hồ sơ tùy chọn của bé lưu trên thiết bị; các chủ đề còn lại đang được bổ sung dần theo lộ trình.",
+      "Bản hiện tại gồm trải nghiệm cốt lõi của trang web, hệ thống giao diện, những hướng dẫn dựa trên bằng chứng đầu tiên, tính năng xem theo độ tuổi và hồ sơ tùy chọn của bé lưu trên thiết bị. Các chủ đề khác đang được bổ sung dần theo lộ trình.",
 
     "notFound.title": "Không tìm thấy trang",
     "notFound.lede": "Không tìm thấy địa chỉ này. Trang có thể đã được chuyển, hoặc liên kết chưa đầy đủ.",
@@ -442,7 +442,7 @@ export const MESSAGES = defineMessages({
     "profile.persistence.unavailable": "Không thể lưu hồ sơ trên trình duyệt này. Thông tin vẫn dùng được trong lần truy cập hiện tại nhưng sẽ không được lưu lại sau khi bạn tải lại trang.",
     "profile.persistence.clearFailed":
       "HowToBaby chưa thể xóa hồ sơ đã lưu khỏi trình duyệt. Hồ sơ sẽ không được dùng trong lần truy cập này, nhưng có thể xuất hiện lại sau khi bạn tải lại trang.",
-    "profile.empty": "Chưa có hồ sơ. Bạn vẫn xem được mọi giai đoạn mà không cần tạo hồ sơ.",
+    "profile.empty": "Chưa có hồ sơ. Bạn vẫn có thể xem mọi giai đoạn mà không cần tạo hồ sơ.",
     "profile.saved.dob": "Ngày sinh",
     "profile.saved.edd": "Ngày dự sinh",
 
@@ -454,7 +454,7 @@ export const MESSAGES = defineMessages({
       "Bé sinh sớm {early} so với ngày dự sinh, nên hướng dẫn Chơi & Phát triển sẽ dựa trên tuổi hiệu chỉnh cho đến khi bé đủ 24 tháng tính từ ngày sinh. Đây chỉ là quy tắc chọn nội dung, không phải chẩn đoán.",
     "summary.corrected.limit": "Bé sinh sớm {early} so với ngày dự sinh. Từ khi bé đủ 24 tháng tính từ ngày sinh, hướng dẫn Chơi & Phát triển sẽ dựa trên tuổi tính từ ngày sinh.",
     "summary.beforeBirth": "Ngày sinh đã nhập nằm sau ngày hôm nay trên thiết bị này.",
-    "summary.outOfScope": "HowToBaby hiện có nội dung cho bé từ lúc mới sinh đến dưới 5 tuổi.",
+    "summary.outOfScope": "HowToBaby hiện có nội dung cho bé từ khi chào đời đến trước sinh nhật 5 tuổi.",
     "summary.stage.label": "Giai đoạn hiện tại theo từng chủ đề",
     "summary.stage.unresolved": "Chưa xác định",
     "summary.safeSleep.inScope": "Hướng dẫn ngủ an toàn dành cho trẻ dưới 12 tháng hiện vẫn áp dụng cho bé.",
@@ -470,7 +470,7 @@ export const MESSAGES = defineMessages({
     "stage.next": "Giai đoạn sau",
     "stage.eyebrow.browsing": "Đang xem",
     "stage.empty.title": "Chưa có hướng dẫn cho giai đoạn này",
-    "stage.empty.note": "Hướng dẫn chỉ được hiển thị sau khi đã hoàn tất biên soạn, kiểm chứng tài liệu và rà soát — không đăng nội dung chưa được duyệt.",
+    "stage.empty.note": "Hướng dẫn chỉ được hiển thị sau khi đã hoàn tất biên soạn, kiểm chứng tài liệu và rà soát. HowToBaby không đăng nội dung chưa được duyệt.",
 
     // Why this stage.
     "why.title": "Vì sao là giai đoạn này?",
@@ -483,10 +483,10 @@ export const MESSAGES = defineMessages({
     "why.relation.actual": "Đây là giai đoạn hiện tại của bé.",
     "why.relation.earlier": "Bé đã qua giai đoạn này (giai đoạn hiện tại: {stage}).",
     "why.relation.later":
-      "Giai đoạn bạn đang xem dành cho độ tuổi lớn hơn giai đoạn hiện tại của bé ({stage}). Việc xem trước không khiến hướng dẫn dành cho trẻ lớn hơn áp dụng sớm cho bé; hướng dẫn an toàn vẫn luôn dựa trên tuổi hiện tại của bé.",
+      "Bé chưa đến giai đoạn này (giai đoạn hiện tại: {stage}). Việc xem trước không khiến hướng dẫn dành cho trẻ lớn hơn áp dụng sớm cho bé; hướng dẫn an toàn vẫn luôn dựa trên tuổi hiện tại của bé.",
     "why.relation.unresolved": "Chưa xác định được giai đoạn của bé ở chủ đề này.",
     "why.preview": "Theo ngày đang xem ({date}), bé ở giai đoạn {stage}.",
-    "why.disclaimer": "Độ tuổi chỉ giúp chọn nội dung có thể phù hợp. Chỉ riêng độ tuổi không cho biết bé đã sẵn sàng, nội dung có phù hợp với bé hay tình trạng phát triển của bé.",
+    "why.disclaimer": "Độ tuổi giúp HowToBaby chọn những hướng dẫn có thể phù hợp với bé, nhưng không thể chỉ dựa vào tuổi để biết bé đã sẵn sàng hay đang phát triển như thế nào.",
 
     // Preview plan date (session only).
     "preview.title": "Xem theo ngày khác",

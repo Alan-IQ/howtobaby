@@ -8,8 +8,9 @@ import { colorDeclarations, foundationDeclarations, registryToCss, themeToCss } 
 import { createThemeRegistry } from "../registry/registry.ts";
 import { defaultThemeDefinitions, defaultThemeRegistry, vendorFixtureTheme } from "../registry/default-registry.ts";
 import { parseThemePreference, serializeThemePreference } from "../preference.ts";
-import type { ColorTokens, ThemeDefinition } from "./index.ts";
+import type { ColorTokens, SemanticColorToken, ThemeDefinition } from "./index.ts";
 import {
+  CONTRAST_REQUIREMENTS,
   contrastFindings,
   contrastRatio,
   GEOMETRY_TOKEN_PATHS,
@@ -17,6 +18,8 @@ import {
   SEMANTIC_COLOR_TOKENS,
   ThemeContractError,
   validateThemeDefinition,
+  VISUAL_ACCENT_SURFACES,
+  WCAG,
   worstCaseContrastRatio,
 } from "./index.ts";
 
@@ -96,6 +99,40 @@ describe("accessibility contrast gate (docs/GUI_DESIGN.md §16)", () => {
     expect(worstCaseContrastRatio("#777777", "#ffffff")!).toBeCloseTo(contrastRatio("#777777", "#ffffff")!, 10);
     // Alpha stops composite over the supplied backdrop: transparent stop over white == white.
     expect(worstCaseContrastRatio("#000000", "linear-gradient(180deg, transparent, rgba(255, 255, 255, 0.5))", "#ffffff")!).toBeCloseTo(21, 5);
+  });
+
+  it("gates every accent.*.visual marker at the non-text floor on every neutral surface it is drawn on", () => {
+    // Real consumers: card icon/strip (canvas, surface.1), stage-chip ring/dot (surface.2), tab underline
+    // over the glass pill (surface.glass) and its reduced-transparency swap (surface.glass.solid).
+    const drawnOn: readonly SemanticColorToken[] = ["canvas", "surface.1", "surface.2", "surface.glass", "surface.glass.solid"];
+    expect([...VISUAL_ACCENT_SURFACES]).toEqual(drawnOn);
+    for (const a of ["brand", "feeding", "play", "sleep", "safety", "tools"] as const) {
+      const fg = `accent.${a}.visual` as SemanticColorToken;
+      const gatedOn = CONTRAST_REQUIREMENTS.filter((r) => r.fg === fg);
+      for (const bg of [...drawnOn, `accent.${a}.glass`, `accent.${a}.soft`]) {
+        const req = gatedOn.find((r) => r.bg === bg);
+        expect(req, `${fg} must be gated on ${bg}`).toBeDefined();
+        expect(req!.min, `${fg} on ${bg} is a non-text marker`).toBe(WCAG.nonText);
+      }
+    }
+  });
+
+  it("catches a visual marker that fades against the stage-chip, glass-pill or solid-glass surfaces", () => {
+    const light = babyModernGlass.modes.light!;
+    // A pale tint that still reads on the domain's own coral card tint fixture would not be enough: the same
+    // marker also sits on surface.2 chips and the neutral glass pill, and must fail there.
+    const broken: ThemeDefinition = {
+      ...babyModernGlass,
+      manifest: { ...babyModernGlass.manifest, modes: ["light"], modeLimitation: "test fixture" },
+      modes: { light: { ...light, "accent.feeding.visual": "#e6b8a3" } },
+    };
+    const findings = contrastFindings(broken).filter((f) => f.fg === "accent.feeding.visual");
+    for (const bg of ["surface.2", "surface.glass", "surface.glass.solid"]) {
+      const f = findings.find((x) => x.bg === bg);
+      expect(f, `expected a finding for accent.feeding.visual on ${bg}`).toBeDefined();
+      expect(f!.ratio).toBeDefined(); // measured, not skipped
+      expect(f!.ratio!).toBeLessThan(WCAG.nonText);
+    }
   });
 
   it("the gate catches a regression", () => {

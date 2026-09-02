@@ -70,8 +70,8 @@ export const babyModernGlassLight: ColorTokens = {
   // colour (`accent.*`) is the deepest, most saturated tone that still clears 4.5:1 on canvas,
   // cards and its own soft/glass tints, because eyebrows and nav highlights are text. The domain
   // identity itself is carried by `accent.*.visual`: a clearly brighter, fresher tone for the
-  // title icon, card identity strip and nav underline, gated at the 3:1 non-text floor on canvas,
-  // cards and its own soft/glass tints. The pastel `.soft`/`.glass` surfaces and vivid
+  // title icon, card identity strip and nav underline, gated at the 3:1 non-text floor on every
+  // surface it is drawn on (contract/contrast-gate.ts VISUAL_ACCENT_SURFACES + its own soft/glass tints). The pastel `.soft`/`.glass` surfaces and vivid
   // `.glass.border` carry the rest of the brightness.
   "accent.brand": "#2c5f9e",
   "accent.brand.visual": "#4c78c6",

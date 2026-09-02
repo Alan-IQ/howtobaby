@@ -105,8 +105,9 @@ Light mode should feel luminous, not washed out.
   saturated tone that clears the 4.5:1 text gate on canvas, cards and its own tints;
   `accent.*.visual` is the NON-TEXT domain identity colour (card title icon, the 3px card identity
   strip, the navigation underline, the actual-stage ring/dot marker) and is clearly brighter and
-  fresher in light mode while clearing the 3:1 non-text gate on canvas, cards and its own
-  soft/glass tints. The pastel `accent.*.soft` / `accent.*.glass` surfaces and the vivid
+  fresher in light mode while clearing the 3:1 non-text gate on every surface it is drawn on:
+  canvas, cards (`surface.1`), stage chips (`surface.2`), the glass pill (`surface.glass`) and its
+  reduced-transparency swap (`surface.glass.solid`), plus its own soft/glass tints. The pastel `accent.*.soft` / `accent.*.glass` surfaces and the vivid
   `accent.*.glass.border` carry the rest of the brightness. Meaning is never carried by the
   visual colour alone — the icon and strip always sit beside the domain title.
 

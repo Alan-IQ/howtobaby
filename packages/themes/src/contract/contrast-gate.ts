@@ -32,6 +32,16 @@ const TEXT_SURFACES: readonly SemanticColorToken[] = [
 
 const ACCENTS = ["brand", "feeding", "play", "sleep", "safety", "tools"] as const;
 
+/**
+ * Every NEUTRAL surface a visual domain marker (`accent.*.visual`) is drawn on in the shipped UI. Each one
+ * is a real consumer, not a hypothetical: the card title icon and 3px identity strip sit on canvas and on
+ * `surface.1` cards (and on the domain's own `.glass`/`.soft` tints, gated separately); the actual-stage
+ * ring/dot sits on a stage chip filled with `surface.2`; the tab-bar underline is painted over the
+ * generic `surface.glass` pill; and the reduced-transparency / no-backdrop-filter path swaps that pill to
+ * `surface.glass.solid`. Add a surface here the moment a visual marker starts being drawn on it.
+ */
+export const VISUAL_ACCENT_SURFACES = ["canvas", "surface.1", "surface.2", "surface.glass", "surface.glass.solid"] as const satisfies readonly SemanticColorToken[];
+
 export const CONTRAST_REQUIREMENTS: readonly ContrastRequirement[] = [
   // Body text on every reading surface.
   ...TEXT_SURFACES.flatMap((bg): ContrastRequirement[] => [
@@ -68,12 +78,12 @@ export const CONTRAST_REQUIREMENTS: readonly ContrastRequirement[] = [
     ]),
   ]),
 
-  // Non-text domain markers (`accent.*.visual`: card title icon, 3px identity strip, nav underline, stage
-  // markers) carry domain identity, so they must clear the 3:1 non-text floor wherever they are drawn —
-  // on canvas and cards, and on the domain's own glass/soft card surfaces (worst gradient stop).
+  // Non-text domain markers (`accent.*.visual`) carry domain identity, so they must clear the 3:1 non-text
+  // floor on every surface they are actually drawn on (VISUAL_ACCENT_SURFACES, worst gradient stop).
   ...ACCENTS.flatMap((a): ContrastRequirement[] => [
-    { fg: `accent.${a}.visual` as SemanticColorToken, bg: "canvas", min: WCAG.nonText, note: `accent ${a} visual marker on canvas` },
-    { fg: `accent.${a}.visual` as SemanticColorToken, bg: "surface.1", min: WCAG.nonText, note: `accent ${a} visual marker on cards` },
+    ...VISUAL_ACCENT_SURFACES.map(
+      (bg): ContrastRequirement => ({ fg: `accent.${a}.visual` as SemanticColorToken, bg, min: WCAG.nonText, note: `accent ${a} visual marker on ${bg}` }),
+    ),
     { fg: `accent.${a}.visual` as SemanticColorToken, bg: `accent.${a}.glass` as SemanticColorToken, min: WCAG.nonText, note: `accent ${a} visual marker on its glass tint` },
     { fg: `accent.${a}.visual` as SemanticColorToken, bg: `accent.${a}.soft` as SemanticColorToken, min: WCAG.nonText, note: `accent ${a} visual marker on its soft tint` },
   ]),
