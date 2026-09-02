@@ -267,14 +267,14 @@ Semantic parity is necessary but not sufficient. Parent-facing Vietnamese must r
 - In **parent-facing Vietnamese evidence/provenance copy**, the generic concept `source` defaults to **`tài liệu`**, not bare **`nguồn`**:
   - `Sources` → `Tài liệu tham khảo`
   - `Original source` → `Tài liệu gốc`
-  - `Primary source` → `Tài liệu chính`
+  - `Primary source` → `Tài liệu tham khảo chính`
   - `Direct support` → `Tài liệu hỗ trợ trực tiếp`
   - `Corroborating source` → `Tài liệu đối chiếu`
   - `Contextual source` → `Tài liệu bổ trợ`
   - `Conflicting source/view` → `Tài liệu có khuyến nghị khác`
   - `Current source version` → `Phiên bản tài liệu hiện tại`
   - `View original source` → `Xem tài liệu gốc`
-  - `Why this source is used` → `Vì sao HowToBaby sử dụng tài liệu này`
+  - `Relationship to the guidance above` → `Mối liên hệ với nội dung hướng dẫn ở trên`
 - This parent-facing rule MUST NOT be applied as a global search-and-replace. Internal identifiers and technical concepts such as `SourceRecord`, `SourceLocator`, `sourceId`, `sourceRefs`, `source of truth`, and `data source` retain their technical meaning/identifier; Vietnamese technical prose may still use `nguồn dữ liệu`, `nguồn chuẩn`, or another context-appropriate term.
 - Exact upstream titles, organization names, URLs, canonical IDs, schema identifiers, and the `/sources` route are not translated or renamed by this rule.
 - `readiness` should normally read as `dấu hiệu sẵn sàng` or `mức độ sẵn sàng của bé` according to context. `developmental readiness` should use natural wording such as `sẵn sàng về mặt phát triển`, never a literal calque such as `sẵn sàng về phát triển`.

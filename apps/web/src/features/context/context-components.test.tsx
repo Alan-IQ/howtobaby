@@ -37,7 +37,9 @@ describe("WhyThisStage (prerender)", () => {
     const html = renderToStaticMarkup(<WhyThisStage stage={stageById("feed-06-08m")!} />);
     expect(html).toContain("Age range for this stage: about 6–&lt;8 months.");
     expect(html).toContain("The source describes the starting point as “about 6 months”. HowToBaby uses that wording to organize content, not to decide whether your child is ready.");
-    expect(html).toContain(MESSAGES.en["why.noProfile"].replace(/'/g, "&#x27;"));
+    // The Now page name renders as a same-tab link whose anchor text is the page's own name.
+    expect(html).toContain(MESSAGES.en["why.noProfile"].replace("{link:now}", '<a href="/">Now</a>'));
+    expect(html).not.toContain("{link:");
     expect(html).toContain(MESSAGES.en["why.disclaimer"]);
     expect(html).not.toMatch(/data-relation=/);
   });

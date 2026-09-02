@@ -11,7 +11,7 @@ import { describe, expect, it } from "vitest";
 
 import type { ClaimEvidenceEntry, SourceRecord } from "@howtobaby/knowledge";
 
-import { referenceEntryForSource, sourceMetaRows } from "./load";
+import { evidenceSourceViews, knowledgeRepository, referenceEntryForSource, sourceMetaRows } from "./load";
 
 const ref: ClaimEvidenceEntry["sourceRefs"][number] = {
   sourceId: "cdc-introduction-solid-foods",
@@ -111,5 +111,25 @@ describe("page References entry", () => {
       expect(entry.sourceDateLabel).toBeUndefined();
     }
     expect(referenceEntryForSource({ ...cdc, status: "changed-review-required" }, "vi").statusLabel).toBe("Đang rà soát bản cập nhật");
+  });
+});
+
+describe("Evidence Drawer relationship explanation", () => {
+  it("names the real organization for every source of the solids-start claim, in both locales", async () => {
+    const evidence = await knowledgeRepository().getClaimEvidence("feeding.solids.start");
+    expect(evidence).not.toBeNull();
+    for (const locale of ["en", "vi"] as const) {
+      const views = await evidenceSourceViews(evidence!, locale);
+      const byOrganization = new Map(views.map((view) => [view.organization, view]));
+      expect([...byOrganization.keys()]).toEqual(expect.arrayContaining(["CDC", "WHO"]));
+      for (const view of views) {
+        expect(view.whyLabel).toBe(locale === "en" ? "Relationship to the guidance above" : "Mối liên hệ với nội dung hướng dẫn ở trên");
+        expect(view.whyText).toContain(view.organization);
+        expect(view.whyText).not.toContain("{organization}");
+      }
+      expect(byOrganization.get("CDC")?.relationshipLabel).toBe(locale === "en" ? "Primary source" : "Tài liệu tham khảo chính");
+    }
+    const [cdcEn] = await evidenceSourceViews(evidence!, "en");
+    expect(cdcEn?.whyText).toBe("HowToBaby relies primarily on the source from CDC to build the guidance shown above.");
   });
 });

@@ -101,9 +101,8 @@ Light mode should feel luminous, not washed out.
   Sleep lavender/periwinkle, Safety rose, Tools sky cyan, Brand clean blue — the same six
   families as dark mode, re-derived for the light canvas rather than copied. Each domain accent
   has two roles with two tokens: `accent.*` is the TEXT-SAFE label tone (eyebrows, navigation
-  label/icon ink, badge text, the selected stage-chip text in light mode, and the stage-chip fill
-  under `text.on-accent` in dark mode) and stays the deepest
-  saturated tone that clears the 4.5:1 text gate on canvas, cards and its own tints;
+  label/icon ink, badge text and selected stage-chip text in every color mode) and stays the
+  deepest saturated tone that clears the 4.5:1 text gate on canvas, cards and its own tints;
   `accent.*.visual` is the NON-TEXT domain identity colour (card title icon, the 3px card identity
   strip, the navigation underline, the actual-stage ring/dot marker) and is clearly brighter and
   fresher in light mode while clearing the 3:1 non-text gate on every surface it is drawn on:
@@ -196,6 +195,28 @@ locale-prefixed: Phase 3 shipped the age routes (`/play|/feeding|/sleep/<stage s
 locale-neutral static paths, and locale-prefixed routing stays a candidate for the public
 discoverability phase (Phase 10) rather than a Phase 3 deliverable.
 
+### Page and site references in copy
+
+When user-facing copy names a specific destination — a HowToBaby page (`Now`, `Feeding`,
+`Privacy`, …), a trust/legal page, the HowToBaby site itself as a destination, or an external
+site/page the reader is being pointed to — that name is rendered as a link to the destination,
+never as plain text that could read as an ordinary word. Rules:
+
+- an internal HowToBaby page links to its canonical route and opens in the same tab;
+- an external site/page opens in a new tab with `target="_blank"` and
+  `rel="noopener noreferrer"` (the shared `ExternalLink`), footer and trust pages included;
+- only a real destination is linked — a topic used as an ordinary noun ("Feeding guidance",
+  "Play & Development guidance") or a tool group that has no page yet is not;
+- the link wraps the page name itself, not the whole sentence, and the wording is never
+  contorted to fit a link;
+- the anchor text is the destination's own localized name in the active language (for a
+  primary destination the full `domain.*.title`, for a trust page its `trust.*.label`), so it is
+  meaningful on its own — never "here" or "see more";
+- in app copy the reference is written as a `{link:<key>}` token resolved from the
+  `MESSAGE_LINKS` registry (`apps/web/src/site.ts`); `<T>` renders it as the link, no HTML is
+  injected, and tests reject an unknown key, an EN/VI mismatch of named destinations, or a
+  tokenised message rendered through the plain string translator.
+
 ### Vietnamese copy quality
 
 All Vietnamese user-facing copy follows `GUIDANCE_CONTENT_CONTRACT.md` §10. UI copy must be
@@ -212,7 +233,7 @@ Vietnamese evidence/provenance presentation uses document-oriented wording for p
 - Collections/headings use `Tài liệu tham khảo`.
 - `Original source` → `Tài liệu gốc`.
 - Relationship labels:
-  - `Primary source` → `Tài liệu chính`
+  - `Primary source` → `Tài liệu tham khảo chính`
   - `Direct support` → `Tài liệu hỗ trợ trực tiếp`
   - `Corroborating source` → `Tài liệu đối chiếu`
   - `Contextual source` → `Tài liệu bổ trợ`
@@ -220,7 +241,7 @@ Vietnamese evidence/provenance presentation uses document-oriented wording for p
 - `Current source version` → `Phiên bản tài liệu hiện tại`.
 - `Source status` → `Trạng thái tài liệu`.
 - `Source temporarily unavailable` → `Tài liệu hiện tạm thời không truy cập được`.
-- `Why this source is used` → `Vì sao HowToBaby sử dụng tài liệu này`.
+- `Relationship to the guidance above` → `Mối liên hệ với nội dung hướng dẫn ở trên`.
 - `View original source` → `Xem tài liệu gốc`.
 
 Evidence Drawer Vietnamese presentation therefore reads naturally, for example:
@@ -228,14 +249,14 @@ Evidence Drawer Vietnamese presentation therefore reads naturally, for example:
 ```text
 Tài liệu tham khảo cho hướng dẫn này
 
-CDC · Tài liệu chính
+CDC · Tài liệu tham khảo chính
 <exact upstream title>
 
 Phần liên quan: …
 Phạm vi áp dụng: Hoa Kỳ
 Phiên bản tài liệu hiện tại: 14/04/2026
 HowToBaby kiểm chứng lần cuối: 31/08/2026
-Vì sao HowToBaby sử dụng tài liệu này: …
+Mối liên hệ với nội dung hướng dẫn ở trên: HowToBaby chủ yếu dựa trên tài liệu do CDC công bố để xây dựng nội dung hướng dẫn ở trên.
 Xem tài liệu gốc
 ```
 
@@ -435,8 +456,10 @@ Rules:
    - both and `updatedAt` later → `Published: Jan 10, 2025` + `Updated: Apr 14, 2026` (VI `Ngày xuất bản` + `Ngày cập nhật`);
    - neither → no source-date rows at all (never an inferred date);
 4. `Last verified by HowToBaby: Aug 31, 2026` / VI `HowToBaby kiểm chứng lần cuối: 31/08/2026` — HowToBaby's own review confirmation, never a crawl or deploy time;
-5. `Why this source is used` / VI `Vì sao HowToBaby sử dụng tài liệu này` — derived from the canonical relationship;
+5. `Relationship to the guidance above` / VI `Mối liên hệ với nội dung hướng dẫn ở trên` — derived from the canonical relationship;
 6. **View original source** / VI **Xem tài liệu gốc** action.
+
+Relationship explanations name the source organization and refer explicitly to the HowToBaby guidance displayed above. They must not rely on ambiguous wording such as “this guidance”, “this statement” or “this organization”.
 
 A status badge is rendered only when a status needs attention (`changed-review-required`, `superseded`, `retired`, `temporarily-unreachable`); a healthy `current` source carries no status UI. A concise interpretation/uncertainty/conflict note follows when needed.
 
@@ -583,11 +606,12 @@ Do not use cute decorative treatment around urgent/emergency copy.
 
 Implementation (Phase 3): chips are plain links to the static stage routes
 (`/<destination>/<stage slug>`, slugs are broad age bins such as `6-9-months`, never child
-data). The browsed stage carries aria-current="page". In light mode, its chip uses the domain’s
-tinted-glass surface, text-safe accent text, and glass border; in dark mode, it keeps the solid
-domain accent with text.on-accent. If the browsed stage is also the actual child’s stage, the
-brand ring remains the actual-stage marker and the dot follows the selected text colour so it
-stays visible on the light glass surface. The actual child's stage — resolved client-side from
+data). The browsed stage carries aria-current="page". In both light and dark modes, its chip
+uses the domain’s tinted-glass surface, matching glass border, text-safe domain accent and
+semibold label. If the browsed stage is also the actual child’s stage, the brand ring remains the
+actual-stage marker; the glass border is removed to avoid a double outline, and the dot follows
+the selected text colour. Differences between light and dark come from theme token values, not
+from different component-state styling. The actual child's stage — resolved client-side from
 the local profile only — carries that brand-colour ring plus dot and a visually hidden "your
 child's current stage" label, so the two states never look alike and prerendered HTML never
 contains a child marker. Each stage page pairs the navigator

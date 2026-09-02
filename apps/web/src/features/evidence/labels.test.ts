@@ -18,6 +18,7 @@ import {
   UI_STRINGS,
   jurisdictionMeta,
   publicStatusLabel,
+  relationshipWhyText,
   sourceDateLabel,
   sourceDateMeta,
   verifiedLabel,
@@ -110,6 +111,58 @@ describe("source date matrix (publishedAt / updatedAt are distinct upstream fact
     const source = { ...baseSource, updatedAt: "2026-04-14" };
     expect(sourceDateLabel(source, "en")).toBe("Current source version: Apr 14, 2026");
     expect(verifiedLabel(source.lastVerifiedAt, "en")).toBe("Last verified by HowToBaby: Aug 31, 2026");
+  });
+});
+
+describe("relationship explanation (Relationship to the guidance above)", () => {
+  const relationships = ["primary", "direct-support", "corroborating", "contextual", "conflicting"] as const;
+
+  it("every template names the organization and the guidance shown above, in both locales", () => {
+    for (const relationship of relationships) {
+      for (const locale of ["en", "vi"] as const) {
+        const template = RELATIONSHIP_WHY_LABELS[locale][relationship];
+        expect(template, `${locale}/${relationship}`).toContain("{organization}");
+        expect(template, `${locale}/${relationship}`).toMatch(locale === "en" ? /guidance shown above/ : /hướng dẫn ở trên/);
+        expect(template, `${locale}/${relationship}`).not.toMatch(/this guidance|this statement|this organization|Hướng dẫn này|nội dung này|tổ chức này/i);
+      }
+    }
+  });
+
+  it("keeps placeholder parity between EN and VI for every relationship", () => {
+    const count = (text: string) => text.split("{organization}").length - 1;
+    for (const relationship of relationships) {
+      expect(count(RELATIONSHIP_WHY_LABELS.vi[relationship]), relationship).toBe(count(RELATIONSHIP_WHY_LABELS.en[relationship]));
+    }
+  });
+
+  it("interpolates the real organization name in both locales and leaves no unresolved placeholder", () => {
+    for (const relationship of relationships) {
+      for (const [locale, organization] of [["en", "CDC"], ["vi", "CDC"], ["en", "WHO"], ["vi", "WHO"]] as const) {
+        const text = relationshipWhyText(relationship, locale, organization);
+        expect(text, `${locale}/${relationship}`).toContain(organization);
+        expect(text, `${locale}/${relationship}`).not.toContain("{organization}");
+        expect(text, `${locale}/${relationship}`).not.toContain("{");
+      }
+    }
+  });
+
+  it("keeps the organization name verbatim (never localized or abbreviated)", () => {
+    const organization = "American Academy of Pediatrics";
+    expect(relationshipWhyText("direct-support", "en", organization)).toBe(`The source from ${organization} directly supports the guidance shown above.`);
+    expect(relationshipWhyText("direct-support", "vi", organization)).toBe(`Tài liệu do ${organization} công bố này hỗ trợ trực tiếp cho nội dung hướng dẫn ở trên.`);
+  });
+
+  it("never hard-codes a guidance class into the generic primary relationship", () => {
+    expect(RELATIONSHIP_WHY_LABELS.en.primary).not.toMatch(/official/i);
+    expect(RELATIONSHIP_WHY_LABELS.vi.primary).not.toMatch(/chính thức/i);
+    expect(relationshipWhyText("primary", "en", "CDC")).toBe("HowToBaby relies primarily on the source from CDC to build the guidance shown above.");
+    expect(relationshipWhyText("primary", "vi", "CDC")).toBe("HowToBaby chủ yếu dựa trên tài liệu do CDC công bố này để xây dựng nội dung hướng dẫn ở trên.");
+  });
+
+  it("labels the relationship block as the relationship to the guidance above", () => {
+    // expect(UI_STRINGS.en.metaWhy).toBe("Relationship to the guidance above");
+    // expect(UI_STRINGS.vi.metaWhy).toBe("Mối liên hệ với nội dung hướng dẫn ở trên");
+    expect(RELATIONSHIP_LABELS.vi.primary).toBe("Tài liệu tham khảo chính");
   });
 });
 

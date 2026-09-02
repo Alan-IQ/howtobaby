@@ -32,7 +32,7 @@ function block(locale: "en" | "vi"): GuidanceBlockView {
             sourceId: "cdc-solids",
             organization: "CDC",
             title: "When, What, and How to Introduce Solid Foods",
-            relationshipLabel: locale === "vi" ? "Tài liệu chính" : "Primary source",
+            relationshipLabel: locale === "vi" ? "Tài liệu tham khảo chính" : "Primary source",
             statusTone: "calm",
             meta: [{ label: UI_STRINGS[locale].metaSourceVersion, value: locale === "vi" ? "14/04/2026" : "Apr 14, 2026", icon: "document" }],
             whyLabel: UI_STRINGS[locale].metaWhy,

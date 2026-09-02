@@ -8,7 +8,7 @@
  *
  * Every drawer metadata line is labeled (e.g. "Applies to: United States", "Published: …",
  * "Updated: …", "Last verified by HowToBaby: …") so parents never see bare values whose meaning
- * they have to guess, and the "why this source is used" line is derived from canonical
+ * they have to guess, and the "Relationship to the guidance above" line is derived from canonical
  * relationship metadata — never hard-coded medical prose in a component.
  */
 
@@ -46,7 +46,7 @@ export const RELATIONSHIP_LABELS: Record<UiLocale, Record<SourceRelationship, st
     conflicting: "Conflicting view",
   },
   vi: {
-    primary: "Tài liệu chính",
+    primary: "Tài liệu tham khảo chính",
     "direct-support": "Tài liệu hỗ trợ trực tiếp",
     corroborating: "Tài liệu đối chiếu",
     contextual: "Tài liệu bổ trợ",
@@ -55,25 +55,38 @@ export const RELATIONSHIP_LABELS: Record<UiLocale, Record<SourceRelationship, st
 };
 
 /**
- * "Why this source is used", derived from the canonical claim→source relationship
- * (EVIDENCE_PROVENANCE.md §3). Presentation copy about provenance roles, not medical prose.
+ * Relationship explanation templates ("Relationship to the guidance above"), derived from the
+ * canonical claim→source relationship (EVIDENCE_PROVENANCE.md §3). Presentation copy about
+ * provenance roles, not medical prose. Each template names the source organization through the
+ * `{organization}` placeholder and refers explicitly to the HowToBaby guidance the Evidence Drawer
+ * shows above its source list — never ambiguous wording such as "this guidance", "this statement"
+ * or "this organization". The `primary` template is relationship-only: it never hard-codes a
+ * guidance class (the class badge is presented separately). Render through `relationshipWhyText`.
  */
 export const RELATIONSHIP_WHY_LABELS: Record<UiLocale, Record<SourceRelationship, string>> = {
   en: {
-    primary: "This guidance is based on an official recommendation published by this organization.",
-    "direct-support": "This organization's published guidance directly supports this statement.",
-    corroborating: "This is an independent authority whose published guidance agrees with the primary source.",
-    contextual: "This source provides background information that helps explain the guidance.",
-    conflicting: "This organization gives different guidance. HowToBaby keeps the relevant difference visible instead of hiding it.",
+    primary: "HowToBaby relies primarily on the source from {organization} to build the guidance shown above.",
+    "direct-support": "The source from {organization} directly supports the guidance shown above.",
+    corroborating: "The source from {organization} provides an independent cross-check because it is consistent with the primary source used for the guidance shown above.",
+    contextual: "The source from {organization} provides background information that helps explain the guidance shown above.",
+    conflicting: "The source from {organization} differs from the primary source used for the guidance shown above. HowToBaby keeps the relevant difference visible.",
   },
   vi: {
-    primary: "Hướng dẫn này dựa trên khuyến nghị chính thức do tổ chức này công bố.",
-    "direct-support": "Hướng dẫn do tổ chức này công bố hỗ trợ trực tiếp cho nội dung này.",
-    corroborating: "Đây là một cơ quan độc lập có hướng dẫn nhất quán với tài liệu chính.",
-    contextual: "Tài liệu này cung cấp thông tin nền giúp hiểu rõ hướng dẫn.",
-    conflicting: "Tổ chức này đưa ra khuyến nghị khác. HowToBaby trình bày rõ điểm khác biệt liên quan thay vì lược bỏ.",
+    primary: "HowToBaby chủ yếu dựa trên tài liệu do {organization} công bố này để xây dựng nội dung hướng dẫn ở trên.",
+    "direct-support": "Tài liệu do {organization} công bố này hỗ trợ trực tiếp cho nội dung hướng dẫn ở trên.",
+    corroborating: "Tài liệu do {organization} công bố này được dùng để đối chiếu độc lập vì nội dung trong đó nhất quán với tài liệu chính được dùng cho hướng dẫn ở trên.",
+    contextual: "Tài liệu do {organization} công bố này cung cấp thông tin nền giúp giải thích rõ hơn nội dung hướng dẫn ở trên.",
+    conflicting: "Tài liệu do {organization} công bố này có điểm khác với tài liệu chính được dùng cho hướng dẫn ở trên. HowToBaby trình bày rõ điểm khác biệt có liên quan.",
   },
 };
+
+/**
+ * Relationship explanation for one source, with `{organization}` replaced by the organization
+ * name exactly as the canonical SourceRecord states it (never localized, never abbreviated here).
+ */
+export function relationshipWhyText(relationship: SourceRelationship, locale: UiLocale, organization: string): string {
+  return RELATIONSHIP_WHY_LABELS[locale][relationship].replaceAll("{organization}", organization);
+}
 
 /**
  * Public status labels for NON-current lifecycle states (EVIDENCE_PROVENANCE.md §14). A healthy

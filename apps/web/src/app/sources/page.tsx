@@ -14,6 +14,7 @@ import type { Metadata } from "next";
 
 import { Card } from "@howtobaby/ui";
 
+import { ExternalLink } from "@/components/ExternalLink";
 import { PageShell } from "@/components/PageShell";
 import { LocalizedSourceRegistry } from "@/features/evidence/LocalizedSourceRegistry";
 import { knowledgeRepository } from "@/features/evidence/load";
@@ -34,9 +35,9 @@ export default async function Page() {
             <T id="sources.generatedNote" />
           </p>
           <p>
-            <a href={SITE.sourceCodeUrl} rel="noopener">
+            <ExternalLink href={SITE.sourceCodeUrl}>
               <T id="sources.browseRepository" />
-            </a>
+            </ExternalLink>
           </p>
         </div>
       </Card>

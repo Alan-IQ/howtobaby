@@ -56,8 +56,8 @@ export const SEMANTIC_COLOR_TOKENS = [
   "status.emergency.border",
   // domain accents
   // Per-domain accent: text-safe label colour, visual marker colour, solid soft tint, and the tinted-glass
-  // surface pair. `accent.<domain>` is TEXT — eyebrows, nav highlight, badge labels, stage-chip fills under
-  // `text.on-accent` — and is gated at 4.5:1. `accent.<domain>.visual` is the NON-TEXT domain identity
+  // surface pair. `accent.<domain>` is TEXT — eyebrows, nav highlight, badge labels, selected stage-chip
+  // text on its own `.glass`/`.soft` tint in every color mode — and is gated at 4.5:1. `accent.<domain>.visual` is the NON-TEXT domain identity
   // colour — card title icon, the 3px card identity strip, nav underline, stage markers — gated at the
   // 3:1 non-text floor so a light theme can keep it bright and vivid while the label tone stays deep.
   // `.glass` is the translucent tinted background (may be a gradient); `.glass.border` its defined edge;

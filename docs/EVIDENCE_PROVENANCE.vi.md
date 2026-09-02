@@ -88,8 +88,10 @@ organization, exact source title, relationship (role badge), rồi metadata **th
 2. **Phạm vi áp dụng** — jurisdiction/scope;
 3. **metadata phát hành/phiên bản nguồn** — theo hợp đồng ngày nguồn (§10): chỉ `Ngày xuất bản`, `Phiên bản tài liệu hiện tại`, `Ngày xuất bản` + `Ngày cập nhật` (chỉ khi cập nhật muộn hơn), hoặc không có gì;
 4. **HowToBaby kiểm chứng lần cuối** — `lastVerifiedAt`, luôn đứng sau ngày của nguồn;
-5. **Vì sao HowToBaby sử dụng tài liệu này** — suy từ relationship canonical;
+5. **Mối liên hệ với nội dung hướng dẫn ở trên** — suy từ relationship canonical;
 6. link **Xem tài liệu gốc**.
+
+Phần giải thích mối liên hệ phải nêu rõ tên tổ chức công bố tài liệu và chỉ rõ nội dung hướng dẫn của HowToBaby được hiển thị ở phía trên. Không dùng cách diễn đạt mơ hồ như “hướng dẫn này”, “nội dung này” hoặc “tổ chức này”.
 
 Badge trạng thái CHỈ render khi source không còn `current` (đang rà soát bản cập nhật / superseded / retired / tạm không truy cập được); source `current` lành mạnh không có status UI. Interpretation/conflict note đi sau khi cần.
 
@@ -103,9 +105,9 @@ Model kỹ thuật vẫn dùng `SourceRecord`, `ClaimSourceRef`, `SourceLocator`
 
 - drawer title → **Tài liệu tham khảo cho hướng dẫn này**; References → **Tài liệu tham khảo trên trang này**
 - `/sources` giữ nguyên route; title/heading VI → **Tài liệu tham khảo** / **Danh mục tài liệu tham khảo**
-- relationship: `primary` → **Tài liệu chính**, `direct-support` → **Tài liệu hỗ trợ trực tiếp**, `corroborating` → **Tài liệu đối chiếu**, `contextual` → **Tài liệu bổ trợ**, `conflicting` → **Tài liệu có khuyến nghị khác**
+- relationship: `primary` → **Tài liệu tham khảo chính**, `direct-support` → **Tài liệu hỗ trợ trực tiếp**, `corroborating` → **Tài liệu đối chiếu**, `contextual` → **Tài liệu bổ trợ**, `conflicting` → **Tài liệu có khuyến nghị khác**
 - `Source status` → **Trạng thái tài liệu**; `Source temporarily unavailable` → **Tài liệu hiện tạm thời không truy cập được**
-- `Why this source is used` → **Vì sao HowToBaby sử dụng tài liệu này**; `View original source` → **Xem tài liệu gốc**
+- `Relationship to the guidance above` → **Mối liên hệ với nội dung hướng dẫn ở trên**; `View original source` → **Xem tài liệu gốc**
 
 Không global replace `nguồn` → `tài liệu` trong technical prose: `source of truth` (**nguồn chuẩn**), `data source` (**nguồn dữ liệu**), source index, canonical provenance graph giữ nguyên. Đây là thay đổi wording cho phụ huynh, không phải rename data model.
 

@@ -15,7 +15,7 @@ import { Card } from "@howtobaby/ui";
 import { useGuidanceContext } from "@/features/profile/ChildProfileProvider";
 import { formatDate } from "@/features/evidence/labels";
 import { useLanguage } from "@/i18n/LanguageProvider";
-import { useMessages } from "@/i18n/T";
+import { T, useMessages } from "@/i18n/T";
 import { fill, formatDayCount, formatElapsedAge, formatStageRange, formatTimeUntilDueDate } from "./format";
 
 export function WhyThisStage({ stage }: { stage: StageDefinition }) {
@@ -34,7 +34,11 @@ export function WhyThisStage({ stage }: { stage: StageDefinition }) {
       <div className="prose">
         <p>{fill(t("why.range"), { range: formatStageRange(stage, language) })}</p>
         {stage.approximateLowerBound ? <p className="supporting">{fill(t("why.range.approx"), { min: stage.minMonths })}</p> : null}
-        {relation === "no-profile" ? <p className="supporting">{t("why.noProfile")}</p> : null}
+        {relation === "no-profile" ? (
+          <p className="supporting">
+            <T id="why.noProfile" />
+          </p>
+        ) : null}
         {actual && resolution && actual.chronological.days >= 0 ? (
           <p>
             {resolution.basis === "corrected-development"

@@ -102,14 +102,14 @@ Trong **parent-facing UI/copy**, `source` mặc định dùng **tài liệu**, k
 
 - Sources → **Tài liệu tham khảo**
 - Original source → **Tài liệu gốc**
-- Primary source → **Tài liệu chính**
+- Primary source → **Tài liệu tham khảo chính**
 - Direct support → **Tài liệu hỗ trợ trực tiếp**
 - Corroborating source → **Tài liệu đối chiếu**
 - Contextual source → **Tài liệu bổ trợ**
 - Conflicting source/view → **Tài liệu có khuyến nghị khác**
 - Current source version → **Phiên bản tài liệu hiện tại**
 - View original source → **Xem tài liệu gốc**
-- Why this source is used → **Vì sao HowToBaby sử dụng tài liệu này**
+- Relationship to the guidance above → **Mối liên hệ với nội dung hướng dẫn ở trên**
 
 Không search/replace máy móc toàn repository. Các thuật ngữ kỹ thuật và identifier như `SourceRecord`, `SourceLocator`, `sourceId`, `sourceRefs`, `source of truth`, `data source` vẫn giữ đúng nghĩa kỹ thuật; trong technical prose có thể dùng **nguồn dữ liệu**, **nguồn chuẩn** hoặc giữ English khi phù hợp.
 

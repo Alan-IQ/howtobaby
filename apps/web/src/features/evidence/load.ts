@@ -21,7 +21,7 @@ import {
   REVIEW_STATUS_LABELS,
   SAFETY_LEVEL_LABELS,
   RELATIONSHIP_LABELS,
-  RELATIONSHIP_WHY_LABELS,
+  relationshipWhyText,
   UI_STRINGS,
   formatDate,
   jurisdictionMeta,
@@ -64,7 +64,7 @@ function relevantSectionValue(entry: ClaimEvidenceEntry["sourceRefs"][number], l
  * `sourceDateMeta` matrix: Published only, Current source version, Published + Updated when the
  * update is later, or nothing when the authority gives no date) → last verified by HowToBaby. Every row carries an explicit label with a small
  * decorative icon anchor and every value derives from canonical metadata. Role renders as a
- * badge; a status badge appears only for non-current sources; and "why this source is used" is
+ * badge; a status badge appears only for non-current sources; and the relationship explanation is
  * its own secondary block — all fed from the same canonical graph, never prose hard-coded in a
  * component.
  */
@@ -96,7 +96,7 @@ export async function evidenceSourceViews(evidence: ClaimEvidenceEntry, locale: 
       statusTone: sourceStatusTone(source.status),
       meta: sourceMetaRows(ref, source, locale),
       whyLabel: UI_STRINGS[locale].metaWhy,
-      whyText: RELATIONSHIP_WHY_LABELS[locale][ref.relationship],
+      whyText: relationshipWhyText(ref.relationship, locale, source.organization),
       url: source.canonicalUrl,
       ...(note !== null && note !== undefined ? { noteText: note } : {}),
     });

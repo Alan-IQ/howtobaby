@@ -7,6 +7,7 @@ import { Icon } from "@howtobaby/ui";
 
 import { T, useMessages } from "@/i18n/T";
 import { TRUST_LINKS } from "@/site";
+import { ExternalLink } from "./ExternalLink";
 
 /**
  * Global legal/source footer (docs/GUI_DESIGN.md §2.1). Must survive every theme; a vendor shell
@@ -23,10 +24,10 @@ export function SiteFooter() {
             {TRUST_LINKS.map((link) =>
               link.external ? (
                 <li key={link.href}>
-                  <a href={link.href} rel="noopener">
+                  <ExternalLink href={link.href}>
                     {t(link.labelKey)}
                     <Icon name="external" label={t("footer.external.icon")} />
-                  </a>
+                  </ExternalLink>
                 </li>
               ) : (
                 <li key={link.href}>

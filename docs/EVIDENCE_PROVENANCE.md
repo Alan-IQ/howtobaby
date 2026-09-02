@@ -199,8 +199,10 @@ Opening the source chip should show, for each supporting source, the organizatio
 2. **Applies to / Scope** — jurisdiction/context;
 3. **source publication/version metadata** — per the source date provenance contract (§14): `Published` only, `Current source version`, `Published` + `Updated` (only when the update is later), or nothing;
 4. **Last verified by HowToBaby** — `lastVerifiedAt`, always after the source dates;
-5. **Why this source is used** — derived from the canonical relationship;
+5. **Relationship to the guidance above** — derived from the canonical relationship;
 6. **View original source** link.
+
+Relationship explanations name the source organization and refer explicitly to the HowToBaby guidance displayed above. They must not rely on ambiguous wording such as “this guidance”, “this statement” or “this organization”.
 
 A status badge is rendered only for a non-current source (reviewing an update / superseded / retired / temporarily unavailable); a healthy `current` source shows no status UI at all. A concise HowToBaby interpretation note and a meaningful conflict/uncertainty note follow where necessary.
 
@@ -220,14 +222,14 @@ Use:
 
 - `Sources` → `Tài liệu tham khảo`
 - `Original source` → `Tài liệu gốc`
-- `Primary source` → `Tài liệu chính`
+- `Primary source` → `Tài liệu tham khảo chính`
 - `Direct support` → `Tài liệu hỗ trợ trực tiếp`
 - `Corroborating source` → `Tài liệu đối chiếu`
 - `Contextual source` → `Tài liệu bổ trợ`
 - `Conflicting source/view` → `Tài liệu có khuyến nghị khác`
 - `Current source version` → `Phiên bản tài liệu hiện tại`
 - `Source status` → `Trạng thái tài liệu`
-- `Why this source is used` → `Vì sao HowToBaby sử dụng tài liệu này`
+- `Relationship to the guidance above` → `Mối liên hệ với nội dung hướng dẫn ở trên`
 - `View original source` → `Xem tài liệu gốc`
 - `/sources` page heading → `Tài liệu tham khảo`
 - page References heading → `Tài liệu tham khảo trên trang này`

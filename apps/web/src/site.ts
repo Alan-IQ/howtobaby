@@ -44,13 +44,42 @@ export const PRIMARY_NAV: readonly PrimaryDestination[] = [
 ];
 
 /** Globally reachable legal/source surface (docs/GUI_DESIGN.md §2.1). Labels via the app dictionary. */
-export const TRUST_LINKS: readonly { href: string; labelKey: AppMessageKey; external?: true }[] = [
-  { href: "/sources", labelKey: "trust.sources.label" },
-  { href: "/methodology", labelKey: "trust.methodology.label" },
-  { href: "/editorial-policy", labelKey: "trust.editorialPolicy.label" },
-  { href: "/disclaimer", labelKey: "trust.disclaimer.label" },
-  { href: "/privacy", labelKey: "trust.privacy.label" },
-  { href: "/license", labelKey: "trust.license.label" },
-  { href: SITE.sourceCodeUrl, labelKey: "trust.sourceCode.label", external: true },
-  { href: "/changelog", labelKey: "trust.changelog.label" },
+export interface TrustLink {
+  readonly href: string;
+  readonly key: "sources" | "methodology" | "editorialPolicy" | "disclaimer" | "privacy" | "license" | "sourceCode" | "changelog";
+  readonly labelKey: AppMessageKey;
+  readonly external?: true;
+}
+
+export const TRUST_LINKS: readonly TrustLink[] = [
+  { href: "/sources", key: "sources", labelKey: "trust.sources.label" },
+  { href: "/methodology", key: "methodology", labelKey: "trust.methodology.label" },
+  { href: "/editorial-policy", key: "editorialPolicy", labelKey: "trust.editorialPolicy.label" },
+  { href: "/disclaimer", key: "disclaimer", labelKey: "trust.disclaimer.label" },
+  { href: "/privacy", key: "privacy", labelKey: "trust.privacy.label" },
+  { href: "/license", key: "license", labelKey: "trust.license.label" },
+  { href: SITE.sourceCodeUrl, key: "sourceCode", labelKey: "trust.sourceCode.label", external: true },
+  { href: "/changelog", key: "changelog", labelKey: "trust.changelog.label" },
 ];
+
+/**
+ * Destinations that app copy may name inline through a `{link:<key>}` token (docs/GUI_DESIGN.md
+ * §6 "Page and site references in copy"). A page or site named in a sentence is always rendered
+ * as a link to that destination, never as plain text: internal destinations open in the same
+ * tab, external ones in a new tab with safe attributes. The anchor text is the destination's
+ * own localized name — the full domain title for primary destinations (`domain.*.title`, so
+ * "Play & Development" never degrades to the nav label "Play" inside prose) and the trust-link
+ * label for trust/legal pages — so copy never carries a second, drifting spelling of a page name.
+ */
+export interface MessageLinkTarget {
+  readonly href: string;
+  readonly labelKey: AppMessageKey;
+  readonly external?: true;
+}
+
+export type MessageLinkKey = PrimaryDestination["key"] | TrustLink["key"];
+
+export const MESSAGE_LINKS: Readonly<Record<MessageLinkKey, MessageLinkTarget>> = Object.fromEntries([
+  ...PRIMARY_NAV.map((item) => [item.key, { href: item.href, labelKey: item.titleKey }]),
+  ...TRUST_LINKS.map((link) => [link.key, { href: link.href, labelKey: link.labelKey, ...(link.external ? { external: true as const } : {}) }]),
+]) as Record<MessageLinkKey, MessageLinkTarget>;

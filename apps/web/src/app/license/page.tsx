@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 
 import { Card } from "@howtobaby/ui";
 
+import { ExternalLink } from "@/components/ExternalLink";
 import { PageShell } from "@/components/PageShell";
 import { T } from "@/i18n/T";
 import { SITE } from "@/site";
@@ -29,13 +30,13 @@ export default function Page() {
             <T id="license.p2" />
           </p>
           <p>
-            <a href={SITE.licenseUrl} rel="noopener">
+            <ExternalLink href={SITE.licenseUrl}>
               <T id="license.readMap" />
-            </a>{" "}
+            </ExternalLink>{" "}
             ·{" "}
-            <a href={SITE.sourceCodeUrl} rel="noopener">
+            <ExternalLink href={SITE.sourceCodeUrl}>
               <T id="license.sourceCode" />
-            </a>
+            </ExternalLink>
           </p>
         </div>
       </Card>

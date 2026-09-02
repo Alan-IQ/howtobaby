@@ -95,11 +95,11 @@ describe("EvidenceDrawer (GUI_DESIGN.md §11.3)", () => {
   });
 
   it("never implies authority endorsement", () => {
-    expect(html).toContain("They have not reviewed or endorsed HowToBaby.");
+    expect(html).toContain("These organizations publish the original sources but do not review or endorse HowToBaby’s guidance.");
   });
 
   it("presents the claim as HowToBaby guidance supported by sources, never as a source quote", () => {
-    expect(html).toContain("not a direct quote from these organizations");
+    expect(html).toContain("This guidance is written by HowToBaby and supported by the original sources listed below. The wording is HowToBaby’s, not a direct quote from these organizations.");
     expect(html).toContain("HowToBaby guidance");
     expect(html).toContain("Introduce solids at about 6 months.");
     expect(html).toContain("Official guidance");

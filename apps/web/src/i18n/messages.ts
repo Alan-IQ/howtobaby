@@ -14,6 +14,10 @@
  * Key semantics: `nav.*.label` is the SHORT navigation label only (e.g. "Play"); the domain's
  * display title — destination cards, page titles — is `domain.*.title` (e.g. "Play &
  * Development"). Never reuse a navigation label as a content/destination title.
+ *
+ * A page or site named inside a sentence is written as a `{link:<key>}` token (MESSAGE_LINKS in
+ * `@/site`; see i18n/message-links.ts), never as plain text: `<T>` renders it as a link whose
+ * anchor text is that destination's own localized name. Value placeholders stay `{name}`.
  */
 
 import { defineMessages } from "@howtobaby/i18n";
@@ -83,7 +87,7 @@ export const MESSAGES = defineMessages({
     "page.home.how.p1":
       "HowToBaby organizes guidance from public-health authorities by age and context, keeps each statement linked to its original source, and turns that guidance into practical steps for parents without making it more precise than the source allows.",
     "page.home.how.p2":
-      "HowToBaby has started publishing its first evidence-backed guidance, beginning with Feeding, and each statement links to its original source. You can browse every age range without creating a profile. If you add a child profile, it stays on your device and shows which stage your child is in today. More personalization on Now and the remaining topics will be added as their content is verified and reviewed.",
+      "HowToBaby has started publishing its first evidence-backed guidance, beginning with {link:feeding}, and each statement links to its original source. You can browse every age range without creating a profile. If you add a child profile, it stays on your device and shows which stage your child is in today. More personalization on {link:now} and the remaining topics will be added as their content is verified and reviewed.",
 
     // Shared destination scaffolding.
     "section.placeholder.title": "What will be added here",
@@ -158,7 +162,7 @@ export const MESSAGES = defineMessages({
     // Privacy trust page.
     "page.privacy.lede": "Local-first by design.",
     "privacy.p1":
-      "The optional child profile — date of birth, plus an optional due date and display name — stays in your browser on this device. It is never sent to a server, added to a URL or page metadata, or included in analytics or logs. You can remove it at any time from Now.",
+      "The optional child profile — date of birth, plus an optional due date and display name — stays in your browser on this device. It is never sent to a server, added to a URL or page metadata, or included in analytics or logs. You can remove it at any time from {link:now}.",
     "privacy.p2":
       "Apart from the optional profile, HowToBaby stores only your display preferences in the browser: theme, light or dark mode, and language. The site uses no analytics or tracking scripts.",
 
@@ -241,7 +245,7 @@ export const MESSAGES = defineMessages({
     "why.title": "Why this stage?",
     "why.range": "Age range for this stage: {range}.",
     "why.range.approx": "The source describes the starting point as “about {min} months”. HowToBaby uses that wording to organize content, not to decide whether your child is ready.",
-    "why.noProfile": "You chose this stage to browse. Add your child’s date of birth on Now and HowToBaby can show which stage applies today. Browsing another stage never changes the profile.",
+    "why.noProfile": "You chose this stage to browse. Add your child’s date of birth on {link:now} and HowToBaby can show which stage applies today. Browsing another stage never changes the profile.",
     "why.basis.chronological": "For this topic, HowToBaby uses age from birth to determine your child’s stage. Current age: {age}.",
     "why.basis.corrected": "For this topic, HowToBaby uses corrected age to determine your child’s stage. Corrected age: {age} (born {early} before the due date).",
     "why.basis.correctedBeforeDue": "It is {time}, so no corrected-age stage applies in this topic yet.",
@@ -326,7 +330,7 @@ export const MESSAGES = defineMessages({
     "page.home.how.p1":
       "HowToBaby sắp xếp hướng dẫn từ các cơ quan y tế công cộng theo độ tuổi và bối cảnh, giữ từng nội dung gắn với tài liệu gốc và chuyển thành những bước cha mẹ có thể áp dụng trong thực tế mà không diễn giải chính xác hơn mức tài liệu cho phép.",
     "page.home.how.p2":
-      "HowToBaby đã bắt đầu xuất bản những hướng dẫn đầu tiên dựa trên bằng chứng, trước hết ở mục Ăn uống; mỗi nội dung đều liên kết đến tài liệu gốc. Bạn có thể xem mọi giai đoạn theo độ tuổi mà không cần tạo hồ sơ. Nếu thêm hồ sơ của bé, thông tin sẽ chỉ được lưu trên thiết bị và HowToBaby sẽ cho biết hôm nay bé đang ở giai đoạn nào. Các phần cá nhân hóa khác của trang Hiện tại và những chủ đề còn lại sẽ được bổ sung sau khi nội dung được kiểm chứng và rà soát.",
+      "HowToBaby đã bắt đầu xuất bản những hướng dẫn đầu tiên dựa trên bằng chứng, trước hết ở mục {link:feeding}; mỗi nội dung đều liên kết đến tài liệu gốc. Bạn có thể xem mọi giai đoạn theo độ tuổi mà không cần tạo hồ sơ. Nếu thêm hồ sơ của bé, thông tin sẽ chỉ được lưu trên thiết bị và HowToBaby sẽ cho biết hôm nay bé đang ở giai đoạn nào. Các phần cá nhân hóa khác của trang {link:now} và những chủ đề còn lại sẽ được bổ sung sau khi nội dung được kiểm chứng và rà soát.",
 
     "section.placeholder.title": "Nội dung sẽ được bổ sung tại đây",
     "section.placeholder.note":
@@ -397,7 +401,7 @@ export const MESSAGES = defineMessages({
 
     "page.privacy.lede": "Ưu tiên lưu dữ liệu trên thiết bị.",
     "privacy.p1":
-      "Hồ sơ của bé là tùy chọn và chỉ được lưu trong trình duyệt trên thiết bị này. Hồ sơ gồm ngày sinh và, nếu bạn muốn, ngày dự sinh cùng tên hiển thị. Thông tin này không được gửi lên máy chủ, không xuất hiện trong địa chỉ trang hay metadata, và không được đưa vào dữ liệu phân tích hoặc nhật ký hệ thống. Bạn có thể xóa hồ sơ bất cứ lúc nào ở trang Hiện tại.",
+      "Hồ sơ của bé là tùy chọn và chỉ được lưu trong trình duyệt trên thiết bị này. Hồ sơ gồm ngày sinh và, nếu bạn muốn, ngày dự sinh cùng tên hiển thị. Thông tin này không được gửi lên máy chủ, không xuất hiện trong địa chỉ trang hay metadata, và không được đưa vào dữ liệu phân tích hoặc nhật ký hệ thống. Bạn có thể xóa hồ sơ bất cứ lúc nào ở trang {link:now}.",
     "privacy.p2":
       "Ngoài hồ sơ tùy chọn, HowToBaby chỉ lưu các tùy chọn hiển thị trong trình duyệt: giao diện, chế độ sáng hoặc tối và ngôn ngữ. Trang web không sử dụng công cụ phân tích hay mã theo dõi người dùng.",
 
@@ -476,7 +480,7 @@ export const MESSAGES = defineMessages({
     "why.title": "Vì sao là giai đoạn này?",
     "why.range": "Độ tuổi của giai đoạn này: {range}.",
     "why.range.approx": "Tài liệu gốc mô tả mốc bắt đầu là “khoảng {min} tháng”. HowToBaby dùng mốc này để sắp xếp nội dung, không phải để quyết định bé đã sẵn sàng hay chưa.",
-    "why.noProfile": "Bạn đang tự chọn giai đoạn này để xem. Nếu thêm ngày sinh ở trang Hiện tại, HowToBaby có thể cho biết hôm nay bé đang ở giai đoạn nào. Việc xem giai đoạn khác không làm thay đổi hồ sơ của bé.",
+    "why.noProfile": "Bạn đang tự chọn giai đoạn này để xem. Nếu thêm ngày sinh ở trang {link:now}, HowToBaby có thể cho biết hôm nay bé đang ở giai đoạn nào. Việc xem giai đoạn khác không làm thay đổi hồ sơ của bé.",
     "why.basis.chronological": "Trong mục này, HowToBaby dùng tuổi tính từ ngày sinh để xác định giai đoạn của bé. Tuổi hiện tại: {age}.",
     "why.basis.corrected": "Trong mục này, HowToBaby dùng tuổi hiệu chỉnh để xác định giai đoạn của bé. Tuổi hiệu chỉnh hiện tại: {age} (bé sinh sớm {early} so với ngày dự sinh).",
     "why.basis.correctedBeforeDue": "Hiện {time}, nên ở mục này chưa có giai đoạn nào áp dụng theo tuổi hiệu chỉnh.",
