@@ -681,6 +681,38 @@
 .stage-nav__chip[aria-current="page"] .stage-nav__marker {
   background: var(--htb-text-on-accent);
 }
+/* Light mode: the solid accent fill is too heavy against the light glass UI, so the browsed chip
+   becomes the domain's tinted-glass surface with text-safe accent text and the glass border. Dark
+   mode keeps the solid domain accent + text.on-accent above. The reduced-transparency path swaps
+   `--htb-accent-*-glass` to `.soft` inside the theme CSS, so no extra fallback is needed here. */
+[data-color-mode="light"] .stage-nav[data-accent="feeding"] .stage-nav__chip[aria-current="page"] {
+  background: var(--htb-accent-feeding-glass);
+  border-color: var(--htb-accent-feeding-glass-border);
+  color: var(--htb-accent-feeding);
+  font-weight: var(--htb-font-weight-semibold);
+}
+[data-color-mode="light"] .stage-nav[data-accent="play"] .stage-nav__chip[aria-current="page"] {
+  background: var(--htb-accent-play-glass);
+  border-color: var(--htb-accent-play-glass-border);
+  color: var(--htb-accent-play);
+  font-weight: var(--htb-font-weight-semibold);
+}
+[data-color-mode="light"] .stage-nav[data-accent="sleep"] .stage-nav__chip[aria-current="page"] {
+  background: var(--htb-accent-sleep-glass);
+  border-color: var(--htb-accent-sleep-glass-border);
+  color: var(--htb-accent-sleep);
+  font-weight: var(--htb-font-weight-semibold);
+}
+/* Browsed chip that is also the actual child's stage: the brand ring stays the actual-stage marker, so
+   the glass border is dropped (no double border). `[data-accent]` is repeated only so this rule outranks
+   the per-domain light rules above, which set the glass border. */
+[data-color-mode="light"] .stage-nav[data-accent] .stage-nav__chip[aria-current="page"][data-actual="true"] {
+  border-color: transparent;
+}
+/* The dot follows the selected text colour so it stays visible on the light glass surface. */
+[data-color-mode="light"] .stage-nav__chip[aria-current="page"] .stage-nav__marker {
+  background: currentColor;
+}
 
 /* Previous / next stage links. */
 .stage-pager {

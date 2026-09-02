@@ -101,7 +101,8 @@ Light mode should feel luminous, not washed out.
   Sleep lavender/periwinkle, Safety rose, Tools sky cyan, Brand clean blue — the same six
   families as dark mode, re-derived for the light canvas rather than copied. Each domain accent
   has two roles with two tokens: `accent.*` is the TEXT-SAFE label tone (eyebrows, navigation
-  label/icon ink, badge text, and the stage-chip fill under `text.on-accent`) and stays the deepest
+  label/icon ink, badge text, the selected stage-chip text in light mode, and the stage-chip fill
+  under `text.on-accent` in dark mode) and stays the deepest
   saturated tone that clears the 4.5:1 text gate on canvas, cards and its own tints;
   `accent.*.visual` is the NON-TEXT domain identity colour (card title icon, the 3px card identity
   strip, the navigation underline, the actual-stage ring/dot marker) and is clearly brighter and
@@ -582,10 +583,14 @@ Do not use cute decorative treatment around urgent/emergency copy.
 
 Implementation (Phase 3): chips are plain links to the static stage routes
 (`/<destination>/<stage slug>`, slugs are broad age bins such as `6-9-months`, never child
-data). The browsed stage carries `aria-current="page"` and the domain-accent fill; the actual
-child's stage — resolved client-side from the local profile only — carries a brand-colour ring
-plus dot and a visually hidden "your child's current stage" label, so the two states never look
-alike and prerendered HTML never contains a child marker. Each stage page pairs the navigator
+data). The browsed stage carries aria-current="page". In light mode, its chip uses the domain’s
+tinted-glass surface, text-safe accent text, and glass border; in dark mode, it keeps the solid
+domain accent with text.on-accent. If the browsed stage is also the actual child’s stage, the
+brand ring remains the actual-stage marker and the dot follows the selected text colour so it
+stays visible on the light glass surface. The actual child's stage — resolved client-side from
+the local profile only — carries that brand-colour ring plus dot and a visually hidden "your
+child's current stage" label, so the two states never look alike and prerendered HTML never
+contains a child marker. Each stage page pairs the navigator
 with a **WhyThisStage** card (stage range with the half-open `6–<9 months` notation and the
 `about` qualifier where the source wording has it, the age basis used for the actual child —
 chronological or corrected-development — the browsed-vs-actual relation, a session preview

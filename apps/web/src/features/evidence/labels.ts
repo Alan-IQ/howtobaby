@@ -60,18 +60,18 @@ export const RELATIONSHIP_LABELS: Record<UiLocale, Record<SourceRelationship, st
  */
 export const RELATIONSHIP_WHY_LABELS: Record<UiLocale, Record<SourceRelationship, string>> = {
   en: {
-    primary: "This guidance is based on the official recommendation this organization publishes.",
+    primary: "This guidance is based on an official recommendation published by this organization.",
     "direct-support": "This organization's published guidance directly supports this statement.",
-    corroborating: "An independent authority whose published guidance agrees with the primary source.",
-    contextual: "Provides background context for this guidance.",
-    conflicting: "This organization's guidance differs; the meaningful difference is kept visible.",
+    corroborating: "This is an independent authority whose published guidance agrees with the primary source.",
+    contextual: "This source provides background information that helps explain the guidance.",
+    conflicting: "This organization gives different guidance. HowToBaby keeps the relevant difference visible instead of hiding it.",
   },
   vi: {
-    primary: "Khuyến nghị này dựa trên hướng dẫn chính thức do tổ chức này công bố.",
+    primary: "Hướng dẫn này dựa trên khuyến nghị chính thức do tổ chức này công bố.",
     "direct-support": "Hướng dẫn do tổ chức này công bố hỗ trợ trực tiếp cho nội dung này.",
     corroborating: "Đây là một cơ quan độc lập có hướng dẫn nhất quán với tài liệu chính.",
-    contextual: "Tài liệu này cung cấp thông tin nền cần thiết để hiểu hướng dẫn.",
-    conflicting: "Hướng dẫn của tổ chức này có điểm khác với tài liệu chính; HowToBaby giữ phần khác biệt đó hiển thị rõ.",
+    contextual: "Tài liệu này cung cấp thông tin nền giúp hiểu rõ hướng dẫn.",
+    conflicting: "Tổ chức này đưa ra khuyến nghị khác. HowToBaby trình bày rõ điểm khác biệt liên quan thay vì lược bỏ.",
   },
 };
 
@@ -162,10 +162,10 @@ export function sourceDateLabel(source: Pick<SourceRecord, "publishedAt" | "upda
 export const REVIEW_STATUS_LABELS: Record<UiLocale, Record<string, string>> = {
   en: {
     draft: "Draft — not published guidance",
-    "source-verified": "Source-verified",
+    "source-verified": "Source verified",
     "clinical-review-required": "Awaiting clinical review",
     "clinically-reviewed": "Clinically reviewed",
-    "release-approved": "Release-approved",
+    "release-approved": "Approved for publication",
     superseded: "Superseded",
   },
   vi: {
@@ -261,11 +261,11 @@ export const UI_STRINGS: Record<UiLocale, {
   en: {
     languageLegend: "Language",
     sourcesDrawerTitle: "Sources for this guidance",
-    drawerAttribution: "HowToBaby guidance, supported by the original sources listed below. The wording is HowToBaby's — not a direct quote from these organizations.",
+    drawerAttribution: "This guidance is written by HowToBaby and supported by the original sources listed below. The wording is HowToBaby’s, not a direct quote from these organizations.",
     claimLabel: "HowToBaby guidance",
     openSources: "Show the sources behind this guidance",
     viewOriginal: "View original source",
-    disclaimer: "These organizations publish the original guidance. They have not reviewed or endorsed HowToBaby.",
+    disclaimer: "These organizations publish the original sources but do not review or endorse HowToBaby’s guidance.",
     close: "Close",
     referencesTitle: "Sources used on this page",
     metaRole: "Role in this guidance",
@@ -287,11 +287,11 @@ export const UI_STRINGS: Record<UiLocale, {
   vi: {
     languageLegend: "Ngôn ngữ",
     sourcesDrawerTitle: "Tài liệu tham khảo cho hướng dẫn này",
-    drawerAttribution: "Hướng dẫn này do HowToBaby biên soạn dựa trên các tài liệu gốc được liệt kê bên dưới. Cách diễn đạt là của HowToBaby, không phải trích dẫn nguyên văn từ các tổ chức này.",
+    drawerAttribution: "Hướng dẫn này do HowToBaby biên soạn và dựa trên các tài liệu gốc được liệt kê bên dưới. Cách diễn đạt là của HowToBaby, không phải trích dẫn nguyên văn từ các tổ chức này.",
     claimLabel: "Hướng dẫn của HowToBaby",
     openSources: "Xem tài liệu tham khảo của hướng dẫn này",
     viewOriginal: "Xem tài liệu gốc",
-    disclaimer: "Các tổ chức dưới đây là đơn vị công bố tài liệu gốc; họ không tham gia rà soát và không xác nhận hay chứng thực nội dung của HowToBaby.",
+    disclaimer: "Các tổ chức dưới đây công bố tài liệu gốc nhưng không tham gia rà soát và không xác nhận nội dung hướng dẫn của HowToBaby.",
     close: "Đóng",
     referencesTitle: "Tài liệu tham khảo trên trang này",
     metaRole: "Vai trò của tài liệu",

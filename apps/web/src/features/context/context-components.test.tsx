@@ -35,8 +35,8 @@ describe("StageNavigator (prerender)", () => {
 describe("WhyThisStage (prerender)", () => {
   it("explains the bin, the no-profile state and the age-selects limitation", () => {
     const html = renderToStaticMarkup(<WhyThisStage stage={stageById("feed-06-08m")!} />);
-    expect(html).toContain("This stage covers about 6–&lt;8 months.");
-    expect(html).toContain("The source uses “about 6 months” as the starting point. This age range is used to organize content, not as a readiness threshold.");
+    expect(html).toContain("Age range for this stage: about 6–&lt;8 months.");
+    expect(html).toContain("The source describes the starting point as “about 6 months”. HowToBaby uses that wording to organize content, not to decide whether your child is ready.");
     expect(html).toContain(MESSAGES.en["why.noProfile"].replace(/'/g, "&#x27;"));
     expect(html).toContain(MESSAGES.en["why.disclaimer"]);
     expect(html).not.toMatch(/data-relation=/);

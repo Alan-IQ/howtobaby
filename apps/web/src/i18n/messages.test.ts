@@ -60,8 +60,8 @@ describe("public trust copy stays truthful", () => {
 
   it("methodology does not imply automated source monitoring is live", () => {
     expect(MESSAGES.en["methodology.p2"]).not.toMatch(/sources are monitored/i);
-    expect(MESSAGES.en["methodology.p2"]).toMatch(/later phase/i);
-    expect(MESSAGES.en["methodology.p2"]).toMatch(/marked for review/i);
+    expect(MESSAGES.en["methodology.p2"]).toMatch(/planned for a future release/i);
+    expect(MESSAGES.en["methodology.p2"]).toMatch(/flagged for review/i);
   });
 
   it("changelog no longer claims no guidance content is published", () => {
