@@ -105,7 +105,16 @@ export function ProfileEditor() {
       ) : (
         <p className="muted">{t("profile.empty")}</p>
       )}
-      {persistence === "unavailable" ? <p className="muted profile-editor__warning">{t("profile.persistence.unavailable")}</p> : null}
+      {persistence === "unavailable" ? (
+        <p className="muted profile-editor__warning" role="status">
+          {t("profile.persistence.unavailable")}
+        </p>
+      ) : null}
+      {persistence === "clear-failed" ? (
+        <p className="muted profile-editor__warning" role="status">
+          {t("profile.persistence.clearFailed")}
+        </p>
+      ) : null}
     </Card>
   );
 }

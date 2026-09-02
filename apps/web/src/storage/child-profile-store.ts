@@ -5,7 +5,8 @@
  * the profile is never sent to a server, placed in a URL, metadata, analytics or logs. Name is
  * display-only; dates resolve context locally through @howtobaby/core and never create a
  * diagnosis. If persistence fails, the in-memory profile still works for the session and the
- * caller can tell the user persistence is unavailable (`write` returns `false`).
+ * caller can tell the user persistence is unavailable (`write` returns `false`); likewise a
+ * removal that the browser refuses is reported (`clear` returns `false`), never hidden.
  */
 
 import { compareCalendarDates, formatCalendarDate, isValidCalendarDate, parseCalendarDate, type CalendarDate, type ChildProfile } from "@howtobaby/core";
@@ -17,7 +18,12 @@ export interface ChildProfileStore {
   read(): ChildProfile | undefined;
   /** Returns whether the profile was actually persisted. */
   write(profile: ChildProfile): boolean;
-  clear(): void;
+  /**
+   * Returns whether no persisted copy remains afterwards. `false` means the browser refused the
+   * removal (or still returns the value) — a stored profile can reappear on the next load, so the
+   * caller must not present the removal as permanent.
+   */
+  clear(): boolean;
 }
 
 export type ChildProfileIssue = "dob-required" | "dob-invalid" | "dob-future" | "edd-invalid" | "name-too-long";
@@ -115,11 +121,14 @@ export function createChildProfileStore(storage: () => Pick<Storage, "getItem" |
         return false;
       }
     },
-    clear(): void {
+    clear(): boolean {
       try {
-        storage()?.removeItem(key);
+        const target = storage();
+        if (!target) return true; // nothing could have been persisted
+        target.removeItem(key);
+        return target.getItem(key) === null;
       } catch {
-        // Ignore: the in-memory state is already cleared.
+        return false;
       }
     },
   };

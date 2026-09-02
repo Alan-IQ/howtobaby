@@ -77,10 +77,16 @@ describe("exact child data stays out of URLs, metadata and server rendering", ()
       return /child-profile-store|useChildProfile|useGuidanceContext/.test(source);
     });
     expect(readers.length).toBeGreaterThan(0);
+    // Framework-free modules (the store and the client state machine) hold no React; everything
+    // that imports them must itself be a client component.
+    const frameworkFree = [join("storage", "child-profile-store.ts"), join("features", "profile", "profile-state.ts")];
     for (const file of readers) {
-      if (file.endsWith(join("storage", "child-profile-store.ts"))) continue;
+      if (frameworkFree.some((suffix) => file.endsWith(suffix))) continue;
       expect(readFileSync(file, "utf8"), `${file} reads the profile and must be a client component`).toMatch(/^"use client";/m);
     }
+    const stateImporters = files.filter((file) => /profile-state["']/.test(readFileSync(file, "utf8")));
+    expect(stateImporters.length).toBeGreaterThan(0);
+    for (const file of stateImporters) expect(readFileSync(file, "utf8"), file).toMatch(/^"use client";/m);
   });
 
   it("no route reads search params or serializes the profile into a query string", () => {

@@ -63,8 +63,32 @@ describe("createChildProfileStore", () => {
     expect(store.write(profile)).toBe(true);
     expect(map.has(CHILD_PROFILE_STORAGE_KEY)).toBe(true);
     expect(store.read()).toEqual(profile);
-    store.clear();
+    expect(store.clear()).toBe(true);
     expect(store.read()).toBeUndefined();
+    expect(store.clear()).toBe(true); // nothing left to remove is still a clean state
+  });
+
+  it("reports a refused or ineffective removal instead of pretending the profile is gone", () => {
+    const map = new Map<string, string>();
+    const stubborn = createChildProfileStore(() => ({
+      getItem: (k) => map.get(k) ?? null,
+      setItem: (k, v) => void map.set(k, v),
+      removeItem: () => {
+        // ignores the request (e.g. a read-only storage shim)
+      },
+    }));
+    expect(stubborn.write(profile)).toBe(true);
+    expect(stubborn.clear()).toBe(false);
+    expect(stubborn.read()).toEqual(profile);
+    const throwing = createChildProfileStore(() => ({
+      getItem: (k) => map.get(k) ?? null,
+      setItem: (k, v) => void map.set(k, v),
+      removeItem: () => {
+        throw new Error("blocked");
+      },
+    }));
+    expect(throwing.clear()).toBe(false);
+    expect(createChildProfileStore(() => undefined).clear()).toBe(true); // never persisted → nothing remains
   });
 
   it("reports persistence as unavailable when storage is missing or throws, without throwing itself", () => {
@@ -82,6 +106,6 @@ describe("createChildProfileStore", () => {
     }));
     expect(throwing.read()).toBeUndefined();
     expect(throwing.write(profile)).toBe(false);
-    expect(() => throwing.clear()).not.toThrow();
+    expect(throwing.clear()).toBe(false);
   });
 });

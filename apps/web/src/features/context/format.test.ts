@@ -5,7 +5,7 @@ import { chronologicalAge, calendarDate, stageById } from "@howtobaby/core";
 import { SUPPORTED_LOCALES } from "@howtobaby/i18n";
 
 import { MESSAGES } from "@/i18n/messages";
-import { fill, formatDayCount, formatElapsedAge, formatStageChip, formatStageRange } from "./format";
+import { fill, formatCorrectedAge, formatDayCount, formatElapsedAge, formatStageChip, formatStageRange, formatTimeUntilDueDate } from "./format";
 
 describe("stage labels keep the half-open contract notation and qualifiers", () => {
   it("renders months bins, whole-year bins and the `about` lower bound per locale", () => {
@@ -55,6 +55,27 @@ describe("message placeholders", () => {
     for (const key of Object.keys(MESSAGES.en) as (keyof typeof MESSAGES.en)[]) {
       const expected = placeholders(MESSAGES.en[key]);
       for (const { id } of SUPPORTED_LOCALES) expect(placeholders(MESSAGES[id][key]), `${id}: ${key}`).toEqual(expected);
+    }
+  });
+});
+
+describe("ages before their origin never render as signed numbers", () => {
+  const beforeDue = { days: -9, weeks: 0, completedMonths: 0, remainderDays: 0 };
+
+  it("phrases a corrected age before the due date as a countdown", () => {
+    expect(formatTimeUntilDueDate(beforeDue, "en")).toBe("9 days until the due date");
+    expect(formatTimeUntilDueDate(beforeDue, "vi")).toBe("còn 9 ngày nữa đến ngày dự sinh");
+    expect(formatTimeUntilDueDate({ ...beforeDue, days: -15 }, "en")).toBe("2 weeks, 1 day until the due date");
+    expect(formatCorrectedAge(beforeDue, "en")).toBe("9 days until the due date");
+    expect(formatCorrectedAge({ days: 61, weeks: 8, completedMonths: 2, remainderDays: 0 }, "vi")).toBe("2 tháng");
+  });
+
+  it("formatElapsedAge degrades to an unsigned day count and every formatter output is sign-free", () => {
+    for (const locale of ["en", "vi"] as const) {
+      for (const text of [formatElapsedAge(beforeDue, locale), formatCorrectedAge(beforeDue, locale), formatTimeUntilDueDate(beforeDue, locale)]) {
+        expect(text).not.toMatch(/-\d/);
+        expect(text).not.toMatch(/−\d/);
+      }
     }
   });
 });

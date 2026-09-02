@@ -190,10 +190,10 @@ export const MESSAGES = defineMessages({
 
     // Child profile (local-only, optional; PROJECT_PROFILE §6).
     "profile.title": "Your child",
-    "profile.lede": "Optional. Stays on this device — never sent anywhere and never part of a link.",
+    "profile.lede": "Optional. Stays on this device only — it is never sent to a server and never appears in a link.",
     "profile.dob.label": "Date of birth",
     "profile.edd.label": "Estimated due date (optional)",
-    "profile.edd.hint": "Used only to decide whether Play & Development guidance follows a corrected age. Not a diagnosis.",
+    "profile.edd.hint": "Used only to decide whether Play & Development guidance follows a corrected age. It is not a diagnosis.",
     "profile.name.label": "Name (optional, display only)",
     "profile.save": "Save on this device",
     "profile.remove": "Remove",
@@ -203,8 +203,10 @@ export const MESSAGES = defineMessages({
     "profile.error.dob-invalid": "That is not a valid date.",
     "profile.error.dob-future": "The date of birth cannot be after today.",
     "profile.error.edd-invalid": "That due date is not a valid date.",
-    "profile.error.name-too-long": "Keep the name under 40 characters.",
+    "profile.error.name-too-long": "The name can be at most 40 characters.",
     "profile.persistence.unavailable": "This browser could not save the profile, so it applies to this visit only.",
+    "profile.persistence.clearFailed":
+      "The profile is removed for this visit only: this browser would not delete the saved copy, so it may come back the next time you open HowToBaby.",
     "profile.empty": "No profile yet. Every stage can be browsed without one.",
     "profile.saved.dob": "Date of birth",
     "profile.saved.edd": "Estimated due date",
@@ -212,19 +214,19 @@ export const MESSAGES = defineMessages({
     // Child summary / age context.
     "summary.child.generic": "Your child",
     "summary.age.label": "Age today",
-    "summary.correctedAge.label": "Corrected development age",
+    "summary.correctedAge.label": "Corrected age",
     "summary.corrected.note":
-      "Born {early} before the due date, so Play & Development guidance follows the corrected age until 24 months of chronological age. This is a selection rule, not a diagnosis.",
-    "summary.corrected.limit": "Born {early} before the due date. From 24 months of chronological age, Play & Development guidance follows chronological age.",
+      "Born {early} before the due date, so Play & Development guidance follows the corrected age until 24 months from birth. This is a way of choosing guidance, not a diagnosis.",
+    "summary.corrected.limit": "Born {early} before the due date. From 24 months after birth, Play & Development guidance follows the age counted from birth.",
     "summary.beforeBirth": "The date of birth is after today's date on this device.",
     "summary.outOfScope": "HowToBaby currently covers birth to under 5 years.",
-    "summary.stage.label": "Current stage by domain",
+    "summary.stage.label": "Current stage by topic",
     "summary.stage.unresolved": "Not resolved yet",
     "summary.safeSleep.inScope": "Infant safe-sleep guidance applies (under 12 months).",
 
     // Browse by age / stage navigation.
     "browse.byAge.title": "Browse by age",
-    "browse.byAge.lede": "Every stage is public — no profile needed. Age selects candidate guidance; it does not measure your child.",
+    "browse.byAge.lede": "Every stage is open to everyone — no profile needed. Age is used to pick relevant guidance; it is not a measure of your child's development.",
     "stage.nav.label": "Stages",
     "stage.nav.actualMarker": "your child's current stage",
     "stage.nav.scrollBack": "Earlier stages",
@@ -233,36 +235,38 @@ export const MESSAGES = defineMessages({
     "stage.next": "Next stage",
     "stage.eyebrow.browsing": "Browsing",
     "stage.empty.title": "No published guidance for this stage yet",
-    "stage.empty.note": "Guidance appears here only after it has passed the content, evidence and review pipeline — never as unreviewed text.",
+    "stage.empty.note": "Guidance appears here only after it has been written, checked against its sources and reviewed — never as unreviewed text.",
 
     // Why this stage.
     "why.title": "Why this stage",
     "why.range": "This stage covers {range}.",
-    "why.range.approx": "The lower bound is “about {min} months” in the source wording — a resolver bin, not a readiness threshold.",
+    "why.range.approx": "In the source wording this stage starts at “about {min} months” — an editorial age band, not a readiness threshold.",
     "why.noProfile": "You are browsing this stage directly. Add a date of birth on Now to see where your child is today — browsing never changes that.",
-    "why.basis.chronological": "Your child's stage here is based on chronological age: {age}.",
-    "why.basis.corrected": "Your child's stage here is based on corrected development age: {age} (born {early} before the due date).",
+    "why.basis.chronological": "Your child's stage here is based on the age counted from birth: {age}.",
+    "why.basis.corrected": "Your child's stage here is based on the corrected age: {age} (born {early} before the due date).",
+    "why.basis.correctedBeforeDue": "Your child's corrected age has not started yet ({time}), so no stage applies here until then.",
     "why.relation.actual": "This is your child's current stage.",
-    "why.relation.earlier": "Your child is past this stage (current: {stage}).",
+    "why.relation.earlier": "Your child has already passed this stage (current stage: {stage}).",
     "why.relation.later":
-      "This stage is ahead of your child (current: {stage}). Browsing ahead never unlocks guidance meant for an older child and never changes safety guidance for your child's actual age.",
+      "This stage comes after your child's current stage ({stage}). Reading ahead does not bring forward guidance meant for an older child, and safety guidance always stays with your child's actual age today.",
     "why.relation.unresolved": "Your child's stage here is not resolved yet.",
     "why.preview": "Preview on {date}: {stage}.",
-    "why.disclaimer": "Age selects candidate guidance. It does not prove readiness, suitability or developmental status.",
+    "why.disclaimer": "Age is used to pick relevant guidance. It does not prove readiness, suitability or how your child is developing.",
 
     // Preview plan date (session only).
     "preview.title": "Preview another date",
-    "preview.lede": "See which stages would apply on a chosen date. Safety guidance always follows today's actual age.",
-    "preview.date.label": "Plan date",
+    "preview.lede": "See which stages would apply on a date you choose. Safety guidance always follows your child's actual age today.",
+    "preview.date.label": "Date to preview",
     "preview.age.label": "Age on that date",
+    "preview.beforeBirth": "Before the date of birth",
     "preview.clear": "Back to today",
-    "preview.banner": "Previewing {date} — not today's context. Safety guidance follows your child's actual age.",
+    "preview.banner": "Previewing {date} — this is not today. Safety guidance follows your child's actual age today.",
     "preview.needsProfile": "Add a date of birth to preview another date.",
 
     // Safety context (actual child only).
-    "safety.context.title": "Safety context",
-    "safety.context.noProfile": "Safety guidance is organized by a child's actual age. Without a profile, safety topics are browsed publicly; nothing here depends on a browsed stage.",
-    "safety.context.actual": "Safety guidance for your child follows today's actual age: {age}. Browsing other stages or previewing a date never changes it.",
+    "safety.context.title": "Safety guidance and your child's age",
+    "safety.context.noProfile": "Safety guidance is organized by a child's actual age. Without a profile you can still read every safety topic; nothing here changes with the stage you are browsing.",
+    "safety.context.actual": "Safety guidance for your child follows their actual age today: {age}. Browsing other stages or previewing another date does not change it.",
   },
   vi: {
     "app.skipToContent": "Chuyển đến nội dung chính",
@@ -322,7 +326,7 @@ export const MESSAGES = defineMessages({
     "page.home.how.p1":
       "HowToBaby sắp xếp các hướng dẫn chính thức từ các cơ quan y tế công cộng theo độ tuổi và bối cảnh, giữ từng nội dung luôn gắn với tài liệu gốc, rồi chuyển thành những việc cha mẹ có thể áp dụng trong thực tế — mà không diễn giải chính xác hơn mức tài liệu gốc cho phép.",
     "page.home.how.p2":
-      "Hiện HowToBaby đã có một số ít hướng dẫn chính thức dựa trên bằng chứng; phần Ăn uống là nơi đầu tiên được triển khai. Mỗi nội dung đều liên kết đến tài liệu gốc. Bạn đã có thể xem mọi giai đoạn theo độ tuổi, và hồ sơ tùy chọn lưu trên thiết bị cho biết hôm nay bé đang ở giai đoạn nào; trang Hiện tại được cá nhân hóa và các mảng còn lại sẽ được bổ sung khi nội dung hoàn tất quy trình kiểm chứng và rà soát.",
+      "Hiện HowToBaby đã có một số ít hướng dẫn chính thức dựa trên bằng chứng; phần Ăn uống là nơi đầu tiên được triển khai. Mỗi nội dung đều liên kết đến tài liệu gốc. Bạn đã có thể xem mọi giai đoạn theo độ tuổi; nếu muốn, bạn tạo hồ sơ của bé lưu ngay trên thiết bị để biết hôm nay bé đang ở giai đoạn nào. Trang Hiện tại được cá nhân hóa và các chủ đề còn lại sẽ được bổ sung dần khi nội dung hoàn tất bước kiểm chứng tài liệu và rà soát.",
 
     "section.placeholder.title": "Nội dung sẽ có trong mục này",
     "section.placeholder.note":
@@ -393,9 +397,9 @@ export const MESSAGES = defineMessages({
 
     "page.privacy.lede": "Thiết kế ưu tiên dữ liệu lưu trên thiết bị.",
     "privacy.p1":
-      "HowToBaby ưu tiên cá nhân hóa ngay trên thiết bị: hồ sơ tùy chọn của bé (ngày sinh, và nếu muốn thì ngày dự sinh và tên hiển thị) chỉ lưu trong trình duyệt trên thiết bị này, không được gửi lên máy chủ, đưa vào URL hay metadata của trang, dữ liệu phân tích hay nhật ký hệ thống. Bạn có thể xóa hồ sơ bất cứ lúc nào tại trang Hiện tại.",
+      "HowToBaby cá nhân hóa ngay trên thiết bị của bạn: hồ sơ của bé (ngày sinh, và nếu muốn thì thêm ngày dự sinh và tên hiển thị) là tùy chọn và chỉ được lưu trong trình duyệt trên thiết bị này. Hồ sơ không được gửi lên máy chủ, không xuất hiện trong đường link hay metadata của trang, và không đi vào dữ liệu phân tích hay nhật ký hệ thống. Bạn có thể xóa hồ sơ bất cứ lúc nào ở trang Hiện tại.",
     "privacy.p2":
-      "Ngoài hồ sơ tùy chọn đó, website chỉ lưu một số tùy chọn hiển thị trong trình duyệt — gồm giao diện, chế độ sáng/tối và ngôn ngữ. HowToBaby không dùng công cụ phân tích hoặc theo dõi người dùng.",
+      "Ngoài hồ sơ tùy chọn đó, trang web chỉ lưu một vài tùy chọn hiển thị trong trình duyệt — giao diện, chế độ sáng/tối và ngôn ngữ. HowToBaby không dùng công cụ phân tích hay theo dõi người dùng.",
 
     "page.license.lede": "Phần mềm, nội dung và thương hiệu có phạm vi cấp phép riêng.",
     "license.software.term": "Phần mềm",
@@ -411,7 +415,7 @@ export const MESSAGES = defineMessages({
     "changelog.p1":
       "Khi một hướng dẫn đã xuất bản thay đổi về ý nghĩa hoặc cần đính chính, HowToBaby ghi lại ngày thay đổi và phần nội dung bị ảnh hưởng tại đây. Trang này sẽ được tạo từ lịch sử phiên bản nội dung khi hệ thống changelog hoàn chỉnh được triển khai.",
     "changelog.status":
-      "Bản hiện tại gồm khung ứng dụng, hệ thống giao diện, những hướng dẫn dựa trên bằng chứng đầu tiên, tính năng xem theo độ tuổi cùng hồ sơ tùy chọn của bé lưu trên thiết bị; các mảng còn lại đang được bổ sung theo lộ trình.",
+      "Bản hiện tại gồm khung ứng dụng, hệ thống giao diện, những hướng dẫn dựa trên bằng chứng đầu tiên, tính năng xem theo độ tuổi và hồ sơ tùy chọn của bé lưu trên thiết bị; các chủ đề còn lại đang được bổ sung dần theo lộ trình.",
 
     "notFound.title": "Không tìm thấy trang",
     "notFound.lede": "Không tìm thấy địa chỉ này. Trang có thể đã được chuyển, hoặc liên kết chưa đầy đủ.",
@@ -421,41 +425,43 @@ export const MESSAGES = defineMessages({
 
     // Child profile (local-only, optional; PROJECT_PROFILE §6).
     "profile.title": "Bé của bạn",
-    "profile.lede": "Không bắt buộc. Thông tin chỉ lưu trên thiết bị này — không gửi đi đâu và không nằm trong đường liên kết.",
+    "profile.lede": "Không bắt buộc. Thông tin chỉ được lưu trên thiết bị này — không gửi lên máy chủ và không xuất hiện trong bất kỳ đường link nào.",
     "profile.dob.label": "Ngày sinh",
     "profile.edd.label": "Ngày dự sinh (không bắt buộc)",
-    "profile.edd.hint": "Chỉ dùng để xác định hướng dẫn Chơi & Phát triển có tính theo tuổi hiệu chỉnh hay không. Đây không phải chẩn đoán.",
-    "profile.name.label": "Tên bé (không bắt buộc, chỉ để hiển thị)",
+    "profile.edd.hint": "Chỉ dùng để xác định hướng dẫn Chơi & Phát triển có tính theo tuổi hiệu chỉnh hay không. Đây không phải là chẩn đoán.",
+    "profile.name.label": "Tên bé (không bắt buộc, chỉ dùng để hiển thị)",
     "profile.save": "Lưu trên thiết bị này",
-    "profile.remove": "Xóa",
+    "profile.remove": "Xóa hồ sơ",
     "profile.edit": "Chỉnh sửa",
     "profile.cancel": "Hủy",
-    "profile.error.dob-required": "Hãy nhập ngày sinh.",
+    "profile.error.dob-required": "Bạn hãy nhập ngày sinh của bé.",
     "profile.error.dob-invalid": "Ngày này không hợp lệ.",
     "profile.error.dob-future": "Ngày sinh không thể sau ngày hôm nay.",
     "profile.error.edd-invalid": "Ngày dự sinh không hợp lệ.",
-    "profile.error.name-too-long": "Tên nên dưới 40 ký tự.",
-    "profile.persistence.unavailable": "Trình duyệt này không lưu được hồ sơ, nên thông tin chỉ dùng cho lần truy cập này.",
-    "profile.empty": "Chưa có hồ sơ. Bạn vẫn xem được mọi giai đoạn mà không cần hồ sơ.",
+    "profile.error.name-too-long": "Tên bé chỉ được tối đa 40 ký tự.",
+    "profile.persistence.unavailable": "Trình duyệt này không lưu được hồ sơ, nên hồ sơ chỉ có hiệu lực trong lần truy cập này.",
+    "profile.persistence.clearFailed":
+      "Hồ sơ chỉ được gỡ bỏ trong lần truy cập này: trình duyệt không cho xóa bản đã lưu, nên hồ sơ có thể xuất hiện lại khi bạn mở HowToBaby lần sau.",
+    "profile.empty": "Chưa có hồ sơ. Bạn vẫn xem được mọi giai đoạn mà không cần tạo hồ sơ.",
     "profile.saved.dob": "Ngày sinh",
     "profile.saved.edd": "Ngày dự sinh",
 
     // Child summary / age context.
     "summary.child.generic": "Bé của bạn",
     "summary.age.label": "Tuổi hôm nay",
-    "summary.correctedAge.label": "Tuổi phát triển hiệu chỉnh",
+    "summary.correctedAge.label": "Tuổi hiệu chỉnh",
     "summary.corrected.note":
-      "Bé sinh sớm {early} so với ngày dự sinh, nên hướng dẫn Chơi & Phát triển tính theo tuổi hiệu chỉnh cho đến khi bé đủ 24 tháng tuổi thực. Đây là quy tắc chọn nội dung, không phải chẩn đoán.",
-    "summary.corrected.limit": "Bé sinh sớm {early} so với ngày dự sinh. Từ 24 tháng tuổi thực, hướng dẫn Chơi & Phát triển tính theo tuổi thực.",
-    "summary.beforeBirth": "Ngày sinh nằm sau ngày hôm nay trên thiết bị này.",
-    "summary.outOfScope": "HowToBaby hiện bao gồm giai đoạn từ khi sinh đến dưới 5 tuổi.",
-    "summary.stage.label": "Giai đoạn hiện tại theo từng mục",
-    "summary.stage.unresolved": "Chưa xác định",
-    "summary.safeSleep.inScope": "Hướng dẫn ngủ an toàn cho trẻ nhỏ đang áp dụng (dưới 12 tháng).",
+      "Bé sinh sớm {early} so với ngày dự sinh, nên hướng dẫn Chơi & Phát triển sẽ tính theo tuổi hiệu chỉnh cho đến khi bé tròn 24 tháng tính từ ngày sinh. Đây chỉ là cách chọn hướng dẫn phù hợp, không phải là chẩn đoán.",
+    "summary.corrected.limit": "Bé sinh sớm {early} so với ngày dự sinh. Từ khi bé tròn 24 tháng tính từ ngày sinh, hướng dẫn Chơi & Phát triển sẽ tính theo tuổi tính từ ngày sinh.",
+    "summary.beforeBirth": "Ngày sinh đang sau ngày hôm nay trên thiết bị này.",
+    "summary.outOfScope": "HowToBaby hiện có nội dung cho bé từ lúc mới sinh đến dưới 5 tuổi.",
+    "summary.stage.label": "Giai đoạn hiện tại theo từng chủ đề",
+    "summary.stage.unresolved": "Chưa xác định được",
+    "summary.safeSleep.inScope": "Hướng dẫn ngủ an toàn cho trẻ nhỏ (dưới 12 tháng) đang áp dụng với bé.",
 
     // Browse by age / stage navigation.
     "browse.byAge.title": "Xem theo độ tuổi",
-    "browse.byAge.lede": "Mọi giai đoạn đều xem được công khai — không cần hồ sơ. Độ tuổi chỉ giúp chọn hướng dẫn phù hợp, không đo lường bé.",
+    "browse.byAge.lede": "Mọi giai đoạn đều mở cho tất cả mọi người — không cần hồ sơ. Độ tuổi chỉ dùng để chọn hướng dẫn phù hợp, không phải là thước đo sự phát triển của bé.",
     "stage.nav.label": "Các giai đoạn",
     "stage.nav.actualMarker": "giai đoạn hiện tại của bé",
     "stage.nav.scrollBack": "Các giai đoạn trước",
@@ -463,37 +469,39 @@ export const MESSAGES = defineMessages({
     "stage.prev": "Giai đoạn trước",
     "stage.next": "Giai đoạn sau",
     "stage.eyebrow.browsing": "Đang xem",
-    "stage.empty.title": "Chưa có hướng dẫn được xuất bản cho giai đoạn này",
-    "stage.empty.note": "Hướng dẫn chỉ xuất hiện ở đây sau khi đã qua quy trình nội dung, bằng chứng và thẩm định — không bao giờ là nội dung chưa được thẩm định.",
+    "stage.empty.title": "Giai đoạn này chưa có hướng dẫn được đăng",
+    "stage.empty.note": "Hướng dẫn chỉ xuất hiện ở đây sau khi đã được biên soạn, kiểm chứng tài liệu và rà soát — không bao giờ đăng nội dung chưa được rà soát.",
 
     // Why this stage.
     "why.title": "Vì sao là giai đoạn này",
-    "why.range": "Giai đoạn này bao gồm {range}.",
-    "why.range.approx": "Mốc bắt đầu trong tài liệu gốc là “khoảng {min} tháng” — đây là khung chọn nội dung, không phải ngưỡng sẵn sàng.",
-    "why.noProfile": "Bạn đang xem trực tiếp giai đoạn này. Thêm ngày sinh ở trang Hiện tại để biết hôm nay bé đang ở giai đoạn nào — việc xem các giai đoạn không làm thay đổi thông tin đó.",
-    "why.basis.chronological": "Giai đoạn của bé ở mục này tính theo tuổi thực: {age}.",
-    "why.basis.corrected": "Giai đoạn của bé ở mục này tính theo tuổi phát triển hiệu chỉnh: {age} (sinh sớm {early} so với ngày dự sinh).",
+    "why.range": "Giai đoạn này gồm các bé {range}.",
+    "why.range.approx": "Theo cách diễn đạt trong tài liệu gốc, giai đoạn này bắt đầu từ “khoảng {min} tháng” — đây là khoảng tuổi để sắp xếp nội dung, không phải mốc đánh giá bé đã sẵn sàng.",
+    "why.noProfile": "Bạn đang xem trực tiếp giai đoạn này. Hãy thêm ngày sinh ở trang Hiện tại để biết hôm nay bé đang ở giai đoạn nào — việc xem các giai đoạn khác không làm thay đổi thông tin đó.",
+    "why.basis.chronological": "Ở chủ đề này, giai đoạn của bé được tính theo tuổi tính từ ngày sinh: {age}.",
+    "why.basis.corrected": "Ở chủ đề này, giai đoạn của bé được tính theo tuổi hiệu chỉnh: {age} (bé sinh sớm {early} so với ngày dự sinh).",
+    "why.basis.correctedBeforeDue": "Tuổi hiệu chỉnh của bé chưa bắt đầu ({time}), nên đến lúc đó ở chủ đề này chưa có giai đoạn nào áp dụng.",
     "why.relation.actual": "Đây là giai đoạn hiện tại của bé.",
-    "why.relation.earlier": "Bé đã qua giai đoạn này (hiện tại: {stage}).",
+    "why.relation.earlier": "Bé đã qua giai đoạn này rồi (giai đoạn hiện tại: {stage}).",
     "why.relation.later":
-      "Giai đoạn này đi trước giai đoạn của bé (hiện tại: {stage}). Xem trước không mở khóa hướng dẫn dành cho trẻ lớn hơn và không làm thay đổi hướng dẫn an toàn theo tuổi thực của bé.",
-    "why.relation.unresolved": "Chưa xác định được giai đoạn của bé ở mục này.",
-    "why.preview": "Xem trước vào {date}: {stage}.",
-    "why.disclaimer": "Độ tuổi chỉ giúp chọn hướng dẫn phù hợp; không chứng minh mức độ sẵn sàng, sự phù hợp hay tình trạng phát triển.",
+      "Giai đoạn này đến sau giai đoạn hiện tại của bé ({stage}). Việc xem trước không làm hướng dẫn dành cho bé lớn hơn áp dụng sớm với bé, và hướng dẫn an toàn luôn theo đúng tuổi hiện tại của bé.",
+    "why.relation.unresolved": "Chưa xác định được giai đoạn của bé ở chủ đề này.",
+    "why.preview": "Xem trước ngày {date}: {stage}.",
+    "why.disclaimer": "Độ tuổi chỉ dùng để chọn hướng dẫn phù hợp. Nó không nói lên việc bé đã sẵn sàng, có phù hợp hay đang phát triển ra sao.",
 
     // Preview plan date (session only).
     "preview.title": "Xem trước một ngày khác",
-    "preview.lede": "Xem các giai đoạn sẽ áp dụng vào ngày bạn chọn. Hướng dẫn an toàn luôn theo tuổi thực của bé hôm nay.",
-    "preview.date.label": "Ngày dự kiến",
+    "preview.lede": "Xem các giai đoạn sẽ áp dụng vào ngày bạn chọn. Hướng dẫn an toàn luôn theo đúng tuổi hiện tại của bé.",
+    "preview.date.label": "Ngày muốn xem",
     "preview.age.label": "Tuổi vào ngày đó",
-    "preview.clear": "Về hôm nay",
-    "preview.banner": "Đang xem trước ngày {date} — không phải bối cảnh hôm nay. Hướng dẫn an toàn theo tuổi thực của bé.",
-    "preview.needsProfile": "Thêm ngày sinh để xem trước một ngày khác.",
+    "preview.beforeBirth": "Trước ngày sinh",
+    "preview.clear": "Quay về hôm nay",
+    "preview.banner": "Đang xem trước ngày {date} — đây không phải là hôm nay. Hướng dẫn an toàn vẫn theo đúng tuổi hiện tại của bé.",
+    "preview.needsProfile": "Hãy thêm ngày sinh của bé để xem trước một ngày khác.",
 
     // Safety context (actual child only).
-    "safety.context.title": "Bối cảnh an toàn",
-    "safety.context.noProfile": "Hướng dẫn an toàn được sắp xếp theo tuổi thực của trẻ. Khi chưa có hồ sơ, bạn xem các chủ đề an toàn ở dạng công khai; không nội dung nào ở đây phụ thuộc vào giai đoạn đang xem.",
-    "safety.context.actual": "Hướng dẫn an toàn cho bé theo tuổi thực hôm nay: {age}. Xem các giai đoạn khác hay xem trước một ngày khác không làm thay đổi điều này.",
+    "safety.context.title": "Hướng dẫn an toàn theo tuổi của bé",
+    "safety.context.noProfile": "Hướng dẫn an toàn được sắp xếp theo tuổi hiện tại của trẻ. Khi chưa có hồ sơ, bạn vẫn đọc được mọi chủ đề an toàn; nội dung ở đây không thay đổi theo giai đoạn bạn đang xem.",
+    "safety.context.actual": "Hướng dẫn an toàn cho bé theo đúng tuổi hiện tại của bé hôm nay: {age}. Việc xem các giai đoạn khác hay xem trước một ngày khác không làm thay đổi điều này.",
   },
 });
 

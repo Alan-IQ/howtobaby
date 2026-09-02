@@ -16,7 +16,7 @@ import { useGuidanceContext } from "@/features/profile/ChildProfileProvider";
 import { formatDate } from "@/features/evidence/labels";
 import { useLanguage } from "@/i18n/LanguageProvider";
 import { useMessages } from "@/i18n/T";
-import { fill, formatDayCount, formatElapsedAge, formatStageRange } from "./format";
+import { fill, formatDayCount, formatElapsedAge, formatStageRange, formatTimeUntilDueDate } from "./format";
 
 export function WhyThisStage({ stage }: { stage: StageDefinition }) {
   const { language } = useLanguage();
@@ -38,7 +38,9 @@ export function WhyThisStage({ stage }: { stage: StageDefinition }) {
         {actual && resolution && actual.chronological.days >= 0 ? (
           <p>
             {resolution.basis === "corrected-development"
-              ? fill(t("why.basis.corrected"), { age: formatElapsedAge(resolution.age, language), early: formatDayCount(actual.correctedDevelopment.earlyByDays ?? 0, language) })
+              ? resolution.age.days < 0
+                ? fill(t("why.basis.correctedBeforeDue"), { time: formatTimeUntilDueDate(resolution.age, language) })
+                : fill(t("why.basis.corrected"), { age: formatElapsedAge(resolution.age, language), early: formatDayCount(actual.correctedDevelopment.earlyByDays ?? 0, language) })
               : fill(t("why.basis.chronological"), { age: formatElapsedAge(resolution.age, language) })}
           </p>
         ) : null}

@@ -12,7 +12,7 @@ import Link from "next/link";
 import { STAGE_DOMAINS, type ChildAgeContext, type StageDomain } from "@howtobaby/core";
 import { Badge, Card } from "@howtobaby/ui";
 
-import { fill, formatDayCount, formatElapsedAge, formatStageRange } from "@/features/context/format";
+import { fill, formatCorrectedAge, formatDayCount, formatElapsedAge, formatStageRange } from "@/features/context/format";
 import { STAGE_DESTINATIONS, stageHref } from "@/features/context/routes";
 import { useLanguage } from "@/i18n/LanguageProvider";
 import { useMessages } from "@/i18n/T";
@@ -70,7 +70,7 @@ export function ChildSummary() {
             {corrected.useCorrectedDevelopmentAge && corrected.correctedDevelopmentAge ? (
               <div>
                 <dt>{t("summary.correctedAge.label")}</dt>
-                <dd>{formatElapsedAge(corrected.correctedDevelopmentAge, language)}</dd>
+                <dd>{formatCorrectedAge(corrected.correctedDevelopmentAge, language)}</dd>
               </div>
             ) : null}
           </dl>

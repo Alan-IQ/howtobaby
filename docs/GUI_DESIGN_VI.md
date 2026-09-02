@@ -57,7 +57,7 @@ CSS var gợi ý: `--htb-color-canvas`, `--htb-color-surface-glass`, `--htb-colo
 
 ## Baby Modern Glass
 
-Light: sáng nhưng không nhạt/chìm; card đủ opacity/border, text strong.
+Light: sáng nhưng không nhạt/chìm; card đủ opacity/border, text strong. Domain accent ở light mode phải tươi và phân biệt được ngay khi nhìn lướt — Feeding cam san hô/đào, Play xanh bạc hà, Sleep tím oải hương/periwinkle, Safety hồng, Tools xanh cyan/trời, Brand xanh dương sạch — cùng sáu họ màu như dark mode nhưng dẫn xuất riêng cho nền sáng, không copy giá trị dark. Vì `accent.*` cũng là chữ (eyebrow, nav highlight) nên giữ ở tông đậm bão hòa nhất còn qua gate 4.5:1 trên canvas, card và tint của chính nó; độ sáng/độ tươi nằm ở `.soft`/`.glass` pastel và `.glass.border` rực hơn — không cần tách token decorative riêng.
 
 Dark: deep cool/tinted canvas, vẫn baby-modern chứ không generic black SaaS.
 

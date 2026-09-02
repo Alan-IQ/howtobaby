@@ -10,7 +10,7 @@
 import { formatCalendarDate, parseCalendarDate, STAGE_DOMAINS } from "@howtobaby/core";
 import { Button, Card, Input } from "@howtobaby/ui";
 
-import { fill, formatElapsedAge, formatStageRange } from "@/features/context/format";
+import { fill, formatCorrectedAge, formatElapsedAge, formatStageRange } from "@/features/context/format";
 import { STAGE_DESTINATIONS } from "@/features/context/routes";
 import { formatDate } from "@/features/evidence/labels";
 import { useLanguage } from "@/i18n/LanguageProvider";
@@ -64,8 +64,14 @@ export function PreviewPlanDate() {
           <dl className="child-summary__stages">
             <div>
               <dt>{t("preview.age.label")}</dt>
-              <dd>{formatElapsedAge(preview.context.chronological, language)}</dd>
+              <dd>{preview.context.chronological.days < 0 ? t("preview.beforeBirth") : formatElapsedAge(preview.context.chronological, language)}</dd>
             </div>
+            {preview.context.correctedDevelopment.useCorrectedDevelopmentAge && preview.context.correctedDevelopment.correctedDevelopmentAge ? (
+              <div>
+                <dt>{t("summary.correctedAge.label")}</dt>
+                <dd>{formatCorrectedAge(preview.context.correctedDevelopment.correctedDevelopmentAge, language)}</dd>
+              </div>
+            ) : null}
             {STAGE_DOMAINS.map((domain) => {
               const stage = preview.context.domains[domain].stage;
               return (

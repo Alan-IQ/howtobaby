@@ -15,6 +15,7 @@ import {
   isLeapYear,
   isValidCalendarDate,
   localCalendarDate,
+  msUntilNextLocalMidnight,
   parseCalendarDate,
   toDaySerial,
 } from "./calendar-date";
@@ -65,6 +66,30 @@ describe("day serials are timezone-independent", () => {
     expect(toDaySerial(calendarDate(2025, 3, 1)) - toDaySerial(calendarDate(2025, 2, 28))).toBe(1);
     expect(toDaySerial(calendarDate(2026, 1, 1)) - toDaySerial(calendarDate(2025, 12, 31))).toBe(1);
     expect(fromDaySerial(toDaySerial(calendarDate(2024, 2, 29)))).toEqual({ year: 2024, month: 2, day: 29 });
+  });
+
+  it("round-trips every day of the declared range boundaries, including years 1–99 (no Date.UTC 1900 mapping)", () => {
+    for (const text of ["0001-01-01", "0001-12-31", "0099-02-28", "0099-12-31", "0100-01-01", "0100-03-01", "0400-02-29", "1582-10-15", "1899-12-31", "1900-02-28", "1970-01-01", "2000-02-29", "9999-01-01", "9999-12-31"]) {
+      const date = parseCalendarDate(text)!;
+      expect(formatCalendarDate(fromDaySerial(toDaySerial(date)))).toBe(text);
+    }
+    // Year 1 really is year 1: 0001-01-01 lies ~1969 years before the epoch, not in 1901.
+    expect(toDaySerial(calendarDate(1, 1, 1))).toBe(-719162);
+    expect(toDaySerial(calendarDate(99, 12, 31)) - toDaySerial(calendarDate(99, 1, 1))).toBe(364);
+    expect(toDaySerial(calendarDate(100, 1, 1)) - toDaySerial(calendarDate(99, 12, 31))).toBe(1);
+    expect(toDaySerial(calendarDate(9999, 12, 31)) - toDaySerial(calendarDate(9999, 1, 1))).toBe(364);
+    expect(daysBetween(calendarDate(1, 1, 1), calendarDate(9999, 12, 31))).toBe(3652058);
+    // Agrees with Date.UTC wherever Date.UTC is trustworthy (years >= 100).
+    for (const [y, m, d] of [[100, 1, 1], [1600, 2, 29], [2026, 9, 2], [9999, 12, 31]] as const) {
+      expect(toDaySerial(calendarDate(y, m, d))).toBe(Date.UTC(y, m - 1, d) / 86_400_000);
+    }
+    // Serial walk across a full leap-cycle boundary stays consecutive.
+    let previous = toDaySerial(calendarDate(99, 12, 1));
+    for (let i = 1; i <= 120; i += 1) {
+      const serial = toDaySerial(addDays(calendarDate(99, 12, 1), i));
+      expect(serial).toBe(previous + 1);
+      previous = serial;
+    }
   });
 
   it("is unaffected by the process time zone (serials never touch local time)", () => {
@@ -142,6 +167,15 @@ describe("today in a time zone", () => {
     expect(calendarDateInTimeZone(newYear, "Asia/Tokyo")).toEqual(calendarDate(2026, 1, 1));
     const leap = new Date(Date.UTC(2024, 2, 1, 3, 0)); // Mar 1 03:00Z = Feb 29 19:00 in Los Angeles
     expect(calendarDateInTimeZone(leap, "America/Los_Angeles")).toEqual(calendarDate(2024, 2, 29));
+  });
+
+  it("measures the wait until the next local midnight (rollover scheduling, DST-safe)", () => {
+    expect(msUntilNextLocalMidnight(new Date(2026, 8, 2, 23, 59, 59, 500))).toBe(500);
+    expect(msUntilNextLocalMidnight(new Date(2026, 8, 2, 0, 0, 0, 0))).toBe(24 * 3_600_000);
+    const eve = new Date(2026, 2, 7, 12, 0); // day before a possible DST switch: length is 23–25h, never negative
+    const wait = msUntilNextLocalMidnight(eve);
+    expect(wait).toBeGreaterThan(0);
+    expect(localCalendarDate(new Date(eve.getTime() + wait))).toEqual(calendarDate(2026, 3, 8));
   });
 
   it("uses the runtime's local calendar for localCalendarDate", () => {

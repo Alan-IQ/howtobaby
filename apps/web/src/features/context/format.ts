@@ -24,10 +24,14 @@ function unit(locale: AppLocale, kind: "day" | "week" | "month" | "year", n: num
   return `${n} ${n === 1 ? one : many}`;
 }
 
-/** `13 days` / `3 months, 5 days` / `2 years, 3 months` — never a bare number without its unit. */
+/**
+ * `13 days` / `3 months, 5 days` / `2 years, 3 months` — never a bare number without its unit and
+ * never a signed number: an age before its origin is not an age, so callers must phrase it
+ * (see `formatTimeUntilDueDate`); this formatter only degrades to the unsigned day count.
+ */
 export function formatElapsedAge(age: ElapsedAge, locale: AppLocale): string {
   const u = UNITS[locale];
-  if (age.days < 0) return unit(locale, "day", age.days);
+  if (age.days < 0) return formatDayCount(-age.days, locale);
   if (age.completedMonths < 1) return unit(locale, "day", age.days);
   if (age.completedMonths < 24) return age.remainderDays > 0 ? `${unit(locale, "month", age.completedMonths)}${u.sep}${unit(locale, "day", age.remainderDays)}` : unit(locale, "month", age.completedMonths);
   const years = Math.floor(age.completedMonths / 12);
@@ -42,6 +46,22 @@ export function formatDayCount(days: number, locale: AppLocale): string {
   const rest = days % 7;
   if (weeks === 0) return unit(locale, "day", days);
   return rest > 0 ? `${unit(locale, "week", weeks)}${UNITS[locale].sep}${unit(locale, "day", rest)}` : unit(locale, "week", weeks);
+}
+
+/**
+ * Parent-facing phrasing for a corrected age that has not started yet (plan date before the
+ * estimated due date): "9 days until the due date" / "còn 9 ngày nữa đến ngày dự sinh".
+ */
+export function formatTimeUntilDueDate(correctedAge: ElapsedAge, locale: AppLocale): string {
+  const days = Math.max(0, -correctedAge.days);
+  // Under two weeks a plain day count reads more naturally than "1 week, 2 days".
+  const remaining = days < 14 ? unit(locale, "day", days) : formatDayCount(days, locale);
+  return locale === "vi" ? `còn ${remaining} nữa đến ngày dự sinh` : `${remaining} until the due date`;
+}
+
+/** Corrected age for display: the elapsed age once the due date has passed, else the countdown to it. */
+export function formatCorrectedAge(correctedAge: ElapsedAge, locale: AppLocale): string {
+  return correctedAge.days < 0 ? formatTimeUntilDueDate(correctedAge, locale) : formatElapsedAge(correctedAge, locale);
 }
 
 /** `6–<9 months`, `about 6–<8 months`, `3–<4 years` (whole-year bins only). */

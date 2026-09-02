@@ -36,9 +36,30 @@ describe("WhyThisStage (prerender)", () => {
   it("explains the bin, the no-profile state and the age-selects limitation", () => {
     const html = renderToStaticMarkup(<WhyThisStage stage={stageById("feed-06-08m")!} />);
     expect(html).toContain("This stage covers about 6–&lt;8 months.");
-    expect(html).toContain("a resolver bin, not a readiness threshold");
+    expect(html).toContain("an editorial age band, not a readiness threshold");
     expect(html).toContain(MESSAGES.en["why.noProfile"].replace(/'/g, "&#x27;"));
     expect(html).toContain(MESSAGES.en["why.disclaimer"]);
     expect(html).not.toMatch(/data-relation=/);
+  });
+});
+
+describe("ChildSummary / WhyThisStage never show a signed corrected age", () => {
+  it("WhyThisStage phrases a pre-due-date corrected age as a countdown when given such a context", async () => {
+    // Drive the client state directly: a profile 50 days early, plan date 9 days before the due date.
+    const { createProfileState } = await import("@/features/profile/profile-state");
+    const { createChildProfileStore } = await import("@/storage/child-profile-store");
+    const { calendarDate, resolveGuidanceContext } = await import("@howtobaby/core");
+    const map = new Map<string, string>();
+    const store = createChildProfileStore(() => ({ getItem: (k) => map.get(k) ?? null, setItem: (k, v) => void map.set(k, v), removeItem: (k) => void map.delete(k) }));
+    const state = createProfileState({ store, now: () => new Date(2026, 1, 20) });
+    state.saveProfile({ dateOfBirth: calendarDate(2026, 1, 10), estimatedDueDate: calendarDate(2026, 3, 1) });
+    const snapshot = state.getSnapshot();
+    const context = resolveGuidanceContext({ profile: snapshot.profile, today: snapshot.today! });
+    const development = context.actualChildContext!.domains.development;
+    expect(development.basis).toBe("corrected-development");
+    expect(development.age.days).toBe(-9);
+    const { formatCorrectedAge } = await import("./format");
+    expect(formatCorrectedAge(development.age, "en")).toBe("9 days until the due date");
+    expect(formatCorrectedAge(development.age, "vi")).toBe("còn 9 ngày nữa đến ngày dự sinh");
   });
 });

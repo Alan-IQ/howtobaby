@@ -9,7 +9,6 @@
 import type { CalendarDate, CalendarDateText } from "../types/calendar.ts";
 
 const ISO_DATE = /^(\d{4})-(\d{2})-(\d{2})$/;
-const MS_PER_DAY = 86_400_000;
 
 export function isLeapYear(year: number): boolean {
   return (year % 4 === 0 && year % 100 !== 0) || year % 400 === 0;
@@ -51,14 +50,32 @@ export function formatCalendarDate(date: CalendarDate): CalendarDateText {
   return `${pad(date.year, 4)}-${pad(date.month, 2)}-${pad(date.day, 2)}`;
 }
 
-/** Days since 1970-01-01 — the timezone-independent comparison key. */
+/**
+ * Days since 1970-01-01 — the timezone-independent comparison key. Pure proleptic-Gregorian
+ * arithmetic (days-from-civil), never `Date.UTC`, which silently maps years 0–99 to 1900–1999;
+ * the full declared range 0001-01-01 … 9999-12-31 round-trips exactly.
+ */
 export function toDaySerial(date: CalendarDate): number {
-  return Math.round(Date.UTC(date.year, date.month - 1, date.day) / MS_PER_DAY);
+  const y = date.month <= 2 ? date.year - 1 : date.year;
+  const era = Math.floor(y / 400);
+  const yoe = y - era * 400; // [0, 399]
+  const mp = (date.month + 9) % 12; // March = 0 … February = 11
+  const doy = Math.floor((153 * mp + 2) / 5) + date.day - 1; // [0, 365]
+  const doe = yoe * 365 + Math.floor(yoe / 4) - Math.floor(yoe / 100) + doy; // [0, 146096]
+  return era * 146097 + doe - 719468;
 }
 
 export function fromDaySerial(serial: number): CalendarDate {
-  const utc = new Date(serial * MS_PER_DAY);
-  return { year: utc.getUTCFullYear(), month: utc.getUTCMonth() + 1, day: utc.getUTCDate() };
+  const z = serial + 719468;
+  const era = Math.floor(z / 146097);
+  const doe = z - era * 146097; // [0, 146096]
+  const yoe = Math.floor((doe - Math.floor(doe / 1460) + Math.floor(doe / 36524) - Math.floor(doe / 146096)) / 365); // [0, 399]
+  const doy = doe - (365 * yoe + Math.floor(yoe / 4) - Math.floor(yoe / 100)); // [0, 365]
+  const mp = Math.floor((5 * doy + 2) / 153); // [0, 11]
+  const day = doy - Math.floor((153 * mp + 2) / 5) + 1;
+  const month = mp < 10 ? mp + 3 : mp - 9;
+  const year = yoe + era * 400 + (month <= 2 ? 1 : 0);
+  return { year, month, day };
 }
 
 export function compareCalendarDates(a: CalendarDate, b: CalendarDate): number {
@@ -114,4 +131,14 @@ export function calendarDateInTimeZone(instant: Date, timeZone: string): Calenda
 /** The calendar date of an instant in the runtime's local time zone (browser "today"). */
 export function localCalendarDate(instant: Date): CalendarDate {
   return calendarDate(instant.getFullYear(), instant.getMonth() + 1, instant.getDate());
+}
+
+/**
+ * Milliseconds from `instant` until the next local midnight (the moment `localCalendarDate`
+ * changes) — for scheduling a single date-rollover wake-up instead of polling. Computed from the
+ * local calendar, so DST days (23/25 hours) resolve correctly.
+ */
+export function msUntilNextLocalMidnight(instant: Date): number {
+  const next = new Date(instant.getFullYear(), instant.getMonth(), instant.getDate() + 1, 0, 0, 0, 0);
+  return Math.max(1, next.getTime() - instant.getTime());
 }

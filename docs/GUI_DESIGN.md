@@ -96,7 +96,14 @@ Light mode should feel luminous, not washed out.
 - off-white/very pale tinted canvas;
 - glass cards with enough opacity and border definition to remain readable;
 - stronger text than decorative background;
-- gradients used sparingly and never behind dense medical copy without contrast protection.
+- gradients used sparingly and never behind dense medical copy without contrast protection;
+- domain accents fresh and distinct at a glance — Feeding coral/warm orange, Play mint green,
+  Sleep lavender/periwinkle, Safety rose, Tools sky cyan, Brand clean blue — the same six
+  families as dark mode, re-derived for the light canvas rather than copied. Because `accent.*`
+  is also label text (eyebrows, navigation highlight), it stays the deepest saturated tone that
+  clears the 4.5:1 gate on canvas, cards and its own tints; the brightness and chroma live in the
+  pastel `accent.*.soft` / `accent.*.glass` surfaces and the vivid `accent.*.glass.border`, so no
+  separate decorative-accent token is needed.
 
 ### 4.3 Dark mode
 
