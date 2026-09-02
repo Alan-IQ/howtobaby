@@ -125,6 +125,8 @@ jobs:
       - name: Lint
         run: pnpm lint
 
+      # `pnpm test` rebuilds the gitignored derived knowledge read model first: apps/web integration
+      # tests read packages/knowledge/generated through the repository.
       - name: Unit tests (theme contract, primitives, storage, knowledge graph, scripts)
         run: pnpm test
 

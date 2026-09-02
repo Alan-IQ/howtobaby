@@ -18,7 +18,7 @@
     "build:static": "pnpm build:knowledge && pnpm --filter @howtobaby/web build:static",
     "typecheck": "tsc -p tsconfig.json --noEmit && pnpm -r --if-present typecheck",
     "lint": "pnpm -r --if-present lint",
-    "test": "pnpm -r --if-present test && pnpm test:scripts",
+    "test": "pnpm build:knowledge && pnpm -r --if-present test && pnpm test:scripts",
     "test:scripts": "node --test scripts/lib/*.test.ts",
     "check:baseline": "node scripts/check-repo-baseline.ts",
     "check:repo-health": "node scripts/check-repo-health.ts",

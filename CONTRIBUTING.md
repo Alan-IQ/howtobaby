@@ -87,7 +87,7 @@ pnpm check:theme-boundary             # semantic tokens only; no vendor-theme / 
 pnpm validate:knowledge               # validate-sources → validate-content → validate-provenance → validate-translations over canonical YAML
 pnpm report:licenses --strict         # dependency + tracked-asset license report; --strict fails on findings
 pnpm lint                             # ESLint in every workspace that defines it (apps/web)
-pnpm test                             # Vitest in every workspace that defines it, then `pnpm test:scripts` (node:test for scripts/lib)
+pnpm test                             # build:knowledge (the web integration tests read the gitignored derived read model), then Vitest in every workspace that defines it, then `pnpm test:scripts` (node:test for scripts/lib)
 pnpm check:knowledge-determinism      # two from-scratch builds of every derived knowledge artifact must be byte-identical
 pnpm build:knowledge                  # build-knowledge-index (knowledge.sqlite + manifests) + build-evidence-index (evidence indexes)
 ```
