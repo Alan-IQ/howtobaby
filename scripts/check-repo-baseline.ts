@@ -220,7 +220,7 @@ function checkWorkflows(report: Report, root: string): void {
       report.error("workflow", "primary pipeline does not run scripts/check-repo-health.ts (docs/REPOSITORY_HEALTH.md §6)", rel);
     }
     // Production deploy must depend on BOTH gates; a deploy that skips either would bypass a release gate.
-    if (!/^\s+needs:\s*\[\s*repository-health\s*,\s*quality-build\s*]/m.test(pipeline)) {
+    if (!/^\s+needs:\s*\[\s*repository-health\s*,\s*quality-build\s*\]/m.test(pipeline)) {
       report.error("workflow", "`deploy-production` must declare `needs: [repository-health, quality-build]`", rel);
     }
     if (!/^\s+group: deploy-production\s*$/m.test(pipeline) || !/cancel-in-progress: false/.test(pipeline)) {

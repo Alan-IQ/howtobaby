@@ -14,6 +14,11 @@
              IDE data source, so "no data sources are configured" is a permanent false positive here.
              This SQL is proven by the knowledge test suite and the deterministic-rebuild gate,
              not by IDE data-source resolution. -->
+        <!-- RegExpRedundantEscape: JetBrains treats escapes such as `\]` or `\/` outside a character
+             class as redundant. Those escapes are kept deliberately in the repository gates
+             (scripts/check-repo-baseline.ts workflow-contract patterns) for readability and symmetry
+             with `\[`; the regexes are valid and proven by the baseline check itself. -->
+        <inspection_tool class="RegExpRedundantEscape" enabled="false" level="WARNING" enabled_by_default="false" />
         <inspection_tool class="SqlNoDataSourceInspection" enabled="false" level="WARNING" enabled_by_default="false" />
         <inspection_tool class="SqlDialectInspection" enabled="false" level="WARNING" enabled_by_default="false" />
         <inspection_tool class="HtmlUnknownAnchorTarget" enabled="false" level="WARNING" enabled_by_default="false" />
