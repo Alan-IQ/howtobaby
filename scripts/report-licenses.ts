@@ -43,6 +43,8 @@ interface AssetRecord {
   attributionText?: string;
   sourceUrl?: string;
   reviewStatus?: string;
+  /** Date (YYYY-MM-DD) the maintainer confirmed the record; informational. */
+  confirmedAt?: string;
   notes?: string;
   /** Forward-coverage record: no warning when it matches no tracked file yet. */
   allowUnmatched?: boolean;

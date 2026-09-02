@@ -5,26 +5,28 @@
     {
       "assetId": "brand.readme-banner",
       "pattern": ".github/images/banner.png",
-      "creator": "HowToBaby",
+      "creator": "HowToBaby (AI-assisted: generated with OpenAI ChatGPT image tools at the maintainer's direction)",
       "license": "HowToBaby brand asset — all rights reserved; not licensed under AGPL-3.0-only or CC-BY-NC-SA-4.0",
       "commercialUseAllowed": true,
       "redistributionAllowed": false,
       "attributionRequired": false,
       "sourceUrl": "",
-      "reviewStatus": "maintainer-confirmation-required",
-      "notes": "README banner. Confirm original authorship/ownership or record the actual creator and license."
+      "reviewStatus": "confirmed",
+      "confirmedAt": "2026-09-02",
+      "notes": "README banner. Maintainer confirmed 2026-09-02: created for HowToBaby; no third-party stock, font or artwork involved. Treated as a HowToBaby brand asset (LICENSE.md \"Trademark and branding\")."
     },
     {
       "assetId": "brand.site-favicon",
       "pattern": "apps/web/src/app/{favicon.ico,icon.png,icon.svg,icon.ico,apple-icon.png,opengraph-image.png,twitter-image.png}",
-      "creator": "HowToBaby",
+      "creator": "HowToBaby (AI-assisted: generated with OpenAI ChatGPT image tools at the maintainer's direction)",
       "license": "HowToBaby brand asset — all rights reserved; not licensed under AGPL-3.0-only or CC-BY-NC-SA-4.0",
       "commercialUseAllowed": true,
       "redistributionAllowed": false,
       "attributionRequired": false,
       "sourceUrl": "",
-      "reviewStatus": "maintainer-confirmation-required",
-      "notes": "Canonical site favicon and future Next.js app-metadata icon files (App Router file conventions). Confirm original authorship/ownership or record the actual creator and license."
+      "reviewStatus": "confirmed",
+      "confirmedAt": "2026-09-02",
+      "notes": "Canonical site favicon and future Next.js app-metadata icon files (App Router file conventions). Maintainer confirmed 2026-09-02: created for HowToBaby; no third-party stock, font or artwork involved. Treated as a HowToBaby brand asset (LICENSE.md \"Trademark and branding\")."
     },
     {
       "assetId": "brand.app-icons",
