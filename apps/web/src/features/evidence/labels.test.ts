@@ -64,7 +64,7 @@ describe("EN/VI presentation parity", () => {
 describe("source date matrix (publishedAt / updatedAt are distinct upstream facts, never inferred)", () => {
   it("A. publishedAt only → a single Published row (no Updated, no Current source version)", () => {
     expect(sourceDateMeta({ publishedAt: "2026-08-04" }, "en")).toEqual([{ label: "Published", value: "Aug 4, 2026" }]);
-    expect(sourceDateLabel({ publishedAt: "2026-08-04" }, "vi")).toBe("Phát hành: 04/08/2026");
+    expect(sourceDateLabel({ publishedAt: "2026-08-04" }, "vi")).toBe("Ngày xuất bản: 04/08/2026");
     expect(sourceDateLabel({ publishedAt: "2026-08-04" }, "en")).not.toContain("Updated");
     expect(sourceDateLabel({ publishedAt: "2026-08-04" }, "en")).not.toContain("Current source version");
   });
@@ -78,9 +78,9 @@ describe("source date matrix (publishedAt / updatedAt are distinct upstream fact
   it("C. both dates equal → Published only; no duplicate Updated / source-version row", () => {
     const equal = { publishedAt: "2026-04-14", updatedAt: "2026-04-14" };
     expect(sourceDateMeta(equal, "en")).toEqual([{ label: "Published", value: "Apr 14, 2026" }]);
-    expect(sourceDateMeta(equal, "vi")).toEqual([{ label: "Phát hành", value: "14/04/2026" }]);
+    expect(sourceDateMeta(equal, "vi")).toEqual([{ label: "Ngày xuất bản", value: "14/04/2026" }]);
     expect(sourceDateLabel(equal, "en")).toBe("Published: Apr 14, 2026");
-    expect(sourceDateLabel(equal, "vi")).toBe("Phát hành: 14/04/2026");
+    expect(sourceDateLabel(equal, "vi")).toBe("Ngày xuất bản: 14/04/2026");
     expect(sourceDateLabel(equal, "en")).not.toContain("Updated");
     expect(sourceDateLabel(equal, "en")).not.toContain("Current source version");
   });
@@ -92,11 +92,11 @@ describe("source date matrix (publishedAt / updatedAt are distinct upstream fact
       { label: "Updated", value: "Apr 14, 2026" },
     ]);
     expect(sourceDateMeta(both, "vi")).toEqual([
-      { label: "Phát hành", value: "10/01/2025" },
-      { label: "Cập nhật", value: "14/04/2026" },
+      { label: "Ngày xuất bản", value: "10/01/2025" },
+      { label: "Ngày cập nhật", value: "14/04/2026" },
     ]);
     expect(sourceDateLabel(both, "en")).toBe("Published: Jan 10, 2025 · Updated: Apr 14, 2026");
-    expect(sourceDateLabel(both, "vi")).toBe("Phát hành: 10/01/2025 · Cập nhật: 14/04/2026");
+    expect(sourceDateLabel(both, "vi")).toBe("Ngày xuất bản: 10/01/2025 · Ngày cập nhật: 14/04/2026");
   });
 
   it("E. neither → no rows and no label; a date is never invented", () => {
@@ -116,7 +116,7 @@ describe("source date matrix (publishedAt / updatedAt are distinct upstream fact
 describe("labeled metadata", () => {
   it("US sources get a labeled Applies to row instead of a bare country name", () => {
     expect(jurisdictionMeta(baseSource, "en")).toEqual({ label: "Applies to", value: "United States" });
-    expect(jurisdictionMeta(baseSource, "vi")).toEqual({ label: "Áp dụng cho", value: "Hoa Kỳ" });
+    expect(jurisdictionMeta(baseSource, "vi")).toEqual({ label: "Phạm vi áp dụng", value: "Hoa Kỳ" });
   });
 
   it("global sources get a labeled Scope row instead of Global (WHO)", () => {

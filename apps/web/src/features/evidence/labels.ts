@@ -7,9 +7,9 @@
  * here mirror the canonical evidence vocabulary so both locales present the same meaning.
  *
  * Every drawer metadata line is labeled (e.g. "Applies to: United States", "Published: …",
- * "Updated: …", "Last verified by HowToBaby: …") so parents never see bare values whose meaning they have to guess, and the
- * "why this source is used" line is derived from canonical relationship metadata — never
- * hard-coded medical prose in a component.
+ * "Updated: …", "Last verified by HowToBaby: …") so parents never see bare values whose meaning
+ * they have to guess, and the "why this source is used" line is derived from canonical
+ * relationship metadata — never hard-coded medical prose in a component.
  */
 
 import type { AppLocale } from "@howtobaby/i18n";
@@ -30,10 +30,10 @@ export const GUIDANCE_CLASS_LABELS: Record<UiLocale, Record<GuidanceClass, strin
   vi: {
     "official-guidance": "Hướng dẫn chính thức",
     "evidence-synthesis": "Tổng hợp bằng chứng",
-    "typical-pattern": "Mô hình thường gặp",
-    "example-plan": "Kế hoạch ví dụ",
-    "practical-interpretation": "Diễn giải thực hành",
-    "product-heuristic": "Gợi ý của sản phẩm",
+    "typical-pattern": "Xu hướng thường gặp",
+    "example-plan": "Kế hoạch mẫu",
+    "practical-interpretation": "Cách áp dụng thực tế",
+    "product-heuristic": "Gợi ý của HowToBaby",
   },
 };
 
@@ -47,10 +47,10 @@ export const RELATIONSHIP_LABELS: Record<UiLocale, Record<SourceRelationship, st
   },
   vi: {
     primary: "Nguồn chính",
-    "direct-support": "Hỗ trợ trực tiếp",
-    corroborating: "Nguồn củng cố",
-    contextual: "Bối cảnh",
-    conflicting: "Quan điểm khác biệt",
+    "direct-support": "Nguồn hỗ trợ trực tiếp",
+    corroborating: "Nguồn đối chiếu",
+    contextual: "Nguồn cung cấp bối cảnh",
+    conflicting: "Nguồn có quan điểm khác",
   },
 };
 
@@ -67,11 +67,11 @@ export const RELATIONSHIP_WHY_LABELS: Record<UiLocale, Record<SourceRelationship
     conflicting: "This organization's guidance differs; the meaningful difference is kept visible.",
   },
   vi: {
-    primary: "Hướng dẫn này dựa trên khuyến nghị chính thức do tổ chức này công bố.",
-    "direct-support": "Hướng dẫn đã công bố của tổ chức này hỗ trợ trực tiếp cho nội dung trên.",
-    corroborating: "Một cơ quan độc lập có hướng dẫn đã công bố thống nhất với nguồn chính.",
-    contextual: "Cung cấp bối cảnh nền cho hướng dẫn này.",
-    conflicting: "Hướng dẫn của tổ chức này khác biệt; điểm khác biệt quan trọng được giữ hiển thị.",
+    primary: "Khuyến nghị này dựa trên hướng dẫn chính thức do tổ chức này công bố.",
+    "direct-support": "Hướng dẫn do tổ chức này công bố hỗ trợ trực tiếp cho nội dung này.",
+    corroborating: "Đây là một cơ quan độc lập có hướng dẫn nhất quán với nguồn chính.",
+    contextual: "Nguồn này cung cấp thông tin nền cần thiết để hiểu hướng dẫn.",
+    conflicting: "Hướng dẫn của tổ chức này có điểm khác với nguồn chính; HowToBaby giữ phần khác biệt đó hiển thị rõ.",
   },
 };
 
@@ -92,8 +92,8 @@ export const STATUS_LABELS: Record<UiLocale, Record<PublicSourceStatus, string>>
   vi: {
     "changed-review-required": "Đang rà soát bản cập nhật",
     superseded: "Đã được thay thế",
-    retired: "Đã ngừng sử dụng",
-    "temporarily-unreachable": "Nguồn tạm thời không truy cập được",
+    retired: "Không còn sử dụng",
+    "temporarily-unreachable": "Tạm thời không truy cập được nguồn",
   },
 };
 
@@ -169,11 +169,11 @@ export const REVIEW_STATUS_LABELS: Record<UiLocale, Record<string, string>> = {
     superseded: "Superseded",
   },
   vi: {
-    draft: "Bản nháp — chưa phải hướng dẫn xuất bản",
+    draft: "Bản nháp — chưa xuất bản",
     "source-verified": "Đã kiểm chứng nguồn",
-    "clinical-review-required": "Chờ rà soát lâm sàng",
-    "clinically-reviewed": "Đã rà soát lâm sàng",
-    "release-approved": "Đã duyệt phát hành",
+    "clinical-review-required": "Chờ rà soát chuyên môn y tế",
+    "clinically-reviewed": "Đã qua rà soát chuyên môn y tế",
+    "release-approved": "Đã duyệt để xuất bản",
     superseded: "Đã được thay thế",
   },
 };
@@ -189,8 +189,8 @@ export const PRECISION_CLASS_LABELS: Record<UiLocale, Record<string, string>> = 
   vi: {
     "source-exact": "Chính xác theo nguồn",
     "source-approximate": "Xấp xỉ theo nguồn",
-    "source-range": "Khoảng theo nguồn",
-    "product-heuristic": "Gợi ý của sản phẩm",
+    "source-range": "Khoảng giá trị theo nguồn",
+    "product-heuristic": "Gợi ý của HowToBaby",
   },
 };
 
@@ -206,8 +206,8 @@ export const SAFETY_LEVEL_LABELS: Record<UiLocale, Record<string, string>> = {
   vi: {
     info: "Thông tin",
     caution: "Thận trọng",
-    clinician: "Hỏi bác sĩ",
-    urgent: "Khẩn",
+    clinician: "Trao đổi với bác sĩ",
+    urgent: "Cần xử lý sớm",
     emergency: "Cấp cứu",
   },
 };
@@ -286,29 +286,29 @@ export const UI_STRINGS: Record<UiLocale, {
   },
   vi: {
     languageLegend: "Ngôn ngữ",
-    sourcesDrawerTitle: "Nguồn của hướng dẫn này",
-    drawerAttribution: "Hướng dẫn của HowToBaby, dựa trên các nguồn gốc liệt kê bên dưới. Câu chữ là của HowToBaby — không phải trích dẫn trực tiếp từ các tổ chức này.",
+    sourcesDrawerTitle: "Nguồn tham khảo cho hướng dẫn này",
+    drawerAttribution: "Hướng dẫn này do HowToBaby biên soạn dựa trên các nguồn ban đầu được liệt kê bên dưới. Cách diễn đạt là của HowToBaby, không phải trích dẫn nguyên văn từ các tổ chức này.",
     claimLabel: "Hướng dẫn của HowToBaby",
-    openSources: "Xem các nguồn đứng sau hướng dẫn này",
-    viewOriginal: "Xem nguồn gốc",
-    disclaimer: "Các tổ chức này công bố hướng dẫn gốc. Họ không rà soát hay bảo chứng cho HowToBaby.",
+    openSources: "Xem nguồn tham khảo của hướng dẫn này",
+    viewOriginal: "Xem nguồn ban đầu",
+    disclaimer: "Các tổ chức dưới đây là đơn vị công bố nguồn ban đầu; họ không tham gia rà soát và không xác nhận hay chứng thực nội dung của HowToBaby.",
     close: "Đóng",
-    referencesTitle: "Nguồn dùng trên trang này",
-    metaRole: "Vai trò trong hướng dẫn này",
-    metaRelevantSection: "Phần liên quan",
-    metaAppliesTo: "Áp dụng cho",
+    referencesTitle: "Nguồn tham khảo trên trang này",
+    metaRole: "Vai trò của nguồn",
+    metaRelevantSection: "Phần liên quan trong nguồn",
+    metaAppliesTo: "Phạm vi áp dụng",
     metaScope: "Phạm vi",
     metaStatus: "Trạng thái nguồn",
-    metaPublished: "Phát hành",
-    metaUpdated: "Cập nhật",
+    metaPublished: "Ngày xuất bản",
+    metaUpdated: "Ngày cập nhật",
     metaSourceVersion: "Phiên bản nguồn hiện tại",
     metaLastVerified: "HowToBaby kiểm chứng lần cuối",
-    metaWhy: "Vì sao dùng nguồn này",
+    metaWhy: "Vì sao HowToBaby dùng nguồn này",
     jurisdictionUS: "Hoa Kỳ",
     jurisdictionGlobal: "Toàn cầu",
-    reviewedOn: "Rà soát",
-    domainLabel: "Mảng nội dung",
-    wordingNote: "HowToBaby tóm lược và diễn giải; câu chữ gốc thuộc về nguồn.",
+    reviewedOn: "Ngày rà soát",
+    domainLabel: "Chủ đề",
+    wordingNote: "HowToBaby tóm tắt và diễn giải; nội dung nguyên văn thuộc về nguồn ban đầu.",
   },
 };
 

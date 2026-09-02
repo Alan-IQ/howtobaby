@@ -189,10 +189,10 @@ export const MESSAGES = defineMessages({
     "guidance.contentLanguage.label": "Guidance language",
   },
   vi: {
-    "app.skipToContent": "Bỏ qua tới nội dung chính",
-    "app.brandHome.label": "trang chính",
+    "app.skipToContent": "Chuyển đến nội dung chính",
+    "app.brandHome.label": "trang chủ",
 
-    "nav.primary.label": "Chính",
+    "nav.primary.label": "Điều hướng chính",
     "nav.now.label": "Hiện tại",
     "nav.feeding.label": "Ăn uống",
     "nav.play.label": "Chơi",
@@ -203,13 +203,13 @@ export const MESSAGES = defineMessages({
     "domain.now.title": "Hiện tại",
     "domain.feeding.title": "Ăn uống",
     "domain.play.title": "Chơi & Phát triển",
-    "domain.sleep.title": "Ngủ",
+    "domain.sleep.title": "Giấc ngủ",
     "domain.safety.title": "An toàn",
     "domain.tools.title": "Công cụ",
 
     "language.control.label": "Ngôn ngữ",
     "language.menu.label": "Chọn ngôn ngữ",
-    "theme.colorMode.label": "Chế độ màu",
+    "theme.colorMode.label": "Chế độ hiển thị",
     "theme.colorMode.light": "Sáng",
     "theme.colorMode.dark": "Tối",
     "theme.colorMode.system": "Theo thiết bị",
@@ -217,121 +217,131 @@ export const MESSAGES = defineMessages({
 
     "action.print.label": "In trang này",
 
-    "footer.trust.label": "Tin cậy và pháp lý",
-    "footer.external.icon": "mở trang ngoài",
+    "footer.trust.label": "Minh bạch & pháp lý",
+    "footer.external.icon": "mở trang web bên ngoài",
     "footer.disclaimer":
-      "HowToBaby là một tài liệu tham khảo thực hành cho cha mẹ — không phải hồ sơ y tế, công cụ chẩn đoán, bài sàng lọc phát triển, dịch vụ cấp cứu hay sự thay thế cho chăm sóc nhi khoa.",
-    "footer.licenses": "Phần mềm AGPL-3.0-only · Nội dung gốc CC BY-NC-SA 4.0 · Tên và logo HowToBaby không thuộc các giấy phép này.",
+      "HowToBaby là nguồn tham khảo thiết thực dành cho cha mẹ, không phải hồ sơ y tế, công cụ chẩn đoán, bài kiểm tra sàng lọc phát triển hay dịch vụ cấp cứu, và không thay thế việc chăm sóc nhi khoa.",
+    "footer.licenses":
+      "Phần mềm: AGPL-3.0-only · Nội dung gốc: CC BY-NC-SA 4.0 · Tên và logo HowToBaby không thuộc phạm vi của các giấy phép này.",
 
-    "trust.eyebrow": "Tin cậy",
-    "trust.sources.label": "Nguồn",
-    "trust.methodology.label": "Phương pháp",
+    "trust.eyebrow": "Minh bạch",
+    "trust.sources.label": "Nguồn tham khảo",
+    "trust.methodology.label": "Phương pháp biên soạn",
     "trust.editorialPolicy.label": "Chính sách biên tập",
-    "trust.disclaimer.label": "Miễn trừ y khoa",
+    "trust.disclaimer.label": "Miễn trừ trách nhiệm y tế",
     "trust.privacy.label": "Quyền riêng tư",
     "trust.license.label": "Giấy phép",
     "trust.sourceCode.label": "Mã nguồn",
-    "trust.changelog.label": "Thay đổi / Đính chính",
+    "trust.changelog.label": "Lịch sử thay đổi / Đính chính",
 
-    "page.home.title": "Biết bé cần gì. Ngay lúc này.",
-    "page.home.lede": "Hướng dẫn dựa trên bằng chứng và công cụ thực hành cho cha mẹ — tổ chức quanh giai đoạn hiện tại của bé.",
-    "page.home.blurb.feeding": "Cho bé ăn gì, thế nào và khi nào — theo giai đoạn và mức sẵn sàng.",
-    "page.home.blurb.play": "Ý tưởng chơi và bối cảnh phát triển cho giai đoạn hiện tại.",
-    "page.home.blurb.sleep": "Nếp ngủ, nguyên tắc ngủ an toàn và lịch sinh hoạt mẫu.",
-    "page.home.blurb.safety": "Ưu tiên an toàn theo độ tuổi, xếp hạng rõ ràng.",
-    "page.home.blurb.tools": "Tiện ích thực hành: công cụ tính, lịch sinh hoạt, âm thanh ru dịu.",
-    "page.home.how.title": "HowToBaby hoạt động thế nào",
+    "page.home.title": "Hiểu bé cần gì, ngay lúc này.",
+    "page.home.lede":
+      "Hướng dẫn dựa trên bằng chứng và các công cụ thiết thực dành cho cha mẹ, được sắp xếp theo giai đoạn hiện tại của bé.",
+    "page.home.blurb.feeding": "Cho bé ăn hoặc bú gì, như thế nào và khi nào — theo giai đoạn và mức độ sẵn sàng của bé.",
+    "page.home.blurb.play": "Gợi ý trò chơi và thông tin phát triển phù hợp với giai đoạn hiện tại của bé.",
+    "page.home.blurb.sleep": "Nếp ngủ thường gặp, nguyên tắc ngủ an toàn và lịch sinh hoạt tham khảo.",
+    "page.home.blurb.safety": "Các vấn đề an toàn phù hợp theo độ tuổi, được xếp rõ theo mức độ ưu tiên.",
+    "page.home.blurb.tools": "Các tiện ích thiết thực: công cụ tính, lịch sinh hoạt và âm thanh giúp thư giãn.",
+    "page.home.how.title": "HowToBaby hoạt động như thế nào",
     "page.home.how.p1":
-      "HowToBaby tổ chức hướng dẫn đã được phê duyệt từ các cơ quan y tế công cộng theo độ tuổi và bối cảnh, giữ mỗi nội dung gắn với nguồn gốc của nó, và biến chúng thành hành động thực tế — không tự tạo độ chính xác mà nguồn không có.",
+      "HowToBaby sắp xếp các hướng dẫn chính thức từ các cơ quan y tế công cộng theo độ tuổi và bối cảnh, giữ từng nội dung luôn gắn với nguồn, rồi chuyển thành những việc cha mẹ có thể áp dụng trong thực tế — mà không diễn giải chính xác hơn mức nguồn cho phép.",
     "page.home.how.p2":
-      "Một lượng nhỏ hướng dẫn chính thức dựa trên bằng chứng đã được xuất bản — Ăn uống có phần đầu tiên — và mỗi nội dung đều gắn với nguồn gốc của nó. Duyệt theo độ tuổi, trang Hiện tại cá nhân hóa và các mảng còn lại sẽ được bổ sung khi nội dung của chúng qua quy trình bằng chứng và rà soát.",
+      "Hiện HowToBaby đã có một số ít hướng dẫn chính thức dựa trên bằng chứng; phần Ăn uống là nơi đầu tiên được triển khai. Mỗi nội dung đều liên kết đến nguồn ban đầu. Tính năng duyệt theo độ tuổi, trang Hiện tại được cá nhân hóa và các mảng còn lại sẽ được bổ sung khi nội dung hoàn tất quy trình kiểm chứng và rà soát.",
 
-    "section.placeholder.title": "Mục này sẽ có gì",
+    "section.placeholder.title": "Nội dung sẽ có trong mục này",
     "section.placeholder.note":
-      "Trang này thuộc khung ứng dụng. Hướng dẫn của nó chỉ được xuất bản sau khi quy trình nội dung, bằng chứng và rà soát sẵn sàng — không bao giờ là văn bản chưa duyệt.",
+      "Mục này đã có sẵn trong HowToBaby. Nội dung hướng dẫn chỉ được xuất bản sau khi hoàn tất quy trình biên soạn, kiểm chứng nguồn và rà soát — không đưa nội dung chưa được duyệt đến người dùng.",
 
-    "page.feeding.lede": "Hướng dẫn ăn uống theo giai đoạn và mức sẵn sàng, với nguồn gốc đứng sau mỗi nội dung.",
+    "page.feeding.lede":
+      "Hướng dẫn ăn uống theo từng giai đoạn và mức độ sẵn sàng của bé, với nguồn tham khảo rõ ràng cho từng nội dung.",
     "page.feeding.hold.p1":
-      "Bú sữa, ăn dặm, kết cấu thức ăn, cho ăn theo tín hiệu, làm quen chất gây dị ứng và an toàn ăn uống — tổ chức theo giai đoạn và mức sẵn sàng thay vì một mốc tuổi duy nhất, mỗi nội dung gắn với nguồn gốc của nó.",
+      "Bú mẹ hoặc dùng sữa công thức, bắt đầu ăn dặm, kết cấu thức ăn, cho ăn theo tín hiệu của bé, làm quen với thực phẩm dễ gây dị ứng và an toàn khi ăn uống — được sắp xếp theo giai đoạn và mức độ sẵn sàng thay vì chỉ dựa vào một mốc tuổi; mỗi nội dung đều liên kết đến nguồn ban đầu.",
     "page.feeding.hold.p2":
-      "Hướng dẫn chỉ xuất hiện tại đây sau khi đã qua quy trình nội dung, bằng chứng và rà soát — không bao giờ là văn bản chưa duyệt. Toàn bộ mảng ăn uống sẽ chuyển sang ở giai đoạn sau.",
-    "guidance.feeding.eyebrow": "Ăn dặm",
+      "Nội dung chỉ xuất hiện tại đây sau khi đã qua quy trình biên soạn, kiểm chứng nguồn và rà soát — không đăng nội dung chưa được duyệt. Phần Ăn uống đầy đủ sẽ được triển khai ở giai đoạn sau.",
+    "guidance.feeding.eyebrow": "Bắt đầu ăn dặm",
 
-    "page.play.lede": "Ý tưởng chơi và bối cảnh phát triển theo độ tuổi, không có cột mốc đạt/trượt.",
+    "page.play.lede":
+      "Gợi ý trò chơi và thông tin phát triển phù hợp theo độ tuổi, không biến các cột mốc phát triển thành bài kiểm tra đạt hay không đạt.",
     "page.play.hold.p1":
-      "Bản đồ giai đoạn, bối cảnh cột mốc, hoạt động và biến thể, cùng xử lý tuổi hiệu chỉnh — trình bày như bối cảnh để chơi và gắn kết, không phải bài sàng lọc.",
+      "Các giai đoạn phát triển, thông tin giúp hiểu các cột mốc, hoạt động và biến thể, cùng cách áp dụng tuổi hiệu chỉnh — được trình bày để hỗ trợ việc chơi và gắn kết với bé, không dùng như một bài sàng lọc.",
 
-    "page.sleep.lede": "Nếp ngủ thường gặp, nguyên tắc ngủ an toàn và lịch sinh hoạt mẫu có thể điều chỉnh.",
+    "page.sleep.lede": "Nếp ngủ thường gặp, nguyên tắc ngủ an toàn và lịch sinh hoạt tham khảo có thể điều chỉnh.",
     "page.sleep.hold.p1":
-      "Hướng dẫn chính thức về thời lượng ngủ, hướng dẫn ngủ an toàn, chế độ sơ sinh linh hoạt, gợi ý giấc ngày và cửa sổ thức được ghi rõ là gợi ý, cùng kế hoạch mẫu bạn có thể điều chỉnh.",
+      "Khuyến nghị chính thức về thời lượng ngủ, hướng dẫn ngủ an toàn, cách tiếp cận theo tín hiệu của trẻ sơ sinh, các ước lượng về số giấc ngày và khoảng thời gian thức được ghi rõ là thông tin tham khảo, cùng các lịch mẫu có thể điều chỉnh.",
 
-    "page.safety.lede": "Ưu tiên an toàn theo độ tuổi, xếp theo mức độ nghiêm trọng và luôn hiển thị ở mọi theme.",
+    "page.safety.lede":
+      "Các ưu tiên an toàn theo độ tuổi, được sắp xếp theo mức độ nghiêm trọng và luôn dễ nhận biết ở mọi giao diện.",
     "page.safety.hold.p1":
-      "Hướng dẫn an toàn cho giai đoạn hiện tại thật của bé. Việc xem giai đoạn khác không bao giờ ẩn hay mở khóa hướng dẫn an toàn áp dụng cho con bạn.",
+      "Hướng dẫn an toàn luôn dựa trên giai đoạn thực tế của bé. Việc xem một giai đoạn khác không làm ẩn các hướng dẫn đang áp dụng cho bé và cũng không tự động áp dụng hướng dẫn an toàn của giai đoạn đó cho bé.",
 
-    "page.tools.lede": "Tiện ích thực hành cho cha mẹ. Công cụ trước hết là tiện ích; không mang tuyên bố sức khỏe chỉ vì nằm ở đây.",
+    "page.tools.lede":
+      "Các công cụ thiết thực dành cho cha mẹ. Một công cụ trước hết chỉ là tiện ích; việc xuất hiện trong HowToBaby không có nghĩa HowToBaby đang khẳng định công cụ đó có tác dụng đối với sức khỏe.",
     "page.tools.hold.p1":
-      "Nhóm theo mục đích — Ru dịu & Âm thanh, Kế hoạch & Lịch sinh hoạt, Tính toán, In & Chia sẻ — với nhãn rõ ràng cho biết công cụ là tiện ích thuần túy hay gắn với hướng dẫn.",
+      "Được nhóm theo mục đích — Âm thanh thư giãn, Lập kế hoạch & lịch sinh hoạt, Tính toán, In & chia sẻ — với nhãn rõ ràng cho biết công cụ chỉ là tiện ích hay có liên kết đến nội dung hướng dẫn.",
 
     "page.evidence.eyebrow": "Bằng chứng",
-    "page.evidence.lede": "Nội dung của nhận định này, những nguồn gốc nào hỗ trợ nó, và lần kiểm chứng gần nhất.",
-    "page.evidence.claim.title": "Nhận định",
+    "page.evidence.lede":
+      "Nội dung này nói gì, những nguồn ban đầu nào hỗ trợ và HowToBaby kiểm chứng lần cuối khi nào.",
+    "page.evidence.claim.title": "Nội dung",
     "page.evidence.sources.title": "Nguồn hỗ trợ",
-    "page.evidence.original.title": "Nguồn gốc",
+    "page.evidence.original.title": "Nguồn ban đầu",
 
-    "page.sources.lede": "Danh mục các nguồn gốc chính thức mà hướng dẫn của HowToBaby được xây dựng từ đó.",
-    "sources.usedByClaims.one": "Được 1 nhận định đã xuất bản sử dụng",
-    "sources.usedByClaims.many": "Được {count} nhận định đã xuất bản sử dụng",
+    "page.sources.lede": "Danh mục các nguồn ban đầu mà HowToBaby sử dụng để xây dựng nội dung hướng dẫn.",
+    "sources.usedByClaims.one": "Được dùng cho 1 nội dung hướng dẫn đã xuất bản",
+    "sources.usedByClaims.many": "Được dùng cho {count} nội dung hướng dẫn đã xuất bản",
     "sources.generatedNote":
-      "Mỗi bản ghi ở trên được duy trì dưới dạng dữ liệu đã rà soát trong kho mã nguồn công khai; trang này được sinh ra từ đó và không bao giờ được chỉnh sửa thủ công.",
+      "Mỗi nguồn ở trên được quản lý dưới dạng dữ liệu đã qua rà soát trong kho mã nguồn công khai. Trang này được tạo tự động từ dữ liệu đó, không chỉnh sửa thủ công.",
     "sources.browseRepository": "Xem kho mã nguồn",
 
-    "page.methodology.lede": "Cách một nguồn gốc trở thành nhận định của HowToBaby, và cách độ mới cùng quy trình rà soát vận hành.",
+    "page.methodology.lede":
+      "Cách HowToBaby chuyển một nguồn ban đầu thành nội dung hướng dẫn, đồng thời quản lý việc kiểm chứng và rà soát theo thời gian.",
     "methodology.p1":
-      "HowToBaby diễn giải, trích dẫn và liên kết. Mỗi nội dung được phân loại (hướng dẫn chính thức, tổng hợp bằng chứng, mô hình thường gặp, kế hoạch ví dụ, diễn giải thực hành hoặc gợi ý của sản phẩm), gắn với một hoặc nhiều bản ghi nguồn kèm vị trí trích dẫn, và được rà soát trước khi xuất bản. Các từ định tính như “khoảng”, “có thể” hay “khi sẵn sàng” được giữ nguyên thay vì bị mài sắc thành độ chính xác tự tạo.",
+      "HowToBaby diễn giải, trích dẫn và liên kết đến nguồn. Mỗi nội dung được phân loại — hướng dẫn chính thức, tổng hợp bằng chứng, xu hướng thường gặp, kế hoạch mẫu, cách áp dụng thực tế hoặc gợi ý của HowToBaby — rồi gắn với một hay nhiều nguồn cùng vị trí liên quan trong nguồn và được rà soát trước khi xuất bản. Những từ thể hiện mức độ chắc chắn như “khoảng”, “có thể” hoặc “khi đã sẵn sàng” phải được giữ nguyên, không bị diễn giải thành một mốc chính xác hơn nguồn cho phép.",
     "methodology.p2":
-      "Xuất xứ và trạng thái rà soát của từng nguồn được theo dõi trong mô hình chuẩn. Khi một thay đổi của nguồn được ghi nhận, các nhận định phụ thuộc vào nó được đánh dấu cần rà soát — hướng dẫn không bao giờ bị viết lại tự động. Giám sát nguồn tự động thuộc về giai đoạn sau.",
-    "methodology.note": "Phương pháp đầy đủ được ghi lại cùng quy trình bằng chứng khi nó được triển khai.",
+      "Nguồn, lịch sử kiểm chứng và trạng thái rà soát được theo dõi trong mô hình dữ liệu chuẩn. Khi một thay đổi ở nguồn được ghi nhận, các nội dung phụ thuộc vào nguồn đó sẽ được đánh dấu để rà soát lại; hệ thống không tự viết lại hướng dẫn. Tự động theo dõi thay đổi nguồn sẽ được triển khai ở giai đoạn sau.",
+    "methodology.note": "Tài liệu phương pháp đầy đủ được cập nhật cùng với hệ thống bằng chứng trong quá trình triển khai.",
 
-    "page.editorialPolicy.lede": "Ai viết và rà soát nội dung HowToBaby, và những gì không được phép xuất bản.",
+    "page.editorialPolicy.lede":
+      "Ai biên soạn và rà soát nội dung HowToBaby, cùng những điều kiện bắt buộc trước khi xuất bản.",
     "editorialPolicy.p1":
-      "Nội dung tiếng Anh được biên soạn và rà soát trước; bản tiếng Việt phải giữ nguyên ý nghĩa, số lượng, phủ định, mức khẩn cấp và ranh giới độ tuổi. Các phát biểu thuộc hướng dẫn chính thức phải có hỗ trợ trực tiếp từ một nguồn chính đã được phê duyệt. Khác biệt giữa các nguồn được giữ hiển thị; không bao giờ bị trung bình hóa cho biến mất.",
+      "Nội dung tiếng Anh được biên soạn và rà soát trước. Bản tiếng Việt phải giữ nguyên ý nghĩa, số liệu, câu phủ định, mức độ khẩn cấp và các mốc tuổi. Nội dung được phân loại là hướng dẫn chính thức phải có nguồn chính đã được phê duyệt hỗ trợ trực tiếp. Nếu các nguồn có điểm khác nhau, HowToBaby phải trình bày rõ thay vì làm mờ bằng cách gộp hoặc lấy trung bình.",
     "editorialPolicy.p2":
-      "AI có thể hỗ trợ tra cứu, soạn thảo hoặc dịch thuật, nhưng không nội dung nào trở thành chuẩn khi chưa qua kiểm chứng nguồn bắt buộc và rà soát bởi con người.",
+      "AI có thể hỗ trợ tìm nguồn, soạn thảo hoặc dịch thuật, nhưng nội dung chỉ trở thành bản chuẩn sau khi hoàn tất việc kiểm chứng nguồn và rà soát bởi con người theo yêu cầu.",
 
-    "page.disclaimer.lede": "HowToBaby là gì — và không phải là gì.",
-    "disclaimer.p1.lead": "HowToBaby là một tài liệu tham khảo thực hành cho cha mẹ.",
-    "disclaimer.p1.rest": "Đây không phải hồ sơ y tế, công cụ chẩn đoán, bài sàng lọc phát triển, dịch vụ cấp cứu hay sự thay thế cho chăm sóc nhi khoa.",
+    "page.disclaimer.lede": "HowToBaby cung cấp gì — và những gì HowToBaby không thay thế.",
+    "disclaimer.p1.lead": "HowToBaby là nguồn tham khảo thiết thực dành cho cha mẹ.",
+    "disclaimer.p1.rest":
+      "HowToBaby không phải hồ sơ y tế, công cụ chẩn đoán, bài kiểm tra sàng lọc phát triển hay dịch vụ cấp cứu, và không thay thế việc chăm sóc nhi khoa.",
     "disclaimer.p2":
-      "Độ tuổi chỉ chọn ra hướng dẫn ứng viên; nó không chứng minh mức sẵn sàng, sự phù hợp hay tình trạng phát triển. Luôn làm theo lời khuyên của bác sĩ của bé, và liên hệ dịch vụ cấp cứu địa phương trong tình huống khẩn cấp.",
+      "Độ tuổi chỉ giúp xác định những hướng dẫn có thể phù hợp; không chứng minh bé đã sẵn sàng, nội dung đó phù hợp với bé hay tình trạng phát triển của bé. Hãy luôn làm theo lời khuyên của bác sĩ hoặc nhân viên y tế đang chăm sóc bé. Trong tình huống khẩn cấp, hãy liên hệ dịch vụ cấp cứu tại nơi bạn ở.",
 
-    "page.privacy.lede": "Ưu tiên cục bộ ngay từ thiết kế.",
+    "page.privacy.lede": "Thiết kế ưu tiên dữ liệu lưu trên thiết bị.",
     "privacy.p1":
-      "Cá nhân hóa trong HowToBaby là cục bộ trước hết: hồ sơ của bé, khi tính năng đó tồn tại, sẽ nằm trên thiết bị của bạn và không bao giờ được gửi lên máy chủ, đặt trong URL, hay đưa vào phân tích hoặc nhật ký.",
+      "HowToBaby ưu tiên cá nhân hóa ngay trên thiết bị. Khi tính năng hồ sơ của bé được triển khai, dữ liệu đó sẽ được lưu trên thiết bị của bạn và không được gửi lên máy chủ, đưa vào URL, dữ liệu phân tích hay nhật ký hệ thống.",
     "privacy.p2":
-      "Hiện trang chỉ lưu các tùy chọn hiển thị cục bộ trong trình duyệt của bạn — hiện gồm lựa chọn giao diện/chế độ màu và lựa chọn ngôn ngữ. Không có script phân tích hay theo dõi nào.",
+      "Hiện tại, website chỉ lưu một số tùy chọn hiển thị trong trình duyệt — gồm giao diện, chế độ sáng/tối và ngôn ngữ. HowToBaby không dùng công cụ phân tích hoặc theo dõi người dùng.",
 
-    "page.license.lede": "Phần mềm, nội dung và thương hiệu được cấp phép riêng.",
+    "page.license.lede": "Phần mềm, nội dung và thương hiệu có phạm vi cấp phép riêng.",
     "license.software.term": "Phần mềm",
     "license.software.rest": "được cấp phép theo AGPL-3.0-only.",
-    "license.content.term": "Tri thức, tài liệu và bản dịch gốc của HowToBaby",
-    "license.content.rest": "được cấp phép theo CC BY-NC-SA 4.0 ở những phần dự án nắm quyền.",
+    "license.content.term": "Nội dung kiến thức, tài liệu và bản dịch gốc do HowToBaby tự tạo",
+    "license.content.rest": "được cấp phép theo CC BY-NC-SA 4.0 tại những phần HowToBaby có quyền cấp phép.",
     "license.p2":
-      "Hướng dẫn trích dẫn từ các cơ quan y tế công cộng vẫn thuộc quyền gốc của họ — ghi xuất xứ không phải là cấp phép lại. Tên và logo HowToBaby không thuộc cả hai giấy phép này.",
-    "license.readMap": "Xem sơ đồ giấy phép đầy đủ",
+      "Nội dung được trích dẫn từ các cơ quan y tế công cộng vẫn thuộc các quyền và điều khoản của nguồn ban đầu; việc ghi nguồn không có nghĩa HowToBaby cấp phép lại nội dung đó. Tên và logo HowToBaby không thuộc phạm vi của hai giấy phép trên.",
+    "license.readMap": "Xem chi tiết phạm vi giấy phép",
     "license.sourceCode": "Mã nguồn",
 
-    "page.changelog.lede": "Các thay đổi và đính chính hướng tới cha mẹ, ở một nơi.",
+    "page.changelog.lede": "Các thay đổi và đính chính ảnh hưởng đến nội dung dành cho cha mẹ, được tập hợp tại một nơi.",
     "changelog.p1":
-      "Khi hướng dẫn đã xuất bản thay đổi về ý nghĩa, hoặc có đính chính, việc đó được ghi lại tại đây kèm ngày và nội dung bị ảnh hưởng. Trang này được sinh ra từ lịch sử phiên bản nội dung khi hướng dẫn được xuất bản.",
+      "Khi một hướng dẫn đã xuất bản thay đổi về ý nghĩa hoặc cần đính chính, HowToBaby ghi lại ngày thay đổi và phần nội dung bị ảnh hưởng tại đây. Trang này sẽ được tạo từ lịch sử phiên bản nội dung khi hệ thống changelog hoàn chỉnh được triển khai.",
     "changelog.status":
-      "Bản phát hành hiện tại: khung ứng dụng, hệ thống giao diện và những hướng dẫn dựa trên bằng chứng đầu tiên; các mảng còn lại đang được bổ sung theo từng giai đoạn.",
+      "Bản hiện tại gồm khung ứng dụng, hệ thống giao diện và những hướng dẫn dựa trên bằng chứng đầu tiên; các mảng còn lại đang được bổ sung theo lộ trình.",
 
     "notFound.title": "Không tìm thấy trang",
-    "notFound.lede": "Địa chỉ này không tồn tại ở đây. Nó có thể đã được chuyển đi, hoặc liên kết chưa đầy đủ.",
+    "notFound.lede": "Không tìm thấy địa chỉ này. Trang có thể đã được chuyển, hoặc liên kết chưa đầy đủ.",
     "notFound.backHome": "Về trang Hiện tại",
 
-    "guidance.contentLanguage.label": "Ngôn ngữ hướng dẫn",
+    "guidance.contentLanguage.label": "Ngôn ngữ nội dung",
   },
 });
 

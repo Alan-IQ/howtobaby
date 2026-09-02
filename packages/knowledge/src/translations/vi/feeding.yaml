@@ -1,12 +1,12 @@
 # SPDX-License-Identifier: CC-BY-NC-SA-4.0
-# Vietnamese parity strings for the feeding domain. Must preserve age boundaries, approximate
-# language, negation, quantities and stop conditions from the canonical English
-# (GUIDANCE_CONTENT_CONTRACT.md §10); validated by scripts/validate-translations.ts.
+# Vietnamese parity strings for the feeding domain. Translate from canonical English for natural,
+# professional Vietnamese while preserving age boundaries, approximation, negation, quantities,
+# readiness conditions and stop conditions (GUIDANCE_CONTENT_CONTRACT.md §10).
 
 locale: vi
 strings:
   feeding.solids.start: >-
-    Cho bé làm quen với thức ăn khác ngoài sữa mẹ hoặc sữa công thức khi bé được
-    khoảng 6 tháng tuổi và có dấu hiệu đã sẵn sàng về phát triển. Không khuyến nghị
-    cho bé ăn thức ăn đặc trước 4 tháng tuổi.
+    Cho bé bắt đầu làm quen với thức ăn ngoài sữa mẹ hoặc sữa công thức vào khoảng
+    6 tháng tuổi, khi bé có các dấu hiệu cho thấy đã sẵn sàng về mặt phát triển.
+    Không khuyến nghị bắt đầu cho bé ăn dặm trước 4 tháng tuổi.
   guidance.feeding.solids-start.title: Bắt đầu ăn dặm
