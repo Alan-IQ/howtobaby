@@ -19,8 +19,16 @@ function hash(buffer: Buffer | string): string {
   return createHash("sha256").update(buffer).digest("hex");
 }
 
+/**
+ * Two full from-scratch builds including two `knowledge.sqlite` files: an integration test, not a
+ * unit test. On a shared CI runner with the workspace test suites running in parallel it has been
+ * observed to take just over vitest's 5 s default, so it carries an explicit budget of its own —
+ * the byte-identity assertion is the gate, wall-clock is not.
+ */
+const FROM_SCRATCH_BUILD_TIMEOUT_MS = 60_000;
+
 describe("deterministic rebuild", () => {
-  it("produces byte-identical artifacts across two independent from-scratch builds", () => {
+  it("produces byte-identical artifacts across two independent from-scratch builds", { timeout: FROM_SCRATCH_BUILD_TIMEOUT_MS }, () => {
     const a = loadFixture();
     const b = loadFixture();
     writeGeneratedArtifacts(compileKnowledge(a.knowledge), join(a.dir, "out"), "all");
