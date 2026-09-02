@@ -44,9 +44,18 @@ describe("PageShell anatomy contract", () => {
     };
     walk(appDir);
     expect(pages.length).toBeGreaterThanOrEqual(14);
+    // The static stage routes (`/<domain>/[stage]`) render through ONE shared StagePage, which is
+    // itself a PageShell page — the container contract is verified there once.
+    const stagePage = readFileSync(join(__dirname, "..", "features", "context", "StagePage.tsx"), "utf8");
+    expect(stagePage).toContain("<PageShell");
     for (const page of pages) {
       if (page.includes("theme-lab")) continue; // dev-only laboratory, not a shipped surface
-      expect(readFileSync(page, "utf8"), `${page} must use PageShell`).toContain("<PageShell");
+      const source = readFileSync(page, "utf8");
+      if (page.includes("[stage]")) {
+        expect(source, `${page} must render the shared StagePage`).toContain("<StagePage");
+        continue;
+      }
+      expect(source, `${page} must use PageShell`).toContain("<PageShell");
     }
   });
 });

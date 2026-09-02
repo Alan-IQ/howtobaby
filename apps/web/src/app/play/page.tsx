@@ -4,6 +4,7 @@ import type { Metadata } from "next";
 import { Card } from "@howtobaby/ui";
 
 import { PageShell } from "@/components/PageShell";
+import { BrowseByAge } from "@/features/context/BrowseByAge";
 import { T } from "@/i18n/T";
 
 // The PAGE title keeps the full domain name ("Play & Development" / "Chơi & Phát triển");
@@ -19,6 +20,7 @@ export default function Page() {
       title={<T id="domain.play.title" />}
       lede={<T id="page.play.lede" />}
     >
+      <BrowseByAge domain="development" />
       <Card icon="play" title={<T id="section.placeholder.title" />} titleAs="h2">
         <div className="prose">
           <p>

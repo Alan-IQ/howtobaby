@@ -559,3 +559,257 @@
     min-height: var(--htb-layout-touch-target);
   }
 }
+
+/* ---------- Phase 3: age/context surfaces (docs/GUI_DESIGN.md §8, §13, §17) ---------- */
+
+/* Stage navigator: one scrolling row of chips, hidden scrollbar, arrows on pointer devices only. */
+.stage-nav {
+  display: grid;
+  grid-template-columns: 1fr;
+  align-items: center;
+  gap: var(--htb-space-2xs);
+}
+.stage-nav__arrow {
+  display: none;
+  width: var(--htb-layout-touch-target);
+  height: var(--htb-layout-touch-target);
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  border-radius: var(--htb-radius-pill);
+  background: transparent;
+  color: var(--htb-text-secondary);
+  cursor: pointer;
+}
+.stage-nav__arrow:hover {
+  background: var(--htb-interactive-subtle-hover);
+}
+.stage-nav__arrow .htb-icon {
+  width: 18px;
+  height: 18px;
+}
+@media (pointer: fine) and (min-width: 640px) {
+  .stage-nav {
+    grid-template-columns: auto 1fr auto;
+  }
+  .stage-nav__arrow {
+    display: inline-flex;
+  }
+}
+.stage-nav__scroller {
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x proximity;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+  /* Room for the focus ring / actual-stage ring without clipping. */
+  padding: 3px;
+  margin: -3px;
+}
+.stage-nav__scroller::-webkit-scrollbar {
+  display: none;
+}
+.stage-nav__list {
+  display: flex;
+  gap: var(--htb-space-xs);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  width: max-content;
+}
+.stage-nav__chip {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--htb-space-2xs);
+  min-height: 36px;
+  padding: 0 var(--htb-space-sm);
+  border-radius: var(--htb-radius-pill);
+  border: 1px solid var(--htb-border-subtle);
+  background: var(--htb-surface-2);
+  color: var(--htb-text-secondary);
+  font-size: var(--htb-font-size-sm);
+  font-weight: var(--htb-font-weight-medium);
+  text-decoration: none;
+  white-space: nowrap;
+  scroll-snap-align: center;
+  transition: background var(--htb-motion-duration-fast) var(--htb-motion-easing-standard), color var(--htb-motion-duration-fast) var(--htb-motion-easing-standard);
+}
+@media (pointer: coarse) {
+  .stage-nav__chip {
+    min-height: var(--htb-layout-touch-target);
+  }
+}
+.stage-nav__chip:hover {
+  background: var(--htb-interactive-subtle-hover);
+  color: var(--htb-text-primary);
+}
+.stage-nav__chip:focus-visible {
+  outline: 2px solid var(--htb-focus-ring);
+  outline-offset: 2px;
+}
+/* Browsed stage: filled with the domain accent — the page you are on. */
+.stage-nav__chip[aria-current="page"] {
+  background: var(--htb-interactive-primary-bg);
+  border-color: transparent;
+  color: var(--htb-interactive-primary-fg);
+}
+.stage-nav[data-accent="feeding"] .stage-nav__chip[aria-current="page"] {
+  background: var(--htb-accent-feeding);
+  color: var(--htb-text-on-accent);
+}
+.stage-nav[data-accent="play"] .stage-nav__chip[aria-current="page"] {
+  background: var(--htb-accent-play);
+  color: var(--htb-text-on-accent);
+}
+.stage-nav[data-accent="sleep"] .stage-nav__chip[aria-current="page"] {
+  background: var(--htb-accent-sleep);
+  color: var(--htb-text-on-accent);
+}
+/* Actual child's stage: a distinct brand ring + dot marker, never the same look as "browsed". */
+.stage-nav__chip[data-actual="true"] {
+  box-shadow: 0 0 0 2px var(--htb-accent-brand);
+  border-color: transparent;
+}
+.stage-nav__marker {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--htb-accent-brand);
+}
+.stage-nav__chip[aria-current="page"] .stage-nav__marker {
+  background: var(--htb-text-on-accent);
+}
+
+/* Previous / next stage links. */
+.stage-pager {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--htb-space-sm);
+}
+.stage-pager__link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--htb-space-xs);
+  min-height: var(--htb-layout-touch-target);
+  padding: var(--htb-space-xs) var(--htb-space-sm);
+  border-radius: var(--htb-radius-md);
+  color: var(--htb-text-link);
+  text-decoration: none;
+  font-weight: var(--htb-font-weight-medium);
+}
+.stage-pager__link:hover {
+  background: var(--htb-interactive-subtle-hover);
+}
+.stage-pager__link:focus-visible {
+  outline: 2px solid var(--htb-focus-ring);
+  outline-offset: 2px;
+}
+.stage-pager__link[data-direction="next"] {
+  text-align: right;
+}
+.stage-pager__label {
+  display: block;
+  font-size: var(--htb-font-size-xs);
+  font-weight: var(--htb-font-weight-semibold);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--htb-text-muted);
+}
+
+/* Profile editor and child summary. */
+.profile-editor__form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--htb-space-sm);
+  max-width: 28rem;
+}
+.profile-editor__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--htb-space-xs);
+}
+.profile-editor__errors {
+  margin: 0;
+  padding: var(--htb-space-xs) var(--htb-space-sm);
+  border-radius: var(--htb-radius-md);
+  border: 1px solid var(--htb-status-caution-border);
+  background: var(--htb-status-caution-bg);
+  color: var(--htb-status-caution);
+  font-size: var(--htb-font-size-sm);
+  list-style: none;
+}
+.profile-editor__warning {
+  color: var(--htb-status-caution);
+}
+.child-summary__facts,
+.child-summary__stages {
+  display: grid;
+  gap: var(--htb-space-xs);
+  margin: 0;
+}
+.child-summary__facts > div,
+.child-summary__stages > div {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: baseline;
+  gap: var(--htb-space-sm);
+  padding-bottom: var(--htb-space-2xs);
+  border-bottom: 1px solid var(--htb-border-subtle);
+}
+.child-summary__facts dt,
+.child-summary__stages dt {
+  font-size: var(--htb-font-size-sm);
+  color: var(--htb-text-secondary);
+}
+.child-summary__facts dd,
+.child-summary__stages dd {
+  margin: 0;
+  font-weight: var(--htb-font-weight-semibold);
+  text-align: right;
+}
+.child-summary__stage[data-accent="feeding"] dt {
+  color: var(--htb-accent-feeding);
+}
+.child-summary__stage[data-accent="play"] dt {
+  color: var(--htb-accent-play);
+}
+.child-summary__stage[data-accent="sleep"] dt {
+  color: var(--htb-accent-sleep);
+}
+.child-summary__heading {
+  margin-top: var(--htb-space-sm);
+  font-size: var(--htb-font-size-sm);
+  font-weight: var(--htb-font-weight-semibold);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--htb-text-muted);
+}
+.preview-plan-date__controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: var(--htb-space-sm);
+  max-width: 28rem;
+}
+/* Preview banner: visibly "not today" — caution tone, not alarm. */
+.preview-banner {
+  padding: var(--htb-space-xs) var(--htb-space-sm);
+  border-radius: var(--htb-radius-md);
+  border: 1px solid var(--htb-status-caution-border);
+  background: var(--htb-status-caution-bg);
+  color: var(--htb-status-caution);
+  font-size: var(--htb-font-size-sm);
+  font-weight: var(--htb-font-weight-medium);
+}
+.age-context-badge {
+  align-self: center;
+}
+@media print {
+  .stage-nav,
+  .stage-pager,
+  .profile-editor,
+  .preview-plan-date {
+    display: none !important;
+  }
+}

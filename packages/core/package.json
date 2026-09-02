@@ -1,0 +1,19 @@
+{
+  "name": "@howtobaby/core",
+  "version": "0.8.0",
+  "private": true,
+  "license": "AGPL-3.0-only",
+  "description": "HowToBaby deterministic age/context logic: calendar dates, chronological age, the corrected-development proxy, stage bins and actual/browsed/preview context isolation (docs/GUIDANCE_CONTENT_CONTRACT.md §2–§7). Pure functions only — no React, no prose, no storage.",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "vitest run"
+  },
+  "devDependencies": {
+    "typescript": "^5.9.3",
+    "vitest": "^4.1.11"
+  }
+}

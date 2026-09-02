@@ -11,3 +11,4 @@ blocks:
       - feeding.solids.start
     routes:
       - /feeding
+      - /feeding/6-8-months

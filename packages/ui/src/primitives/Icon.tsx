@@ -20,7 +20,9 @@ export type IconName =
   | "globe"
   | "document"
   | "calendar"
-  | "info";
+  | "info"
+  | "chevronLeft"
+  | "chevronRight";
 
 /** Minimal line-icon set drawn in-house (no third-party icon font/asset). Decorative by default. */
 const PATHS: Record<IconName, string> = {
@@ -43,6 +45,8 @@ const PATHS: Record<IconName, string> = {
   document: "M7 3h7l4 4v14H7V3ZM14 3v4h4M10 12h5M10 16h5",
   calendar: "M5 5.5h14V20H5V5.5ZM5 9.5h14M8.5 3v4M15.5 3v4",
   info: "M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18ZM12 11v5M12 7.6h.01",
+  chevronLeft: "M15 5l-7 7 7 7",
+  chevronRight: "M9 5l7 7-7 7",
 };
 
 export interface IconProps extends Omit<SVGProps<SVGSVGElement>, "name"> {

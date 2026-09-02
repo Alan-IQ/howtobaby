@@ -177,8 +177,10 @@ other proper names, URLs, license identifiers such as `AGPL-3.0-only` / `CC BY-N
 canonical identifiers/IDs — the labels and context around them localize. Localized presentation
 of canonical evidence data goes through locale-generic presenters/view models built for every
 registered locale — no page hard-codes an English presentation or branches on a locale pair.
-Document metadata (`<title>`) stays in the canonical prerender locale until locale-prefixed
-public routes land; those are a Phase 3 routing concern.
+Document metadata (`<title>`) stays in the canonical prerender locale. Public routes are not
+locale-prefixed: Phase 3 shipped the age routes (`/play|/feeding|/sleep/<stage slug>`) as
+locale-neutral static paths, and locale-prefixed routing stays a candidate for the public
+discoverability phase (Phase 10) rather than a Phase 3 deliverable.
 
 ### Vietnamese copy quality
 
@@ -278,6 +280,14 @@ reduced-motion preference the motion tokens collapse to 0 ms, so every transitio
 effectively instant while the end states stay identical.
 
 ## 7. Now page
+
+Phase 3 ships the first item — the child/context summary: an optional local **ProfileEditor**
+(DOB required, due date and name optional, saved to localStorage only, with an explicit
+"could not save, applies to this visit" state), the **ChildSummary** (age today, corrected
+development age and the due-date-proxy explanation when it applies, current stage per domain
+linking into public browsing, infant safe-sleep scope note) and a session-only **preview plan
+date** with its **PreviewBanner** — the preview resolves into its own context and never
+replaces today's safety context. The remaining items belong to the Now composer phase.
 
 Order:
 
@@ -556,6 +566,19 @@ Do not use cute decorative treatment around urgent/emergency copy.
 - current-child stage marker distinct from browsed stage;
 - keyboard-operable;
 - browsing never mutates actual profile context.
+
+Implementation (Phase 3): chips are plain links to the static stage routes
+(`/<destination>/<stage slug>`, slugs are broad age bins such as `6-9-months`, never child
+data). The browsed stage carries `aria-current="page"` and the domain-accent fill; the actual
+child's stage — resolved client-side from the local profile only — carries a brand-colour ring
+plus dot and a visually hidden "your child's current stage" label, so the two states never look
+alike and prerendered HTML never contains a child marker. Each stage page pairs the navigator
+with a **WhyThisStage** card (stage range with the half-open `6–<9 months` notation and the
+`about` qualifier where the source wording has it, the age basis used for the actual child —
+chronological or corrected-development — the browsed-vs-actual relation, a session preview
+date if set, and the standing "age selects candidate guidance; it does not prove readiness"
+limitation) and previous/next stage links. Safety has no stage navigator: its context card
+reads the actual child only.
 
 ## 14. Responsive behavior
 

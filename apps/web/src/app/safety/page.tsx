@@ -4,6 +4,7 @@ import type { Metadata } from "next";
 import { Card } from "@howtobaby/ui";
 
 import { PageShell } from "@/components/PageShell";
+import { SafetyContextNote } from "@/features/safety/SafetyContextNote";
 import { T } from "@/i18n/T";
 
 export const metadata: Metadata = { title: "Safety" };
@@ -17,6 +18,7 @@ export default function Page() {
       title={<T id="domain.safety.title" />}
       lede={<T id="page.safety.lede" />}
     >
+      <SafetyContextNote />
       <Card icon="safety" title={<T id="section.placeholder.title" />} titleAs="h2">
         <div className="prose">
           <p>

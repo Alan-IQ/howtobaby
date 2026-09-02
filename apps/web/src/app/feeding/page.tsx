@@ -4,6 +4,7 @@ import type { Metadata } from "next";
 import { Card } from "@howtobaby/ui";
 
 import { PageShell } from "@/components/PageShell";
+import { BrowseByAge } from "@/features/context/BrowseByAge";
 import { LocalizedReferences } from "@/features/evidence/LocalizedReferences";
 import { loadGuidanceBlockViews, loadReferenceEntries } from "@/features/evidence/load";
 import { GuidanceEvidenceCard } from "@/features/feeding/GuidanceEvidenceCard";
@@ -33,6 +34,7 @@ export default async function Page() {
       lede={<T id="page.feeding.lede" />}
       printable
     >
+      <BrowseByAge domain="feeding" />
       {enBlocks.map((enBlock) => {
         const viBlock = viBlocks.find((b) => b.blockId === enBlock.blockId);
         return viBlock ? <GuidanceEvidenceCard key={enBlock.blockId} variants={{ en: enBlock, vi: viBlock }} /> : null;

@@ -6,7 +6,7 @@
  * This is the ONE place a locale is declared. Adding a locale means adding one entry here (plus
  * its canonical knowledge translations and app message entries); the language selector, the
  * language provider and the local content-language override all read this registry and need no
- * redesign. Locale-prefixed public routing is a Phase 3 concern and deliberately absent here.
+ * redesign. Locale-prefixed public routing is deliberately absent here (public routes are locale-neutral).
  */
 
 export interface LocaleDefinition {

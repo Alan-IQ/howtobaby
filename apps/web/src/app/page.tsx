@@ -5,6 +5,9 @@ import type { Metadata } from "next";
 import { Card, Icon } from "@howtobaby/ui";
 
 import { PageShell } from "@/components/PageShell";
+import { ChildSummary } from "@/features/profile/ChildSummary";
+import { PreviewPlanDate } from "@/features/profile/PreviewPlanDate";
+import { ProfileEditor } from "@/features/profile/ProfileEditor";
 import { T } from "@/i18n/T";
 import type { AppMessageKey } from "@/i18n/messages";
 import { PRIMARY_NAV, SITE } from "@/site";
@@ -21,8 +24,9 @@ const DESTINATION_BLURB_KEYS: Partial<Record<string, AppMessageKey>> = {
 };
 
 /**
- * Now (docs/GUI_DESIGN.md §7). Phase 1 ships the shell and destination overview only; the child/context
- * summary, "What matters now" and focus cards arrive with the age/context and domain phases.
+ * Now (docs/GUI_DESIGN.md §7). Phase 3 adds the child/context summary — the optional local profile,
+ * today's resolved context and a session-only plan-date preview — above the destination overview;
+ * "What matters now", focus cards and the routine timeline belong to the Now composer phase.
  */
 export default function NowPage() {
   return (
@@ -33,6 +37,11 @@ export default function NowPage() {
       title={<T id="page.home.title" />}
       lede={<T id="page.home.lede" />}
     >
+      <div className="card-grid">
+        <ProfileEditor />
+        <ChildSummary />
+      </div>
+      <PreviewPlanDate />
       <div className="card-grid card-grid--3">
         {/* Destination cards use the FULL domain display title (titleKey) — never the short nav label. */}
         {PRIMARY_NAV.filter((item) => item.href !== "/").map((item) => {

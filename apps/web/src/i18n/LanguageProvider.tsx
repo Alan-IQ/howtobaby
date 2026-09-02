@@ -9,8 +9,8 @@
  * Pages are statically prerendered in the canonical locale; `useSyncExternalStore` serves the
  * canonical snapshot during SSR/hydration and swaps to the stored preference immediately after,
  * so there is no hydration mismatch. `<html lang>` follows the active language so assistive tech
- * announces the correct one. Locale-prefixed public routes are a Phase 3 routing concern; this
- * provider is the foundation they will plug into.
+ * announces the correct one. Public routes are locale-neutral (the Phase 3 age routes included);
+ * locale-prefixed routing, if ever adopted, plugs into this provider.
  */
 
 "use client";
