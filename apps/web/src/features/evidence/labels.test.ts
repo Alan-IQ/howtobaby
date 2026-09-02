@@ -62,7 +62,30 @@ describe("EN/VI presentation parity", () => {
 });
 
 describe("source date matrix (publishedAt / updatedAt are distinct upstream facts, never inferred)", () => {
-  it("A. both dates → Published + Updated rows, in that order, in both locales", () => {
+  it("A. publishedAt only → a single Published row (no Updated, no Current source version)", () => {
+    expect(sourceDateMeta({ publishedAt: "2026-08-04" }, "en")).toEqual([{ label: "Published", value: "Aug 4, 2026" }]);
+    expect(sourceDateLabel({ publishedAt: "2026-08-04" }, "vi")).toBe("Phát hành: 04/08/2026");
+    expect(sourceDateLabel({ publishedAt: "2026-08-04" }, "en")).not.toContain("Updated");
+    expect(sourceDateLabel({ publishedAt: "2026-08-04" }, "en")).not.toContain("Current source version");
+  });
+
+  it("B. updatedAt only → Current source version (never presented as a publication date)", () => {
+    expect(sourceDateMeta({ updatedAt: "2026-04-14" }, "en")).toEqual([{ label: "Current source version", value: "Apr 14, 2026" }]);
+    expect(sourceDateLabel({ updatedAt: "2026-04-14" }, "vi")).toBe("Phiên bản nguồn hiện tại: 14/04/2026");
+    expect(sourceDateLabel({ updatedAt: "2026-04-14" }, "en")).not.toContain("Published");
+  });
+
+  it("C. both dates equal → Published only; no duplicate Updated / source-version row", () => {
+    const equal = { publishedAt: "2026-04-14", updatedAt: "2026-04-14" };
+    expect(sourceDateMeta(equal, "en")).toEqual([{ label: "Published", value: "Apr 14, 2026" }]);
+    expect(sourceDateMeta(equal, "vi")).toEqual([{ label: "Phát hành", value: "14/04/2026" }]);
+    expect(sourceDateLabel(equal, "en")).toBe("Published: Apr 14, 2026");
+    expect(sourceDateLabel(equal, "vi")).toBe("Phát hành: 14/04/2026");
+    expect(sourceDateLabel(equal, "en")).not.toContain("Updated");
+    expect(sourceDateLabel(equal, "en")).not.toContain("Current source version");
+  });
+
+  it("D. updatedAt later than publishedAt → Published + Updated rows, in that order, in both locales", () => {
     const both = { publishedAt: "2025-01-10", updatedAt: "2026-04-14" };
     expect(sourceDateMeta(both, "en")).toEqual([
       { label: "Published", value: "Jan 10, 2025" },
@@ -76,20 +99,7 @@ describe("source date matrix (publishedAt / updatedAt are distinct upstream fact
     expect(sourceDateLabel(both, "vi")).toBe("Phát hành: 10/01/2025 · Cập nhật: 14/04/2026");
   });
 
-  it("B. publishedAt only → a single Published row (no Updated, no Current source version)", () => {
-    expect(sourceDateMeta({ publishedAt: "2026-08-04" }, "en")).toEqual([{ label: "Published", value: "Aug 4, 2026" }]);
-    expect(sourceDateLabel({ publishedAt: "2026-08-04" }, "vi")).toBe("Phát hành: 04/08/2026");
-    expect(sourceDateLabel({ publishedAt: "2026-08-04" }, "en")).not.toContain("Updated");
-    expect(sourceDateLabel({ publishedAt: "2026-08-04" }, "en")).not.toContain("Current source version");
-  });
-
-  it("C. updatedAt only → Current source version (never presented as a publication date)", () => {
-    expect(sourceDateMeta({ updatedAt: "2026-04-14" }, "en")).toEqual([{ label: "Current source version", value: "Apr 14, 2026" }]);
-    expect(sourceDateLabel({ updatedAt: "2026-04-14" }, "vi")).toBe("Phiên bản nguồn hiện tại: 14/04/2026");
-    expect(sourceDateLabel({ updatedAt: "2026-04-14" }, "en")).not.toContain("Published");
-  });
-
-  it("D. neither → no rows and no label; a date is never invented", () => {
+  it("E. neither → no rows and no label; a date is never invented", () => {
     expect(sourceDateMeta({}, "en")).toEqual([]);
     expect(sourceDateMeta({}, "vi")).toEqual([]);
     expect(sourceDateLabel({}, "en")).toBeUndefined();

@@ -86,7 +86,7 @@ organization, exact source title, relationship (role badge), rồi metadata **th
 
 1. **Phần liên quan** — section/page locator khi hữu ích;
 2. **Áp dụng cho / Phạm vi** — jurisdiction/scope;
-3. **metadata phát hành/phiên bản nguồn** — theo hợp đồng ngày nguồn (§10): `Phát hành` + `Cập nhật`, chỉ `Phát hành`, `Phiên bản nguồn hiện tại`, hoặc không có gì;
+3. **metadata phát hành/phiên bản nguồn** — theo hợp đồng ngày nguồn (§10): chỉ `Phát hành`, `Phiên bản nguồn hiện tại`, `Phát hành` + `Cập nhật` (chỉ khi cập nhật muộn hơn), hoặc không có gì;
 4. **HowToBaby kiểm chứng lần cuối** — `lastVerifiedAt`, luôn đứng sau ngày của nguồn;
 5. **Vì sao dùng nguồn này** — suy từ relationship canonical;
 6. link **Xem nguồn gốc**.
@@ -167,20 +167,25 @@ Mọi surface hiện ngày nguồn (Evidence Drawer, `/sources`, `/evidence/[slu
 
 | Trường canonical | EN | VI |
 | --- | --- | --- |
-| A. có cả `publishedAt` **và** `updatedAt` | `Published: <publishedAt>` rồi `Updated: <updatedAt>` | `Phát hành: <publishedAt>` rồi `Cập nhật: <updatedAt>` |
-| B. chỉ `publishedAt` | `Published: <publishedAt>` | `Phát hành: <publishedAt>` |
-| C. chỉ `updatedAt` | `Current source version: <updatedAt>` | `Phiên bản nguồn hiện tại: <updatedAt>` |
-| D. không có cả hai | bỏ hẳn metadata phiên bản nguồn | bỏ hẳn metadata phiên bản nguồn |
+| A. chỉ `publishedAt` | `Published: <publishedAt>` | `Phát hành: <publishedAt>` |
+| B. chỉ `updatedAt` | `Current source version: <updatedAt>` | `Phiên bản nguồn hiện tại: <updatedAt>` |
+| C. có cả hai, `updatedAt === publishedAt` | chỉ `Published: <publishedAt>` | chỉ `Phát hành: <publishedAt>` |
+| D. có cả hai, `updatedAt > publishedAt` | `Published: <publishedAt>` rồi `Updated: <updatedAt>` | `Phát hành: <publishedAt>` rồi `Cập nhật: <updatedAt>` |
+| E. không có cả hai | bỏ hẳn metadata ngày nguồn | bỏ hẳn metadata ngày nguồn |
 
 Quy tắc:
 
-- case C không bao giờ trình bày `updatedAt` như ngày phát hành; case B không trình bày `publishedAt` như ngày cập nhật;
-- case D tuyệt đối không infer/guess/thay thế ngày (không crawl time, không năm copyright, không ngày deploy);
+- case B không bao giờ trình bày `updatedAt` như ngày phát hành; case A không trình bày `publishedAt` như ngày cập nhật;
+- case C là một phiên bản nguồn duy nhất: không lặp cùng một ngày thành `Cập nhật`/thông tin phiên bản;
+- case E tuyệt đối không infer/guess/thay thế ngày (không crawl time, không năm copyright, không ngày deploy);
+- `sourceDateMeta()` (`apps/web/src/features/evidence/labels.ts`) là nguồn trình bày duy nhất của ma trận này; consumer chỉ render các hàng nó trả về, không branch lại trên trường thô;
+- validation canonical (`packages/knowledge/src/validate.ts`, `pnpm validate:knowledge`) fail khi `publishedAt`/`updatedAt` không phải calendar date hợp lệ, nằm trong tương lai, hoặc `updatedAt < publishedAt` (`source-date-order`); hai ngày bằng nhau là hợp lệ. UI không bao giờ che metadata canonical sai — phải sửa ở source registry;
+- `publishedAt`/`updatedAt` vẫn là metadata của authority; `lastVerifiedAt` vẫn là ngày HowToBaby thực sự kiểm chứng và được validate riêng (không được ở tương lai);
 - sau metadata ngày nguồn — và chỉ sau đó — mới tới **Last verified by HowToBaby: <lastVerifiedAt>** / VI **HowToBaby kiểm chứng lần cuối: <lastVerifiedAt>**: ngày maintainer/review workflow HowToBaby thực sự xác nhận nguồn (không phải crawl/fetch time, không phải deploy time);
 - ngày là calendar date (`YYYY-MM-DD` trong YAML), hiển thị `Apr 14, 2026` (EN) và `14/04/2026` (VI);
 - surface dạng list (`/sources`, References) nối các hàng trên một dòng (`Phát hành: 10/01/2025 · Cập nhật: 14/04/2026 · HowToBaby kiểm chứng lần cuối: 31/08/2026`), không bịa biến thể ngắn hơn.
 
-Regression tests phủ cả bốn case cộng các trạng thái non-current (`apps/web/src/features/evidence/labels.test.ts`, `load.test.ts`, `presenters.test.ts`, `packages/ui/src/evidence/evidence.test.tsx`).
+Regression tests phủ cả năm case trình bày cộng các trạng thái non-current (`apps/web/src/features/evidence/labels.test.ts`, `load.test.ts`, `presenters.test.ts`, `packages/ui/src/evidence/evidence.test.tsx`) và các kết quả validation — chỉ published, chỉ updated, bằng nhau, updated sau, updated trước (fail), ngày tương lai (fail), không có cả hai (`packages/knowledge/tests/validate.test.ts`).
 
 Public UI:
 

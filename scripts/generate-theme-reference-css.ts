@@ -10,7 +10,7 @@
  *
  *   node scripts/generate-theme-reference-css.ts
  *
- * Runs on plain Node >= 22.18 (type stripping) — theme sources use explicit .ts import specifiers for this.
+ * Runs on plain Node >= 24 (type stripping) — theme sources use explicit .ts import specifiers for this.
  */
 
 import { mkdirSync, writeFileSync } from "node:fs";

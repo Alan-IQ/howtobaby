@@ -65,6 +65,53 @@ describe("source gates", () => {
     })).toContain("superseded-without-successor");
   });
 
+  describe("source-date provenance contract (publishedAt/updatedAt are the authority's dates)", () => {
+    const base = `    lastVerifiedAt: 2026-08-30
+    status: current
+    accessMode: link-only
+    approvalLevel: approved-primary
+    approvedScopes: [feeding]`;
+    const withDates = (dates: string) => ({ "sources/registry.yaml": cdcSource(`${dates}\n${base}`) });
+
+    it("accepts publishedAt only", () => {
+      expect(check(withDates("    publishedAt: 2025-01-10"))).toEqual([]);
+    });
+
+    it("accepts updatedAt only", () => {
+      expect(check(withDates("    updatedAt: 2026-04-14"))).toEqual([]);
+    });
+
+    it("accepts equal publishedAt/updatedAt (one source version)", () => {
+      expect(check(withDates("    publishedAt: 2026-04-14\n    updatedAt: 2026-04-14"))).toEqual([]);
+    });
+
+    it("accepts updatedAt later than publishedAt", () => {
+      expect(check(withDates("    publishedAt: 2025-01-10\n    updatedAt: 2026-04-14"))).toEqual([]);
+    });
+
+    it("accepts neither date (no date is inferred)", () => {
+      expect(check(withDates(""))).toEqual([]);
+    });
+
+    it("rejects updatedAt earlier than publishedAt", () => {
+      expect(check(withDates("    publishedAt: 2026-04-14\n    updatedAt: 2025-01-10"))).toContain("source-date-order");
+    });
+
+    it("rejects a future publishedAt", () => {
+      expect(check(withDates("    publishedAt: 2026-09-01"))).toContain("future-date");
+    });
+
+    it("rejects a future updatedAt", () => {
+      expect(check(withDates("    publishedAt: 2025-01-10\n    updatedAt: 2026-09-01"))).toContain("future-date");
+    });
+
+    it("rejects a non-calendar publishedAt/updatedAt", () => {
+      expect(check(withDates("    publishedAt: 2025-02-30"))).toContain("invalid-date");
+      expect(check(withDates("    updatedAt: 2026-13-01"))).toContain("invalid-date");
+      expect(check(withDates('    updatedAt: "April 2026"'))).toContain("invalid-date");
+    });
+  });
+
   it("rejects an http (non-https) canonical URL", () => {
     expect(check({
       "sources/registry.yaml": VALID_FIXTURE["sources/registry.yaml"]!.replace("https://www.who.int", "http://www.who.int"),

@@ -14,7 +14,7 @@
  *   4. packages/ui stays framework-neutral (no `next/*` imports; the app injects router-aware links).
  *
  * Usage: node scripts/check-theme-boundary.ts
- * Exit code 1 on any violation. Plain Node >= 22.18 + Git; no dependencies.
+ * Exit code 1 on any violation. Plain Node >= 24 + Git; no dependencies.
  */
 
 import { readFileSync } from "node:fs";

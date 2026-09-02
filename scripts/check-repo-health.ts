@@ -15,7 +15,7 @@
  * Usage:
  *   node scripts/check-repo-health.ts [--base=<ref>] [--json=<file>] [--no-history]
  *
- * Runs with Node >= 22.18 (native type stripping) and Git; no third-party dependencies.
+ * Runs with Node >= 24 (native type stripping) and Git; no third-party dependencies.
  * Exit code 1 on any hard-policy violation. Warnings never fail the check.
  */
 

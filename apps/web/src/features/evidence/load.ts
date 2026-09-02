@@ -61,8 +61,8 @@ function relevantSectionValue(entry: ClaimEvidenceEntry["sourceRefs"][number], l
 /**
  * Labeled metadata rows for one source reference (GUI_DESIGN.md §11.3), in the required order:
  * relevant section → jurisdiction/scope → source publication/version rows (the
- * `sourceDateMeta` matrix: Published + Updated, Published only, Current source version, or
- * nothing when the authority gives no date) → last verified by HowToBaby. Every row carries an explicit label with a small
+ * `sourceDateMeta` matrix: Published only, Current source version, Published + Updated when the
+ * update is later, or nothing when the authority gives no date) → last verified by HowToBaby. Every row carries an explicit label with a small
  * decorative icon anchor and every value derives from canonical metadata. Role renders as a
  * badge; a status badge appears only for non-current sources; and "why this source is used" is
  * its own secondary block — all fed from the same canonical graph, never prose hard-coded in a

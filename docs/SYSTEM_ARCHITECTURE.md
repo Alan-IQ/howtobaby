@@ -369,10 +369,12 @@ Minimum checks:
 
 ```text
 GitHub
-  → CI/build
-  → Next.js static-first build
-  → host/CDN capable of serving pre-rendered routes
+  → one primary pipeline run (repository-health ∥ quality gates + Next.js static-first build)
+  → validated static export artifact
+  → deploy job (needs both gates) → host/CDN capable of serving pre-rendered routes
 ```
+
+Workflow ownership and job contract: `REPOSITORY_STRUCTURE.md` §12; host runbook: `DEPLOYMENT_HAWKHOST.md`.
 
 A full static export may be produced for compatible shared-hosting targets, but it is a deployment profile rather than the canonical application architecture. The same repository should remain deployable to a normal Next.js runtime later without redesigning knowledge ownership.
 

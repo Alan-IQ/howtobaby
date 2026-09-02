@@ -90,6 +90,8 @@ Recommended implementation:
 
 The check must be deterministic enough to run locally and in GitHub Actions.
 
+Implementation: the `repository-health` job of `.github/workflows/pipeline.yml` (full-history checkout, plain Node from `.nvmrc`, no dependency install) on every push/PR and weekly; production deploy depends on it. Locally it is part of `pnpm check`.
+
 ## 7. `.gitignore` / deny-pattern baseline
 
 At minimum protect patterns conceptually equivalent to:

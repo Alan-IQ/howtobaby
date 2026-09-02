@@ -38,7 +38,7 @@ howtobaby/
 ├─ scripts/
 ├─ docs/
 ├─ tests/
-└─ .github/workflows/
+└─ .github/workflows/            # pipeline.yml (repository-health ∥ quality-build → deploy-production) + evidence-watch.yml
 ```
 
 ## 3. Ownership quan trọng

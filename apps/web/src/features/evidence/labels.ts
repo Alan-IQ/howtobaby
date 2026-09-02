@@ -123,26 +123,28 @@ export interface SourceDateMeta {
 /**
  * Source publication/version metadata as the authority states it (EVIDENCE_PROVENANCE.md §14).
  * `publishedAt` and `updatedAt` are DIFFERENT upstream facts and are never inferred from each
- * other; the presentation matrix is:
+ * other; this is the single presentation source for every surface (Evidence Drawer, /sources,
+ * /evidence/[slug], References) — consumers never re-branch on the raw dates. The matrix is:
  *
- * - both dates      → `Published: <publishedAt>` + `Updated: <updatedAt>`
- * - publishedAt only → `Published: <publishedAt>`
- * - updatedAt only   → `Current source version: <updatedAt>`
- * - neither          → no rows at all (a date is never invented)
+ * - A. publishedAt only                    → `Published: <publishedAt>`
+ * - B. updatedAt only                      → `Current source version: <updatedAt>`
+ * - C. both, updatedAt === publishedAt     → `Published: <publishedAt>` only (no duplicate row)
+ * - D. both, updatedAt > publishedAt       → `Published: <publishedAt>` + `Updated: <updatedAt>`
+ * - E. neither                             → no rows at all (a date is never invented)
  *
- * Every row is distinct from `lastVerifiedAt`, which is HowToBaby's own verification date and
- * always renders AFTER these rows (see `verifiedLabel`).
+ * `updatedAt < publishedAt` is invalid canonical metadata and is rejected by knowledge validation
+ * (`source-date-order`); the UI never masks it. Every row is distinct from `lastVerifiedAt`, which
+ * is HowToBaby's own verification date and always renders AFTER these rows (see `verifiedLabel`).
  */
 export function sourceDateMeta(source: Pick<SourceRecord, "publishedAt" | "updatedAt">, locale: UiLocale): SourceDateMeta[] {
   const strings = UI_STRINGS[locale];
   const { publishedAt, updatedAt } = source;
-  if (publishedAt !== undefined && updatedAt !== undefined) {
-    return [
-      { label: strings.metaPublished, value: formatDate(publishedAt, locale) },
-      { label: strings.metaUpdated, value: formatDate(updatedAt, locale) },
-    ];
+  if (publishedAt !== undefined) {
+    const rows: SourceDateMeta[] = [{ label: strings.metaPublished, value: formatDate(publishedAt, locale) }];
+    // ISO YYYY-MM-DD strings compare lexically; an equal date is the same source version, not an update.
+    if (updatedAt !== undefined && updatedAt > publishedAt) rows.push({ label: strings.metaUpdated, value: formatDate(updatedAt, locale) });
+    return rows;
   }
-  if (publishedAt !== undefined) return [{ label: strings.metaPublished, value: formatDate(publishedAt, locale) }];
   if (updatedAt !== undefined) return [{ label: strings.metaSourceVersion, value: formatDate(updatedAt, locale) }];
   return [];
 }

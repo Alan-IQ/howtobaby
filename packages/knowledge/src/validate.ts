@@ -160,6 +160,20 @@ function validateSources(knowledge: CanonicalKnowledge, issues: IssueCollector, 
     if (source.lastVerifiedAt > today) {
       issues.error("source", "future-date", `\`lastVerifiedAt\` ${source.lastVerifiedAt} is in the future`, source.id);
     }
+    // Source-date provenance contract (EVIDENCE_PROVENANCE.md §14): `publishedAt`/`updatedAt` are
+    // the authority's own dates (distinct from HowToBaby's `lastVerifiedAt`). Calendar validity is
+    // enforced by the schema parser; here the dates must not be in the future and an update can
+    // never precede publication. Equal dates are valid (one source version; presentation shows
+    // Published only) — the UI never masks canonical metadata that fails these checks.
+    if (source.publishedAt !== undefined && source.publishedAt > today) {
+      issues.error("source", "future-date", `\`publishedAt\` ${source.publishedAt} is in the future`, source.id);
+    }
+    if (source.updatedAt !== undefined && source.updatedAt > today) {
+      issues.error("source", "future-date", `\`updatedAt\` ${source.updatedAt} is in the future`, source.id);
+    }
+    if (source.publishedAt !== undefined && source.updatedAt !== undefined && source.updatedAt < source.publishedAt) {
+      issues.error("source", "source-date-order", `\`updatedAt\` ${source.updatedAt} is earlier than \`publishedAt\` ${source.publishedAt}; an update cannot precede publication`, source.id);
+    }
     if (source.supersededBy !== undefined) {
       const successor = byId.get(source.supersededBy);
       if (!successor) {

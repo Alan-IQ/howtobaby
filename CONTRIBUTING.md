@@ -33,7 +33,7 @@ A source URL alone is not enough. Health/safety content changes must preserve cl
 
 ### Requirements
 
-- Node.js `>= 22.18` (see `.nvmrc`).
+- Node.js `>= 24` (see `.nvmrc`).
 - pnpm `11`, pinned in `package.json` → `packageManager`. Run `corepack enable` once; every `pnpm` invocation then resolves to the pinned version automatically (no global pnpm install needed). If Corepack is missing, `npm install -g corepack` restores it.
 - Package scripts run through pnpm's POSIX shell emulator (`shellEmulator: true` in `pnpm-workspace.yaml`), so env-prefixed scripts like `DEPLOY_TARGET=static next build` work on Windows too. pnpm also enforces the supply-chain policy there (`minimumReleaseAge: 1440`): a dependency release younger than 24 hours cannot be resolved into the lockfile — if an install fails on a brand-new release, wait out the window or pick an older version instead of relaxing the policy.
 
@@ -78,7 +78,8 @@ pnpm setup:dropbox -- "<Dropbox root>"   # optional: keep Dropbox from syncing n
 `pnpm validate` = `pnpm check && pnpm lint && pnpm test && pnpm check:knowledge-determinism && pnpm build && pnpm build:static`, where:
 
 ```bash
-pnpm check                            # typecheck + check:baseline + check:repo-health + check:theme-boundary + validate:knowledge + report:licenses --strict
+pnpm check                            # check:quality + check:repo-health (the full local gate set)
+pnpm check:quality                    # typecheck + check:baseline + check:theme-boundary + validate:knowledge + report:licenses --strict (what CI's quality-build job runs; repository health is its own CI job)
 pnpm typecheck                        # tsc over scripts/, then every workspace package/app (apps/web runs `next typegen` first)
 pnpm check:baseline                   # layout, workspace config, workflows, license entry points, doc links
 pnpm check:repo-health                # large-blob guard, deny patterns, size report (--base=origin/main for PR diff)
@@ -122,7 +123,7 @@ pnpm install --frozen-lockfile
 pnpm store path                       # the central virtual store is <this path>/links
 ```
 
-`storeDir` is never pinned in the repo (it would hard-code one machine's path); `pnpm store path` prints the real location. `pnpm store prune` is optional, occasional housekeeping — it affects every pnpm project on the machine and only forces re-downloads later. CI needs nothing extra: `pnpm/action-setup` plus the pnpm cache handle the store on the runner.
+`storeDir` is never pinned in the repo (it would hard-code one machine's path); `pnpm store path` prints the real location. `pnpm store prune` is optional, occasional housekeeping — it affects every pnpm project on the machine and only forces re-downloads later. CI needs nothing extra: `pnpm/setup` (`cache: true`) handles the store on the runner.
 
 ### Dropbox and other syncing folders
 
@@ -161,8 +162,8 @@ Notes:
 
 ## Commits and pull requests
 
-- Work on a branch and open a pull request; CI (`ci.yml`, `repo-health.yml`) runs on every push and PR. **A push to `main` deploys production** (`deploy.yml` → `https://howtobaby.com`) once the `production` GitHub Environment is configured, so never push unreviewed work to `main`.
-- Branch protection is **not yet enabled** on GitHub (it is a repository setting, not configurable from this codebase). Until a maintainer enables it, a direct push to `main` is technically possible and CI failures are advisory. Required setup (GitHub → Settings → Branches → add rule for `main`): require a pull request before merging; require status checks `Repository baseline` and `App lint, typecheck, tests, builds` (CI) and `Large-blob guard and size report` (Repository health) to pass; require branches to be up to date; block force pushes and deletions.
+- Work on a branch and open a pull request; the primary pipeline (`.github/workflows/pipeline.yml`) runs its `Repository health` and `Quality gates and builds` jobs on every push and PR, on the Node version in `.nvmrc`. **A push to `main` deploys production** (the same run's `Deploy production` job → `https://howtobaby.com`, only after both gate jobs pass) once the `production` GitHub Environment is configured, so never push unreviewed work to `main`. Manual runs (Actions → Pipeline → Run workflow) validate only, unless `deploy` is ticked on `main`.
+- Branch protection is **not yet enabled** on GitHub (it is a repository setting, not configurable from this codebase). Until a maintainer enables it, a direct push to `main` is technically possible and CI failures are advisory. Required setup (GitHub → Settings → Branches → add rule for `main`): require a pull request before merging; require the status checks `Repository health` and `Quality gates and builds` (Pipeline) to pass; require branches to be up to date; block force pushes and deletions.
 - Commit subject: plain-language imperative describing the whole change, no type/scope prefix. Body bullets use the most specific Conventional Commits prefix (`feat`, `fix`, `docs`, `refactor`, `test`, `build`, `ci`, `chore`, `perf`, `revert`) with an optional scope:
 
   ```text

@@ -1,7 +1,8 @@
 # HowToBaby — HawkHost production deployment
 
-This runbook belongs to the repository `Alan-IQ/HowToBaby` and is implemented by
-`.github/workflows/deploy.yml` (Phase 1).
+This runbook belongs to the repository `Alan-IQ/HowToBaby` and is implemented by the
+`deploy-production` job of `.github/workflows/pipeline.yml` (Phase 1; consolidated with CI and
+repository health so one push to `main` produces one pipeline run).
 
 ## Deployment model
 
@@ -209,15 +210,22 @@ The GitHub workflow sets `DEPLOY_TARGET=static`.
 git push origin main
     |
     v
-GitHub Actions (deploy.yml)
+GitHub Actions (pipeline.yml — one run)
     |
-    +-- pnpm install --frozen-lockfile
-    +-- pnpm check && pnpm lint && pnpm test          (required gates)
-    +-- pnpm build:static  (DEPLOY_TARGET=static)
-    +-- verify apps/web/out/index.html
-    +-- ssh: test -f "$HH_DEPLOY_PATH/.howtobaby-deploy-root"
-    +-- rsync --delete apps/web/out/ -> $HH_DEPLOY_PATH
-    +-- curl https://howtobaby.com  (+ www redirect check)
+    +-- repository-health   (parallel) full-history checkout, Node 24, no install:
+    |                       large-blob guard / deny patterns / size report
+    +-- quality-build       (parallel) Node 24 + pinned pnpm, ONE frozen install:
+    |     +-- pnpm check:quality && pnpm lint && pnpm test && pnpm check:knowledge-determinism
+    |     +-- pnpm build && pnpm build:static  (DEPLOY_TARGET=static)
+    |     +-- verify apps/web/out/{index.html,404.html,.htaccess}
+    |     +-- upload apps/web/out as artifact static-export-<sha>   (main production runs only)
+    +-- deploy-production   needs BOTH jobs above; main only; no checkout/install/build:
+          +-- HH_* secrets present, HH_DEPLOY_PATH absolute
+          +-- download artifact static-export-<sha>, verify index.html + .htaccess
+          +-- ssh (StrictHostKeyChecking=yes): test -f "$HH_DEPLOY_PATH/.howtobaby-deploy-root"
+          +-- rsync --delete out/ -> $HH_DEPLOY_PATH   (sentinel, .well-known/, cgi-bin/ protected)
+          +-- curl https://howtobaby.com  (+ www canonical redirect check)
+          +-- remove deploy key
 ```
 
 ## First deployment checklist (manual steps outside the repository)
@@ -239,8 +247,9 @@ once, in order; each maps to a check the workflow performs.
 6. Cloudflare: add the `A` (apex) and `CNAME www` records (proxied), set SSL/TLS to
    `Full (strict)` once AutoSSL has issued the origin certificate, enable Always Use HTTPS, add the
    `www` → apex redirect rule.
-7. Trigger the workflow (push to `main` or Actions → Deploy production → Run workflow) and read the
-   smoke-check step: HTTP 200 on `https://howtobaby.com` and a 301 from `www`.
+7. Trigger the workflow (push to `main`, or Actions → Pipeline → Run workflow on `main` with
+   `deploy` ticked) and read the smoke-check step: HTTP 200 on `https://howtobaby.com` and a 301
+   from `www`.
 8. Optional but recommended: enable branch protection on `main` (see `CONTRIBUTING.md`) so only
    reviewed, green commits reach production.
 
@@ -258,10 +267,14 @@ symlink switching if the hosting layout supports it.
 
 ## Important
 
-Status (Phase 1): `.github/workflows/deploy.yml` implements this runbook and runs on every push to
-`main` (and on manual dispatch). Until the manual steps above are completed the workflow fails
-safely: the `verify` job still proves the build, and the `deploy` job stops at the missing-secrets
-or sentinel check without contacting or modifying anything.
+Status (Phase 1): the `deploy-production` job of `.github/workflows/pipeline.yml` implements this
+runbook and runs on every push to `main` (and on manual dispatch with `deploy: true`), only after
+the `repository-health` and `quality-build` jobs of the same run succeed. Pull requests and the
+weekly scheduled run never deploy. Production deploys use a dedicated concurrency group with
+`cancel-in-progress: false`: a newer deploy waits for a running transfer instead of interrupting
+it, while superseded gate jobs of an older push may be cancelled. Until the manual steps above are
+completed the workflow fails safely: the gate jobs still prove the build, and `deploy-production`
+stops at the missing-secrets or sentinel check without contacting or modifying anything.
 
 The static-first/server-capable posture is unchanged: `DEPLOY_TARGET=static` is a deployment
 profile, not the canonical application architecture.

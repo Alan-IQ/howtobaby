@@ -126,7 +126,15 @@ const REQUIRED_FILES = [
   "docs/IMPLEMENTATION_ROADMAP.md",
 ];
 
-const REQUIRED_WORKFLOWS = ["ci.yml", "repo-health.yml", "deploy.yml", "evidence-watch.yml"];
+/**
+ * Workflow contract (docs/REPOSITORY_STRUCTURE.md §12): ONE primary pipeline owns CI, repository
+ * health and production deploy; Evidence Watch stays a separate manual-only Phase 9 workflow.
+ */
+const PRIMARY_PIPELINE = "pipeline.yml";
+const REQUIRED_WORKFLOWS = [PRIMARY_PIPELINE, "evidence-watch.yml"];
+const PIPELINE_JOBS = ["repository-health", "quality-build", "deploy-production"] as const;
+/** Workflows replaced by the primary pipeline; their presence would re-create duplicate runs per push. */
+const OBSOLETE_WORKFLOWS = ["ci.yml", "repo-health.yml", "deploy.yml"];
 
 /**
  * Layout is verified against the Git index, not the working tree, so a local run matches a fresh CI checkout
@@ -195,11 +203,31 @@ function checkWorkflows(report: Report, root: string): void {
       report.error("workflow", "workflow file is empty or lacks `on:`/`jobs:`; GitHub reports such files as invalid", rel);
     }
   }
-  const ci = join(root, ".github/workflows/ci.yml");
-  const health = join(root, ".github/workflows/repo-health.yml");
-  const mentionsHealth = [ci, health].some((f) => existsSync(f) && readFileSync(f, "utf8").includes("check-repo-health"));
-  if (!mentionsHealth) report.error("workflow", "no workflow runs scripts/check-repo-health.ts (docs/REPOSITORY_HEALTH.md §6)");
-  if (report.errors.filter((f) => f.check === "workflow").length === 0) report.info("workflow", "all required workflows are present and the repository-health check is wired into CI");
+  for (const name of OBSOLETE_WORKFLOWS) {
+    if (existsSync(join(root, ".github/workflows", name))) {
+      report.error("workflow", `obsolete workflow must be deleted; its jobs live in ${PRIMARY_PIPELINE}`, `.github/workflows/${name}`);
+    }
+  }
+  const pipelineFile = join(root, ".github/workflows", PRIMARY_PIPELINE);
+  if (existsSync(pipelineFile)) {
+    const pipeline = readFileSync(pipelineFile, "utf8");
+    const rel = `.github/workflows/${PRIMARY_PIPELINE}`;
+    for (const job of PIPELINE_JOBS) {
+      if (!new RegExp(`^  ${job}:`, "m").test(pipeline)) report.error("workflow", `primary pipeline lacks the \`${job}\` job`, rel);
+    }
+    // The repository-health gate must be a real job step (docs/REPOSITORY_HEALTH.md §6), not a comment.
+    if (!/^\s+run: node scripts\/check-repo-health\.ts/m.test(pipeline)) {
+      report.error("workflow", "primary pipeline does not run scripts/check-repo-health.ts (docs/REPOSITORY_HEALTH.md §6)", rel);
+    }
+    // Production deploy must depend on BOTH gates; a deploy that skips either would bypass a release gate.
+    if (!/^\s+needs:\s*\[\s*repository-health\s*,\s*quality-build\s*]/m.test(pipeline)) {
+      report.error("workflow", "`deploy-production` must declare `needs: [repository-health, quality-build]`", rel);
+    }
+    if (!/^\s+group: deploy-production\s*$/m.test(pipeline) || !/cancel-in-progress: false/.test(pipeline)) {
+      report.error("workflow", "production deploy must use the dedicated `deploy-production` concurrency group with `cancel-in-progress: false`", rel);
+    }
+  }
+  if (report.errors.filter((f) => f.check === "workflow").length === 0) report.info("workflow", "primary pipeline + evidence-watch are present, obsolete workflows are gone, and the repository-health gate is wired into the pipeline");
 }
 
 function checkLicenseEntryPoints(report: Report, root: string): void {

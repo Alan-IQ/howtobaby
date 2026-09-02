@@ -360,10 +360,11 @@ Rules:
 1. `Relevant section` / VI `Phần liên quan` — locator such as section/heading/page, when available;
 2. `Applies to: United States` / `Scope: Global` (VI `Áp dụng cho` / `Phạm vi`);
 3. source publication/version metadata — the conditional matrix from EVIDENCE_PROVENANCE.md §14:
-   - both dates → `Published: Jan 10, 2025` + `Updated: Apr 14, 2026` (VI `Phát hành` + `Cập nhật`);
    - `publishedAt` only → `Published: …` (VI `Phát hành`);
    - `updatedAt` only → `Current source version: Apr 14, 2026` (VI `Phiên bản nguồn hiện tại: 14/04/2026`);
-   - neither → no source-version rows at all (never an inferred date);
+   - both and equal → `Published: …` only (the same date is never repeated as `Updated`);
+   - both and `updatedAt` later → `Published: Jan 10, 2025` + `Updated: Apr 14, 2026` (VI `Phát hành` + `Cập nhật`);
+   - neither → no source-date rows at all (never an inferred date);
 4. `Last verified by HowToBaby: Aug 31, 2026` / VI `HowToBaby kiểm chứng lần cuối: 31/08/2026` — HowToBaby's own review confirmation, never a crawl or deploy time;
 5. `Why this source is used` / VI `Vì sao dùng nguồn này` — derived from the canonical relationship;
 6. **View original source** / VI **Xem nguồn gốc** action.
@@ -386,9 +387,9 @@ When, What, and How to Introduce Solid Foods
 Published: Jan 10, 2025 · Updated: Apr 14, 2026 · Last verified by HowToBaby: Aug 31, 2026 · View original source ↗
 ```
 
-The source-date segment follows the same conditional matrix as the drawer (`Published` +
-`Updated`, `Published` only, `Current source version`, or omitted when the authority provides no
-date) and always precedes the HowToBaby verification date; a non-current status (e.g. `Reviewing
+The source-date segment follows the same conditional matrix as the drawer (`Published` only,
+`Current source version`, `Published` + `Updated` only when the update is later, or omitted when
+the authority provides no date) and always precedes the HowToBaby verification date; a non-current status (e.g. `Reviewing
 an update`) is appended after the verification date, while a healthy `current` source shows no
 status text. References stay one line per source — the joined form is the compact variant, no
 extra rows.
@@ -428,9 +429,10 @@ state, not a public claim: it renders **no** status badge/chip. Its trust inform
 dates, always in this order:
 
 - the authority's own dates per the source date provenance contract (EVIDENCE_PROVENANCE.md §14):
-  `Published: …` + `Updated: …` when both exist, `Published: …` alone, `Current source version: …`
-  when only `updatedAt` exists (VI `Phát hành` / `Cập nhật` / `Phiên bản nguồn hiện tại`), and
-  nothing at all when the authority provides neither — never an invented date, never `Published`
+  `Published: …` alone (also when `updatedAt` equals `publishedAt`), `Current source version: …`
+  when only `updatedAt` exists, `Published: …` + `Updated: …` only when the update is later (VI
+  `Phát hành` / `Cập nhật` / `Phiên bản nguồn hiện tại`), and nothing at all when the authority
+  provides neither — never an invented date, never `Published`
   for a date the authority did not call a publication date;
 - `Last verified by HowToBaby: Aug 31, 2026` / VI `HowToBaby kiểm chứng lần cuối: 31/08/2026` —
   HowToBaby's verification, a different fact.

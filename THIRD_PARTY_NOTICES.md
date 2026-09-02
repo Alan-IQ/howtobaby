@@ -25,7 +25,7 @@ Music, lullabies, sound effects, recordings, images, and other media must carry 
 
 ## Dependencies
 
-Software dependencies remain subject to their respective upstream licenses. `scripts/report-licenses.ts` reports every workspace dependency with its SPDX license, classified against `licenses.policy.json`; review decisions for copyleft/unknown licenses are recorded there. Rights metadata for media/font/icon files tracked in Git lives in `asset-rights.json`. Both reports run in CI (`.github/workflows/ci.yml`).
+Software dependencies remain subject to their respective upstream licenses. `scripts/report-licenses.ts` reports every workspace dependency with its SPDX license, classified against `licenses.policy.json`; review decisions for copyleft/unknown licenses are recorded there. Rights metadata for media/font/icon files tracked in Git lives in `asset-rights.json`. Both reports run in CI (`.github/workflows/pipeline.yml`, `quality-build` job).
 
 ## Adding third-party material
 

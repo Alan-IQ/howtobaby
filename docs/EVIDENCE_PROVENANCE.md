@@ -197,7 +197,7 @@ Opening the source chip should show, for each supporting source, the organizatio
 
 1. **Relevant section** — source locator, when useful;
 2. **Applies to / Scope** — jurisdiction/context;
-3. **source publication/version metadata** — per the source date provenance contract (§14): `Published` + `Updated`, `Published` only, `Current source version`, or nothing;
+3. **source publication/version metadata** — per the source date provenance contract (§14): `Published` only, `Current source version`, `Published` + `Updated` (only when the update is later), or nothing;
 4. **Last verified by HowToBaby** — `lastVerifiedAt`, always after the source dates;
 5. **Why this source is used** — derived from the canonical relationship;
 6. **View original source** link.
@@ -265,7 +265,7 @@ Shows the authorities and exact source records currently used by HowToBaby, grou
 Useful metadata:
 
 - source count;
-- source publication/version metadata (same contract as §14: `Published`/`Updated`, `Published`, `Current source version`, or omitted);
+- source publication/version metadata (same contract as §14: `Published`, `Current source version`, `Published`/`Updated` when the update is later, or omitted);
 - last verification date (HowToBaby);
 - status — rendered only for non-current sources, with the same attention treatment as the Evidence Drawer;
 - topics/claims using the source;
@@ -378,20 +378,25 @@ A changed source does not automatically mean the existing recommendation is wron
 
 | Canonical fields | EN presentation | VI presentation |
 | --- | --- | --- |
-| A. `publishedAt` **and** `updatedAt` | `Published: <publishedAt>` then `Updated: <updatedAt>` | `Phát hành: <publishedAt>` then `Cập nhật: <updatedAt>` |
-| B. `publishedAt` only | `Published: <publishedAt>` | `Phát hành: <publishedAt>` |
-| C. `updatedAt` only | `Current source version: <updatedAt>` | `Phiên bản nguồn hiện tại: <updatedAt>` |
-| D. neither | source-version metadata omitted entirely | bỏ hẳn metadata phiên bản nguồn |
+| A. `publishedAt` only | `Published: <publishedAt>` | `Phát hành: <publishedAt>` |
+| B. `updatedAt` only | `Current source version: <updatedAt>` | `Phiên bản nguồn hiện tại: <updatedAt>` |
+| C. both, `updatedAt === publishedAt` | `Published: <publishedAt>` only | `Phát hành: <publishedAt>` only |
+| D. both, `updatedAt > publishedAt` | `Published: <publishedAt>` then `Updated: <updatedAt>` | `Phát hành: <publishedAt>` then `Cập nhật: <updatedAt>` |
+| E. neither | source-date metadata omitted entirely | bỏ hẳn metadata ngày nguồn |
 
 Rules:
 
-- case C never presents `updatedAt` as a publication date, and case B never presents `publishedAt` as an update;
-- case D never infers, guesses or substitutes a date (no crawl time, no copyright year, no deploy date);
+- case B never presents `updatedAt` as a publication date, and case A never presents `publishedAt` as an update;
+- case C is one source version: the same date is never repeated as `Updated`/source-version information;
+- case E never infers, guesses or substitutes a date (no crawl time, no copyright year, no deploy date);
+- `sourceDateMeta()` (`apps/web/src/features/evidence/labels.ts`) is the single presentation source of this matrix; consumers render its rows and never re-branch on the raw fields;
+- canonical validation (`packages/knowledge/src/validate.ts`, `pnpm validate:knowledge`) fails when `publishedAt`/`updatedAt` is not a valid calendar date, is in the future, or when `updatedAt < publishedAt` (`source-date-order`); equal dates are valid. The UI never masks invalid canonical metadata — the fix belongs in the source registry;
+- `publishedAt`/`updatedAt` remain the authority's metadata; `lastVerifiedAt` remains HowToBaby's own verification date and is validated separately (never in the future);
 - after the source date metadata — and only after it — comes **Last verified by HowToBaby: <lastVerifiedAt>** / VI **HowToBaby kiểm chứng lần cuối: <lastVerifiedAt>**, the date the HowToBaby maintainer/review workflow actually confirmed the source (never a crawl/fetch time, never a deploy time);
 - dates are calendar dates (`YYYY-MM-DD` in YAML), formatted `Apr 14, 2026` in EN and `14/04/2026` in VI;
 - list surfaces (`/sources`, References) join the same rows on one line (`Published: Jan 10, 2025 · Updated: Apr 14, 2026 · Last verified by HowToBaby: Aug 31, 2026`) rather than inventing a shorter variant.
 
-Regression tests cover all four cases plus the non-current status states (`apps/web/src/features/evidence/labels.test.ts`, `load.test.ts`, `presenters.test.ts`, `packages/ui/src/evidence/evidence.test.tsx`).
+Regression tests cover all five presentation cases plus the non-current status states (`apps/web/src/features/evidence/labels.test.ts`, `load.test.ts`, `presenters.test.ts`, `packages/ui/src/evidence/evidence.test.tsx`) and the validation outcomes — published only, updated only, equal, updated later, updated earlier (fails), future dates (fail), neither (`packages/knowledge/tests/validate.test.ts`).
 
 ## 15. Source disagreement
 

@@ -157,10 +157,8 @@ howtobaby/
 ├─ .github/
 │  ├─ PULL_REQUEST_TEMPLATE.md
 │  └─ workflows/
-│     ├─ ci.yml
-│     ├─ repo-health.yml            # Dedicated health workflow (push/PR/weekly)
-│     ├─ deploy.yml
-│     └─ evidence-watch.yml
+│     ├─ pipeline.yml               # Primary pipeline: repository-health ∥ quality-build → deploy-production
+│     └─ evidence-watch.yml         # Separate manual-only Phase 9 concern
 │
 ├─ LICENSE.md                     # Multi-license scope map
 ├─ LICENSES/                      # Full standard license texts
@@ -473,13 +471,15 @@ Git history is part of the audit trail but does not replace the explicit provena
 
 ## 12. Workflow ownership
 
-### `ci.yml`
+### `pipeline.yml`
 
-Runs product/content validation and build checks.
+The single primary workflow. One run per push to `main`, pull request, weekly schedule or manual dispatch, with three logical jobs:
 
-### `deploy.yml`
+- `repository-health` — full-history checkout, plain Node (no dependency install); large-blob guard, deny patterns, size report per `REPOSITORY_HEALTH.md` §6. The only job that runs on the weekly schedule.
+- `quality-build` — Node 24 (`.nvmrc`) + pinned pnpm, one frozen dependency install, every remaining gate exactly once (`pnpm check:quality`, lint, tests, deterministic knowledge rebuild, default build, static export build + verification). Builds the static export once and uploads it as the deploy artifact on production runs.
+- `deploy-production` — `needs: [repository-health, quality-build]`; `main` only; downloads that artifact and deploys it (runbook: `DEPLOYMENT_HAWKHOST.md`). Never checks out, installs, tests or builds again. Never runs for pull requests or the schedule.
 
-Deploys an approved static-first Next.js build/deployment profile only after required gates pass.
+`scripts/check-repo-baseline.ts` enforces this contract (required jobs, health gate wired, deploy depends on both gates, obsolete `ci.yml`/`repo-health.yml`/`deploy.yml` absent).
 
 ### `evidence-watch.yml`
 

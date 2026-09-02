@@ -1,79 +1,165 @@
-name: Deploy production
+name: Pipeline
 
-# Production deployment to HawkHost (DEPLOYMENT_HAWKHOST.md; docs/REPOSITORY_STRUCTURE.md §12;
-# docs/SYSTEM_ARCHITECTURE.md §13). Pipeline:
+# Primary CI/CD pipeline (docs/REPOSITORY_STRUCTURE.md §12, docs/REPOSITORY_HEALTH.md §6,
+# docs/SYSTEM_ARCHITECTURE.md §13, DEPLOYMENT_HAWKHOST.md). One run per event, three logical jobs:
 #
-#   push to main
-#     → verify   : repository gates + lint + typecheck + tests + DEPLOY_TARGET=static build + export check
-#     → deploy   : (GitHub Environment `production`) SSH sentinel check → rsync --delete → smoke check
+#   repository-health  full-history checkout, plain Node (no dependency install): large-blob guard,
+#                      deny patterns, size report (+ optional git-sizer diagnostics).
+#   quality-build      Node 24 + pinned pnpm, ONE dependency install, every remaining quality gate
+#                      exactly once (typecheck, repository baseline, theme boundary, knowledge
+#                      validation, strict license report, lint, tests, deterministic knowledge
+#                      rebuild, default build, static export build + verification). On a production
+#                      run the validated static export (apps/web/out) is uploaded as an artifact.
+#   deploy-production  needs BOTH jobs above; main only; downloads the artifact quality-build made and
+#                      never checks out, installs, tests or builds again (GitHub Environment
+#                      `production`, HH_* secrets, sentinel-guarded rsync --delete, smoke checks).
 #
-# The static export is a deployment profile for shared hosting; the application stays static-first and
-# server-capable. Nothing host-specific is hard-coded: hostname, port, user, key, known_hosts and document
-# root all come from the `production` environment secrets (HH_*). The deploy job refuses to run unless the
-# sentinel file `.howtobaby-deploy-root` exists inside HH_DEPLOY_PATH, so a mistyped path can never be wiped.
+# Trigger matrix:
+#   pull_request      repository-health + quality-build; never deploys.
+#   push (main)       repository-health ∥ quality-build → deploy-production.
+#   schedule          repository-health only (weekly object-database growth report); no install/build/deploy.
+#   workflow_dispatch manual validation; deploy only with `deploy: true` on refs/heads/main.
+#
+# Runtime: every project command runs on the Node version in .nvmrc (Node 24). Evidence Watch
+# (evidence-watch.yml) stays a separate, manual-only Phase 9 concern.
 
 on:
   push:
     branches: [main]
+  pull_request:
+  schedule:
+    - cron: "17 6 * * 1"
   workflow_dispatch:
+    inputs:
+      deploy:
+        description: "Deploy to production after all gates pass (main only)"
+        type: boolean
+        default: false
 
 permissions:
   contents: read
-
-# One production deploy at a time; never cancel a deploy that has already started transferring files.
-concurrency:
-  group: deploy-production
-  cancel-in-progress: false
 
 env:
   NEXT_TELEMETRY_DISABLED: "1"
 
 jobs:
-  verify:
-    name: Gates and static build
+  repository-health:
+    name: Repository health
     runs-on: ubuntu-latest
+    # A newer push to the same ref supersedes this check; scoped per job + event so a scheduled run
+    # never cancels the health gate of an in-flight production push (and vice versa).
+    concurrency:
+      group: pipeline-health-${{ github.event_name }}-${{ github.ref }}
+      cancel-in-progress: true
     steps:
       - name: Checkout (full history for repository-health metrics)
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           fetch-depth: 0
 
-      - name: Set up pnpm
-        uses: pnpm/action-setup@v4
+      - name: Fetch base branch for changed-blob comparison
+        if: github.event_name == 'pull_request'
+        run: git fetch --no-tags origin "${{ github.base_ref }}:refs/remotes/origin/${{ github.base_ref }}"
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
+      - name: Set up Node.js (.nvmrc; no dependency install)
+        uses: actions/setup-node@v7
         with:
           node-version-file: .nvmrc
-          cache: pnpm
+          package-manager-cache: false
 
-      - name: Install dependencies
+      - name: Install git-sizer (optional deeper diagnostics)
+        continue-on-error: true
+        run: |
+          curl -fsSL -o /tmp/git-sizer.zip https://github.com/github/git-sizer/releases/download/v1.5.0/git-sizer-1.5.0-linux-amd64.zip
+          mkdir -p /tmp/git-sizer && unzip -q -o /tmp/git-sizer.zip -d /tmp/git-sizer
+          sudo install -m 755 /tmp/git-sizer/git-sizer /usr/local/bin/git-sizer
+          git-sizer --version
+
+      - name: Repository health (large-blob guard, deny patterns, size report)
+        run: node scripts/check-repo-health.ts --json=repo-health.json
+
+      - name: Upload health report
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: repo-health-${{ github.run_number }}
+          path: repo-health.json
+          if-no-files-found: ignore
+          retention-days: 90
+
+  quality-build:
+    name: Quality gates and builds
+    if: github.event_name != 'schedule'
+    runs-on: ubuntu-latest
+    concurrency:
+      group: pipeline-quality-${{ github.event_name }}-${{ github.ref }}
+      cancel-in-progress: true
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Read the project Node.js version (.nvmrc is the single source of truth)
+        id: node
+        run: echo "version=$(tr -d '[:space:]' < .nvmrc)" >> "$GITHUB_OUTPUT"
+
+      # pnpm/setup installs pnpm (version from package.json `packageManager`) and the Node runtime in
+      # one step. Its built-in install is disabled so the single install below is explicitly frozen.
+      - name: Set up pnpm and Node.js
+        uses: pnpm/setup@v2
+        with:
+          runtime: node@${{ steps.node.outputs.version }}
+          cache: true
+          install: false
+
+      - name: Install dependencies (frozen lockfile)
         run: pnpm install --frozen-lockfile
 
-      - name: Repository gates (typecheck, baseline, health, theme boundary, strict licenses)
-        run: pnpm check
+      - name: Print toolchain
+        run: |
+          echo "node $(node --version)"
+          echo "pnpm $(pnpm --version)"
+
+      - name: Quality gates (typecheck, repository baseline, theme boundary, knowledge validation, strict licenses)
+        run: pnpm check:quality
 
       - name: Lint
         run: pnpm lint
 
-      - name: Unit tests
+      - name: Unit tests (theme contract, primitives, storage, knowledge graph, scripts)
         run: pnpm test
 
       - name: Deterministic knowledge rebuild (knowledge.sqlite + evidence indexes)
         run: pnpm check:knowledge-determinism
 
-      - name: Build static export (DEPLOY_TARGET=static)
+      - name: Build — default profile (static-first, server-capable)
+        run: pnpm build
+
+      - name: Build — static export profile (DEPLOY_TARGET=static)
         run: pnpm build:static
 
       - name: Verify static export
         run: |
-          test -f apps/web/out/index.html || { echo "::error title=Static export::apps/web/out/index.html is missing — refusing to deploy"; exit 1; }
+          test -f apps/web/out/index.html || { echo "::error title=Static export::apps/web/out/index.html is missing"; exit 1; }
           test -f apps/web/out/404.html || { echo "::error title=Static export::apps/web/out/404.html is missing"; exit 1; }
           test -f apps/web/out/.htaccess || { echo "::error title=Static export::apps/web/out/.htaccess is missing"; exit 1; }
           echo "Static export OK: $(find apps/web/out -type f | wc -l) files, $(du -sh apps/web/out | cut -f1)"
 
-      - name: Upload static export
-        uses: actions/upload-artifact@v4
+      - name: Upload quality reports
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: quality-reports-${{ github.run_number }}
+          path: reports/
+          if-no-files-found: ignore
+          retention-days: 30
+
+      # Production candidates only (same condition as deploy-production): the validated export is
+      # built exactly once here and reused by the deploy job.
+      - name: Upload static export for deployment
+        if: >-
+          github.ref == 'refs/heads/main' &&
+          (github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && inputs.deploy))
+        uses: actions/upload-artifact@v7
         with:
           name: static-export-${{ github.sha }}
           path: apps/web/out
@@ -81,10 +167,19 @@ jobs:
           if-no-files-found: error
           retention-days: 14
 
-  deploy:
-    name: Deploy to HawkHost
-    needs: verify
+  deploy-production:
+    name: Deploy production
+    needs: [repository-health, quality-build]
+    # Runs only when BOTH upstream gates succeeded, from main, on a push or an explicit manual deploy.
+    if: >-
+      success() &&
+      github.ref == 'refs/heads/main' &&
+      (github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && inputs.deploy))
     runs-on: ubuntu-latest
+    # One production deploy at a time; a newer deploy waits — a transfer in progress is never cancelled.
+    concurrency:
+      group: deploy-production
+      cancel-in-progress: false
     environment:
       name: production
       url: https://howtobaby.com
@@ -111,8 +206,8 @@ jobs:
             *) echo "::error title=Deploy production::HH_DEPLOY_PATH must be an absolute path"; exit 1 ;;
           esac
 
-      - name: Download static export
-        uses: actions/download-artifact@v4
+      - name: Download the static export built by quality-build
+        uses: actions/download-artifact@v8
         with:
           name: static-export-${{ github.sha }}
           path: out

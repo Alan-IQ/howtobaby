@@ -2,9 +2,9 @@
 /**
  * Evidence Drawer / References view-model mapping (docs/GUI_DESIGN.md §11.3, §11.8): the
  * metadata rows keep the required order (section → jurisdiction/scope → source publication/version
- * rows → last verified by HowToBaby), the source-date rows follow the display matrix (both dates,
- * published only, updated only, neither — never inferred), and a healthy `current` source carries
- * no public status while every non-current state stays visible.
+ * rows → last verified by HowToBaby), the source-date rows follow the display matrix (published
+ * only, updated only, equal, updated later, neither — never inferred), and a healthy `current`
+ * source carries no public status while every non-current state stays visible.
  */
 
 import { describe, expect, it } from "vitest";
@@ -63,6 +63,16 @@ describe("Evidence Drawer metadata rows", () => {
 
   it("published only → a single Published row", () => {
     expect(sourceMetaRows(ref, without(cdc, "updatedAt"), "en").map((row) => `${row.label}: ${row.value}`)).toEqual([
+      "Relevant section: “When, What, and How to Introduce Solid Foods”",
+      "Applies to: United States",
+      "Published: Jan 10, 2025",
+      "Last verified by HowToBaby: Aug 31, 2026",
+    ]);
+  });
+
+  it("equal published/updated → Published only; the drawer never repeats the same date as Updated", () => {
+    const labels = sourceMetaRows(ref, { ...cdc, updatedAt: cdc.publishedAt! }, "en").map((row) => `${row.label}: ${row.value}`);
+    expect(labels).toEqual([
       "Relevant section: “When, What, and How to Introduce Solid Foods”",
       "Applies to: United States",
       "Published: Jan 10, 2025",
