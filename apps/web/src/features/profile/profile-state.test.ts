@@ -122,7 +122,7 @@ describe("persistence outcomes", () => {
     const readOnly = createChildProfileStore(() => ({ getItem: () => null, setItem: () => { throw new Error("quota"); }, removeItem: () => undefined }));
     const session = createProfileState({ store: readOnly, now: () => new Date(2026, 8, 2, 12, 0) });
     session.saveProfile({ dateOfBirth: calendarDate(2026, 5, 3) });
-    expect(state.getSnapshot().loaded).toBe(true);
+    expect(session.getSnapshot().loaded).toBe(true);
     expect(session.getSnapshot()).toMatchObject({ profile: { dateOfBirth: calendarDate(2026, 5, 3) }, persistence: "unavailable" });
   });
 });

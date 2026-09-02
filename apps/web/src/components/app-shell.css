@@ -666,16 +666,17 @@
   background: var(--htb-accent-sleep);
   color: var(--htb-text-on-accent);
 }
-/* Actual child's stage: a distinct brand ring + dot marker, never the same look as "browsed". */
+/* Actual child's stage: a distinct brand ring + dot marker, never the same look as "browsed".
+   Both are non-text markers (the chip text carries the meaning), so they use the visual brand accent. */
 .stage-nav__chip[data-actual="true"] {
-  box-shadow: 0 0 0 2px var(--htb-accent-brand);
+  box-shadow: 0 0 0 2px var(--htb-accent-brand-visual);
   border-color: transparent;
 }
 .stage-nav__marker {
   width: 8px;
   height: 8px;
   border-radius: 50%;
-  background: var(--htb-accent-brand);
+  background: var(--htb-accent-brand-visual);
 }
 .stage-nav__chip[aria-current="page"] .stage-nav__marker {
   background: var(--htb-text-on-accent);

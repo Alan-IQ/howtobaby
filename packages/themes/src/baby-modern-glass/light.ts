@@ -68,29 +68,38 @@ export const babyModernGlassLight: ColorTokens = {
   // glance — coral/warm orange, mint green, lavender/periwinkle, rose, sky cyan and a clean blue —
   // the same six families as dark mode, re-derived for a light canvas rather than copied. The label
   // colour (`accent.*`) is the deepest, most saturated tone that still clears 4.5:1 on canvas,
-  // cards and its own soft/glass tints, because eyebrows and nav highlights are text; the
-  // brightness and chroma live in the pastel `.soft`/`.glass` surfaces and the vivid `.glass.border`.
+  // cards and its own soft/glass tints, because eyebrows and nav highlights are text. The domain
+  // identity itself is carried by `accent.*.visual`: a clearly brighter, fresher tone for the
+  // title icon, card identity strip and nav underline, gated at the 3:1 non-text floor on canvas,
+  // cards and its own soft/glass tints. The pastel `.soft`/`.glass` surfaces and vivid
+  // `.glass.border` carry the rest of the brightness.
   "accent.brand": "#2c5f9e",
+  "accent.brand.visual": "#4c78c6",
   "accent.brand.soft": "#dce9fb",
   "accent.brand.glass": "linear-gradient(180deg, rgba(204, 226, 252, 0.80), rgba(228, 240, 255, 0.62))",
   "accent.brand.glass.border": "rgba(88, 150, 224, 0.70)",
   "accent.feeding": "#b03b0b",
+  "accent.feeding.visual": "#d05f32",
   "accent.feeding.soft": "#ffe4d5",
   "accent.feeding.glass": "linear-gradient(180deg, rgba(255, 222, 204, 0.78), rgba(255, 235, 224, 0.60))",
   "accent.feeding.glass.border": "rgba(240, 140, 90, 0.72)",
   "accent.play": "#1a7248",
+  "accent.play.visual": "#2b9260",
   "accent.play.soft": "#d8f4e5",
   "accent.play.glass": "linear-gradient(180deg, rgba(202, 242, 222, 0.80), rgba(228, 248, 237, 0.60))",
   "accent.play.glass.border": "rgba(80, 190, 135, 0.70)",
   "accent.sleep": "#5847b3",
+  "accent.sleep.visual": "#7b6bd5",
   "accent.sleep.soft": "#e6e2fb",
   "accent.sleep.glass": "linear-gradient(180deg, rgba(222, 214, 253, 0.80), rgba(238, 234, 254, 0.60))",
   "accent.sleep.glass.border": "rgba(150, 130, 235, 0.70)",
   "accent.safety": "#ad2857",
+  "accent.safety.visual": "#cd4d77",
   "accent.safety.soft": "#fde0ea",
   "accent.safety.glass": "linear-gradient(180deg, rgba(253, 214, 229, 0.78), rgba(254, 231, 239, 0.60))",
   "accent.safety.glass.border": "rgba(235, 120, 160, 0.70)",
   "accent.tools": "#0c6a89",
+  "accent.tools.visual": "#2789ad",
   "accent.tools.soft": "#d6f1fa",
   "accent.tools.glass": "linear-gradient(180deg, rgba(196, 236, 250, 0.80), rgba(224, 245, 252, 0.60))",
   "accent.tools.glass.border": "rgba(70, 180, 220, 0.72)",

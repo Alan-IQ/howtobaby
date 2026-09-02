@@ -67,6 +67,16 @@ export const CONTRAST_REQUIREMENTS: readonly ContrastRequirement[] = [
       { fg: "text.muted", bg: `accent.${a}.${surface}` as SemanticColorToken, min: WCAG.text, note: `muted text on ${a} ${surface} surface` },
     ]),
   ]),
+
+  // Non-text domain markers (`accent.*.visual`: card title icon, 3px identity strip, nav underline, stage
+  // markers) carry domain identity, so they must clear the 3:1 non-text floor wherever they are drawn —
+  // on canvas and cards, and on the domain's own glass/soft card surfaces (worst gradient stop).
+  ...ACCENTS.flatMap((a): ContrastRequirement[] => [
+    { fg: `accent.${a}.visual` as SemanticColorToken, bg: "canvas", min: WCAG.nonText, note: `accent ${a} visual marker on canvas` },
+    { fg: `accent.${a}.visual` as SemanticColorToken, bg: "surface.1", min: WCAG.nonText, note: `accent ${a} visual marker on cards` },
+    { fg: `accent.${a}.visual` as SemanticColorToken, bg: `accent.${a}.glass` as SemanticColorToken, min: WCAG.nonText, note: `accent ${a} visual marker on its glass tint` },
+    { fg: `accent.${a}.visual` as SemanticColorToken, bg: `accent.${a}.soft` as SemanticColorToken, min: WCAG.nonText, note: `accent ${a} visual marker on its soft tint` },
+  ]),
 ];
 
 export interface ContrastFinding {

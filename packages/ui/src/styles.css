@@ -157,7 +157,7 @@ select {
   color: var(--htb-text-secondary);
 }
 .htb-card[data-accent] .htb-card__title-icon {
-  color: var(--htb-card-accent);
+  color: var(--htb-card-accent-visual);
 }
 .htb-card__title {
   /* Above canonical guidance/claim text (lg): titles lead by size + weight, never text-shadow. */
@@ -172,7 +172,9 @@ select {
 }
 /* Domain cards are tinted glass: translucent accent gradient + defined accent border + identity strip.
    The blur/highlight come from the glass surface class; reduced transparency swaps the gradient for the
-   solid soft tint via the theme CSS fallback. */
+   solid soft tint via the theme CSS fallback. The title icon and the identity strip are non-text domain
+   markers, so they use the visual accent (`accent.*.visual`, 3:1 non-text gate), never the text-safe
+   label tone — eyebrows/labels keep `accent.*`. */
 .htb-card[data-accent] {
   background: var(--htb-card-accent-glass);
   border-color: var(--htb-card-accent-border);
@@ -181,35 +183,35 @@ select {
      as a detached flat bar and loses the taper. The 1px inset glass highlight directly under the
      strip is part of the approved look too (the "thin glass edge") — it comes from the glass
      surface classes; do not override it away. */
-  border-top: 3px solid var(--htb-card-accent);
+  border-top: 3px solid var(--htb-card-accent-visual);
 }
 .htb-card[data-accent="feeding"] {
-  --htb-card-accent: var(--htb-accent-feeding);
+  --htb-card-accent-visual: var(--htb-accent-feeding-visual);
   --htb-card-accent-glass: var(--htb-accent-feeding-glass);
   --htb-card-accent-border: var(--htb-accent-feeding-glass-border);
 }
 .htb-card[data-accent="play"] {
-  --htb-card-accent: var(--htb-accent-play);
+  --htb-card-accent-visual: var(--htb-accent-play-visual);
   --htb-card-accent-glass: var(--htb-accent-play-glass);
   --htb-card-accent-border: var(--htb-accent-play-glass-border);
 }
 .htb-card[data-accent="sleep"] {
-  --htb-card-accent: var(--htb-accent-sleep);
+  --htb-card-accent-visual: var(--htb-accent-sleep-visual);
   --htb-card-accent-glass: var(--htb-accent-sleep-glass);
   --htb-card-accent-border: var(--htb-accent-sleep-glass-border);
 }
 .htb-card[data-accent="safety"] {
-  --htb-card-accent: var(--htb-accent-safety);
+  --htb-card-accent-visual: var(--htb-accent-safety-visual);
   --htb-card-accent-glass: var(--htb-accent-safety-glass);
   --htb-card-accent-border: var(--htb-accent-safety-glass-border);
 }
 .htb-card[data-accent="tools"] {
-  --htb-card-accent: var(--htb-accent-tools);
+  --htb-card-accent-visual: var(--htb-accent-tools-visual);
   --htb-card-accent-glass: var(--htb-accent-tools-glass);
   --htb-card-accent-border: var(--htb-accent-tools-glass-border);
 }
 .htb-card[data-accent="brand"] {
-  --htb-card-accent: var(--htb-accent-brand);
+  --htb-card-accent-visual: var(--htb-accent-brand-visual);
   --htb-card-accent-glass: var(--htb-accent-brand-glass);
   --htb-card-accent-border: var(--htb-accent-brand-glass-border);
 }
@@ -740,7 +742,8 @@ nav[data-layout="horizontal"][data-slide="true"] .htb-nav__link[aria-current="pa
    - ::before is the lit-glass pill (milky translucent film + luminous glass-highlight rim +
      faint outer seam — the glass edge "lights up" in both modes);
    - ::after is the short centred accent underline (a 16×3 background-image layer near the
-     bottom edge, coloured per domain accent).
+     bottom edge, coloured per domain with the visual accent — a non-text marker; the link's
+     own icon/label ink stays the text-safe accent).
    Route changes slide both with a transform-only transition; routes outside the bar fade them
    out in place (data-active="false", last index + accent kept). Motion tokens only — reduced
    motion → instant. */
@@ -781,19 +784,19 @@ nav[data-layout="horizontal"][data-slide="true"] .htb-nav__link[aria-current="pa
   opacity: 1;
 }
 .htb-nav--tabs[data-active-accent="feeding"]::after {
-  color: var(--htb-accent-feeding);
+  color: var(--htb-accent-feeding-visual);
 }
 .htb-nav--tabs[data-active-accent="play"]::after {
-  color: var(--htb-accent-play);
+  color: var(--htb-accent-play-visual);
 }
 .htb-nav--tabs[data-active-accent="sleep"]::after {
-  color: var(--htb-accent-sleep);
+  color: var(--htb-accent-sleep-visual);
 }
 .htb-nav--tabs[data-active-accent="safety"]::after {
-  color: var(--htb-accent-safety);
+  color: var(--htb-accent-safety-visual);
 }
 .htb-nav--tabs[data-active-accent="tools"]::after {
-  color: var(--htb-accent-tools);
+  color: var(--htb-accent-tools-visual);
 }
 .htb-nav--tabs[data-active-accent="brand"]::after {
   color: var(--htb-text-primary);

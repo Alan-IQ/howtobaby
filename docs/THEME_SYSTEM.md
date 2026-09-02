@@ -173,7 +173,17 @@ accent.play
 accent.sleep
 accent.safety
 accent.tools
+accent.<domain>.visual
+accent.<domain>.soft
+accent.<domain>.glass
+accent.<domain>.glass.border
 ```
+
+Each domain accent is two roles: `accent.<domain>` is the text-safe label tone (gated 4.5:1 as text) and
+`accent.<domain>.visual` is the non-text identity colour for icons, identity strips and markers (gated
+3:1 as non-text, never darker than the label tone). A vendor adapter may map both to one colour; the
+first-party light mode keeps `.visual` visibly brighter. Components must pick the token by role (text
+consumer vs visual consumer), never swap one for the other.
 
 Foundation geometry/accessibility tokens may have controlled theme overrides, but critical minimums remain enforced by HowToBaby.
 

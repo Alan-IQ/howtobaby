@@ -99,11 +99,16 @@ Light mode should feel luminous, not washed out.
 - gradients used sparingly and never behind dense medical copy without contrast protection;
 - domain accents fresh and distinct at a glance — Feeding coral/warm orange, Play mint green,
   Sleep lavender/periwinkle, Safety rose, Tools sky cyan, Brand clean blue — the same six
-  families as dark mode, re-derived for the light canvas rather than copied. Because `accent.*`
-  is also label text (eyebrows, navigation highlight), it stays the deepest saturated tone that
-  clears the 4.5:1 gate on canvas, cards and its own tints; the brightness and chroma live in the
-  pastel `accent.*.soft` / `accent.*.glass` surfaces and the vivid `accent.*.glass.border`, so no
-  separate decorative-accent token is needed.
+  families as dark mode, re-derived for the light canvas rather than copied. Each domain accent
+  has two roles with two tokens: `accent.*` is the TEXT-SAFE label tone (eyebrows, navigation
+  label/icon ink, badge text, and the stage-chip fill under `text.on-accent`) and stays the deepest
+  saturated tone that clears the 4.5:1 text gate on canvas, cards and its own tints;
+  `accent.*.visual` is the NON-TEXT domain identity colour (card title icon, the 3px card identity
+  strip, the navigation underline, the actual-stage ring/dot marker) and is clearly brighter and
+  fresher in light mode while clearing the 3:1 non-text gate on canvas, cards and its own
+  soft/glass tints. The pastel `accent.*.soft` / `accent.*.glass` surfaces and the vivid
+  `accent.*.glass.border` carry the rest of the brightness. Meaning is never carried by the
+  visual colour alone — the icon and strip always sit beside the domain title.
 
 ### 4.3 Dark mode
 
@@ -246,8 +251,8 @@ hairline DOUBLE rim from the dedicated token pair `surface.glass.glow` (inner 1p
 ring glares (equal to the glass highlight) over a darker outer seam; in dark the outer seam is
 the thin luminous line and the inner ring recedes darker — glass catching light from outside.
 Both rings stay 1px: delicate, never a thick bright border — heavier
-icon/label in the domain accent, and a short centred underline
-in the domain accent — state is never carried by colour alone, and the indicator must not add
+icon/label in the text-safe domain accent (`accent.*`), and a short centred underline
+in the visual domain accent (`accent.*.visual`) — state is never carried by colour alone, and the indicator must not add
 height or break the bar's equal-column alignment. The desktop row's active pill wears the same
 frosted-glass treatment. The glass pill and the underline are painted by ONE persistent active
 indicator that slides between the equal-width

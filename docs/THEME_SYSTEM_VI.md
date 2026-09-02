@@ -72,7 +72,10 @@ border.*
 focus.ring
 status.info/caution/clinician/urgent/emergency
 accent.feeding/play/sleep/safety/tools
+accent.<domain>.visual / .soft / .glass / .glass.border
 ```
+
+Mỗi domain accent gồm hai vai trò: `accent.<domain>` là tông an toàn cho chữ (gate 4.5:1 như text), `accent.<domain>.visual` là màu nhận diện phi-chữ cho icon, dải nhận diện và marker (gate 3:1 phi-chữ, không bao giờ tối hơn tông chữ). Vendor adapter có thể map cả hai về một màu; light mode first-party giữ `.visual` sáng hơn rõ rệt. Component chọn token theo vai trò (text consumer hay visual consumer), không đổi chỗ cho nhau.
 
 Không cho domain component dùng raw palette/vendor token.
 

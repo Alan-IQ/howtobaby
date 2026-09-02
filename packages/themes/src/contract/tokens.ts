@@ -55,30 +55,40 @@ export const SEMANTIC_COLOR_TOKENS = [
   "status.emergency.bg",
   "status.emergency.border",
   // domain accents
-  // Per-domain accent: label colour, solid soft tint, and the tinted-glass surface pair.
+  // Per-domain accent: text-safe label colour, visual marker colour, solid soft tint, and the tinted-glass
+  // surface pair. `accent.<domain>` is TEXT — eyebrows, nav highlight, badge labels, stage-chip fills under
+  // `text.on-accent` — and is gated at 4.5:1. `accent.<domain>.visual` is the NON-TEXT domain identity
+  // colour — card title icon, the 3px card identity strip, nav underline, stage markers — gated at the
+  // 3:1 non-text floor so a light theme can keep it bright and vivid while the label tone stays deep.
   // `.glass` is the translucent tinted background (may be a gradient); `.glass.border` its defined edge;
   // `.soft` doubles as the opaque reduced-transparency fallback for `.glass`.
   "accent.brand",
+  "accent.brand.visual",
   "accent.brand.soft",
   "accent.brand.glass",
   "accent.brand.glass.border",
   "accent.feeding",
+  "accent.feeding.visual",
   "accent.feeding.soft",
   "accent.feeding.glass",
   "accent.feeding.glass.border",
   "accent.play",
+  "accent.play.visual",
   "accent.play.soft",
   "accent.play.glass",
   "accent.play.glass.border",
   "accent.sleep",
+  "accent.sleep.visual",
   "accent.sleep.soft",
   "accent.sleep.glass",
   "accent.sleep.glass.border",
   "accent.safety",
+  "accent.safety.visual",
   "accent.safety.soft",
   "accent.safety.glass",
   "accent.safety.glass.border",
   "accent.tools",
+  "accent.tools.visual",
   "accent.tools.soft",
   "accent.tools.glass",
   "accent.tools.glass.border",

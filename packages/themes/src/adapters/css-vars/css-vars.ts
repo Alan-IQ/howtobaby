@@ -118,6 +118,7 @@ export function themeToCss(definition: ThemeDefinition): string {
       // Domain accents print as neutral ink; safety/evidence status tokens keep their (icon+text backed) tone.
       ...(["brand", "feeding", "play", "sleep", "safety", "tools"] as const).flatMap((a): Array<[string, string]> => [
         [colorTokenVar(`accent.${a}`), p.textSecondary],
+        [colorTokenVar(`accent.${a}.visual`), p.textSecondary],
         [colorTokenVar(`accent.${a}.soft`), p.canvas],
         [colorTokenVar(`accent.${a}.glass`), p.canvas],
         [colorTokenVar(`accent.${a}.glass.border`), p.border],
