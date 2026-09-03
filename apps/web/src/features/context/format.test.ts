@@ -1,28 +1,53 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 import { describe, expect, it } from "vitest";
 
-import { chronologicalAge, calendarDate, stageById } from "@howtobaby/core";
+import { allStages, chronologicalAge, calendarDate, stageById } from "@howtobaby/core";
 import { SUPPORTED_LOCALES } from "@howtobaby/i18n";
 
 import { MESSAGES } from "@/i18n/messages";
 import { fill, formatCorrectedAge, formatDayCount, formatElapsedAge, formatStageChip, formatStageRange, formatTimeUntilDueDate } from "./format";
 
-describe("stage labels keep the half-open contract notation and qualifiers", () => {
-  it("renders months bins, whole-year bins and the `about` lower bound per locale", () => {
-    expect(formatStageRange(stageById("dev-06-09m")!, "en")).toBe("6–<9 months");
-    expect(formatStageRange(stageById("dev-06-09m")!, "vi")).toBe("6–<9 tháng");
-    expect(formatStageRange(stageById("dev-36-48m")!, "en")).toBe("3–<4 years");
-    expect(formatStageRange(stageById("dev-36-48m")!, "vi")).toBe("3–<4 tuổi");
-    expect(formatStageRange(stageById("feed-06-08m")!, "en")).toBe("about 6–<8 months");
-    expect(formatStageRange(stageById("feed-06-08m")!, "vi")).toBe("khoảng 6–<8 tháng");
-    expect(formatStageRange(stageById("feed-12-24m")!, "en")).toBe("12–<24 months");
+describe("stage labels express the half-open bin in ordinary language", () => {
+  it("renders the first bin, months bins, whole-year bins and the `about` lower bound per locale", () => {
+    expect(formatStageRange(stageById("feed-00-04m")!, "en")).toBe("under 4 months");
+    expect(formatStageRange(stageById("feed-00-04m")!, "vi")).toBe("dưới 4 tháng");
+    expect(formatStageRange(stageById("feed-04-06m")!, "en")).toBe("4 to under 6 months");
+    expect(formatStageRange(stageById("feed-04-06m")!, "vi")).toBe("từ 4 đến dưới 6 tháng");
+    expect(formatStageRange(stageById("feed-06-08m")!, "en")).toBe("about 6 to under 8 months");
+    expect(formatStageRange(stageById("feed-06-08m")!, "vi")).toBe("khoảng 6 đến dưới 8 tháng");
+    expect(formatStageRange(stageById("feed-24-36m")!, "en")).toBe("2 to under 3 years");
+    expect(formatStageRange(stageById("feed-24-36m")!, "vi")).toBe("từ 2 đến dưới 3 tuổi");
+    expect(formatStageRange(stageById("dev-06-09m")!, "en")).toBe("6 to under 9 months");
+    expect(formatStageRange(stageById("dev-36-48m")!, "vi")).toBe("từ 3 đến dưới 4 tuổi");
+    expect(formatStageRange(stageById("feed-12-24m")!, "en")).toBe("12 to under 24 months");
   });
 
-  it("chips stay short and keep the same numbers", () => {
-    expect(formatStageChip(stageById("dev-06-09m")!, "en")).toBe("6–<9 mo");
-    expect(formatStageChip(stageById("dev-48-60m")!, "en")).toBe("4–<5 y");
-    expect(formatStageChip(stageById("feed-06-08m")!, "en")).toBe("~6–<8 mo");
-    expect(formatStageChip(stageById("feed-06-08m")!, "vi")).toBe("~6–<8 tháng");
+  it("chips stay short and keep the same words and numbers", () => {
+    expect(formatStageChip(stageById("feed-00-04m")!, "en")).toBe("under 4 mo");
+    expect(formatStageChip(stageById("feed-00-04m")!, "vi")).toBe("dưới 4 tháng");
+    expect(formatStageChip(stageById("feed-04-06m")!, "en")).toBe("4 to under 6 mo");
+    expect(formatStageChip(stageById("feed-04-06m")!, "vi")).toBe("4 đến dưới 6 tháng");
+    expect(formatStageChip(stageById("feed-06-08m")!, "en")).toBe("about 6 to under 8 mo");
+    expect(formatStageChip(stageById("feed-06-08m")!, "vi")).toBe("khoảng 6 đến dưới 8 tháng");
+    expect(formatStageChip(stageById("feed-24-36m")!, "en")).toBe("2 to under 3 y");
+    expect(formatStageChip(stageById("feed-24-36m")!, "vi")).toBe("2 đến dưới 3 tuổi");
+    expect(formatStageChip(stageById("dev-48-60m")!, "en")).toBe("4 to under 5 y");
+  });
+
+  it("never exposes interval notation (`–<`, `<`, `~`) for any stage in any locale", () => {
+    const stages = allStages();
+    expect(stages.length).toBeGreaterThan(0);
+    for (const stage of stages) {
+      for (const locale of SUPPORTED_LOCALES.map((l) => l.id)) {
+        for (const text of [formatStageRange(stage, locale), formatStageChip(stage, locale)]) {
+          expect(text, `${stage.id} ${locale}`).not.toContain("–<");
+          expect(text, `${stage.id} ${locale}`).not.toContain("<");
+          expect(text, `${stage.id} ${locale}`).not.toContain("~");
+          // The `about` qualifier of a source-worded lower bound survives in both renderings.
+          expect(/^(about|khoảng) /.test(text), `${stage.id} ${locale}: ${text}`).toBe(stage.approximateLowerBound === true);
+        }
+      }
+    }
   });
 });
 

@@ -87,7 +87,7 @@ export const MESSAGES = defineMessages({
     "page.home.how.p1":
       "HowToBaby organizes guidance from public-health authorities by age and context, keeps each statement linked to its original source, and turns that guidance into practical steps for parents without making it more precise than the source allows.",
     "page.home.how.p2":
-      "HowToBaby has started publishing its first evidence-backed guidance, beginning with {link:feeding}, and each statement links to its original source. You can browse every age range without creating a profile. If you add a child profile, it stays on your device and shows which stage your child is in today. More personalization on {link:now} and the remaining topics will be added as their content is verified and reviewed.",
+      "HowToBaby has started publishing its first evidence-backed guidance, beginning with {link:feeding}, and each statement links to its original source. You can browse every age range without creating a profile. If you add a child profile, it stays on your device and shows which stage your child is in today. More personalization on this page and the remaining topics will be added as their content is verified and reviewed.",
 
     // Shared destination scaffolding.
     "section.placeholder.title": "What will be added here",
@@ -330,7 +330,7 @@ export const MESSAGES = defineMessages({
     "page.home.how.p1":
       "HowToBaby sắp xếp hướng dẫn từ các cơ quan y tế công cộng theo độ tuổi và bối cảnh, giữ từng nội dung gắn với tài liệu gốc và chuyển thành những bước cha mẹ có thể áp dụng trong thực tế mà không diễn giải chính xác hơn mức tài liệu cho phép.",
     "page.home.how.p2":
-      "HowToBaby đã bắt đầu xuất bản những hướng dẫn đầu tiên dựa trên bằng chứng, trước hết ở mục {link:feeding}; mỗi nội dung đều liên kết đến tài liệu gốc. Bạn có thể xem mọi giai đoạn theo độ tuổi mà không cần tạo hồ sơ. Nếu thêm hồ sơ của bé, thông tin sẽ chỉ được lưu trên thiết bị và HowToBaby sẽ cho biết hôm nay bé đang ở giai đoạn nào. Các phần cá nhân hóa khác của trang {link:now} và những chủ đề còn lại sẽ được bổ sung sau khi nội dung được kiểm chứng và rà soát.",
+      "HowToBaby đã bắt đầu xuất bản những hướng dẫn đầu tiên dựa trên bằng chứng, trước hết ở mục {link:feeding}; mỗi nội dung đều liên kết đến tài liệu gốc. Bạn có thể xem mọi giai đoạn theo độ tuổi mà không cần tạo hồ sơ. Nếu thêm hồ sơ của bé, thông tin sẽ chỉ được lưu trên thiết bị và HowToBaby sẽ cho biết hôm nay bé đang ở giai đoạn nào. Các phần cá nhân hóa khác trên trang này và những chủ đề còn lại sẽ được bổ sung sau khi nội dung được kiểm chứng và rà soát.",
 
     "section.placeholder.title": "Nội dung sẽ được bổ sung tại đây",
     "section.placeholder.note":

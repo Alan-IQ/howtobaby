@@ -1,9 +1,11 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 /**
  * Presentation of core age/stage values (no date math here — SYSTEM_ARCHITECTURE §6 "no date
- * math in UI components"). Labels carry the contract's half-open notation (`6–<9 months`) so a
- * bin boundary is never read as an inclusive age, and the `about` qualifier of a source-worded
- * lower bound is preserved. Canonical English labels double as document metadata.
+ * math in UI components"). Stage bins stay half-open `[min,max)` internally; parent-facing
+ * labels express that boundary in ordinary language (`4 to under 6 months`) — never interval
+ * notation such as `4–<6` or `~6` — so a bin boundary is never read as an inclusive age, and
+ * the `about` qualifier of a source-worded lower bound is preserved. Canonical English labels
+ * double as document metadata.
  */
 
 import type { AppLocale } from "@howtobaby/i18n";
@@ -64,18 +66,39 @@ export function formatCorrectedAge(correctedAge: ElapsedAge, locale: AppLocale):
   return correctedAge.days < 0 ? formatTimeUntilDueDate(correctedAge, locale) : formatElapsedAge(correctedAge, locale);
 }
 
-/** `6–<9 months`, `about 6–<8 months`, `3–<4 years` (whole-year bins only). */
-export function formatStageRange(stage: StageDefinition, locale: AppLocale): string {
-  const u = UNITS[locale];
+/** Whole-year bins (`24–36m` → `2 to under 3 years`) only from two years on; everything else is in months. */
+function stageBounds(stage: StageDefinition): { min: number; max: number; unit: "month" | "year" } {
   const wholeYears = stage.minMonths % 12 === 0 && stage.maxMonths % 12 === 0 && stage.minMonths >= 24;
-  const range = wholeYears ? `${stage.minMonths / 12}–<${stage.maxMonths / 12} ${u.year[1]}` : `${stage.minMonths}–<${stage.maxMonths} ${u.month[1]}`;
-  return stage.approximateLowerBound ? `${u.about} ${range}` : range;
+  return wholeYears ? { min: stage.minMonths / 12, max: stage.maxMonths / 12, unit: "year" } : { min: stage.minMonths, max: stage.maxMonths, unit: "month" };
 }
 
-/** Short chip label: `6–<9 mo` / `3–<4 y`; VI keeps the full unit word (it is already short). */
+/**
+ * Half-open `[min,max)` in words: `under 4 months` / `4 to under 6 months` / `about 6 to under
+ * 8 months` / `2 to under 3 years`; VI `dưới 4 tháng` / `từ 4 đến dưới 6 tháng` / `khoảng 6 đến
+ * dưới 8 tháng` / `từ 2 đến dưới 3 tuổi`.
+ */
+export function formatStageRange(stage: StageDefinition, locale: AppLocale): string {
+  const { min, max, unit } = stageBounds(stage);
+  return stageWords(stage, locale, min, max, UNITS[locale][unit][1]);
+}
+
+function stageWords(stage: StageDefinition, locale: AppLocale, min: number, max: number, unitWord: string): string {
+  const about = UNITS[locale].about;
+  if (locale === "vi") {
+    if (min === 0) return `dưới ${max} ${unitWord}`;
+    return stage.approximateLowerBound ? `${about} ${min} đến dưới ${max} ${unitWord}` : `từ ${min} đến dưới ${max} ${unitWord}`;
+  }
+  if (min === 0) return `under ${max} ${unitWord}`;
+  return stage.approximateLowerBound ? `${about} ${min} to under ${max} ${unitWord}` : `${min} to under ${max} ${unitWord}`;
+}
+
+/**
+ * Short chip label with the same words and numbers: EN abbreviates the unit (`under 4 mo`,
+ * `4 to under 6 mo`, `about 6 to under 8 mo`, `2 to under 3 y`); VI drops the leading `từ`
+ * (`4 đến dưới 6 tháng`, `khoảng 6 đến dưới 8 tháng`, `2 đến dưới 3 tuổi`).
+ */
 export function formatStageChip(stage: StageDefinition, locale: AppLocale): string {
-  if (locale === "vi") return formatStageRange(stage, locale).replace(/^khoảng /, "~");
-  const wholeYears = stage.minMonths % 12 === 0 && stage.maxMonths % 12 === 0 && stage.minMonths >= 24;
-  const range = wholeYears ? `${stage.minMonths / 12}–<${stage.maxMonths / 12} y` : `${stage.minMonths}–<${stage.maxMonths} mo`;
-  return stage.approximateLowerBound ? `~${range}` : range;
+  if (locale === "vi") return formatStageRange(stage, locale).replace(/^từ /, "");
+  const { min, max, unit } = stageBounds(stage);
+  return stageWords(stage, locale, min, max, unit === "year" ? "y" : "mo");
 }

@@ -50,6 +50,8 @@ type PrecisionClass =
 - Use half-open ranges `[min,max)`.
 - Test leap day, month end, DST/timezone changes, stage boundaries.
 
+Stage boundaries remain half-open internally (`[min,max)`), but parent-facing labels must express those boundaries in ordinary language rather than interval notation. For example: “under 4 months”, “4 to under 6 months”, and “about 6 to under 8 months”. The UI must not expose forms such as “4–<6 months” or “~6–<8 mo”.
+
 ### Corrected-development proxy
 
 ```text

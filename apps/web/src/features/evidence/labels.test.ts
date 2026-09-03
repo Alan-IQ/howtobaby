@@ -122,7 +122,8 @@ describe("relationship explanation (Relationship to the guidance above)", () => 
       for (const locale of ["en", "vi"] as const) {
         const template = RELATIONSHIP_WHY_LABELS[locale][relationship];
         expect(template, `${locale}/${relationship}`).toContain("{organization}");
-        expect(template, `${locale}/${relationship}`).toMatch(locale === "en" ? /guidance shown above/ : /hướng dẫn ở trên/);
+        expect(template, `${locale}/${relationship}`).toMatch(locale === "en" ? /guidance shown above/ : /nội dung hướng dẫn phía trên/);
+        expect(template, `${locale}/${relationship}`).not.toContain("công bố này");
         expect(template, `${locale}/${relationship}`).not.toMatch(/this guidance|this statement|this organization|Hướng dẫn này|nội dung này|tổ chức này/i);
       }
     }
@@ -149,19 +150,19 @@ describe("relationship explanation (Relationship to the guidance above)", () => 
   it("keeps the organization name verbatim (never localized or abbreviated)", () => {
     const organization = "American Academy of Pediatrics";
     expect(relationshipWhyText("direct-support", "en", organization)).toBe(`The source from ${organization} directly supports the guidance shown above.`);
-    expect(relationshipWhyText("direct-support", "vi", organization)).toBe(`Tài liệu do ${organization} công bố này hỗ trợ trực tiếp cho nội dung hướng dẫn ở trên.`);
+    expect(relationshipWhyText("direct-support", "vi", organization)).toBe(`Tài liệu do ${organization} công bố hỗ trợ trực tiếp cho nội dung hướng dẫn phía trên.`);
   });
 
   it("never hard-codes a guidance class into the generic primary relationship", () => {
     expect(RELATIONSHIP_WHY_LABELS.en.primary).not.toMatch(/official/i);
     expect(RELATIONSHIP_WHY_LABELS.vi.primary).not.toMatch(/chính thức/i);
     expect(relationshipWhyText("primary", "en", "CDC")).toBe("HowToBaby relies primarily on the source from CDC to build the guidance shown above.");
-    expect(relationshipWhyText("primary", "vi", "CDC")).toBe("HowToBaby chủ yếu dựa trên tài liệu do CDC công bố này để xây dựng nội dung hướng dẫn ở trên.");
+    expect(relationshipWhyText("primary", "vi", "CDC")).toBe("Tài liệu do CDC công bố là tài liệu tham khảo chính mà HowToBaby sử dụng để xây dựng nội dung hướng dẫn phía trên.");
   });
 
   it("labels the relationship block as the relationship to the guidance above", () => {
-    // expect(UI_STRINGS.en.metaWhy).toBe("Relationship to the guidance above");
-    // expect(UI_STRINGS.vi.metaWhy).toBe("Mối liên hệ với nội dung hướng dẫn ở trên");
+    expect(UI_STRINGS.en.metaWhy).toBe("Relationship to the guidance above");
+    expect(UI_STRINGS.vi.metaWhy).toBe("Mối liên hệ với nội dung hướng dẫn ở trên");
     expect(RELATIONSHIP_LABELS.vi.primary).toBe("Tài liệu tham khảo chính");
   });
 });

@@ -28,14 +28,15 @@ describe("StageNavigator (prerender)", () => {
     const html = renderToStaticMarkup(<StageNavigator domain="feeding" />);
     expect(html).not.toContain('aria-current="page"');
     expect(html).toContain('href="/feeding/6-8-months"');
-    expect(html).toContain("~6–&lt;8 mo");
+    expect(html).toContain("about 6 to under 8 mo");
+    expect(html).toContain('title="about 6 to under 8 months"');
   });
 });
 
 describe("WhyThisStage (prerender)", () => {
   it("explains the bin, the no-profile state and the age-selects limitation", () => {
     const html = renderToStaticMarkup(<WhyThisStage stage={stageById("feed-06-08m")!} />);
-    expect(html).toContain("Age range for this stage: about 6–&lt;8 months.");
+    expect(html).toContain("Age range for this stage: about 6 to under 8 months.");
     expect(html).toContain("The source describes the starting point as “about 6 months”. HowToBaby uses that wording to organize content, not to decide whether your child is ready.");
     // The Now page name renders as a same-tab link whose anchor text is the page's own name.
     expect(html).toContain(MESSAGES.en["why.noProfile"].replace("{link:now}", '<a href="/">Now</a>'));

@@ -46,9 +46,9 @@ describe("static stage routes", () => {
 
   it("document metadata derives from the stage bin alone, in the canonical locale", async () => {
     const metadata = await stageMetadata("development", { params: Promise.resolve({ stage: "6-9-months" }) });
-    expect(metadata).toEqual({ title: "Play & Development · 6–<9 months" });
+    expect(metadata).toEqual({ title: "Play & Development · 6 to under 9 months" });
     const feeding = await stageMetadata("feeding", { params: Promise.resolve({ stage: "6-8-months" }) });
-    expect(feeding.title).toBe("Feeding · about 6–<8 months");
+    expect(feeding.title).toBe("Feeding · about 6 to under 8 months");
     expect(await stageMetadata("sleep", { params: Promise.resolve({ stage: "unknown" }) })).toEqual({});
     for (const domain of STAGE_DOMAINS) {
       for (const stage of stagesFor(domain)) {

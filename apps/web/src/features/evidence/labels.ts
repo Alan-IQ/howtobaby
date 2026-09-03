@@ -72,11 +72,11 @@ export const RELATIONSHIP_WHY_LABELS: Record<UiLocale, Record<SourceRelationship
     conflicting: "The source from {organization} differs from the primary source used for the guidance shown above. HowToBaby keeps the relevant difference visible.",
   },
   vi: {
-    primary: "HowToBaby chủ yếu dựa trên tài liệu do {organization} công bố này để xây dựng nội dung hướng dẫn ở trên.",
-    "direct-support": "Tài liệu do {organization} công bố này hỗ trợ trực tiếp cho nội dung hướng dẫn ở trên.",
-    corroborating: "Tài liệu do {organization} công bố này được dùng để đối chiếu độc lập vì nội dung trong đó nhất quán với tài liệu chính được dùng cho hướng dẫn ở trên.",
-    contextual: "Tài liệu do {organization} công bố này cung cấp thông tin nền giúp giải thích rõ hơn nội dung hướng dẫn ở trên.",
-    conflicting: "Tài liệu do {organization} công bố này có điểm khác với tài liệu chính được dùng cho hướng dẫn ở trên. HowToBaby trình bày rõ điểm khác biệt có liên quan.",
+    primary: "Tài liệu do {organization} công bố là tài liệu tham khảo chính mà HowToBaby sử dụng để xây dựng nội dung hướng dẫn phía trên.",
+    "direct-support": "Tài liệu do {organization} công bố hỗ trợ trực tiếp cho nội dung hướng dẫn phía trên.",
+    corroborating: "Tài liệu do {organization} công bố được dùng để đối chiếu độc lập vì các khuyến nghị trong đó nhất quán với tài liệu tham khảo chính dùng cho nội dung hướng dẫn phía trên.",
+    contextual: "Tài liệu do {organization} công bố cung cấp thông tin nền giúp giải thích rõ hơn nội dung hướng dẫn phía trên.",
+    conflicting: "Tài liệu do {organization} công bố có khuyến nghị khác với tài liệu tham khảo chính dùng cho nội dung hướng dẫn phía trên. HowToBaby trình bày rõ điểm khác biệt có liên quan thay vì lược bỏ.",
   },
 };
 

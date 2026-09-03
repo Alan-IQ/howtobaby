@@ -212,6 +212,7 @@ never as plain text that could read as an ordinary word. Rules:
 - the anchor text is the destination's own localized name in the active language (for a
   primary destination the full `domain.*.title`, for a trust page its `trust.*.label`), so it is
   meaningful on its own — never "here" or "see more";
+- A destination name is linked when it points to another page. When copy refers to the page the user is already viewing, use natural wording such as “this page” instead of rendering a self-link.
 - in app copy the reference is written as a `{link:<key>}` token resolved from the
   `MESSAGE_LINKS` registry (`apps/web/src/site.ts`); `<T>` renders it as the link, no HTML is
   injected, and tests reject an unknown key, an EN/VI mismatch of named destinations, or a
@@ -256,7 +257,7 @@ Phần liên quan: …
 Phạm vi áp dụng: Hoa Kỳ
 Phiên bản tài liệu hiện tại: 14/04/2026
 HowToBaby kiểm chứng lần cuối: 31/08/2026
-Mối liên hệ với nội dung hướng dẫn ở trên: HowToBaby chủ yếu dựa trên tài liệu do CDC công bố để xây dựng nội dung hướng dẫn ở trên.
+Mối liên hệ với nội dung hướng dẫn ở trên: Tài liệu do CDC công bố là tài liệu tham khảo chính mà HowToBaby sử dụng để xây dựng nội dung hướng dẫn phía trên.
 Xem tài liệu gốc
 ```
 
@@ -615,12 +616,17 @@ from different component-state styling. The actual child's stage — resolved cl
 the local profile only — carries that brand-colour ring plus dot and a visually hidden "your
 child's current stage" label, so the two states never look alike and prerendered HTML never
 contains a child marker. Each stage page pairs the navigator
-with a **WhyThisStage** card (stage range with the half-open `6–<9 months` notation and the
+with a **WhyThisStage** card (stage range in ordinary language — `6 to under 9 months` — with the
 `about` qualifier where the source wording has it, the age basis used for the actual child —
 chronological or corrected-development — the browsed-vs-actual relation, a session preview
 date if set, and the standing "age selects candidate guidance; it does not prove readiness"
 limitation) and previous/next stage links. Safety has no stage navigator: its context card
 reads the actual child only.
+
+Stage boundaries remain half-open internally (`[min,max)`), but parent-facing labels must express those boundaries in ordinary language rather than interval notation. For example: “under 4 months”, “4 to under 6 months”, and “about 6 to under 8 months”. The UI must not expose forms such as “4–<6 months” or “~6–<8 mo”. The same
+wording is used wherever a stage range is shown to a parent: page title and document metadata,
+the stage navigator chips and their `title` tooltip, WhyThisStage, ChildSummary, PreviewPlanDate
+and the previous/next stage pager. Route slugs (`/feeding/6-8-months`) are unchanged.
 
 ## 14. Responsive behavior
 

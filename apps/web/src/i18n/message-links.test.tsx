@@ -107,6 +107,16 @@ describe("<T> renders page and site names as links", () => {
     expect(renderToStaticMarkup(<T id="why.noProfile" />)).toContain('ở trang <a href="/">Hiện tại</a>,');
   });
 
+  it("never links the page the reader is already on — the home page says “this page” instead of linking Now", () => {
+    expect(MESSAGES.en["page.home.how.p2"]).not.toContain("{link:now}");
+    expect(MESSAGES.vi["page.home.how.p2"]).not.toContain("{link:now}");
+    expect(renderToStaticMarkup(<T id="page.home.how.p2" />)).toContain("More personalization on this page and");
+    expect(renderToStaticMarkup(<T id="page.home.how.p2" />)).not.toContain('href="/"');
+    language = "vi";
+    expect(renderToStaticMarkup(<T id="page.home.how.p2" />)).toContain("Các phần cá nhân hóa khác trên trang này và");
+    expect(renderToStaticMarkup(<T id="page.home.how.p2" />)).not.toContain('href="/"');
+  });
+
   it("uses the full domain title as the anchor text for a primary destination, never the short nav label", () => {
     expect(MESSAGE_LINKS.play.labelKey).toBe("domain.play.title");
     expect(MESSAGE_LINKS.now.href).toBe("/");

@@ -16,7 +16,9 @@ Nội dung gắn nhãn `source-approximate` hoặc `source-range` phải giữ n
 
 ## Tuổi và bối cảnh
 
-Dùng phép tính theo ngày trên lịch, so sánh không phụ thuộc múi giờ và khoảng nửa mở `[min,max)`. Proxy cho tuổi phát triển hiệu chỉnh:
+Dùng phép tính theo ngày trên lịch, so sánh không phụ thuộc múi giờ và khoảng nửa mở `[min,max)`. Ranh giới giai đoạn vẫn dùng khoảng nửa mở `[min,max)` trong logic nội bộ, nhưng nội dung hiển thị cho phụ huynh phải diễn đạt bằng ngôn ngữ thông thường thay vì ký hiệu khoảng. Ví dụ: “dưới 4 tháng”, “từ 4 đến dưới 6 tháng” và “khoảng 6 đến dưới 8 tháng”. UI không được hiển thị các dạng như “4–<6 tháng” hoặc “~6–<8 tháng”.
+
+Proxy cho tuổi phát triển hiệu chỉnh:
 
 ```text
 earlyByDays = EDD - DOB
