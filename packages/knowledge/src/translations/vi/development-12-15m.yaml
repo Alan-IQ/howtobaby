@@ -1,0 +1,60 @@
+# SPDX-License-Identifier: CC-BY-NC-SA-4.0
+# Vietnamese parity strings for Development stage dev-12-15m: natural, professional Vietnamese that
+# preserves every quantity, age boundary, qualifier, negation and applicability condition of the
+# canonical English (GUIDANCE_CONTENT_CONTRACT.md §10). Same lead line + `- item` structure.
+
+locale: vi
+strings:
+  development.12-15m.at-a-glance: |-
+    Từ 12 đến dưới 15 tháng, danh sách 1 tuổi của CDC là tham chiếu. Phần lớn trẻ ở tuổi này đã biết bám vịn đứng lên, đi men theo đồ đạc, nhặt miếng thức ăn nhỏ bằng ngón cái và ngón trỏ, vẫy tay “tạm biệt”, gọi “mama” hoặc “dada”, hiểu từ “không”, bỏ đồ vào hộp và tìm thứ bé thấy bạn giấu. Chơi lúc này là làm: bỏ vào rồi đổ ra, đẩy đồ vật đi quanh nhà, vỗ tay theo bài hát, và gọi tên thứ bé chỉ vào.
+  development.12-15m.milestone-context: |-
+    Với giai đoạn này (từ 12 đến dưới 15 tháng), tham chiếu là danh sách 1 tuổi của CDC: điều phần lớn trẻ (từ 75% trở lên) làm được khi được 1 tuổi. Bé 13 hoặc 14 tháng được đối chiếu với danh sách 1 tuổi, không phải với một mức ở giữa; danh sách 15 tháng chỉ trở thành tham chiếu khi bé được 15 tháng. CDC lưu ý rằng các tài liệu về cột mốc không thay thế cho các công cụ sàng lọc phát triển đã được chuẩn hóa và kiểm định.
+  development.12-15m.development-focus: |-
+    Đứng lên làm thay đổi mọi thứ: bám vịn đứng dậy và đi men theo đồ đạc đưa bé lên ngang tầm mặt bàn, và động tác kẹp chính xác bằng ngón cái và ngón trỏ giúp bé nhặt được vụn bánh, khối gỗ và miếng thức ăn nhỏ. Những “từ” và cử chỉ đầu tiên — vẫy tay, chỉ tay, “mama”, “dada” — mang ý nghĩa thực sự, và bé bắt đầu hiểu các từ đơn giản như “không”. Những trò chơi có nguyên nhân–kết quả rõ ràng là trò được yêu thích nhất.
+  development.12-15m.gross-motor: |-
+    Các cột mốc vận động thô mà phần lớn trẻ làm được khi được 1 tuổi (danh sách của CDC):
+    - bám vịn đứng lên
+    - đi men theo đồ đạc
+    Tự đi một mình không có trong danh sách 1 tuổi; “tự bước được vài bước” xuất hiện ở danh sách 15 tháng.
+  development.12-15m.fine-motor: |-
+    Các cột mốc bàn tay và phối hợp tay–mắt mà phần lớn trẻ làm được khi được 1 tuổi (danh sách của CDC):
+    - nhặt đồ vật bằng ngón cái và ngón trỏ, như miếng thức ăn nhỏ
+    - uống từ cốc không nắp khi bạn giữ cốc
+    - bỏ một vật vào hộp đựng, như bỏ khối gỗ vào cốc (CDC xếp mục này vào nhóm học hỏi và tư duy)
+  development.12-15m.communication: |-
+    Các cột mốc giao tiếp mà phần lớn trẻ làm được khi được 1 tuổi (danh sách của CDC):
+    - vẫy tay “tạm biệt”
+    - gọi cha mẹ là “mama”, “dada” hoặc một cách gọi thân thuộc khác
+    - hiểu từ “không” (dừng lại một chút hoặc ngừng hẳn khi bạn nói)
+  development.12-15m.cognitive: |-
+    Các cột mốc học hỏi và tư duy mà phần lớn trẻ làm được khi được 1 tuổi (danh sách của CDC):
+    - tìm thứ bé thấy bạn giấu, như món đồ chơi dưới chăn
+    CDC còn liệt kê “bỏ một vật vào hộp đựng”, mục mà HowToBaby trình bày ở phần bàn tay và phối hợp tay–mắt.
+  development.12-15m.social-emotional: |-
+    Cột mốc xã hội và cảm xúc mà phần lớn trẻ làm được khi được 1 tuổi (danh sách của CDC):
+    - chơi các trò chơi cùng bạn, như vỗ tay theo bài hát
+  development.12-15m.activities: |-
+    Những gợi ý của CDC cho độ tuổi này:
+    - nói hoặc hát về việc bạn đang làm: “Mẹ đang rửa tay cho con”
+    - nói tiếp dựa trên điều bé cố nói: “tô” — “Đúng rồi, ô tô”
+    - đáp lại bằng lời khi bé chỉ tay: “Con muốn cái cốc à? Cốc đây”
+    - chỉ cho bé những thứ thú vị bạn nhìn thấy — xe tải, xe buýt, con vật
+    - chơi với khối gỗ và các đồ chơi cần dùng tay; đưa nồi, chảo hoặc một chiếc trống nhỏ để bé tạo tiếng động
+    - để bé đẩy đồ vật đi quanh nhà — thùng rỗng, ghế nhỏ, đồ chơi đẩy — để tập đi
+    - cùng “đọc sách”; sách có bề mặt sờ được hoặc nắp lật là loại bé thích lúc này
+    - dạy bé “hành vi mong muốn”: chỉ cho bé cách làm và khen bằng lời hoặc ôm bé khi bé làm được
+  development.12-15m.variants: |-
+    Dễ hơn: dùng hộp miệng rộng và khối gỗ to để lần nào thả vào cũng thành công; giấu đồ chơi nhưng để lộ một phần. Khó hơn: miệng hộp hẹp hơn hoặc vật an toàn nhỏ hơn; giấu đồ chơi hoàn toàn, hoặc chuyển nó giữa hai tấm che khi bé đang nhìn. Dễ hơn với tập đi: một món đồ chơi đẩy nặng, không trôi đi, hoặc cả hai tay bạn. Khó hơn: chỉ một tay, rồi một khoảnh khắc không có tay đỡ, trên sàn mềm. Dễ hơn với lời nói: gọi tên thứ bé chỉ. Khó hơn: dừng lại và để bé thử nói từ đó trước.
+  development.12-15m.safety-environment: |-
+    Những lưu ý an toàn mà CDC và AAP gắn với độ tuổi này:
+    - không bao giờ để bé ở gần hoặc quanh nước — bồn tắm, hồ bơi, ao, xô chậu — mà không có người trông; CDC lưu ý đuối nước là nguyên nhân tử vong do thương tích hàng đầu ở độ tuổi này
+    - chắn cầu thang bằng cổng chắn, bịt các ổ điện không dùng, để đồ điện gia dụng, bàn là và máy sưởi ngoài tầm với, và xoay tay cầm nồi vào phía trong bếp
+    - khóa kỹ thuốc, chất tẩy rửa và chất độc, và cất vật sắc nhọn xa tầm tay
+    - CDC cho biết không khuyến nghị dùng xe tập đi; thay vào đó hãy để bé vịn tay bạn hoặc đồ đạc chắc chắn
+    - tiếp tục tìm hiểu những thực phẩm nào có nguy cơ gây hóc; không khuyến nghị cho trẻ dưới 2 tuổi xem màn hình, ngoại trừ gọi video
+  development.12-15m.what-not-to-force: |-
+    Đừng coi việc tự đi là điều phải có ngay — nó nằm trong danh sách 15 tháng, không phải danh sách 1 tuổi — và đừng dùng xe tập đi để thúc cho sớm. Đừng lạm dụng từ “không”: CDC gợi ý chỉ dùng “không” cho những hành vi nguy hiểm, còn lại thì hướng bé sang việc khác bằng một món đồ chơi hoặc đổi chỗ. Đừng vội đẩy bé vào vòng tay người chăm sóc mới; CDC gợi ý cho bé thời gian và mang theo món đồ chơi hay chiếc chăn yêu thích. Và đừng mong bé biết chia sẻ hay chơi cùng trẻ khác lúc này — ở tuổi này, bé chơi cùng bạn.
+  development.12-15m.what-to-observe: |-
+    Hãy để ý cách bé giao tiếp khi chưa có nhiều từ: chỉ tay, vẫy tay, mang đồ đến cho bạn, nhìn bạn rồi nhìn thứ bé muốn. Để ý cách cầm — cả bàn tay hay ngón cái và ngón trỏ — và cách bé đứng lên, đi men và hạ người ngồi xuống. Để ý điều gì xảy ra sau khi bạn nói “không” một lần, và cách hướng bé sang việc khác nào hiệu quả nhất. Những chi tiết này định hình cả cách chơi lẫn cuộc trò chuyện với bác sĩ của bé.
+  development.12-15m.clinician-cues: |-
+    Tham chiếu cho giai đoạn này là danh sách 1 tuổi của CDC. CDC gợi ý mang đến lần khám: những việc bạn và bé thường làm cùng nhau, những gì bé thích làm, bất cứ điều gì bé làm hoặc chưa làm khiến bạn lo lắng, bé có mất đi kỹ năng nào từng có không, và bé có nhu cầu chăm sóc sức khỏe đặc biệt hay sinh non không. Nếu bé chưa làm được một hoặc nhiều cột mốc trong danh sách 1 tuổi, mất đi kỹ năng từng có, hoặc bạn có lo lắng khác, đừng chờ đợi — hãy trao đổi với bác sĩ của bé và hỏi về việc sàng lọc phát triển.

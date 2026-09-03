@@ -1,0 +1,68 @@
+# SPDX-License-Identifier: CC-BY-NC-SA-4.0
+# Canonical English strings for Development stage dev-48-60m. English is authored first;
+# Vietnamese parity lives in translations/vi/development-48-60m.yaml. List claims keep one
+# lead line followed by `- item` lines; source qualifiers survive verbatim (no invented precision).
+
+locale: en
+strings:
+  development.48-60m.at-a-glance: |-
+    From 4 to under 5 years, the CDC 4-year checklist is the reference. Most children now pretend to be someone else in play, ask to play with other children, comfort someone who is hurt, avoid obvious danger, like being a helper, speak in sentences of four or more words, tell you about their day, name a few colors, draw a person with three or more body parts, catch a large ball most of the time, pour water with supervision and hold a crayon between fingers and thumb. Play is social and imaginative: dress-up, outdoor games with friends, simple board games, counting, stories and “why” questions.
+  development.48-60m.milestone-context: |-
+    For this stage (4 to under 5 years) the reference is CDC’s 4-year checklist: what most children (75% or more) do by 4 years. A child of 4½ is compared with the 4-year checklist, not with something in between; CDC’s 5-year checklist is the next one and lies beyond the ages HowToBaby currently covers. CDC notes that its milestone materials are not a substitute for standardized, validated developmental screening tools.
+  development.48-60m.development-focus: |-
+    Imagination and friendship lead: your child takes on roles, seeks out other children, and begins to comfort, help and adjust behavior to the place they are in. Language carries stories — what happened today, what comes next in a familiar book. Thinking shows in colors, counting and drawing a person. Hands are precise enough for buttons and a proper pencil grip, and a large ball can be caught.
+  development.48-60m.gross-motor: |-
+    Large-movement milestone most children reach by 4 years (CDC checklist):
+    - catches a large ball most of the time
+    CDC’s tips for this age add outdoor games with friends — tag, follow the leader, hide and seek — and active play every day, ideally with your child choosing the activity.
+  development.48-60m.fine-motor: |-
+    Hand and hand–eye milestones most children reach by 4 years (CDC checklist):
+    - serves themselves food or pours water, with adult supervision
+    - unbuttons some buttons
+    - holds a crayon or pencil between the fingers and thumb, not in a fist
+    - draws a person with three or more body parts (CDC lists this under learning and thinking)
+  development.48-60m.communication: |-
+    Communication milestones most children reach by 4 years (CDC checklist):
+    - says sentences with four or more words
+    - says some words from a song, story or nursery rhyme
+    - talks about at least one thing that happened during the day, like “I played soccer”
+    - answers simple questions like “What is a coat for?” or “What is a crayon for?”
+  development.48-60m.cognitive: |-
+    Learning and thinking milestones most children reach by 4 years (CDC checklist):
+    - names a few colors of items
+    - tells what comes next in a well-known story
+    CDC also lists drawing a person with three or more body parts, which HowToBaby shows under hand and hand–eye skills.
+  development.48-60m.social-emotional: |-
+    Social and emotional milestones most children reach by 4 years (CDC checklist):
+    - pretends to be something else during play, like a teacher, superhero or dog
+    - asks to go play with children if none are around, like “Can I play with Alex?”
+    - comforts others who are hurt or sad, like hugging a crying friend
+    - avoids danger, like not jumping from tall heights at the playground
+    - likes to be a “helper”
+    - changes behavior based on where they are, like a place of worship, library or playground
+  development.48-60m.activities: |-
+    Ideas CDC suggests for this age:
+    - read together and ask what is happening and what might happen next; visit the library and let your child pick books
+    - talk about colors, shapes and sizes of things you see during the day, and count everyday things like fingers, toys or bananas
+    - give dress-up clothes, blocks and pretend cooking things, and join the pretend play — eat the food your child “cooks”
+    - teach outdoor games with friends: tag, follow the leader, hide and seek; play red light, green light or freeze dance to practice stopping and waiting
+    - play simple games like Tic-Tac-Toe or matching games; dance and take turns copying each other’s moves
+    - take time to answer “why” questions, and say “I don’t know” when you don’t — then find out together
+    - use words like “first”, “second” and “finally” while playing or doing chores
+    - let your child help with simple chores: bringing in the mail, feeding a pet, wiping the table
+  development.48-60m.variants: |-
+    Easier: for catching, a big soft ball tossed gently from close up, or rolled first. Harder: a smaller ball, more distance, or a bounce before the catch. Easier for stories: ask what comes next in a book you have read many times. Harder: ask your child to tell you the story from the pictures alone, or to make one up. Easier for buttons: large buttons on a doll or a jacket laid flat. Harder: buttons on the clothes your child is wearing.
+  development.48-60m.safety-environment: |-
+    Safety points CDC attaches to this age:
+    - keep explaining why your child stays out of traffic and never runs into the street after a ball
+    - tricycle riding stays on the sidewalk with a helmet on
+    - check playground equipment for loose parts or sharp edges, and watch your child at all times when they play outside
+    - teach your child to swim, but watch them at all times in or around any water, including kiddie pools
+    - teach your child how to be safe around strangers
+    - limit screen time to no more than 1 hour a day of a children’s program with an adult present, keep screens out of the bedroom, and avoid screens for 1 to 2 hours before bed
+  development.48-60m.what-not-to-force: |-
+    Don’t step in at the first disagreement between children: CDC’s tip is to give your child time to work it out, stay nearby, and use questions to help if they can’t. Don’t dismiss fears — CDC suggests comforting your child and talking about what feels scary and what they can do about it. Don’t rely on “no” alone; CDC suggests explaining simply why something is not allowed and offering a choice of what your child can do instead. And don’t schedule every minute of active play — your child will have more fun choosing the activity.
+  development.48-60m.what-to-observe: |-
+    Notice how your child plays with others: taking roles, asking to join, handling turns and disagreements, comforting a friend. Notice storytelling — the day retold, the next page predicted — and how “why” questions grow. Notice judgment about danger at the playground and how behavior shifts between places. In hands-on play, notice the pencil grip, buttons and pouring. These are the details worth sharing at the next visit.
+  development.48-60m.clinician-cues: |-
+    The reference for this stage is CDC’s 4-year checklist. CDC suggests bringing to the visit: what you and your child do together, what your child likes to do, anything your child does or does not do that concerns you, whether your child has lost any skills they once had, and whether your child has special healthcare needs or was born prematurely. If your child is not doing one or more of the 4-year milestones, has lost skills, or you have other concerns, don’t wait — talk with your child’s doctor and ask about developmental screening.

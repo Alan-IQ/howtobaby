@@ -18,6 +18,7 @@ function block(locale: "en" | "vi"): GuidanceBlockView {
   const title = locale === "vi" ? "Bắt đầu ăn dặm" : "Starting solid foods";
   return {
     blockId: "feeding-solids-start",
+    domain: "feeding",
     locale,
     title,
     strings: UI_STRINGS[locale],

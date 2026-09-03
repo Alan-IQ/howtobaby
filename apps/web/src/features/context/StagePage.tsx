@@ -14,9 +14,10 @@ import type { StageDomain } from "@howtobaby/core";
 import { Card } from "@howtobaby/ui";
 
 import { PageShell } from "@/components/PageShell";
+import { orderGuidanceBlocks } from "@/features/development/sections";
+import { GuidanceBlockCards } from "@/features/evidence/GuidanceBlockCards";
 import { LocalizedReferences } from "@/features/evidence/LocalizedReferences";
 import { loadGuidanceBlockViews, loadReferenceEntries } from "@/features/evidence/load";
-import { GuidanceEvidenceCard } from "@/features/feeding/GuidanceEvidenceCard";
 import { T } from "@/i18n/T";
 import { formatStageRange } from "./format";
 import { STAGE_DESTINATIONS, stageForRoute, stageHref } from "./routes";
@@ -49,6 +50,11 @@ export async function StagePage({ domain, params }: { domain: StageDomain } & St
     loadReferenceEntries(route, "en"),
     loadReferenceEntries(route, "vi"),
   ]);
+  // Contract section order, not block-id order (GUI_DESIGN.md §8 anatomy): an "at a glance"
+  // section leads the page, above Why-this-stage; every other section follows it.
+  const ordered = orderGuidanceBlocks(enBlocks);
+  const lead = ordered.filter((block) => block.section === "at-a-glance");
+  const rest = ordered.filter((block) => block.section !== "at-a-glance");
 
   return (
     <PageShell
@@ -68,12 +74,10 @@ export async function StagePage({ domain, params }: { domain: StageDomain } & St
       printable
     >
       <StageNavigator domain={domain} currentSlug={stage.slug} />
+      <GuidanceBlockCards en={lead} vi={viBlocks} stage={stage} />
       <WhyThisStage stage={stage} />
-      {enBlocks.length > 0 ? (
-        enBlocks.map((enBlock) => {
-          const viBlock = viBlocks.find((b) => b.blockId === enBlock.blockId);
-          return viBlock ? <GuidanceEvidenceCard key={enBlock.blockId} variants={{ en: enBlock, vi: viBlock }} /> : null;
-        })
+      {rest.length > 0 ? (
+        <GuidanceBlockCards en={rest} vi={viBlocks} stage={stage} />
       ) : (
         <Card icon={destination.icon} title={<T id="stage.empty.title" />} titleAs="h2">
           <p className="muted">

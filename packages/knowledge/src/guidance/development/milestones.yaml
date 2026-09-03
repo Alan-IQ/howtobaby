@@ -1,0 +1,30 @@
+# SPDX-License-Identifier: CC-BY-NC-SA-4.0
+# Cross-stage block rendered on the Play landing page, every Development stage page and the
+# all-stages print view: how HowToBaby reads CDC milestone checklists.
+
+blocks:
+  - id: guidance.development.reading-milestones
+    domain: development
+    section: reading-milestones
+    titleKey: guidance.development.section.reading-milestones.title
+    claimIds:
+      - development.milestones.reference
+      - development.milestones.not-pass-fail
+      - development.milestones.younger-checklist
+      - development.milestones.corrected-age
+      - development.milestones.act-early
+    routes:
+      - /play
+      - /play/0-2-months
+      - /play/2-4-months
+      - /play/4-6-months
+      - /play/6-9-months
+      - /play/9-12-months
+      - /play/12-15-months
+      - /play/15-18-months
+      - /play/18-24-months
+      - /play/24-30-months
+      - /play/30-36-months
+      - /play/3-4-years
+      - /play/4-5-years
+      - /play/all-stages

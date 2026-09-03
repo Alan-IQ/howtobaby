@@ -1,0 +1,62 @@
+# SPDX-License-Identifier: CC-BY-NC-SA-4.0
+# Canonical English strings for Development stage dev-09-12m. English is authored first;
+# Vietnamese parity lives in translations/vi/development-09-12m.yaml. List claims keep one
+# lead line followed by `- item` lines; source qualifiers survive verbatim (no invented precision).
+
+locale: en
+strings:
+  development.09-12m.at-a-glance: |-
+    From 9 to under 12 months, the CDC 9-month checklist is the reference. Most babies now sit without support, get into a sitting position on their own, move things from hand to hand, rake up food with the fingers, babble strings like “mamamama”, look for a dropped toy and look when you call their name. Play turns into games: peek-a-boo, my turn–your turn, dumping and filling, and crawling or scooting toward toys.
+  development.09-12m.milestone-context: |-
+    For this stage (9 to under 12 months) the reference is CDC’s 9-month checklist: what most babies (75% or more) do by 9 months. A baby of 10 or 11 months is compared with the 9-month checklist, not with something in between; the 1-year checklist becomes the reference at 12 months. CDC notes that its milestone materials are not a substitute for standardized, validated developmental screening tools.
+  development.09-12m.development-focus: |-
+    Independence begins: sitting steadily frees both hands, and getting around — crawling, scooting, rolling — brings toys within reach. Your baby starts to understand that things still exist when hidden, and that a dropped toy can be looked for. Feelings show more clearly, including shyness with strangers and reacting when you leave. Games with rules — peek-a-boo, taking turns — become favorites.
+  development.09-12m.gross-motor: |-
+    Large-movement milestones most babies reach by 9 months (CDC checklist):
+    - gets to a sitting position by themselves
+    - sits without support
+    Crawling is not on the CDC checklist; CDC’s tips encourage crawling, scooting or rolling toward toys, whichever way your baby gets around.
+  development.09-12m.fine-motor: |-
+    Hand and hand–eye milestones most babies reach by 9 months (CDC checklist):
+    - moves things from one hand to the other
+    - uses the fingers to “rake” food toward themselves
+    - bangs two things together (CDC lists this under learning and thinking)
+  development.09-12m.communication: |-
+    Communication milestones most babies reach by 9 months (CDC checklist):
+    - makes a lot of different sounds like “mamamama” and “bababababa”
+    - lifts the arms up to be picked up
+  development.09-12m.cognitive: |-
+    Learning and thinking milestones most babies reach by 9 months (CDC checklist):
+    - looks for objects when they drop out of sight, like a spoon or toy
+    CDC also lists “bangs two things together”, which HowToBaby shows under hand and hand–eye skills.
+  development.09-12m.social-emotional: |-
+    Social and emotional milestones most babies reach by 9 months (CDC checklist):
+    - is shy, clingy or fearful around strangers
+    - shows several facial expressions, like happy, sad, angry and surprised
+    - looks when you call their name
+    - reacts when you leave (looks, reaches for you, or cries)
+    - smiles or laughs when you play peek-a-boo
+  development.09-12m.activities: |-
+    Ideas CDC suggests for this age:
+    - repeat your baby’s sounds and turn them into simple words: “bababa” — “book”
+    - place toys a little out of reach and encourage crawling, scooting or rolling to get them; celebrate when they arrive
+    - teach waving “bye-bye” and shaking the head “no”, and simple baby signs
+    - play peek-a-boo — cover your head with a cloth and see if your baby pulls it off
+    - dump blocks out of a container and put them back in together; hand a toy back and forth, “my turn, your turn”
+    - hide a toy under a blanket and let your baby find it
+    - “read” by naming pictures as you point to them, and describe what your baby is looking at: “red, round ball”
+  development.09-12m.variants: |-
+    Easier: hide the toy while your baby watches and leave a corner showing; hand the container over already half full. Harder: cover the toy completely, or hide it under one of two cloths; let your baby do all the filling and emptying. Easier for movement: put the toy just past the fingertips. Harder: put it across the room or on a low cushion so getting there takes a change of position. Easier for words: one sound, one word. Harder: pause and wait for your baby to start the exchange.
+  development.09-12m.safety-environment: |-
+    Safety points CDC and the AAP attach to this age:
+    - baby-proof your home now that your baby moves: move sharp or breakable things out of reach, lock away medicines, chemicals and cleaning products, and save the Poison Help Line number, 800-222-1222, in all phones
+    - find out which foods are choking risks, and cut food into small bites
+    - stay close as your baby explores, and put them near things they can pull up on safely
+    - the AAP recommends against wheeled baby walkers; a stationary activity center or play yard is the safer choice
+    - sleep is still always on the back; for children under 18 months, the AAP recommends no screen media other than video chatting
+  development.09-12m.what-not-to-force: |-
+    Don’t insist on a particular way of moving: crawling is not on the CDC checklist, and CDC’s tip is to encourage crawling, scooting or rolling — whichever way your baby gets to the toy. Don’t hold your baby up to “walk” for long stretches or use a walker; pulling up on furniture and cruising come at their own pace. Don’t force cuddles with new people — shyness with strangers is a 9-month milestone, not a problem — and don’t sneak away when you leave; CDC suggests a quick, cheerful goodbye instead.
+  development.09-12m.what-to-observe: |-
+    Notice how your baby solves small problems: what they do when a toy rolls under the couch, how they get from lying to sitting, whether they use both hands together. Notice communication that is not yet words — pointing, arm-lifting, babbling with a rising tone, looking at you before touching something new. And notice how your baby handles new people and your leaving; those reactions tell you how to pace introductions.
+  development.09-12m.clinician-cues: |-
+    The reference for this stage is CDC’s 9-month checklist. CDC cites the AAP recommendation for standardized developmental screening at 9 months, so this stage usually includes a screening visit. Bring: what you and your baby do together, what your baby likes to do, anything your baby does or does not do that concerns you, whether your baby has lost any skills they once had, and whether your baby has special healthcare needs or was born prematurely. If your baby is not doing one or more of the 9-month milestones, has lost skills, or you have other concerns, don’t wait — talk with your baby’s doctor.

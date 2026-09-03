@@ -126,6 +126,7 @@ export class SQLiteKnowledgeRepository implements KnowledgeRepository {
       const claimIds = (this.db.prepare("SELECT claim_id FROM guidance_block_claims WHERE block_id = ? ORDER BY position").all(id) as Row[]).map((r) => str(r, "claim_id"));
       const routes = (this.db.prepare("SELECT route FROM guidance_block_routes WHERE block_id = ? ORDER BY route").all(id) as Row[]).map((r) => str(r, "route"));
       const stage = optStr(row, "stage");
+      const section = optStr(row, "section");
       return {
         id,
         domain: str(row, "domain") as GuidanceBlock["domain"],
@@ -133,6 +134,7 @@ export class SQLiteKnowledgeRepository implements KnowledgeRepository {
         claimIds,
         routes,
         ...(stage !== undefined ? { stage } : {}),
+        ...(section !== undefined ? { section } : {}),
       };
     });
     return blocks.filter(

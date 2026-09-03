@@ -1,0 +1,59 @@
+# SPDX-License-Identifier: CC-BY-NC-SA-4.0
+# Vietnamese parity strings for Development stage dev-00-02m: natural, professional Vietnamese that
+# preserves every quantity, age boundary, qualifier, negation and applicability condition of the
+# canonical English (GUIDANCE_CONTENT_CONTRACT.md §10). Same lead line + `- item` structure.
+
+locale: vi
+strings:
+  development.00-02m.at-a-glance: |-
+    Dưới 2 tháng, bé đang dần làm quen với thế giới xung quanh: nhìn vào mặt bạn, dịu lại khi được bế hoặc được nghe bạn nói, và luyện cơ cổ trong những lần nằm sấp ngắn có người trông. CDC chưa có danh sách cột mốc cho bé dưới 2 tháng; danh sách 2 tháng là tham chiếu đầu tiên và mô tả điều phần lớn trẻ làm được khi được 2 tháng. Chơi ở giai đoạn này đơn giản là chăm sóc đáp ứng theo tín hiệu của bé — bằng gương mặt, giọng nói và cái chạm của bạn.
+  development.00-02m.milestone-context: |-
+    CDC không có danh sách cột mốc cho bé dưới 2 tháng. Danh sách 2 tháng là danh sách đầu tiên; nó mô tả điều phần lớn trẻ (từ 75% trở lên) làm được khi được 2 tháng — những kỹ năng mà một em bé sơ sinh đang dần hướng tới, không phải điều mong đợi ngay hôm nay. CDC cũng lưu ý rằng các tài liệu về cột mốc không thay thế cho các công cụ sàng lọc phát triển đã được chuẩn hóa và kiểm định.
+  development.00-02m.development-focus: |-
+    Trọng tâm của giai đoạn này là sự gắn kết và khả năng tự điều hòa: bé học được rằng gương mặt và giọng nói quen thuộc mang lại cảm giác an toàn, và bắt đầu biết nhìn, lắng nghe và dịu lại. Về thể chất, trọng tâm là kiểm soát đầu và cổ, được luyện tập trong những lần nằm sấp ngắn khi bé thức và có bạn trông chừng. Mọi thứ đều ngắn, nhẹ nhàng và đi theo tín hiệu của bé.
+  development.00-02m.gross-motor: |-
+    Các cột mốc vận động thô mà phần lớn trẻ làm được khi được 2 tháng — những kỹ năng bé sơ sinh đang dần hướng tới:
+    - ngẩng đầu lên khi nằm sấp
+    - cử động cả hai tay và hai chân
+  development.00-02m.fine-motor: |-
+    Kỹ năng bàn tay mà phần lớn trẻ làm được khi được 2 tháng — một kỹ năng bé sơ sinh đang dần hướng tới:
+    - xòe tay ra trong chốc lát
+    Tay của trẻ sơ sinh thường nắm chặt; việc xòe tay trong chốc lát là khởi đầu cho khả năng với và cầm nắm sau này.
+  development.00-02m.communication: |-
+    Các cột mốc giao tiếp mà phần lớn trẻ làm được khi được 2 tháng — những kỹ năng bé sơ sinh đang dần hướng tới:
+    - phát ra âm thanh khác ngoài tiếng khóc
+    - phản ứng với âm thanh lớn
+  development.00-02m.cognitive: |-
+    Các cột mốc học hỏi và tư duy mà phần lớn trẻ làm được khi được 2 tháng — những kỹ năng bé sơ sinh đang dần hướng tới:
+    - dõi mắt theo bạn khi bạn di chuyển
+    - nhìn một món đồ chơi trong vài giây
+  development.00-02m.social-emotional: |-
+    Các cột mốc xã hội và cảm xúc mà phần lớn trẻ làm được khi được 2 tháng — những kỹ năng bé sơ sinh đang dần hướng tới:
+    - dịu lại khi được nói chuyện hoặc được bế lên
+    - nhìn vào mặt bạn
+    - có vẻ vui khi thấy bạn đến gần
+    - mỉm cười khi bạn nói chuyện hoặc cười với bé
+  development.00-02m.activities: |-
+    Những gợi ý của CDC và AAP cho độ tuổi này:
+    - đáp lại âm thanh của bé bằng vẻ hào hứng, nụ cười và lời nói — đây là khởi đầu của việc luân phiên “trò chuyện”
+    - nói chuyện, đọc sách và hát cho bé nghe; ôm ấp và bế bé sẽ không làm bé hư
+    - cầm một chiếc lục lạc ở một bên đầu bé, lắc nhẹ và xem bé có tìm tiếng động không
+    - đặt gần bé một chiếc gương an toàn cho trẻ hoặc các bức tranh màu sắc tươi sáng, có hình gương mặt, và nói với bé về chúng
+    - ngay từ ngày đầu về nhà, cho bé nằm sấp khi bé thức và có người trông, 2 đến 3 lần mỗi ngày trong thời gian ngắn (3 đến 5 phút) với một món đồ chơi ngang tầm mắt, rồi tăng dần lên 15 đến 30 phút mỗi ngày khi bé được 7 tuần
+  development.00-02m.activities.note.who: |-
+    Hướng dẫn toàn cầu của WHO khuyến nghị ít nhất 30 phút nằm sấp mỗi ngày, chia thành nhiều lần, cho trẻ chưa tự di chuyển; AAP mô tả việc tăng dần lên 15 đến 30 phút mỗi ngày khi bé được 7 tuần. HowToBaby giữ nguyên cả hai cách diễn đạt thay vì gộp lại.
+  development.00-02m.variants: |-
+    Dễ hơn: nếu nằm sấp khiến bé khó chịu, hãy thử cho bé nằm sấp trên ngực bạn khi bạn ngả người ra sau, hoặc nằm ngang trên đùi bạn, chỉ một hai phút, và dừng lại khi bé đã mệt. Khó hơn: đặt một món đồ chơi hoặc gương mặt bạn hơi lệch sang một bên để bé quay đầu tìm. Dễ hơn với trò chơi giao tiếp: nói hoặc hát ở gần, cách mặt bé chừng một cánh tay. Khó hơn: sau khi nói, hãy dừng lại và chờ bé đáp lại bằng âm thanh hay cử động.
+  development.00-02m.safety-environment: |-
+    Những lưu ý an toàn mà CDC và AAP gắn với độ tuổi này:
+    - chỉ cho bé nằm sấp khi bé thức và có người trông; nếu bé buồn ngủ, hãy đặt bé nằm ngửa trong khu vực ngủ an toàn
+    - luôn đặt bé nằm ngửa khi ngủ
+    - không bao giờ rung lắc bé; nếu tiếng khóc khiến bạn quá căng thẳng, hãy đặt bé ở nơi an toàn và rời đi vài phút
+    - không cho bé chơi với bất cứ thứ gì có thể che kín mặt, và không bao giờ cầm đồ uống hay thức ăn nóng khi đang bế bé
+    - không khuyến nghị cho trẻ dưới 2 tuổi xem màn hình, ngoại trừ gọi video với người thân
+  development.00-02m.what-not-to-force: |-
+    Đừng kéo dài thời gian nằm sấp quá mức bé chịu được — AAP mô tả những lần nằm sấp ngắn rồi tăng dần, và một em bé đang khó chịu sẽ không học thêm được gì khi phải nằm sấp lâu hơn. Đừng cố giữ bé “chơi” tiếp khi bé quay mặt đi, ngáp hoặc quấy; CDC mô tả đó là tín hiệu bé cần được nghỉ. Và đừng coi các cột mốc 2 tháng là điều bé sơ sinh phải làm được ngay — chúng mô tả mức mà phần lớn trẻ đạt tới khi được 2 tháng.
+  development.00-02m.what-to-observe: |-
+    Hãy để ý cách bé nhìn, lắng nghe và dịu lại thay vì đếm kỹ năng: bé có yên hơn khi bạn bế lên hay nói chuyện không, mắt bé có tìm gương mặt bạn không, bé có giật mình hay phản ứng với tiếng động lớn không, và bé ngẩng đầu được bao lâu khi nằm sấp. Cũng hãy để ý những tín hiệu cho biết “đủ rồi” — quay mặt đi, ngáp, quấy. Chính những quan sát này giúp lần chơi tiếp theo phù hợp với bé hơn.
+  development.00-02m.clinician-cues: |-
+    CDC chưa có danh sách cột mốc cho độ tuổi này; danh sách 2 tháng là danh sách đầu tiên, nên lần trao đổi đầu tiên về cột mốc thường diễn ra ở lần khám khi bé được 2 tháng. CDC gợi ý mang đến mỗi lần khám: những việc bạn và bé thường làm cùng nhau, những gì bé thích làm, bất cứ điều gì bé làm hoặc chưa làm khiến bạn lo lắng, và bé có nhu cầu chăm sóc sức khỏe đặc biệt hay sinh non không. Nếu bạn lo lắng ở bất kỳ thời điểm nào, đừng chờ đợi — hãy trao đổi với bác sĩ của bé.

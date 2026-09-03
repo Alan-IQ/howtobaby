@@ -1,0 +1,62 @@
+# SPDX-License-Identifier: CC-BY-NC-SA-4.0
+# Vietnamese parity strings for Development stage dev-18-24m: natural, professional Vietnamese that
+# preserves every quantity, age boundary, qualifier, negation and applicability condition of the
+# canonical English (GUIDANCE_CONTENT_CONTRACT.md §10). Same lead line + `- item` structure.
+
+locale: vi
+strings:
+  development.18-24m.at-a-glance: |-
+    Từ 18 đến dưới 24 tháng, danh sách 18 tháng của CDC là tham chiếu. Phần lớn trẻ ở tuổi này đã đi không cần vịn, trèo lên và xuống ghế sofa, vẽ nguệch ngoạc, uống từ cốc không nắp (có làm đổ), thử dùng thìa, nói được từ ba từ trở lên ngoài “mama” và “dada”, làm theo chỉ dẫn một bước không cần cử chỉ, bắt chước làm việc nhà và chơi đồ chơi theo cách đơn giản, như đẩy xe đồ chơi. Chơi lúc này là giả vờ và tham gia: cho thú bông ăn, quét nhà cạnh bạn, những lựa chọn đơn giản và sách tranh.
+  development.18-24m.milestone-context: |-
+    Với giai đoạn này (từ 18 đến dưới 24 tháng), tham chiếu là danh sách 18 tháng của CDC: điều phần lớn trẻ (từ 75% trở lên) làm được khi được 18 tháng. Bé từ 19 đến 23 tháng được đối chiếu với danh sách 18 tháng, không phải với một mức ở giữa; danh sách 2 tuổi chỉ trở thành tham chiếu khi bé được 24 tháng. CDC lưu ý rằng các tài liệu về cột mốc không thay thế cho các công cụ sàng lọc phát triển đã được chuẩn hóa và kiểm định.
+  development.18-24m.development-focus: |-
+    Đi vững và trèo leo biến bé thành một nhà thám hiểm nhỏ, thỉnh thoảng lại quay nhìn để chắc rằng bạn vẫn ở gần. Chơi giả vờ bắt đầu — chiếc thìa để cho gấu bông ăn — và bắt chước làm việc nhà là chuyện rất nghiêm túc. Từ ngữ còn ít nhưng khả năng hiểu đã mạnh: một chỉ dẫn một bước không kèm cử chỉ là đủ. Khả năng tự chăm sóc cũng lớn dần: cốc không nắp, thìa, luồn tay vào tay áo, chìa tay ra để được rửa.
+  development.18-24m.gross-motor: |-
+    Các cột mốc vận động thô mà phần lớn trẻ làm được khi được 18 tháng (danh sách của CDC):
+    - đi mà không cần vịn vào ai hay vật gì
+    - tự trèo lên và xuống ghế sofa hoặc ghế thường mà không cần giúp
+  development.18-24m.fine-motor: |-
+    Các cột mốc bàn tay và phối hợp tay–mắt mà phần lớn trẻ làm được khi được 18 tháng (danh sách của CDC):
+    - vẽ nguệch ngoạc
+    - uống từ cốc không nắp và đôi khi làm đổ
+    - tự bốc ăn bằng tay
+    - thử dùng thìa
+  development.18-24m.communication: |-
+    Các cột mốc giao tiếp mà phần lớn trẻ làm được khi được 18 tháng (danh sách của CDC):
+    - thử nói từ ba từ trở lên ngoài “mama” hay “dada”
+    - làm theo chỉ dẫn một bước mà không cần cử chỉ, như đưa đồ chơi cho bạn khi bạn nói “Đưa cho mẹ”
+  development.18-24m.cognitive: |-
+    Các cột mốc học hỏi và tư duy mà phần lớn trẻ làm được khi được 18 tháng (danh sách của CDC):
+    - bắt chước bạn làm việc nhà, như quét nhà bằng chổi
+    - chơi đồ chơi theo cách đơn giản, như đẩy xe đồ chơi
+  development.18-24m.social-emotional: |-
+    Các cột mốc xã hội và cảm xúc mà phần lớn trẻ làm được khi được 18 tháng (danh sách của CDC):
+    - rời xa bạn, nhưng ngoái nhìn để chắc rằng bạn vẫn ở gần
+    - chỉ tay để cho bạn thấy điều gì đó thú vị
+    - chìa tay ra để bạn rửa tay cho bé
+    - cùng bạn xem vài trang sách
+    - phụ bạn mặc đồ bằng cách luồn tay vào tay áo hoặc nhấc chân lên
+  development.18-24m.activities: |-
+    Những gợi ý của CDC cho độ tuổi này:
+    - khuyến khích chơi giả vờ: đưa một chiếc thìa để bé cho thú bông ăn, và thay phiên nhau giả vờ
+    - hỏi những câu đơn giản về mọi thứ xung quanh: “Cái gì đây?”
+    - cho bé chọn giữa hai thứ, như áo đỏ hay áo xanh
+    - nói thêm vào từ bé nói: “Chó” — “Đúng rồi, con chó. Chó kêu gâu gâu”
+    - nói chuyện mặt đối mặt ngang tầm mắt bé, và bắt đầu gọi tên các bộ phận cơ thể: “Mũi của con đây, mũi của mẹ đây”
+    - lăn bóng qua lại, đẩy xe đồ chơi, bỏ khối gỗ vào rồi lấy ra khỏi hộp, và cho bé đồ chơi có thể đẩy hoặc kéo an toàn
+    - để bé uống từ cốc không nắp và tập dùng thìa — bừa bộn, nhưng đó chính là cách học
+    - giúp bé nhận ra cảm xúc của người khác: “Bạn ấy trông buồn. Mình mang gấu bông đến cho bạn nhé”
+  development.18-24m.variants: |-
+    Dễ hơn: với chơi giả vờ, bạn hãy mở đầu câu chuyện — cho gấu bông ăn rồi đưa thìa cho bé. Khó hơn: hỏi bé gấu bông muốn gì tiếp theo, hoặc thêm một nhân vật thứ hai. Dễ hơn với chỉ dẫn: một bước, với đồ vật đã ở trong tầm nhìn. Khó hơn: một bước về thứ ở phòng khác, vẫn không kèm cử chỉ. Dễ hơn với tự xúc ăn: thức ăn đặc, bám thìa. Khó hơn: cốc không nắp với một chút nước và khăn lau để sẵn.
+  development.18-24m.safety-environment: |-
+    Những lưu ý an toàn mà CDC gắn với độ tuổi này:
+    - một em bé thích trèo leo cần một ngôi nhà an toàn: không bao giờ để bé ở gần nước mà không có người trông, chắn cầu thang, và khóa kỹ hoặc để ngoài tầm với các đồ điện nóng, vật sắc nhọn và chất độc
+    - không bao giờ để bé một mình trong xe, dù chỉ vài phút
+    - chọn đồ chơi đẩy và kéo an toàn cho bé mới biết đi, và tiếp tục kiểm tra đồ chơi xem có bộ phận lỏng lẻo hay gãy vỡ không
+    - không khuyến nghị cho trẻ dưới 2 tuổi xem màn hình, ngoại trừ gọi video
+  development.18-24m.what-not-to-force: |-
+    Đừng bắt đầu tập ngồi bô theo lịch định sẵn: CDC lưu ý phần lớn trẻ chưa tập ngồi bô thành công cho đến khi được 2 đến 3 tuổi, rằng bắt đầu khi bé chưa sẵn sàng có thể gây căng thẳng và thụt lùi, và gợi ý hỏi bác sĩ hoặc giáo viên của bé về dấu hiệu sẵn sàng. Đừng mong bé nói thành câu — từ ba từ đơn trở lên là cột mốc 18 tháng. Đừng tranh đấu với cơn ăn vạ; CDC cho biết ăn vạ là bình thường, sẽ ngắn hơn và thưa dần theo tuổi, và bạn có thể để cơn ăn vạ qua đi trong khi vẫn ở gần bé.
+  development.18-24m.what-to-observe: |-
+    Hãy để ý cách bé dùng bạn làm điểm tựa: đi khám phá, ngoái lại kiểm tra, chỉ tay để chia sẻ điều gì đó thú vị. Để ý chơi giả vờ bắt đầu — cho đồ chơi ăn, “gọi điện” bằng khối gỗ — và cách bé bắt chước các thói quen trong nhà. Để ý những từ bé dùng có chủ đích, và một chỉ dẫn không kèm cử chỉ có được bé đáp lại không. Khi bé di chuyển, để ý cách bé trèo lên và tự tụt xuống.
+  development.18-24m.clinician-cues: |-
+    Tham chiếu cho giai đoạn này là danh sách 18 tháng của CDC. CDC dẫn khuyến nghị của AAP về sàng lọc phát triển chuẩn hóa khi bé được 18 tháng và sàng lọc tự kỷ khi bé được 18 và 24 tháng, nên giai đoạn này thường có các lần khám sàng lọc. Hãy mang theo: những việc bạn và bé thường làm cùng nhau, những gì bé thích làm, bất cứ điều gì bé làm hoặc chưa làm khiến bạn lo lắng, bé có mất đi kỹ năng nào từng có không, và bé có nhu cầu chăm sóc sức khỏe đặc biệt hay sinh non không. Nếu bé chưa làm được một hoặc nhiều cột mốc trong danh sách 18 tháng, mất đi kỹ năng từng có, hoặc bạn có lo lắng khác, đừng chờ đợi — hãy trao đổi với bác sĩ của bé.

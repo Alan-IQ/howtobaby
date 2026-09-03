@@ -83,6 +83,16 @@ Group theo purpose: Soothe & Sound, Plan & Routine, Calculate, Track, Print & Sh
 
 Không autoplay; có Play/Pause/Stop/volume/timer/fade; có thể persistent mini-player sau khi user chủ động play. 432 Hz chỉ là preset/audio preference, không therapeutic claim.
 
+## Trang giai đoạn Chơi & Phát triển — Phase 4
+
+`/play/<stage>` hiển thị toàn bộ đồ thị nội dung chuẩn của một giai đoạn Phát triển, sắp xếp theo các mục bắt buộc của `GUIDANCE_CONTENT_CONTRACT.md` §3 (mỗi guidance block mang id `section`; trang sắp thứ tự theo id này, không bao giờ theo id của block): thẻ **Tóm tắt nhanh** đứng đầu, rồi Vì sao là giai đoạn này, tiếp đến Hiểu về các cột mốc, Trọng tâm phát triển, Vận động thô, Vận động tinh và phối hợp tay–mắt, Giao tiếp, Nhận thức và giải quyết vấn đề, Xã hội và cảm xúc, Hoạt động gợi ý, Biến thể dễ hơn và khó hơn, An toàn và môi trường chơi, Những điều không nên ép bé, Điều nên quan sát, Trao đổi với bác sĩ của bé; sau đó là khối dùng chung **Cách đọc các cột mốc phát triển**, liên kết giai đoạn trước/sau và Tài liệu tham khảo của trang. Mọi thẻ đều là thẻ hướng dẫn kèm bằng chứng dùng chung (SourceChip + Evidence Drawer); eyebrow của thẻ thuộc giai đoạn là khoảng tuổi diễn đạt bằng ngôn ngữ thông thường.
+
+Ý nghĩa của cột mốc: nội dung được biên soạn dưới dạng một dòng dẫn cùng các dòng `- mục` sẽ hiển thị thành danh sách thuần trên màn hình, trong drawer và trên bản in. Cột mốc là điểm tham chiếu để đọc, không phải bảng để tích — không có ô đánh dấu, không đếm, không chấm điểm, không trạng thái “đúng hạn/trễ hạn”, và nội dung chuẩn được kiểm soát để không dùng cách diễn đạt đạt–không đạt, điểm số hay thời hạn ở cả hai ngôn ngữ.
+
+Xác định danh sách cột mốc của CDC: thẻ Vì sao là giai đoạn này nêu rõ danh sách tham chiếu của giai đoạn đang xem (“Danh sách cột mốc tham chiếu cho giai đoạn này: danh sách 6 tháng của CDC”); mọi độ tuổi trong một giai đoạn đều dùng cùng một danh sách vì các giai đoạn Phát triển bắt đầu đúng tại các mốc tuổi có danh sách của CDC, và tuổi nằm giữa hai mốc thì dùng danh sách của mốc nhỏ hơn (`resolveCdcChecklist` trong `@howtobaby/core`). Dưới 2 tháng chưa có danh sách nào và thẻ nói rõ điều đó. Khi có hồ sơ cục bộ, một dòng thứ hai (chỉ phía client) nêu danh sách áp dụng cho tuổi phát triển thực tế của bé (tuổi hiệu chỉnh khi đủ điều kiện) nếu khác với giai đoạn đang xem. Tuổi hiệu chỉnh trước ngày dự sinh không gán giai đoạn hay danh sách nào; thẻ giải thích rằng giai đoạn đầu tiên bắt đầu vào ngày dự sinh thay vì tự đặt ra một giai đoạn.
+
+`/play/all-stages` là chế độ tham khảo/in toàn bộ giai đoạn của mục Print: một trang tĩnh gồm khối “Cách đọc các cột mốc” một lần, rồi từng giai đoạn Phát triển dưới tiêu đề riêng (liên kết tới trang giai đoạn) với đầy đủ các mục, và một danh sách Tài liệu tham khảo cho route; khi in, mỗi giai đoạn bắt đầu trên một trang mới. Trang Chơi & Phát triển có liên kết tới trang này. Bản đầy đủ: `GUI_DESIGN.md` §8.
+
 ## Evidence/Safety UI
 
 Hiển thị rõ Official/Evidence synthesis/Typical/Example/Practical/Product heuristic. Safety severity dùng icon/text/structure chứ không chỉ màu; urgent/emergency không giấu trong drawer.

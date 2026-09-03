@@ -1,0 +1,61 @@
+# SPDX-License-Identifier: CC-BY-NC-SA-4.0
+# Vietnamese parity strings for Development stage dev-36-48m: natural, professional Vietnamese that
+# preserves every quantity, age boundary, qualifier, negation and applicability condition of the
+# canonical English (GUIDANCE_CONTENT_CONTRACT.md §10). Same lead line + `- item` structure.
+
+locale: vi
+strings:
+  development.36-48m.at-a-glance: |-
+    Từ 3 đến dưới 4 tuổi, danh sách 3 tuổi của CDC là tham chiếu. Phần lớn trẻ ở tuổi này đã trò chuyện thực sự với ít nhất hai lượt qua lại, hỏi “ai”, “cái gì”, “ở đâu” hay “tại sao”, nói được tên của mình, nói đủ rõ để người khác hiểu trong hầu hết trường hợp, vẽ hình tròn khi được làm mẫu, tránh chạm vào vật nóng sau khi được nhắc, xâu hạt to, tự mặc một số món đồ và dùng nĩa. Chơi lúc này giàu lời nói: kể chuyện và đặt câu hỏi, trò chơi đếm, đất nặn và bút sáp, chơi giả vờ, và nhiều thời gian chơi ngoài trời với trẻ khác.
+  development.36-48m.milestone-context: |-
+    Với giai đoạn này (từ 3 đến dưới 4 tuổi), tham chiếu là danh sách 3 tuổi của CDC: điều phần lớn trẻ (từ 75% trở lên) làm được khi được 3 tuổi. Bé 3 tuổi rưỡi được đối chiếu với danh sách 3 tuổi, không phải với một mức ở giữa; danh sách 4 tuổi chỉ trở thành tham chiếu khi bé được 4 tuổi. CDC lưu ý rằng các tài liệu về cột mốc không thay thế cho các công cụ sàng lọc phát triển đã được chuẩn hóa và kiểm định.
+  development.36-48m.development-focus: |-
+    Trò chuyện là điểm nổi bật: đặt câu hỏi, trả lời, mô tả điều đang diễn ra trong tranh, và lời nói mà người lạ cũng hiểu được phần lớn. Bé bắt đầu biết điều tiết cảm xúc với sự giúp đỡ của bạn, hòa vào chơi cùng trẻ khác, và có thể được nhắc nhở bằng lời thay vì chỉ bị ngăn lại. Đôi tay đủ khéo để vẽ hình, xâu hạt, mặc đồ và dùng nĩa.
+  development.36-48m.gross-motor: |-
+    Danh sách 3 tuổi của CDC không có cột mốc vận động thô riêng; cột mốc gần nhất là nhảy bật khỏi mặt đất bằng cả hai chân, thuộc danh sách 30 tháng, còn chạy, đá bóng và bước lên cầu thang từ danh sách 2 tuổi vẫn là một phần của việc chơi hằng ngày. Các gợi ý của CDC cho trẻ 3 tuổi nhấn mạnh việc chơi ngoài trời — công viên, đường đi bộ — với nhiều thời gian để bé tự chọn chơi gì và chơi như thế nào.
+  development.36-48m.fine-motor: |-
+    Các cột mốc bàn tay và phối hợp tay–mắt mà phần lớn trẻ làm được khi được 3 tuổi (danh sách của CDC):
+    - xâu các vật lại với nhau, như hạt to hoặc nui
+    - tự mặc một số món đồ, như quần rộng hay áo khoác
+    - dùng nĩa
+    - vẽ hình tròn khi bạn làm mẫu (CDC xếp mục này vào nhóm học hỏi và tư duy)
+  development.36-48m.communication: |-
+    Các cột mốc giao tiếp mà phần lớn trẻ làm được khi được 3 tuổi (danh sách của CDC):
+    - trò chuyện với bạn với ít nhất hai lượt qua lại
+    - đặt câu hỏi “ai”, “cái gì”, “ở đâu” hay “tại sao”, như “Mẹ đâu?”
+    - nói được hành động đang diễn ra trong tranh hoặc sách khi được hỏi, như “chạy” hay “ăn”
+    - nói được tên của mình khi được hỏi
+    - nói đủ rõ để người khác hiểu trong hầu hết trường hợp
+  development.36-48m.cognitive: |-
+    Cột mốc học hỏi và tư duy mà phần lớn trẻ làm được khi được 3 tuổi (danh sách của CDC):
+    - tránh chạm vào vật nóng, như bếp, khi bạn nhắc
+    CDC còn liệt kê vẽ hình tròn khi được làm mẫu, mục mà HowToBaby trình bày ở phần bàn tay và phối hợp tay–mắt.
+  development.36-48m.social-emotional: |-
+    Các cột mốc xã hội và cảm xúc mà phần lớn trẻ làm được khi được 3 tuổi (danh sách của CDC):
+    - bình tĩnh lại trong vòng 10 phút sau khi bạn rời đi, như lúc gửi bé ở nhà trẻ
+    - để ý đến trẻ khác và nhập cuộc chơi cùng
+  development.36-48m.activities: |-
+    Những gợi ý của CDC cho độ tuổi này:
+    - cùng đọc sách và hỏi “Trong tranh đang có chuyện gì?” và “Con nghĩ tiếp theo sẽ ra sao?”, rồi hỏi thêm chi tiết
+    - chơi trò đếm với bộ phận cơ thể, bậc cầu thang và các vật hằng ngày
+    - nói với bé bằng những câu dài hơn câu của bé, dùng từ ngữ chuẩn: “cần chối” — “Con muốn một quả chuối”
+    - đưa ra chỉ dẫn 2 hoặc 3 bước: “Vào phòng lấy giày và áo khoác của con”
+    - một “hộp hoạt động” với giấy, bút sáp và sách tô màu; đất nặn để bóp, véo và vo thành viên
+    - trò chơi từ trái nghĩa — to/nhỏ, nhanh/chậm, yên lặng/ồn ào — và trò ghép cặp giống nhau
+    - để bé phụ làm bữa ăn: rửa rau củ quả, khuấy trộn
+    - chơi ngoài trời, ở công viên hay trên đường đi bộ, và để bé chọn chơi gì, chơi thế nào; khuyến khích bé chơi với trẻ khác
+  development.36-48m.variants: |-
+    Dễ hơn: chỉ dẫn hai bước, rồi chỉ thêm bước thứ ba khi hai bước đã chắc; hỏi về bức tranh ngay trước mặt. Khó hơn: ba bước không theo thứ tự, hoặc hỏi về điều xảy ra trước bức tranh. Dễ hơn với vẽ: bạn vẽ hình tròn trước rồi để bé tô theo. Khó hơn: vẽ hình tròn không cần mẫu, rồi đến dấu cộng. Dễ hơn với chơi nhóm: một bạn quen và một hoạt động chung do bạn sắp xếp. Khó hơn: một bạn mới ở công viên, với bạn đứng cách vài bước.
+  development.36-48m.safety-environment: |-
+    Những lưu ý an toàn mà CDC gắn với độ tuổi này:
+    - giải thích cho bé vì sao phải tránh xa xe cộ — không chơi ngoài đường và không chạy theo quả bóng lăn ra đường
+    - xe ba bánh chỉ đi trên vỉa hè, xa lòng đường, và bé luôn đội mũ bảo hiểm
+    - kiểm tra thiết bị sân chơi xem có bộ phận lỏng lẻo hay cạnh sắc không, và luôn trông chừng bé khi bé chơi ngoài trời
+    - luôn trông chừng bé khi bé ở trong hoặc gần bất kỳ vùng nước nào, kể cả bể bơi phao cho trẻ; dạy bơi không thay thế được việc trông chừng
+    - giới hạn thời gian xem màn hình không quá 1 giờ mỗi ngày với chương trình dành cho trẻ em và có người lớn xem cùng, và không đặt màn hình trong phòng ngủ của bé
+  development.36-48m.what-not-to-force: |-
+    Đừng giải quyết mọi vấn đề thay bé: gợi ý của CDC là hỗ trợ bé tự giải quyết — đặt câu hỏi, cùng nghĩ cách, thử một cách. Đừng mong bé lúc nào cũng nói rõ; “trong hầu hết trường hợp” mới là cột mốc 3 tuổi. Đừng đặt quá nhiều quy tắc cùng lúc — CDC gợi ý vài quy tắc đơn giản, rõ ràng, và chỉ cho bé nên làm gì thay thế khi bé phạm quy. Và khi chơi ngoài trời, đừng điều khiển cuộc chơi; CDC gợi ý để bé chọn chơi gì, chơi thế nào và đi theo sự dẫn dắt của bé.
+  development.36-48m.what-to-observe: |-
+    Hãy để ý cuộc trò chuyện: bé giữ được bao nhiêu lượt, bé hỏi những kiểu câu hỏi nào, và người ngoài gia đình có hiểu bé không. Để ý cách bé xử lý khi phải tạm xa bạn và khi bực bội, và điều gì giúp bé bình tĩnh lại. Để ý cách bé tiếp cận trẻ khác — quan sát trước, nhập cuộc, hay dẫn dắt. Trong các trò chơi dùng tay, để ý cách bé cầm bút sáp, hạt xâu và nĩa, và việc mặc đồ diễn ra thế nào.
+  development.36-48m.clinician-cues: |-
+    Tham chiếu cho giai đoạn này là danh sách 3 tuổi của CDC. CDC gợi ý mang đến lần khám: những việc bạn và bé thường làm cùng nhau, những gì bé thích làm, bất cứ điều gì bé làm hoặc chưa làm khiến bạn lo lắng, bé có mất đi kỹ năng nào từng có không, và bé có nhu cầu chăm sóc sức khỏe đặc biệt hay sinh non không. Nếu bé chưa làm được một hoặc nhiều cột mốc trong danh sách 3 tuổi, mất đi kỹ năng từng có, hoặc bạn có lo lắng khác, đừng chờ đợi — hãy trao đổi với bác sĩ của bé và hỏi về việc sàng lọc phát triển.

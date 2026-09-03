@@ -1,0 +1,60 @@
+# SPDX-License-Identifier: CC-BY-NC-SA-4.0
+# Canonical English strings for Development stage dev-06-09m. English is authored first;
+# Vietnamese parity lives in translations/vi/development-06-09m.yaml. List claims keep one
+# lead line followed by `- item` lines; source qualifiers survive verbatim (no invented precision).
+
+locale: en
+strings:
+  development.06-09m.at-a-glance: |-
+    From 6 to under 9 months, the CDC 6-month checklist is the reference. Most babies now laugh, take turns making sounds, blow raspberries, reach for what they want, roll from tummy to back, push up with straight arms and lean on the hands when sitting. Play widens to the floor: rolling toward toys, reaching and mouthing, and back-and-forth games with faces, sounds and a mirror.
+  development.06-09m.milestone-context: |-
+    For this stage (6 to under 9 months) the reference is CDC’s 6-month checklist: what most babies (75% or more) do by 6 months. A baby of 7 or 8 months is compared with the 6-month checklist, not with something in between; the 9-month checklist becomes the reference at 9 months. CDC notes that its milestone materials are not a substitute for standardized, validated developmental screening tools.
+  development.06-09m.development-focus: |-
+    Movement opens up the world: rolling, pushing up on straight arms and steadying in a supported sit let your baby reach for what catches their eye. Exploring by mouth is at its peak. Socially, your baby knows familiar people, laughs, and enjoys turn-taking games — copying your sounds and expressions, and noticing themselves in a mirror.
+  development.06-09m.gross-motor: |-
+    Large-movement milestones most babies reach by 6 months (CDC checklist):
+    - rolls from tummy to back
+    - pushes up with straight arms when on the tummy
+    - leans on the hands to support themselves when sitting
+  development.06-09m.fine-motor: |-
+    Hand and hand–eye milestones most babies reach by 6 months (CDC lists these under learning and thinking):
+    - reaches to grab a toy they want
+    - puts things in the mouth to explore them
+  development.06-09m.communication: |-
+    Communication milestones most babies reach by 6 months (CDC checklist):
+    - takes turns making sounds with you
+    - blows “raspberries” (sticks the tongue out and blows)
+    - makes squealing noises
+  development.06-09m.cognitive: |-
+    Learning and thinking milestones most babies reach by 6 months (CDC checklist):
+    - closes the lips to show they don’t want more food
+    CDC lists two more learning milestones — reaching to grab a wanted toy and exploring things by mouth — which HowToBaby shows under hand and hand–eye skills.
+  development.06-09m.social-emotional: |-
+    Social and emotional milestones most babies reach by 6 months (CDC checklist):
+    - knows familiar people
+    - likes to look at themselves in a mirror
+    - laughs
+  development.06-09m.activities: |-
+    Ideas CDC suggests for this age:
+    - play “back and forth”: when your baby smiles, you smile; when they make a sound, you copy it
+    - “read” to your baby every day by looking at colorful pictures and talking about them, and answer when they babble back
+    - point out new things and name them — cars, trees, animals on a walk
+    - put your baby on the tummy or back with toys just out of reach and encourage rolling to get them
+    - hold your baby up while sitting and give them toys to look at while they learn to balance
+    - when your baby drops a toy, pick it up and hand it back — a game that teaches cause and effect
+    - play on the floor or a play mat every day
+  development.06-09m.variants: |-
+    Easier: put the toy within a short stretch so a reach succeeds quickly, and support the sit with your hands or your body behind your baby. Harder: place the toy to one side so your baby has to shift weight or begin a roll to reach it, and lighten your support in sitting for a moment at a time. Easier for sound games: copy exactly. Harder: change the rhythm — two sounds, then a pause — and see whether your baby follows the pattern.
+  development.06-09m.safety-environment: |-
+    Safety points CDC and the AAP attach to this age:
+    - as your baby starts moving and mouthing more, keep small objects that could be swallowed out of reach and check toys for loose parts
+    - CDC suggests asking your baby’s doctor which foods are choking risks when you talk about starting solid foods
+    - the AAP recommends against wheeled baby walkers; a stationary activity center or play yard is the safer choice, and floor time is better still
+    - sleep is always on the back; never carry hot liquids near or while holding your baby
+    - for children under 18 months, the AAP recommends no screen media other than video chatting
+  development.06-09m.what-not-to-force: |-
+    Don’t leave your baby propped in a sit they can’t hold — CDC’s tip is to hold your baby up while they learn to balance, not to prop them with pillows. Don’t use a walker or jumper to hurry standing; the AAP says walkers can delay walking. Don’t push a roll or a reach when your baby is tired or upset: CDC’s advice is to read your baby’s mood and take a break. Sitting without support and crawling belong to later checklists, so not doing them yet at 6 to 8 months is expected.
+  development.06-09m.what-to-observe: |-
+    Notice how your baby gets to things: rolling, pivoting, reaching with one hand or both. Notice how they explore a new object — looking, mouthing, banging, moving between hands — and how they tell you they are done, such as closing the lips at a spoon or turning away. In social play, notice who makes your baby laugh and which games get the longest turn-taking.
+  development.06-09m.clinician-cues: |-
+    The reference for this stage is CDC’s 6-month checklist. CDC suggests bringing to the visit: what you and your baby do together, what your baby likes to do, anything your baby does or does not do that concerns you, whether your baby has lost any skills they once had, and whether your baby has special healthcare needs or was born prematurely. If your baby is not doing one or more of the 6-month milestones, has lost skills, or you have other concerns, don’t wait — talk with your baby’s doctor and ask about developmental screening.

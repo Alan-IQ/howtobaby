@@ -1,0 +1,65 @@
+# SPDX-License-Identifier: CC-BY-NC-SA-4.0
+# Vietnamese parity strings for Development stage dev-30-36m: natural, professional Vietnamese that
+# preserves every quantity, age boundary, qualifier, negation and applicability condition of the
+# canonical English (GUIDANCE_CONTENT_CONTRACT.md §10). Same lead line + `- item` structure.
+
+locale: vi
+strings:
+  development.30-36m.at-a-glance: |-
+    Từ 30 đến dưới 36 tháng, danh sách 30 tháng của CDC là tham chiếu. Phần lớn trẻ ở tuổi này đã nói được khoảng 50 từ, ghép từ hai từ trở lên với một động từ, nói “con”, “mình” hay “chúng mình”, làm theo chỉ dẫn hai bước, biết ít nhất một màu, chơi giả vờ với đồ vật, nhảy bật bằng cả hai chân, xoay tay nắm cửa và vặn nắp, tự cởi một số món đồ và lật từng trang sách. Chơi lúc này là chơi tự do, giả vờ nấu ăn, vẽ, ghép hình, leo trèo ngoài trời và chơi cạnh — đôi khi cùng — trẻ khác.
+  development.30-36m.milestone-context: |-
+    Với giai đoạn này (từ 30 đến dưới 36 tháng), tham chiếu là danh sách 30 tháng của CDC: điều phần lớn trẻ (từ 75% trở lên) làm được khi được 30 tháng. Bé từ 31 đến 35 tháng được đối chiếu với danh sách 30 tháng, không phải với một mức ở giữa; danh sách 3 tuổi chỉ trở thành tham chiếu khi bé được 36 tháng. CDC lưu ý rằng các tài liệu về cột mốc không thay thế cho các công cụ sàng lọc phát triển đã được chuẩn hóa và kiểm định.
+  development.30-36m.development-focus: |-
+    Ngôn ngữ bứt phá — vốn từ tăng nhanh, những câu ngắn có động từ, và “con”, “mình”. Chơi giả vờ trở nên mang tính biểu tượng: một khối gỗ có thể là thức ăn cho búp bê. Bé giải quyết những vấn đề thực tế nhỏ, như lấy ghế đẩu để với đồ, và làm theo nếp sinh hoạt khi được nhắc. Đôi tay biết xoay, vặn và cởi đồ; đôi chân biết nhảy. Chơi cạnh trẻ khác dần chuyển thành chơi cùng nhau.
+  development.30-36m.gross-motor: |-
+    Cột mốc vận động thô mà phần lớn trẻ làm được khi được 30 tháng (danh sách của CDC):
+    - nhảy bật khỏi mặt đất bằng cả hai chân
+    Chạy, đá bóng và bước lên vài bậc cầu thang nằm trong danh sách 2 tuổi và vẫn là một phần của việc chơi hằng ngày.
+  development.30-36m.fine-motor: |-
+    Các cột mốc bàn tay và phối hợp tay–mắt mà phần lớn trẻ làm được khi được 30 tháng (danh sách của CDC):
+    - dùng tay xoay vặn đồ vật, như xoay tay nắm cửa hoặc vặn mở nắp
+    - tự cởi một số món đồ, như quần rộng hay áo khoác đang mở
+    - lật từng trang sách khi bạn đọc cùng bé
+  development.30-36m.communication: |-
+    Các cột mốc giao tiếp mà phần lớn trẻ làm được khi được 30 tháng (danh sách của CDC):
+    - nói được khoảng 50 từ
+    - ghép từ hai từ trở lên với một động từ, như “Chó chạy”
+    - gọi tên các thứ trong sách khi bạn chỉ và hỏi “Cái gì đây?”
+    - nói những từ như “con”, “mình” hay “chúng mình”
+  development.30-36m.cognitive: |-
+    Các cột mốc học hỏi và tư duy mà phần lớn trẻ làm được khi được 30 tháng (danh sách của CDC):
+    - dùng đồ vật để chơi giả vờ, như đút khối gỗ cho búp bê như thể đó là thức ăn
+    - thể hiện kỹ năng giải quyết vấn đề đơn giản, như đứng lên ghế đẩu nhỏ để với đồ
+    - làm theo chỉ dẫn hai bước, như “Đặt đồ chơi xuống rồi đóng cửa lại”
+    - cho thấy bé biết ít nhất một màu, như chỉ vào bút sáp đỏ khi bạn hỏi “Cái nào màu đỏ?”
+  development.30-36m.social-emotional: |-
+    Các cột mốc xã hội và cảm xúc mà phần lớn trẻ làm được khi được 30 tháng (danh sách của CDC):
+    - chơi cạnh trẻ khác và đôi khi chơi cùng
+    - khoe điều mình làm được bằng cách nói “Nhìn con này!”
+    - làm theo nếp sinh hoạt đơn giản khi được nhắc, như phụ dọn đồ chơi khi bạn nói “Đến giờ dọn dẹp rồi”
+  development.30-36m.activities: |-
+    Những gợi ý của CDC cho độ tuổi này:
+    - khuyến khích chơi tự do, để bé theo đuổi điều mình thích và dùng đồ vật theo những cách mới
+    - hỏi những câu đơn giản về sách và câu chuyện: “Ai?”, “Cái gì?”, “Ở đâu?”
+    - dùng các từ mô tả: to/nhỏ, nhanh/chậm, bật/tắt, trong/ngoài, và khuyến khích bé gọi tên màu sắc, bộ phận cơ thể và hình trong sách
+    - để bé vẽ bằng bút sáp trên giấy, bọt cạo râu trên khay hoặc phấn trên vỉa hè
+    - chơi giả vờ với những đồ an toàn trong bếp, và những chiếc thùng lớn biến thành ô tô, xe buýt hay ngôi nhà
+    - đá bóng qua lại; chơi “làm theo người dẫn đầu” đi thành hàng, đi lùi và đi nhón chân
+    - bộ ghép hình đơn giản với hình khối, màu sắc hoặc con vật — gọi tên từng mảnh khi bé ghép vào
+    - cho bé những lựa chọn đơn giản — hai hoặc ba — về đồ ăn vặt hay quần áo, và giúp bé học cách chia sẻ, chờ đến lượt với trẻ khác
+  development.30-36m.variants: |-
+    Dễ hơn: chỉ dẫn một bước, rồi hai bước liền mạch với nhau (“lấy cốc rồi mang lại đây”). Khó hơn: hai bước không liên quan, hoặc một bước có từ chỉ vị trí (“đặt quả bóng dưới ghế”). Dễ hơn với chơi giả vờ: đạo cụ giống thật. Khó hơn: một khối gỗ thay cho điện thoại, thức ăn, chiếc xe. Dễ hơn với nhảy: từ một bậc thấp, có tay bạn đỡ. Khó hơn: nhảy qua một vạch trên sàn, rồi qua một vật nhỏ.
+  development.30-36m.safety-environment: |-
+    Những lưu ý an toàn mà CDC gắn với độ tuổi này:
+    - ngồi yên khi ăn và nhai kỹ giúp tránh hóc; không để bé ngậm bút sáp, bút chì khi vẽ
+    - thường xuyên kiểm tra đồ chơi xem có bộ phận lỏng lẻo hay gãy vỡ không
+    - không cầm đồ uống nóng khi bé đang ngồi trên đùi bạn
+    - luôn trông chừng bé khi ở gần bất kỳ vùng nước nào, và rào kín hồ bơi sau nhà
+    - khi đi ô tô, bé ngồi hàng ghế sau trong ghế ô tô có đai an toàn
+    - leo trèo trên thiết bị và chạy nhảy nên diễn ra ở khu vực an toàn có bạn ở gần; giới hạn thời gian xem màn hình không quá 1 giờ mỗi ngày với chương trình dành cho trẻ em và có người lớn xem cùng
+  development.30-36m.what-not-to-force: |-
+    Đừng coi việc “chơi cùng trẻ khác” là điều phải có mọi lúc — cột mốc 30 tháng là chơi cạnh trẻ khác và đôi khi chơi cùng, và gợi ý của CDC là chỉ cho bé cách chia sẻ, chờ đến lượt, chứ không phải ép buộc. Đừng thúc tập ngồi bô theo lịch; CDC gợi ý hỏi bác sĩ hoặc giáo viên của bé xem bé đã sẵn sàng chưa. Đừng ép ăn: CDC gợi ý để bé tự quyết định ăn bao nhiêu trong số những món lành mạnh bạn đưa ra. Và đừng sửa từng từ bé nói — hãy nhắc lại theo cách nói của người lớn.
+  development.30-36m.what-to-observe: |-
+    Hãy để ý cách bé dùng lời nói để đạt được điều mình muốn — xin, từ chối, mô tả, “Nhìn con này!” — và chỉ dẫn hai bước có được bé thực hiện không. Để ý chơi giả vờ: cái gì được dùng thay cho cái gì, và câu chuyện có phát triển không. Để ý cách giải quyết vấn đề nhỏ, như kéo ghế đẩu, và cách bé hòa vào nhóm trẻ khác — quan sát, chơi bên cạnh hay tham gia cùng. Những quan sát này nói lên nhiều điều hơn là đếm số từ.
+  development.30-36m.clinician-cues: |-
+    Tham chiếu cho giai đoạn này là danh sách 30 tháng của CDC. CDC dẫn khuyến nghị của AAP về sàng lọc phát triển chuẩn hóa khi bé được 30 tháng, nên giai đoạn này thường có một lần khám sàng lọc. Hãy mang theo: những việc bạn và bé thường làm cùng nhau, những gì bé thích làm, bất cứ điều gì bé làm hoặc chưa làm khiến bạn lo lắng, bé có mất đi kỹ năng nào từng có không, và bé có nhu cầu chăm sóc sức khỏe đặc biệt hay sinh non không. Nếu bé chưa làm được một hoặc nhiều cột mốc trong danh sách 30 tháng, mất đi kỹ năng từng có, hoặc bạn có lo lắng khác, đừng chờ đợi — hãy trao đổi với bác sĩ của bé.

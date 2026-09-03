@@ -1,0 +1,65 @@
+# SPDX-License-Identifier: CC-BY-NC-SA-4.0
+# Vietnamese parity strings for Development stage dev-15-18m: natural, professional Vietnamese that
+# preserves every quantity, age boundary, qualifier, negation and applicability condition of the
+# canonical English (GUIDANCE_CONTENT_CONTRACT.md §10). Same lead line + `- item` structure.
+
+locale: vi
+strings:
+  development.15-18m.at-a-glance: |-
+    Từ 15 đến dưới 18 tháng, danh sách 15 tháng của CDC là tham chiếu. Phần lớn trẻ ở tuổi này đã tự bước được vài bước, tự bốc ăn một số món bằng tay, thử nói một hai từ ngoài “mama” và “dada”, chỉ tay để xin thứ gì đó, làm theo chỉ dẫn kèm cử chỉ và lời nói, xếp chồng hai vật nhỏ và bắt chước trẻ khác khi chơi. Chơi lúc này là bắt chước và giúp việc: các việc vặt hằng ngày, bài hát có động tác, “trò chuyện” giả vờ với thú bông.
+  development.15-18m.milestone-context: |-
+    Với giai đoạn này (từ 15 đến dưới 18 tháng), tham chiếu là danh sách 15 tháng của CDC: điều phần lớn trẻ (từ 75% trở lên) làm được khi được 15 tháng. Bé 16 hoặc 17 tháng được đối chiếu với danh sách 15 tháng, không phải với một mức ở giữa; danh sách 18 tháng chỉ trở thành tham chiếu khi bé được 18 tháng. CDC lưu ý rằng các tài liệu về cột mốc không thay thế cho các công cụ sàng lọc phát triển đã được chuẩn hóa và kiểm định.
+  development.15-18m.development-focus: |-
+    Những bước đi đầu tiên và những từ đầu tiên đến gần như cùng lúc, và cả hai đều còn chập chững. Bé chỉ tay để xin và để khoe, hiểu nhiều hơn hẳn những gì bé nói được, và bắt đầu dùng đồ vật “đúng cách” — cốc để uống, điện thoại áp vào tai, sách để mở ra. Bắt chước bạn và trẻ khác là cách học chính lúc này, và tình cảm được thể hiện có chủ ý: ôm, rúc vào lòng và hôn.
+  development.15-18m.gross-motor: |-
+    Cột mốc vận động thô mà phần lớn trẻ làm được khi được 15 tháng (danh sách của CDC):
+    - tự bước được vài bước
+    Đi mà không cần vịn vào ai hay vật gì xuất hiện ở danh sách 18 tháng.
+  development.15-18m.fine-motor: |-
+    Các cột mốc bàn tay và phối hợp tay–mắt mà phần lớn trẻ làm được khi được 15 tháng (danh sách của CDC):
+    - dùng các ngón tay tự bốc ăn một số món
+    - xếp chồng ít nhất hai vật nhỏ, như khối gỗ (CDC xếp mục này vào nhóm học hỏi và tư duy)
+    - cố dùng đồ vật đúng cách, như điện thoại, cốc hay sách (CDC xếp mục này vào nhóm học hỏi và tư duy)
+  development.15-18m.communication: |-
+    Các cột mốc giao tiếp mà phần lớn trẻ làm được khi được 15 tháng (danh sách của CDC):
+    - thử nói một hai từ ngoài “mama” hay “dada”, như “bó” thay cho bóng hay “chó” thay cho con chó
+    - nhìn vào một đồ vật quen thuộc khi bạn gọi tên nó
+    - làm theo chỉ dẫn có cả cử chỉ lẫn lời nói, như đưa đồ chơi cho bạn khi bạn chìa tay ra và nói “Đưa đồ chơi cho mẹ”
+    - chỉ tay để xin thứ gì đó hoặc nhờ giúp
+  development.15-18m.cognitive: |-
+    Các cột mốc học hỏi và tư duy mà phần lớn trẻ làm được khi được 15 tháng (danh sách của CDC):
+    - cố dùng đồ vật đúng cách, như điện thoại, cốc hay sách
+    - xếp chồng ít nhất hai vật nhỏ, như khối gỗ
+    HowToBaby cũng trình bày hai mục này ở phần bàn tay và phối hợp tay–mắt, vì chúng liên quan đến bàn tay không kém gì tư duy.
+  development.15-18m.social-emotional: |-
+    Các cột mốc xã hội và cảm xúc mà phần lớn trẻ làm được khi được 15 tháng (danh sách của CDC):
+    - bắt chước trẻ khác khi chơi, như lấy đồ chơi ra khỏi hộp khi thấy bạn khác làm vậy
+    - khoe với bạn một món đồ bé thích
+    - vỗ tay khi phấn khích
+    - ôm búp bê nhồi bông hoặc đồ chơi khác
+    - thể hiện tình cảm với bạn (ôm, rúc vào lòng hoặc hôn bạn)
+  development.15-18m.activities: |-
+    Những gợi ý của CDC cho độ tuổi này:
+    - lặp lại và nói thêm vào điều bé nói: “bó” — “Bóng, đúng rồi, quả bóng”
+    - gọi tên thứ bé chỉ vào, rồi chờ vài giây xem bé có phát ra âm thanh không trước khi đưa cho bé
+    - để bé giúp các việc hằng ngày: lấy giày, bỏ tất vào giỏ, phụ “dọn dẹp” theo một bài hát
+    - đưa một đồ vật ra và hỏi nó dùng để làm gì — “Cái mũ thì làm gì nhỉ?” — rồi xem bé có bắt chước bạn không
+    - hát những bài có động tác, như “Bánh xe trên xe buýt”
+    - xếp chồng khối gỗ rồi để bé đẩy đổ; thổi bong bóng xà phòng và để bé chọc vỡ
+    - làm một cuốn “sách” với ảnh những người và thú cưng trong cuộc sống của bé, rồi cùng gọi tên
+    - “trò chuyện giả vờ” với thú bông và xem bé có tham gia không
+  development.15-18m.variants: |-
+    Dễ hơn: đưa từng khối gỗ một và giữ vững khối dưới cùng; dùng khối to và nhẹ. Khó hơn: ba bốn khối, hoặc khối nhỏ hơn, còn tay bạn đặt trên đùi. Dễ hơn với lời nói: chấp nhận bất kỳ âm nào là “từ” và gọi tên lại. Khó hơn: đưa ra lựa chọn — “bóng hay ô tô?” — và chờ bé chỉ tay hoặc nói. Dễ hơn với giúp việc: các việc một bước kèm cử chỉ. Khó hơn: cùng yêu cầu đó nhưng chỉ bằng lời, là mục nằm trong danh sách 18 tháng.
+  development.15-18m.safety-environment: |-
+    Những lưu ý an toàn mà CDC gắn với độ tuổi này:
+    - không bao giờ để bé ở gần hoặc quanh nước mà không có người trông — đuối nước là nguyên nhân tử vong do thương tích hàng đầu ở độ tuổi này
+    - cổng chắn cầu thang, nắp bịt ổ điện, đồ điện nóng ngoài tầm với và tay cầm nồi xoay vào trong; một em bé mới biết đi có thể đi khắp nơi
+    - khóa kỹ thuốc, hóa chất và chất tẩy rửa, và lưu số đường dây trợ giúp ngộ độc (Poison Help Line) 800-222-1222 vào mọi điện thoại
+    - không bao giờ để bé một mình trong xe, dù chỉ vài phút
+    - không khuyến nghị cho trẻ dưới 2 tuổi xem màn hình, ngoại trừ gọi video
+  development.15-18m.what-not-to-force: |-
+    Đừng mong bé nói rõ ràng: CDC lưu ý những từ đầu tiên của trẻ chưa hoàn chỉnh, nên “bó” thay cho bóng vẫn được tính — hãy lặp lại và nói thêm thay vì sửa. Đừng tranh đấu với cơn ăn vạ; CDC cho biết ăn vạ là bình thường ở tuổi này, dễ xảy ra hơn khi bé mệt hoặc đói, và bạn có thể để cơn ăn vạ qua đi trong khi vẫn ở gần bé. Đừng nhất quyết bắt bé chia sẻ hay chơi hợp tác với trẻ khác — bắt chước trẻ khác là cột mốc 15 tháng, còn chia sẻ đến muộn hơn nhiều. Và đừng thúc bé tập đi quá mức khi bé còn loạng choạng; bước được vài bước đã là cột mốc.
+  development.15-18m.what-to-observe: |-
+    Hãy để ý bé chỉ vào gì và vì sao — để xin, để khoe với bạn, để nhờ giúp — và những từ hay âm thanh nào đi kèm. Để ý sự bắt chước: bé bắt chước gì từ bạn, từ anh chị, từ những trẻ khác ở công viên. Để ý cách bé dùng đồ vật — cốc đưa lên miệng, điện thoại áp vào tai — và cách bé hồi phục sau một cú vấp hay một cơn ăn vạ. Đó là những manh mối phong phú hơn bất kỳ mục đơn lẻ nào trong danh sách.
+  development.15-18m.clinician-cues: |-
+    Tham chiếu cho giai đoạn này là danh sách 15 tháng của CDC. CDC gợi ý mang đến lần khám: những việc bạn và bé thường làm cùng nhau, những gì bé thích làm, bất cứ điều gì bé làm hoặc chưa làm khiến bạn lo lắng, bé có mất đi kỹ năng nào từng có không, và bé có nhu cầu chăm sóc sức khỏe đặc biệt hay sinh non không. Nếu bé chưa làm được một hoặc nhiều cột mốc trong danh sách 15 tháng, mất đi kỹ năng từng có, hoặc bạn có lo lắng khác, đừng chờ đợi — hãy trao đổi với bác sĩ của bé và hỏi về việc sàng lọc phát triển.

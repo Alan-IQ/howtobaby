@@ -355,7 +355,7 @@ export function parseClaim(value: unknown, issues: IssueCollector, file?: string
 
 // --- GuidanceBlock -----------------------------------------------------------------------------
 
-const GUIDANCE_KEYS = ["id", "domain", "stage", "titleKey", "claimIds", "routes"] as const;
+const GUIDANCE_KEYS = ["id", "domain", "stage", "section", "titleKey", "claimIds", "routes"] as const;
 
 export function parseGuidanceBlock(value: unknown, issues: IssueCollector, file?: string): GuidanceBlock | undefined {
   const raw = asRaw(value, issues, "schema", "(guidance block)", file);
@@ -367,6 +367,10 @@ export function parseGuidanceBlock(value: unknown, issues: IssueCollector, file?
   const id = r.requireString("id", GUIDANCE_ID_PATTERN, "is not a `guidance.` dot-path ID");
   const domain = r.requireEnum("domain", KNOWLEDGE_DOMAINS);
   const stage = r.optionalString("stage");
+  const section = r.optionalString("section");
+  if (section !== undefined && !PUBLIC_SLUG_PATTERN.test(section)) {
+    r.fail("invalid-format", `\`section\` value \`${section}\` is not a kebab-case section id`);
+  }
   const titleKey = r.requireString("titleKey", TEXT_KEY_PATTERN, "is not a dot-path translation key");
   const claimIds = r.requireStringArray("claimIds", 1);
   const routes = r.requireStringArray("routes", 1);
@@ -384,7 +388,7 @@ export function parseGuidanceBlock(value: unknown, issues: IssueCollector, file?
   }
 
   if (r.failed || !id || !domain || !titleKey || !claimIds || !routes) return undefined;
-  return { id, domain, titleKey, claimIds, routes, ...(stage !== undefined ? { stage } : {}) };
+  return { id, domain, titleKey, claimIds, routes, ...(stage !== undefined ? { stage } : {}), ...(section !== undefined ? { section } : {}) };
 }
 
 // --- TranslationBundle -------------------------------------------------------------------------

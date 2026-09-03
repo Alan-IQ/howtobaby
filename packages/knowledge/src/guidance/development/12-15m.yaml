@@ -1,0 +1,158 @@
+# SPDX-License-Identifier: CC-BY-NC-SA-4.0
+# Guidance blocks for Development stage dev-12-15m: one block per required section, in the
+# contract's section order (the `section` id drives page grouping; block ids are not an order).
+
+blocks:
+  - id: guidance.development.12-15m.at-a-glance
+    domain: development
+    stage: dev-12-15m
+    section: at-a-glance
+    titleKey: guidance.development.section.at-a-glance.title
+    claimIds:
+      - development.12-15m.at-a-glance
+    routes:
+      - /play/12-15-months
+      - /play/all-stages
+
+  - id: guidance.development.12-15m.milestone-context
+    domain: development
+    stage: dev-12-15m
+    section: milestone-context
+    titleKey: guidance.development.section.milestone-context.title
+    claimIds:
+      - development.12-15m.milestone-context
+    routes:
+      - /play/12-15-months
+      - /play/all-stages
+
+  - id: guidance.development.12-15m.development-focus
+    domain: development
+    stage: dev-12-15m
+    section: development-focus
+    titleKey: guidance.development.section.development-focus.title
+    claimIds:
+      - development.12-15m.development-focus
+    routes:
+      - /play/12-15-months
+      - /play/all-stages
+
+  - id: guidance.development.12-15m.gross-motor
+    domain: development
+    stage: dev-12-15m
+    section: gross-motor
+    titleKey: guidance.development.section.gross-motor.title
+    claimIds:
+      - development.12-15m.gross-motor
+    routes:
+      - /play/12-15-months
+      - /play/all-stages
+
+  - id: guidance.development.12-15m.fine-motor
+    domain: development
+    stage: dev-12-15m
+    section: fine-motor
+    titleKey: guidance.development.section.fine-motor.title
+    claimIds:
+      - development.12-15m.fine-motor
+    routes:
+      - /play/12-15-months
+      - /play/all-stages
+
+  - id: guidance.development.12-15m.communication
+    domain: development
+    stage: dev-12-15m
+    section: communication
+    titleKey: guidance.development.section.communication.title
+    claimIds:
+      - development.12-15m.communication
+    routes:
+      - /play/12-15-months
+      - /play/all-stages
+
+  - id: guidance.development.12-15m.cognitive
+    domain: development
+    stage: dev-12-15m
+    section: cognitive
+    titleKey: guidance.development.section.cognitive.title
+    claimIds:
+      - development.12-15m.cognitive
+    routes:
+      - /play/12-15-months
+      - /play/all-stages
+
+  - id: guidance.development.12-15m.social-emotional
+    domain: development
+    stage: dev-12-15m
+    section: social-emotional
+    titleKey: guidance.development.section.social-emotional.title
+    claimIds:
+      - development.12-15m.social-emotional
+    routes:
+      - /play/12-15-months
+      - /play/all-stages
+
+  - id: guidance.development.12-15m.activities
+    domain: development
+    stage: dev-12-15m
+    section: activities
+    titleKey: guidance.development.section.activities.title
+    claimIds:
+      - development.12-15m.activities
+    routes:
+      - /play/12-15-months
+      - /play/all-stages
+
+  - id: guidance.development.12-15m.variants
+    domain: development
+    stage: dev-12-15m
+    section: variants
+    titleKey: guidance.development.section.variants.title
+    claimIds:
+      - development.12-15m.variants
+    routes:
+      - /play/12-15-months
+      - /play/all-stages
+
+  - id: guidance.development.12-15m.safety-environment
+    domain: development
+    stage: dev-12-15m
+    section: safety-environment
+    titleKey: guidance.development.section.safety-environment.title
+    claimIds:
+      - development.12-15m.safety-environment
+    routes:
+      - /play/12-15-months
+      - /play/all-stages
+
+  - id: guidance.development.12-15m.what-not-to-force
+    domain: development
+    stage: dev-12-15m
+    section: what-not-to-force
+    titleKey: guidance.development.section.what-not-to-force.title
+    claimIds:
+      - development.12-15m.what-not-to-force
+    routes:
+      - /play/12-15-months
+      - /play/all-stages
+
+  - id: guidance.development.12-15m.what-to-observe
+    domain: development
+    stage: dev-12-15m
+    section: what-to-observe
+    titleKey: guidance.development.section.what-to-observe.title
+    claimIds:
+      - development.12-15m.what-to-observe
+    routes:
+      - /play/12-15-months
+      - /play/all-stages
+
+  - id: guidance.development.12-15m.clinician-cues
+    domain: development
+    stage: dev-12-15m
+    section: clinician-cues
+    titleKey: guidance.development.section.clinician-cues.title
+    claimIds:
+      - development.12-15m.clinician-cues
+    routes:
+      - /play/12-15-months
+      - /play/all-stages

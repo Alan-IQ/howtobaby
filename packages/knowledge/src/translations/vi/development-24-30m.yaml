@@ -1,0 +1,63 @@
+# SPDX-License-Identifier: CC-BY-NC-SA-4.0
+# Vietnamese parity strings for Development stage dev-24-30m: natural, professional Vietnamese that
+# preserves every quantity, age boundary, qualifier, negation and applicability condition of the
+# canonical English (GUIDANCE_CONTENT_CONTRACT.md §10). Same lead line + `- item` structure.
+
+locale: vi
+strings:
+  development.24-30m.at-a-glance: |-
+    Từ 2 đến dưới 2 tuổi rưỡi (24 đến dưới 30 tháng), danh sách 2 tuổi của CDC là tham chiếu. Phần lớn trẻ ở tuổi này đã chạy, đá bóng, bước lên vài bậc cầu thang, ăn bằng thìa, ghép hai từ với nhau, chỉ vào bộ phận cơ thể và hình trong sách khi được hỏi, dùng cử chỉ như hôn gió, bật tắt công tắc và nút bấm trên đồ chơi, và nhận ra khi ai đó bị đau hay buồn. Chơi lúc này vừa vận động vừa giàu tưởng tượng: đá bóng, hóa trang, ghép hình đơn giản, khối gỗ, cát và nước, và trò “chuẩn bị, sẵn sàng, chạy”.
+  development.24-30m.milestone-context: |-
+    Với giai đoạn này (từ 24 đến dưới 30 tháng), tham chiếu là danh sách 2 tuổi của CDC: điều phần lớn trẻ (từ 75% trở lên) làm được khi được 2 tuổi. Bé từ 25 đến 29 tháng được đối chiếu với danh sách 2 tuổi, không phải với một mức ở giữa; danh sách 30 tháng chỉ trở thành tham chiếu khi bé được 30 tháng. CDC lưu ý rằng các tài liệu về cột mốc không thay thế cho các công cụ sàng lọc phát triển đã được chuẩn hóa và kiểm định.
+  development.24-30m.development-focus: |-
+    Những cụm hai từ mở ra cuộc trò chuyện thực sự, và cử chỉ ngày càng phong phú. Bé tìm hiểu cách mọi thứ hoạt động — nắp, công tắc, nút bấm — và bắt đầu dùng nhiều đồ chơi cùng lúc trong một trò. Chạy, đá bóng và leo cầu thang biến chơi ngoài trời thành điểm nhấn của ngày. Bé nhận ra cảm xúc của người khác, và nhìn mặt bạn để quyết định phản ứng thế nào trước điều mới lạ.
+  development.24-30m.gross-motor: |-
+    Các cột mốc vận động thô mà phần lớn trẻ làm được khi được 2 tuổi (danh sách của CDC):
+    - đá bóng
+    - chạy
+    - bước (không phải bò) lên vài bậc cầu thang, có hoặc không có người dắt
+  development.24-30m.fine-motor: |-
+    Các cột mốc bàn tay và phối hợp tay–mắt mà phần lớn trẻ làm được khi được 2 tuổi (danh sách của CDC):
+    - ăn bằng thìa
+    - cầm một vật bằng tay này trong khi dùng tay kia, như giữ hộp và mở nắp (CDC xếp mục này vào nhóm học hỏi và tư duy)
+    - thử bật công tắc, vặn núm hoặc bấm nút trên đồ chơi (CDC xếp mục này vào nhóm học hỏi và tư duy)
+  development.24-30m.communication: |-
+    Các cột mốc giao tiếp mà phần lớn trẻ làm được khi được 2 tuổi (danh sách của CDC):
+    - chỉ vào hình trong sách khi bạn hỏi, như “Con gấu đâu?”
+    - nói được ít nhất hai từ ghép với nhau, như “Thêm sữa”
+    - chỉ vào ít nhất hai bộ phận cơ thể khi bạn hỏi
+    - dùng nhiều cử chỉ hơn ngoài vẫy tay và chỉ tay, như hôn gió hay gật đầu
+  development.24-30m.cognitive: |-
+    Cột mốc học hỏi và tư duy mà phần lớn trẻ làm được khi được 2 tuổi (danh sách của CDC):
+    - chơi với nhiều hơn một đồ chơi cùng lúc, như đặt đồ ăn đồ chơi lên đĩa đồ chơi
+    CDC còn liệt kê cầm một vật bằng tay này trong khi dùng tay kia, và thử công tắc, núm vặn hay nút bấm — cả hai được HowToBaby trình bày ở phần bàn tay và phối hợp tay–mắt.
+  development.24-30m.social-emotional: |-
+    Các cột mốc xã hội và cảm xúc mà phần lớn trẻ làm được khi được 2 tuổi (danh sách của CDC):
+    - nhận ra khi người khác bị đau hay buồn, như dừng lại hoặc tỏ vẻ buồn khi ai đó khóc
+    - nhìn mặt bạn để xem nên phản ứng thế nào trong tình huống mới
+  development.24-30m.activities: |-
+    Những gợi ý của CDC cho độ tuổi này:
+    - giúp bé nghe cách phát âm từ: “thêm chối” — “Con muốn thêm chuối”
+    - cho bé bóng để đá, lăn và ném, và chơi “chuẩn bị, sẵn sàng, chạy” trên xích đu
+    - cho bé đồ chơi bấm nút là có chuyện xảy ra, và bộ ghép hình đơn giản với hình khối, màu sắc hoặc con vật — gọi tên từng mảnh khi bé ghép vào
+    - để bé hóa trang với giày, mũ và áo của người lớn để bắt đầu chơi giả vờ
+    - bút sáp hoặc màu vẽ bằng tay trên giấy, đồ chơi cát, và hộp đựng, thìa hay phễu trong bồn tắm
+    - cùng xếp tháp khối gỗ rồi đẩy đổ
+    - để bé phụ chuẩn bị bữa ăn bằng cách mang cốc hoặc khăn ăn, và cảm ơn bé
+    - theo dõi sát khi bé chơi cùng bạn: trẻ tuổi này chơi cạnh nhau và cần bạn chỉ cách chia sẻ và chờ đến lượt
+  development.24-30m.variants: |-
+    Dễ hơn: bộ ghép hình hai ba mảnh to, mỗi mảnh có núm cầm; một quả bóng to, nhẹ lăn thẳng tới chân bé. Khó hơn: nhiều mảnh hơn và không có núm; bóng nhỏ hơn, hoặc đá về phía một mục tiêu. Dễ hơn với ngôn ngữ: lặp lại cụm hai từ bé vừa nói. Khó hơn: thêm một từ — “thêm sữa” → “thêm sữa lạnh” — rồi chờ. Dễ hơn với chơi giả vờ: bạn dựng bối cảnh với hai món đồ chơi. Khó hơn: hỏi bé chuyện gì xảy ra tiếp theo.
+  development.24-30m.safety-environment: |-
+    Những lưu ý an toàn mà CDC gắn với độ tuổi này:
+    - khuyến khích bé ngồi yên khi ăn và nhai kỹ để tránh hóc
+    - thường xuyên kiểm tra đồ chơi xem có bộ phận lỏng lẻo hay gãy vỡ không, và không để bé ngậm bút sáp, bút chì
+    - không cầm đồ uống nóng khi bé đang ngồi trên đùi bạn
+    - không bao giờ để bé ở gần hoặc quanh nước — bồn tắm, hồ bơi, ao — mà không có người trông, và rào kín hồ bơi sau nhà
+    - khi đi ô tô, bé ngồi ở hàng ghế sau, được cài dây trong ghế ô tô có đai an toàn
+    - giới hạn thời gian xem màn hình không quá 1 giờ mỗi ngày với chương trình dành cho trẻ em và có người lớn xem cùng
+  development.24-30m.what-not-to-force: |-
+    Đừng ép bé chia sẻ: CDC lưu ý trẻ tuổi này chơi cạnh nhau và chưa biết cách chia sẻ hay giải quyết mâu thuẫn — việc của bạn là chỉ cho bé cách làm, không phải đòi hỏi bé. Đừng ép ăn: CDC gợi ý để bé ăn nhiều hay ít tùy ý trong mỗi bữa, còn bạn là người chọn những món lành mạnh để đưa ra. Đừng bắt đầu tập ngồi bô chỉ vì bé vừa tròn 2 tuổi; CDC cho biết phần lớn trẻ chưa thể tập ngồi bô cho đến khi được 2 đến 3 tuổi, và bắt đầu quá sớm có thể gây căng thẳng và thụt lùi — hãy hỏi bác sĩ hoặc giáo viên của bé về dấu hiệu sẵn sàng.
+  development.24-30m.what-to-observe: |-
+    Hãy để ý cách bé kết hợp từ ngữ và cử chỉ để truyền đạt điều mình muốn, và bé có nhìn mặt bạn trước khi quyết định phản ứng với điều mới lạ không. Để ý cách bé giải quyết vấn đề với đồ vật — cái nắp phải mở ra, cái nút làm đồ chơi chạy — và bao nhiêu món đồ chơi được dùng cùng nhau trong một trò. Ngoài trời, để ý bé chạy, dừng lại và lên cầu thang thế nào, có cần vịn tay hay không.
+  development.24-30m.clinician-cues: |-
+    Tham chiếu cho giai đoạn này là danh sách 2 tuổi của CDC. CDC dẫn khuyến nghị của AAP về sàng lọc tự kỷ khi bé được 24 tháng, nên giai đoạn này thường có một lần khám sàng lọc. Hãy mang theo: những việc bạn và bé thường làm cùng nhau, những gì bé thích làm, bất cứ điều gì bé làm hoặc chưa làm khiến bạn lo lắng, bé có mất đi kỹ năng nào từng có không, và bé có nhu cầu chăm sóc sức khỏe đặc biệt hay sinh non không. Nếu bé chưa làm được một hoặc nhiều cột mốc trong danh sách 2 tuổi, mất đi kỹ năng từng có, hoặc bạn có lo lắng khác, đừng chờ đợi — hãy trao đổi với bác sĩ của bé và hỏi về việc sàng lọc phát triển.

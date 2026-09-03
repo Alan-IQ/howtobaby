@@ -87,7 +87,7 @@ export const MESSAGES = defineMessages({
     "page.home.how.p1":
       "HowToBaby organizes guidance from public-health authorities by age and context, keeps each statement linked to its original source, and turns that guidance into practical steps for parents without making it more precise than the source allows.",
     "page.home.how.p2":
-      "HowToBaby has started publishing its first evidence-backed guidance, beginning with {link:feeding}, and each statement links to its original source. You can browse every age range without creating a profile. If you add a child profile, it stays on your device and shows which stage your child is in today. More personalization on this page and the remaining topics will be added as their content is verified and reviewed.",
+      "HowToBaby has started publishing its first evidence-backed guidance, beginning with {link:feeding} and {link:play}, and each statement links to its original source. You can browse every age range without creating a profile. If you add a child profile, it stays on your device and shows which stage your child is in today. More personalization on this page and the remaining topics will be added as their content is verified and reviewed.",
 
     // Shared destination scaffolding.
     "section.placeholder.title": "What will be added here",
@@ -104,8 +104,12 @@ export const MESSAGES = defineMessages({
 
     // Play & Development.
     "page.play.lede": "Play ideas and developmental context by age, without turning milestones into pass/fail tests.",
-    "page.play.hold.p1":
-      "Developmental stages, milestone context, activity ideas and variations, and how corrected age is used — all presented to support play and connection, not to screen development.",
+    "play.allStages.title": "All stages on one page",
+    "play.allStages.note": "A print-friendly page with every Play & Development stage, its sections and its sources.",
+    "play.allStages.link": "Open all stages",
+    "page.play.allStages.title": "All Play & Development stages",
+    "page.play.allStages.lede":
+      "Every stage from birth to under 5 years, with its sections and sources, on one page you can print. Milestones are references, not deadlines or tests.",
 
     // Sleep.
     "page.sleep.lede": "Typical sleep patterns, safe-sleep basics and editable example routines.",
@@ -182,7 +186,7 @@ export const MESSAGES = defineMessages({
     "changelog.p1":
       "When published guidance changes meaning or a correction is made, HowToBaby records the date and affected content here. This page will be generated from content version history as the full changelog system is completed.",
     "changelog.status":
-      "The current release includes the core site, theme system, the first evidence-backed guidance, browsing by age, and an optional child profile stored on your device. More topics are being added over time.",
+      "The current release includes the core site, theme system, the first evidence-backed guidance, browsing by age, the full Play & Development stage guide, and an optional child profile stored on your device. More topics are being added over time.",
 
     // Not found / common error UI.
     "notFound.title": "Page not found",
@@ -256,6 +260,13 @@ export const MESSAGES = defineMessages({
     "why.relation.unresolved": "HowToBaby cannot determine your child’s stage for this topic yet.",
     "why.preview": "On {date}, your child is in {stage}.",
     "why.disclaimer": "Age is only one factor HowToBaby uses to select guidance that may be relevant. Age alone cannot tell whether your child is ready or how they are developing.",
+    // Play & Development: CDC milestone checklist resolution (younger checklist between checklist ages).
+    "why.checklist.stage": "Milestone reference for this stage: CDC’s checklist for {age}.",
+    "why.checklist.stageNone": "No CDC milestone checklist applies before 2 months; the checklist for 2 months is the first reference.",
+    "why.checklist.actual": "For your child’s current age in this topic, the reference is CDC’s checklist for {age}.",
+    "why.checklist.actualNone": "Your child is under 2 months in this topic, so no CDC checklist applies yet.",
+    "why.development.beforeDue":
+      "For Play & Development, HowToBaby counts age from the due date, so the first stage (under 2 months) begins on {date}. No stage is assigned before then; you can still read any stage.",
 
     // Preview plan date (session only).
     "preview.title": "View another date",
@@ -330,7 +341,7 @@ export const MESSAGES = defineMessages({
     "page.home.how.p1":
       "HowToBaby sắp xếp hướng dẫn từ các cơ quan y tế công cộng theo độ tuổi và bối cảnh, giữ từng nội dung gắn với tài liệu gốc và chuyển thành những bước cha mẹ có thể áp dụng trong thực tế mà không diễn giải chính xác hơn mức tài liệu cho phép.",
     "page.home.how.p2":
-      "HowToBaby đã bắt đầu xuất bản những hướng dẫn đầu tiên dựa trên bằng chứng, trước hết ở mục {link:feeding}; mỗi nội dung đều liên kết đến tài liệu gốc. Bạn có thể xem mọi giai đoạn theo độ tuổi mà không cần tạo hồ sơ. Nếu thêm hồ sơ của bé, thông tin sẽ chỉ được lưu trên thiết bị và HowToBaby sẽ cho biết hôm nay bé đang ở giai đoạn nào. Các phần cá nhân hóa khác trên trang này và những chủ đề còn lại sẽ được bổ sung sau khi nội dung được kiểm chứng và rà soát.",
+      "HowToBaby đã bắt đầu xuất bản những hướng dẫn đầu tiên dựa trên bằng chứng, trước hết ở mục {link:feeding} và {link:play}; mỗi nội dung đều liên kết đến tài liệu gốc. Bạn có thể xem mọi giai đoạn theo độ tuổi mà không cần tạo hồ sơ. Nếu thêm hồ sơ của bé, thông tin sẽ chỉ được lưu trên thiết bị và HowToBaby sẽ cho biết hôm nay bé đang ở giai đoạn nào. Các phần cá nhân hóa khác trên trang này và những chủ đề còn lại sẽ được bổ sung sau khi nội dung được kiểm chứng và rà soát.",
 
     "section.placeholder.title": "Nội dung sẽ được bổ sung tại đây",
     "section.placeholder.note":
@@ -346,8 +357,12 @@ export const MESSAGES = defineMessages({
 
     "page.play.lede":
       "Gợi ý chơi và thông tin phát triển theo độ tuổi, không biến các cột mốc thành bài kiểm tra đạt–không đạt.",
-    "page.play.hold.p1":
-      "Các giai đoạn phát triển, thông tin giúp hiểu các cột mốc, gợi ý hoạt động và biến thể, cùng cách sử dụng tuổi hiệu chỉnh — nhằm hỗ trợ việc chơi và gắn kết với bé, không nhằm sàng lọc phát triển.",
+    "play.allStages.title": "Tất cả các giai đoạn trên một trang",
+    "play.allStages.note": "Trang thuận tiện để in, gồm mọi giai đoạn Chơi & Phát triển cùng các mục và tài liệu tham khảo.",
+    "play.allStages.link": "Xem tất cả các giai đoạn",
+    "page.play.allStages.title": "Tất cả các giai đoạn Chơi & Phát triển",
+    "page.play.allStages.lede":
+      "Mọi giai đoạn từ khi chào đời đến trước 5 tuổi, cùng các mục và tài liệu tham khảo, trên một trang có thể in. Các cột mốc chỉ mang tính tham khảo, không phải thời hạn hay bài kiểm tra.",
 
     "page.sleep.lede": "Nếp ngủ thường gặp, nguyên tắc ngủ an toàn và lịch sinh hoạt tham khảo có thể điều chỉnh.",
     "page.sleep.hold.p1":
@@ -419,7 +434,7 @@ export const MESSAGES = defineMessages({
     "changelog.p1":
       "Khi một hướng dẫn đã xuất bản thay đổi về ý nghĩa hoặc cần đính chính, HowToBaby sẽ ghi ngày thay đổi và nội dung bị ảnh hưởng tại đây. Trang này sẽ được tạo từ lịch sử phiên bản nội dung khi hệ thống lịch sử thay đổi được hoàn thiện.",
     "changelog.status":
-      "Bản hiện tại gồm các chức năng cốt lõi của trang web, hệ thống giao diện, những hướng dẫn đầu tiên dựa trên bằng chứng, tính năng xem theo độ tuổi và hồ sơ tùy chọn của bé lưu trên thiết bị. Các chủ đề khác đang tiếp tục được bổ sung.",
+      "Bản hiện tại gồm các chức năng cốt lõi của trang web, hệ thống giao diện, những hướng dẫn đầu tiên dựa trên bằng chứng, tính năng xem theo độ tuổi, bộ hướng dẫn đầy đủ theo giai đoạn của mục Chơi & Phát triển và hồ sơ tùy chọn của bé lưu trên thiết bị. Các chủ đề khác đang tiếp tục được bổ sung.",
 
     "notFound.title": "Không tìm thấy trang",
     "notFound.lede": "Trang này không tồn tại. Có thể trang đã được chuyển sang địa chỉ khác hoặc liên kết chưa đầy đủ.",
@@ -491,6 +506,12 @@ export const MESSAGES = defineMessages({
     "why.relation.unresolved": "HowToBaby chưa xác định được giai đoạn của bé trong mục này.",
     "why.preview": "Vào ngày {date}, bé ở giai đoạn {stage}.",
     "why.disclaimer": "Độ tuổi chỉ là một trong những yếu tố HowToBaby dùng để chọn hướng dẫn có thể phù hợp. Chỉ riêng độ tuổi không thể cho biết bé đã sẵn sàng hay đang phát triển ra sao.",
+    "why.checklist.stage": "Danh sách cột mốc tham chiếu cho giai đoạn này: danh sách {age} của CDC.",
+    "why.checklist.stageNone": "Chưa có danh sách cột mốc nào của CDC áp dụng cho bé dưới 2 tháng; danh sách 2 tháng là tham chiếu đầu tiên.",
+    "why.checklist.actual": "Với tuổi hiện tại của bé trong mục này, tham chiếu là danh sách {age} của CDC.",
+    "why.checklist.actualNone": "Trong mục này bé đang dưới 2 tháng, nên chưa có danh sách nào của CDC áp dụng.",
+    "why.development.beforeDue":
+      "Ở mục Chơi & Phát triển, HowToBaby tính tuổi từ ngày dự sinh, nên giai đoạn đầu tiên (dưới 2 tháng) bắt đầu vào ngày {date}. Trước đó HowToBaby không gán giai đoạn nào cho bé; bạn vẫn có thể đọc bất kỳ giai đoạn nào.",
 
     // Preview plan date (session only).
     "preview.title": "Xem theo ngày khác",

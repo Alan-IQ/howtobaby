@@ -102,3 +102,16 @@ export function formatStageChip(stage: StageDefinition, locale: AppLocale): stri
   const { min, max, unit } = stageBounds(stage);
   return stageWords(stage, locale, min, max, unit === "year" ? "y" : "mo");
 }
+
+/**
+ * A CDC milestone checklist age the way CDC names it: `2 months`, `1 year`, `15 months`,
+ * `2 years`, `30 months`, `3 years` (whole years from 12 months on, otherwise months); VI
+ * `2 tháng`, `1 tuổi`, `30 tháng`, `3 tuổi`.
+ */
+export function formatChecklistAge(months: number, locale: AppLocale): string {
+  if (months >= 12 && months % 12 === 0) {
+    const years = months / 12;
+    return locale === "vi" ? `${years} tuổi` : unit(locale, "year", years);
+  }
+  return unit(locale, "month", months);
+}

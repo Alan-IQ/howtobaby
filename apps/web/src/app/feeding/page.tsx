@@ -7,7 +7,7 @@ import { PageShell } from "@/components/PageShell";
 import { BrowseByAge } from "@/features/context/BrowseByAge";
 import { LocalizedReferences } from "@/features/evidence/LocalizedReferences";
 import { loadGuidanceBlockViews, loadReferenceEntries } from "@/features/evidence/load";
-import { GuidanceEvidenceCard } from "@/features/feeding/GuidanceEvidenceCard";
+import { GuidanceBlockCards } from "@/features/evidence/GuidanceBlockCards";
 import { T } from "@/i18n/T";
 
 export const metadata: Metadata = { title: "Feeding" };
@@ -35,10 +35,7 @@ export default async function Page() {
       printable
     >
       <BrowseByAge domain="feeding" />
-      {enBlocks.map((enBlock) => {
-        const viBlock = viBlocks.find((b) => b.blockId === enBlock.blockId);
-        return viBlock ? <GuidanceEvidenceCard key={enBlock.blockId} variants={{ en: enBlock, vi: viBlock }} /> : null;
-      })}
+      <GuidanceBlockCards en={enBlocks} vi={viBlocks} />
       <Card icon="feeding" title={<T id="section.placeholder.title" />} titleAs="h2">
         <div className="prose">
           <p>

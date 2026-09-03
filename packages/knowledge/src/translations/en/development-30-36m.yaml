@@ -1,0 +1,65 @@
+# SPDX-License-Identifier: CC-BY-NC-SA-4.0
+# Canonical English strings for Development stage dev-30-36m. English is authored first;
+# Vietnamese parity lives in translations/vi/development-30-36m.yaml. List claims keep one
+# lead line followed by `- item` lines; source qualifiers survive verbatim (no invented precision).
+
+locale: en
+strings:
+  development.30-36m.at-a-glance: |-
+    From 30 to under 36 months, the CDC 30-month checklist is the reference. Most children now say about 50 words, put two or more words together with an action word, say “I”, “me” or “we”, follow two-step instructions, know at least one color, pretend with objects, jump with both feet, twist doorknobs and lids, take some clothes off and turn book pages one at a time. Play is free play, pretend cooking, drawing, puzzles, outdoor climbing and playing next to — and sometimes with — other children.
+  development.30-36m.milestone-context: |-
+    For this stage (30 to under 36 months) the reference is CDC’s 30-month checklist: what most children (75% or more) do by 30 months. A child of 31 to 35 months is compared with the 30-month checklist, not with something in between; the 3-year checklist becomes the reference at 36 months. CDC notes that its milestone materials are not a substitute for standardized, validated developmental screening tools.
+  development.30-36m.development-focus: |-
+    Language takes off — a growing vocabulary, short sentences with action words, and “I” and “me”. Pretend play becomes symbolic: a block can be food for a doll. Your child solves small practical problems, such as fetching a stool to reach something, and follows a routine when asked. Hands twist, unscrew and undress; feet jump. Playing near other children slowly turns into playing with them.
+  development.30-36m.gross-motor: |-
+    Large-movement milestone most children reach by 30 months (CDC checklist):
+    - jumps off the ground with both feet
+    Running, kicking a ball and walking up a few stairs are on the 2-year checklist and remain part of everyday play.
+  development.30-36m.fine-motor: |-
+    Hand and hand–eye milestones most children reach by 30 months (CDC checklist):
+    - uses the hands to twist things, like turning doorknobs or unscrewing lids
+    - takes some clothes off by themselves, like loose pants or an open jacket
+    - turns book pages one at a time when you read together
+  development.30-36m.communication: |-
+    Communication milestones most children reach by 30 months (CDC checklist):
+    - says about 50 words
+    - says two or more words together, with one action word, like “Doggie run”
+    - names things in a book when you point and ask “What is this?”
+    - says words like “I”, “me” or “we”
+  development.30-36m.cognitive: |-
+    Learning and thinking milestones most children reach by 30 months (CDC checklist):
+    - uses things to pretend, like feeding a block to a doll as if it were food
+    - shows simple problem-solving skills, like standing on a small stool to reach something
+    - follows two-step instructions, like “Put the toy down and close the door”
+    - shows they know at least one color, like pointing to a red crayon when you ask “Which one is red?”
+  development.30-36m.social-emotional: |-
+    Social and emotional milestones most children reach by 30 months (CDC checklist):
+    - plays next to other children and sometimes plays with them
+    - shows you what they can do by saying “Look at me!”
+    - follows simple routines when told, like helping to pick up toys when you say “It’s clean-up time”
+  development.30-36m.activities: |-
+    Ideas CDC suggests for this age:
+    - encourage free play, where your child follows their own interests and uses things in new ways
+    - ask simple questions about books and stories: “Who?”, “What?”, “Where?”
+    - use words that describe: big/small, fast/slow, on/off, in/out, and encourage naming colors, body parts and pictures
+    - let your child draw with crayons on paper, shaving cream on a tray or chalk on the sidewalk
+    - pretend play with safe things from your kitchen, and large boxes that become a car, bus or house
+    - kick a ball back and forth; play “follow the leader” walking in a line, backwards and on tiptoes
+    - simple puzzles with shapes, colors or animals — name each piece as it goes in
+    - give simple choices — two or three — for snacks or clothes, and help your child learn to share and take turns with other children
+  development.30-36m.variants: |-
+    Easier: one-step instructions, then two steps that go together naturally (“get your cup and bring it here”). Harder: two unrelated steps, or a step with a position word (“put the ball under the chair”). Easier for pretend play: real-looking props. Harder: a block stands in for the phone, the food, the car. Easier for jumping: from a low step with your hands. Harder: over a line on the floor, then over a small object.
+  development.30-36m.safety-environment: |-
+    Safety points CDC attaches to this age:
+    - sitting while eating and chewing thoroughly helps prevent choking; keep crayons and pencils out of the mouth during drawing
+    - check toys often for loose or broken parts
+    - don’t hold hot drinks while your child sits on your lap
+    - watch your child around any water, and fence off backyard pools
+    - in the car, back seat and a harnessed car seat
+    - climbing equipment and running belong in safe areas with you nearby; limit screen time to no more than 1 hour a day of a children’s program with an adult present
+  development.30-36m.what-not-to-force: |-
+    Don’t treat “plays with other children” as expected all the time — the 30-month milestone is playing next to others and sometimes with them, and CDC’s tip is to show sharing and turn-taking, not to enforce it. Don’t push toilet training on a calendar; CDC suggests asking your child’s doctor or teachers whether your child is ready. Don’t press food: CDC suggests letting your child decide how much to eat from the healthy options you offer. And don’t correct every word — repeat it back the grown-up way instead.
+  development.30-36m.what-to-observe: |-
+    Notice how your child uses words to get things done — asking, refusing, describing, “Look at me!” — and whether two-step instructions land. Notice pretend play: what stands in for what, and whether a story develops. Notice small problem solving, like moving a stool, and how your child joins other children — watching, playing alongside, or joining in. These observations say more than counting words.
+  development.30-36m.clinician-cues: |-
+    The reference for this stage is CDC’s 30-month checklist. CDC cites the AAP recommendation for standardized developmental screening at 30 months, so this stage usually includes a screening visit. Bring: what you and your child do together, what your child likes to do, anything your child does or does not do that concerns you, whether your child has lost any skills they once had, and whether your child has special healthcare needs or was born prematurely. If your child is not doing one or more of the 30-month milestones, has lost skills, or you have other concerns, don’t wait — talk with your child’s doctor.

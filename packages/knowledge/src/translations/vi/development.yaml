@@ -1,0 +1,26 @@
+# SPDX-License-Identifier: CC-BY-NC-SA-4.0
+# Vietnamese parity strings shared across Development stages: section titles and the cross-stage
+# "reading milestones" claims (GUIDANCE_CONTENT_CONTRACT.md §3, §10).
+
+locale: vi
+strings:
+  development.milestones.reference: "Cột mốc phát triển là những kỹ năng như nụ cười đầu tiên, bước đi đầu tiên hay vẫy tay “tạm biệt” — những điều mà phần lớn trẻ (từ 75% trở lên) làm được khi đến một độ tuổi nhất định, trải rộng trên các mặt chơi, học, nói, hành vi và vận động. CDC công bố một danh sách cột mốc cho từng độ tuổi, từ 2 tháng đến 5 tuổi. CDC lưu ý rằng các tài liệu này không thay thế cho các công cụ sàng lọc phát triển đã được chuẩn hóa và kiểm định."
+  development.milestones.not-pass-fail: "HowToBaby trình bày các cột mốc như điểm tham chiếu giúp bạn nhận ra bé đang tập làm gì, không phải như thời hạn phải đạt, điểm số hay bài kiểm tra đạt–không đạt. Một danh sách cột mốc mô tả điều phần lớn trẻ làm được ở một độ tuổi; nó không nói bé phải làm gì vào một ngày cụ thể, và tự nó cũng không cho biết bé đang phát triển ra sao. Hãy dùng danh sách này để chọn trò chơi phù hợp với bé hôm nay và để biết nên trao đổi điều gì với bác sĩ của bé."
+  development.milestones.younger-checklist: "CDC chỉ có danh sách cột mốc cho một số độ tuổi cố định. Khi tuổi của bé nằm giữa hai độ tuổi có danh sách, HowToBaby dùng danh sách của độ tuổi nhỏ hơn làm tham chiếu thay vì tự ước lượng một mức ở giữa. Ví dụ, khi bé 7 hoặc 8 tháng, tham chiếu là danh sách 6 tháng; danh sách 9 tháng chỉ trở thành tham chiếu khi bé được 9 tháng. Dưới 2 tháng thì chưa có danh sách nào."
+  development.milestones.corrected-age: "Nếu bé sinh sớm, AAP giải thích rằng trong 2 năm đầu, việc dùng tuổi hiệu chỉnh — tính từ ngày dự sinh ban đầu thay vì ngày sinh — giúp hình dung chính xác hơn thời điểm bé có thể đạt các cột mốc phát triển thường gặp. HowToBaby áp dụng điều này bằng cách tính tuổi ở mục Chơi & Phát triển từ ngày dự sinh khi ngày dự sinh cách ngày sinh hơn 3 tuần, và áp dụng cho đến khi bé được 24 tháng tính từ ngày sinh. Đây là quy tắc để chọn nội dung hướng dẫn, không phải chẩn đoán sinh non."
+  development.milestones.act-early: "Lời khuyên của CDC là: bạn là người hiểu bé nhất — đừng chờ đợi. Nếu bé chưa làm được một hoặc nhiều cột mốc, mất đi kỹ năng từng có, hoặc bạn có bất kỳ lo lắng nào khác, hãy trao đổi với bác sĩ của bé, chia sẻ điều bạn lo lắng và hỏi về việc sàng lọc phát triển. Nếu bạn hoặc bác sĩ vẫn còn băn khoăn, hãy đề nghị được giới thiệu đến chuyên gia và liên hệ chương trình can thiệp sớm của tiểu bang hoặc vùng lãnh thổ nơi bạn ở. CDC cũng dẫn khuyến nghị của AAP rằng trẻ nên được sàng lọc phát triển chung bằng công cụ chuẩn hóa, đã kiểm định khi được 9, 18 và 30 tháng, và sàng lọc tự kỷ khi được 18 và 24 tháng hoặc bất cứ khi nào cha mẹ hay nhân viên y tế có lo ngại."
+  guidance.development.section.at-a-glance.title: "Tóm tắt nhanh"
+  guidance.development.section.milestone-context.title: "Hiểu về các cột mốc"
+  guidance.development.section.development-focus.title: "Trọng tâm phát triển"
+  guidance.development.section.gross-motor.title: "Vận động thô"
+  guidance.development.section.fine-motor.title: "Vận động tinh và phối hợp tay–mắt"
+  guidance.development.section.communication.title: "Giao tiếp"
+  guidance.development.section.cognitive.title: "Nhận thức và giải quyết vấn đề"
+  guidance.development.section.social-emotional.title: "Xã hội và cảm xúc"
+  guidance.development.section.activities.title: "Hoạt động gợi ý"
+  guidance.development.section.variants.title: "Biến thể dễ hơn và khó hơn"
+  guidance.development.section.safety-environment.title: "An toàn và môi trường chơi"
+  guidance.development.section.what-not-to-force.title: "Những điều không nên ép bé"
+  guidance.development.section.what-to-observe.title: "Điều nên quan sát"
+  guidance.development.section.clinician-cues.title: "Trao đổi với bác sĩ của bé"
+  guidance.development.section.reading-milestones.title: "Cách đọc các cột mốc phát triển"

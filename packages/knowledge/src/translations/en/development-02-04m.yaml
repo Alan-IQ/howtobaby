@@ -1,0 +1,58 @@
+# SPDX-License-Identifier: CC-BY-NC-SA-4.0
+# Canonical English strings for Development stage dev-02-04m. English is authored first;
+# Vietnamese parity lives in translations/vi/development-02-04m.yaml. List claims keep one
+# lead line followed by `- item` lines; source qualifiers survive verbatim (no invented precision).
+
+locale: en
+strings:
+  development.02-04m.at-a-glance: |-
+    From 2 to under 4 months, the CDC 2-month checklist is the reference. Most babies now smile back, make sounds other than crying, follow you with their eyes and hold the head up during tummy time. Play is face-to-face: talking, singing, copying sounds, and short tummy-time sessions with a toy in view. Everything still follows your baby’s signals.
+  development.02-04m.milestone-context: |-
+    For this stage (2 to under 4 months) the reference is CDC’s 2-month checklist: what most babies (75% or more) do by 2 months. A baby of 3 months is compared with the 2-month checklist, not with something in between; the 4-month checklist becomes the reference at 4 months. CDC notes that its milestone materials are not a substitute for standardized, validated developmental screening tools.
+  development.02-04m.development-focus: |-
+    This is the stage of the social smile and the first “conversations”: your baby smiles when you smile, makes sounds and waits for you to answer. Looking and tracking sharpen — following you across the room, studying a toy. On the tummy, head control keeps improving. Play is about back-and-forth: your response is the reward.
+  development.02-04m.gross-motor: |-
+    Large-movement milestones most babies reach by 2 months (CDC checklist):
+    - holds the head up when on the tummy
+    - moves both arms and both legs
+  development.02-04m.fine-motor: |-
+    Hand skills most babies reach by 2 months (CDC checklist):
+    - opens the hands briefly
+    Over this stage many babies also start bringing hands together or toward the mouth; the CDC lists “brings hands to mouth” on the 4-month checklist.
+  development.02-04m.communication: |-
+    Communication milestones most babies reach by 2 months (CDC checklist):
+    - makes sounds other than crying
+    - reacts to loud sounds
+  development.02-04m.cognitive: |-
+    Learning and thinking milestones most babies reach by 2 months (CDC checklist):
+    - watches you as you move
+    - looks at a toy for several seconds
+  development.02-04m.social-emotional: |-
+    Social and emotional milestones most babies reach by 2 months (CDC checklist):
+    - calms down when spoken to or picked up
+    - looks at your face
+    - seems happy to see you when you walk up
+    - smiles when you talk to or smile at them
+  development.02-04m.activities: |-
+    Ideas CDC suggests for this age:
+    - copy your baby’s sounds and see how long they keep “talking” back and forth with you
+    - talk and play with your baby while feeding, dressing and bathing
+    - hold a rattle to one side of your baby’s head, shake it and see if they look for the sound
+    - lay your baby on the tummy while awake with toys at eye level so they practice lifting the head
+    - look at pictures with bright colors or faces together and talk about them
+    - practice staying calm when your baby is upset — soft talking, holding, rocking or singing helps them calm down
+  development.02-04m.variants: |-
+    Easier: for sound games, start by copying exactly what your baby says and keep your face close and still. Harder: after copying, add a new sound and wait to see if your baby tries it. Easier for tummy time: prop your baby’s chest on a rolled towel or on your chest, with your face as the “toy”. Harder: move the toy slowly from side to side so your baby turns the head while lifting it. Keep every session short and stop at the first fussing.
+  development.02-04m.safety-environment: |-
+    Safety points CDC and the AAP attach to this age:
+    - tummy time is only for a baby who is awake and being watched; sleep is always on the back
+    - give your baby floor time to move; try not to keep them in swings, strollers, bouncer seats or exercise saucers for too long
+    - never shake your baby
+    - don’t let your baby play with anything that could cover the face, and never carry hot liquids or food near or while holding your baby
+    - for children under 18 months, the AAP recommends no screen media other than video chatting
+  development.02-04m.what-not-to-force: |-
+    Don’t prop or hold your baby in positions their body can’t yet manage, such as sitting or standing, for play — the milestones for this stage are about the head and the hands, not sitting. Don’t extend tummy time or face-to-face play past the point where your baby turns away, yawns or fusses; those are CDC’s signals for a break. And don’t compare your baby with the 4-month checklist yet: until 4 months, the 2-month list is the reference.
+  development.02-04m.what-to-observe: |-
+    Watch how your baby engages rather than ticking items: does the smile come in answer to yours, do sounds come in a back-and-forth pattern, do the eyes follow you across the room, and how steady is the head during tummy time compared with a couple of weeks ago? Notice what your baby prefers — voices, faces, a particular toy — and build the next play session around that.
+  development.02-04m.clinician-cues: |-
+    The reference for this stage is CDC’s 2-month checklist. CDC suggests bringing to the visit: what you and your baby do together, what your baby likes to do, anything your baby does or does not do that concerns you, whether your baby has lost any skills they once had, and whether your baby has special healthcare needs or was born prematurely. If your baby is not doing one or more of the 2-month milestones, has lost skills, or you have other concerns, don’t wait — talk with your baby’s doctor and ask about developmental screening.

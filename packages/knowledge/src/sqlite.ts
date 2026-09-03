@@ -85,6 +85,7 @@ CREATE TABLE guidance_blocks (
   id TEXT PRIMARY KEY,
   domain TEXT NOT NULL,
   stage TEXT,
+  section TEXT,
   title_key TEXT NOT NULL
 ) WITHOUT ROWID;
 
@@ -162,11 +163,11 @@ function populate(db: DatabaseSync, compiled: CompiledKnowledge): void {
     });
   }
 
-  const insertBlock = db.prepare("INSERT INTO guidance_blocks (id, domain, stage, title_key) VALUES (?,?,?,?)");
+  const insertBlock = db.prepare("INSERT INTO guidance_blocks (id, domain, stage, section, title_key) VALUES (?,?,?,?,?)");
   const insertBlockClaim = db.prepare("INSERT INTO guidance_block_claims (block_id, position, claim_id) VALUES (?,?,?)");
   const insertBlockRoute = db.prepare("INSERT INTO guidance_block_routes (block_id, route) VALUES (?,?)");
   for (const b of compiled.guidance) {
-    insertBlock.run(b.id, b.domain, b.stage ?? null, b.titleKey);
+    insertBlock.run(b.id, b.domain, b.stage ?? null, b.section ?? null, b.titleKey);
     b.claimIds.forEach((claimId, position) => insertBlockClaim.run(b.id, position, claimId));
     for (const route of [...b.routes].sort()) insertBlockRoute.run(b.id, route);
   }

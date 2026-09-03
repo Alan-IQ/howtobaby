@@ -1,0 +1,60 @@
+# SPDX-License-Identifier: CC-BY-NC-SA-4.0
+# Canonical English strings for Development stage dev-12-15m. English is authored first;
+# Vietnamese parity lives in translations/vi/development-12-15m.yaml. List claims keep one
+# lead line followed by `- item` lines; source qualifiers survive verbatim (no invented precision).
+
+locale: en
+strings:
+  development.12-15m.at-a-glance: |-
+    From 12 to under 15 months, the CDC 1-year checklist is the reference. Most children now pull up to stand, walk holding on to furniture, pick up small bits of food between thumb and finger, wave “bye-bye”, call a parent “mama” or “dada”, understand “no”, put things into a container and look for something they saw you hide. Play is about doing: filling and dumping, pushing things around, pat-a-cake, and naming what your child points to.
+  development.12-15m.milestone-context: |-
+    For this stage (12 to under 15 months) the reference is CDC’s 1-year checklist: what most children (75% or more) do by 1 year. A child of 13 or 14 months is compared with the 1-year checklist, not with something in between; the 15-month checklist becomes the reference at 15 months. CDC notes that its milestone materials are not a substitute for standardized, validated developmental screening tools.
+  development.12-15m.development-focus: |-
+    Standing up changes everything: pulling up and cruising along furniture put your child at table height, and a precise thumb-and-finger grip lets them pick up crumbs, blocks and small bits of food. First “words” and gestures — waving, pointing, “mama”, “dada” — carry real meaning, and your child begins to understand simple words like “no”. Games with a clear cause and effect are the favorites.
+  development.12-15m.gross-motor: |-
+    Large-movement milestones most children reach by 1 year (CDC checklist):
+    - pulls up to stand
+    - walks holding on to furniture
+    Walking alone is not on the 1-year checklist; “takes a few steps on their own” appears on the 15-month checklist.
+  development.12-15m.fine-motor: |-
+    Hand and hand–eye milestones most children reach by 1 year (CDC checklist):
+    - picks things up between thumb and pointer finger, like small bits of food
+    - drinks from a cup without a lid as you hold it
+    - puts something in a container, like a block in a cup (CDC lists this under learning and thinking)
+  development.12-15m.communication: |-
+    Communication milestones most children reach by 1 year (CDC checklist):
+    - waves “bye-bye”
+    - calls a parent “mama” or “dada” or another special name
+    - understands “no” (pauses briefly or stops when you say it)
+  development.12-15m.cognitive: |-
+    Learning and thinking milestones most children reach by 1 year (CDC checklist):
+    - looks for things they see you hide, like a toy under a blanket
+    CDC also lists “puts something in a container”, which HowToBaby shows under hand and hand–eye skills.
+  development.12-15m.social-emotional: |-
+    Social and emotional milestone most children reach by 1 year (CDC checklist):
+    - plays games with you, like pat-a-cake
+  development.12-15m.activities: |-
+    Ideas CDC suggests for this age:
+    - talk or sing about what you are doing: “Mommy is washing your hands”
+    - build on what your child tries to say: “ta” — “Yes, a truck”
+    - respond with words when your child points: “You want the cup? Here is the cup”
+    - point to interesting things you see — a truck, a bus, animals
+    - play with blocks and other toys that use the hands; give pots and pans or a small drum to make noise with
+    - let your child push things around — empty boxes, a small chair, push toys — to practice walking
+    - “read” books together; books with textures or flaps are favorites now
+    - teach “wanted behaviors”: show what to do and give positive words or hugs when your child does it
+  development.12-15m.variants: |-
+    Easier: use a wide container and large blocks so dropping in always succeeds; hide the toy with part of it showing. Harder: a narrower opening or smaller safe objects; hide the toy fully, or move it between two covers while your child watches. Easier for walking practice: a heavy push toy that won’t run away, or your two hands. Harder: one hand only, then a moment with no hands, on a soft floor. Easier for words: name what your child points to. Harder: pause and let them try the word first.
+  development.12-15m.safety-environment: |-
+    Safety points CDC and the AAP attach to this age:
+    - never leave your child near or around water — bathtubs, pools, ponds, buckets — without someone watching; CDC notes that drowning is the leading cause of injury death at this age
+    - block off stairs with a gate, cover unused outlets, keep appliances, irons and heaters out of reach and turn pot handles toward the back of the stove
+    - lock up medicines, cleaners and poisons, and keep sharp objects away
+    - CDC says baby walkers are not recommended; let your child hold your hands or safe furniture instead
+    - keep learning which foods are choking risks; screen time is not recommended under 2 years except video calling
+  development.12-15m.what-not-to-force: |-
+    Don’t treat independent walking as due now — it is on the 15-month checklist, not the 1-year one — and don’t use a walker to bring it forward. Don’t drill “no”: CDC suggests saving “no” for dangerous behaviors and redirecting with a toy or a move otherwise. Don’t rush your child into a new caregiver’s arms; CDC suggests giving time and bringing a favorite toy or blanket. And don’t expect sharing or playing with other children yet — at this age play is with you.
+  development.12-15m.what-to-observe: |-
+    Notice how your child communicates without many words: pointing, waving, bringing you things, looking at you and then at what they want. Notice the grip — whole hand or thumb and finger — and how your child gets up, cruises and lowers back down. Notice what happens after you say “no” once, and what redirects work best. These details shape both play and the conversation with your child’s doctor.
+  development.12-15m.clinician-cues: |-
+    The reference for this stage is CDC’s 1-year checklist. CDC suggests bringing to the visit: what you and your child do together, what your child likes to do, anything your child does or does not do that concerns you, whether your child has lost any skills they once had, and whether your child has special healthcare needs or was born prematurely. If your child is not doing one or more of the 1-year milestones, has lost skills, or you have other concerns, don’t wait — talk with your child’s doctor and ask about developmental screening.

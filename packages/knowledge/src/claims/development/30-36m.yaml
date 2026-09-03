@@ -1,0 +1,344 @@
+# SPDX-License-Identifier: CC-BY-NC-SA-4.0
+# Canonical Play & Development claims — stage dev-30-36m (docs/GUIDANCE_CONTENT_CONTRACT.md §3).
+# Milestone sections paraphrase the CDC checklist (interpret + cite + link); milestones are references,
+# never deadlines, scores or pass/fail tests. Parent-facing wording lives in translations/<locale>/.
+
+domain: development
+
+claims:
+  - id: development.30-36m.at-a-glance
+    textKey: development.30-36m.at-a-glance
+    publicSlug: development-30-36-months-at-a-glance
+    guidanceClass: practical-interpretation
+    precisionClass: product-heuristic
+    safetyLevel: info
+    applicability:
+      - "development-stage:dev-30-36m"
+      - "cdc-checklist:30-months"
+    sourceRefs:
+      - sourceId: cdc-milestones-30-months
+        relationship: direct-support
+        locator:
+          paragraphHint: >-
+            Overall picture drawn from the whole checklist for 30 months: the milestone lists
+            and the tips and activities. HowToBaby's own summary wording.
+        verifiedAt: 2026-09-03
+    reviewedAt: 2026-09-03
+    reviewStatus: source-verified
+
+  - id: development.30-36m.milestone-context
+    textKey: development.30-36m.milestone-context
+    publicSlug: development-30-36-months-milestone-context
+    guidanceClass: official-guidance
+    precisionClass: source-exact
+    safetyLevel: info
+    applicability:
+      - "development-stage:dev-30-36m"
+      - "cdc-checklist:30-months"
+    sourceRefs:
+      - sourceId: cdc-milestones-30-months
+        relationship: primary
+        locator:
+          section: "Ways to monitor milestones"
+          paragraphHint: >-
+            The checklist for 30 months describes what most children (75% or more) do by 30
+            months; the materials are not a substitute for standardized developmental screening
+            tools. Paraphrased.
+        verifiedAt: 2026-09-03
+      - sourceId: cdc-developmental-milestones
+        relationship: direct-support
+        locator:
+          heading: "CDC's Developmental Milestones"
+          paragraphHint: >-
+            List of age-specific checklists (2 months through 5 years) — the fixed checklist
+            ages HowToBaby resolves between.
+        verifiedAt: 2026-09-03
+    reviewedAt: 2026-09-03
+    reviewStatus: source-verified
+
+  - id: development.30-36m.development-focus
+    textKey: development.30-36m.development-focus
+    publicSlug: development-30-36-months-development-focus
+    guidanceClass: practical-interpretation
+    precisionClass: product-heuristic
+    safetyLevel: info
+    applicability:
+      - "development-stage:dev-30-36m"
+      - "cdc-checklist:30-months"
+    sourceRefs:
+      - sourceId: cdc-milestones-30-months
+        relationship: direct-support
+        locator:
+          section: "What most children do by 30 months"
+          paragraphHint: >-
+            The four milestone groups on the checklist for 30 months, read together as the
+            themes of this stage. HowToBaby's interpretation, not source wording.
+        verifiedAt: 2026-09-03
+      - sourceId: aap-power-of-play-2018
+        relationship: contextual
+        locator:
+          section: "Abstract"
+          paragraphHint: >-
+            Developmentally appropriate play with parents and peers promotes social-emotional,
+            cognitive, language and self-regulation skills.
+        verifiedAt: 2026-09-03
+    reviewedAt: 2026-09-03
+    reviewStatus: source-verified
+
+  - id: development.30-36m.gross-motor
+    textKey: development.30-36m.gross-motor
+    publicSlug: development-30-36-months-gross-motor
+    guidanceClass: official-guidance
+    precisionClass: source-exact
+    safetyLevel: info
+    applicability:
+      - "development-stage:dev-30-36m"
+      - "cdc-checklist:30-months"
+    sourceRefs:
+      - sourceId: cdc-milestones-30-months
+        relationship: primary
+        locator:
+          section: "Movement/Physical Development Milestones"
+          paragraphHint: >-
+            Large-movement items on the checklist for 30 months (what most children do by 30
+            months). Paraphrased, not source wording.
+        verifiedAt: 2026-09-03
+    reviewedAt: 2026-09-03
+    reviewStatus: source-verified
+
+  - id: development.30-36m.fine-motor
+    textKey: development.30-36m.fine-motor
+    publicSlug: development-30-36-months-fine-motor
+    guidanceClass: official-guidance
+    precisionClass: source-exact
+    safetyLevel: info
+    applicability:
+      - "development-stage:dev-30-36m"
+      - "cdc-checklist:30-months"
+    sourceRefs:
+      - sourceId: cdc-milestones-30-months
+        relationship: primary
+        locator:
+          section: "Movement/Physical Development Milestones"
+          paragraphHint: >-
+            Hand, finger and hand–eye items on the checklist for 30 months; where CDC lists a
+            hand skill under Cognitive Milestones, that section is the locator. Paraphrased.
+        verifiedAt: 2026-09-03
+    reviewedAt: 2026-09-03
+    reviewStatus: source-verified
+
+  - id: development.30-36m.communication
+    textKey: development.30-36m.communication
+    publicSlug: development-30-36-months-communication
+    guidanceClass: official-guidance
+    precisionClass: source-exact
+    safetyLevel: info
+    applicability:
+      - "development-stage:dev-30-36m"
+      - "cdc-checklist:30-months"
+    sourceRefs:
+      - sourceId: cdc-milestones-30-months
+        relationship: primary
+        locator:
+          section: "Language/Communication Milestones"
+          paragraphHint: >-
+            Language/communication items on the checklist for 30 months (what most children do
+            by 30 months). Paraphrased, not source wording.
+        verifiedAt: 2026-09-03
+    reviewedAt: 2026-09-03
+    reviewStatus: source-verified
+
+  - id: development.30-36m.cognitive
+    textKey: development.30-36m.cognitive
+    publicSlug: development-30-36-months-cognitive
+    guidanceClass: official-guidance
+    precisionClass: source-exact
+    safetyLevel: info
+    applicability:
+      - "development-stage:dev-30-36m"
+      - "cdc-checklist:30-months"
+    sourceRefs:
+      - sourceId: cdc-milestones-30-months
+        relationship: primary
+        locator:
+          section: "Cognitive Milestones (learning, thinking, problem-solving)"
+          paragraphHint: >-
+            Cognitive items on the checklist for 30 months (what most children do by 30 months).
+            Paraphrased, not source wording.
+        verifiedAt: 2026-09-03
+    reviewedAt: 2026-09-03
+    reviewStatus: source-verified
+
+  - id: development.30-36m.social-emotional
+    textKey: development.30-36m.social-emotional
+    publicSlug: development-30-36-months-social-emotional
+    guidanceClass: official-guidance
+    precisionClass: source-exact
+    safetyLevel: info
+    applicability:
+      - "development-stage:dev-30-36m"
+      - "cdc-checklist:30-months"
+    sourceRefs:
+      - sourceId: cdc-milestones-30-months
+        relationship: primary
+        locator:
+          section: "Social/Emotional Milestones"
+          paragraphHint: >-
+            Social/emotional items on the checklist for 30 months (what most children do by 30
+            months). Paraphrased, not source wording.
+        verifiedAt: 2026-09-03
+    reviewedAt: 2026-09-03
+    reviewStatus: source-verified
+
+  - id: development.30-36m.activities
+    textKey: development.30-36m.activities
+    publicSlug: development-30-36-months-activities
+    guidanceClass: official-guidance
+    precisionClass: source-exact
+    safetyLevel: info
+    applicability:
+      - "development-stage:dev-30-36m"
+      - "cdc-checklist:30-months"
+    sourceRefs:
+      - sourceId: cdc-milestones-30-months
+        relationship: primary
+        locator:
+          section: "Tips and Activities"
+          paragraphHint: >-
+            CDC's "What you can do for this age" tips and activities; HowToBaby selects and
+            paraphrases a few.
+        verifiedAt: 2026-09-03
+      - sourceId: aap-power-of-play-2018
+        relationship: corroborating
+        locator:
+          section: "Abstract"
+          paragraphHint: >-
+            Play with parents builds social-emotional, cognitive, language and self-regulation
+            skills — consistent with CDC's play-based tips.
+        verifiedAt: 2026-09-03
+    reviewedAt: 2026-09-03
+    reviewStatus: source-verified
+
+  - id: development.30-36m.variants
+    textKey: development.30-36m.variants
+    publicSlug: development-30-36-months-variants
+    guidanceClass: practical-interpretation
+    precisionClass: product-heuristic
+    safetyLevel: info
+    applicability:
+      - "development-stage:dev-30-36m"
+      - "cdc-checklist:30-months"
+    sourceRefs:
+      - sourceId: cdc-milestones-30-months
+        relationship: direct-support
+        locator:
+          section: "Tips and Activities"
+          paragraphHint: >-
+            CDC's tips for this age are the basis; the easier/harder adjustments are HowToBaby's
+            practical interpretation, not source wording.
+        verifiedAt: 2026-09-03
+    reviewedAt: 2026-09-03
+    reviewStatus: source-verified
+
+  - id: development.30-36m.safety-environment
+    textKey: development.30-36m.safety-environment
+    publicSlug: development-30-36-months-safety-environment
+    guidanceClass: official-guidance
+    precisionClass: source-exact
+    safetyLevel: caution
+    applicability:
+      - "development-stage:dev-30-36m"
+      - "cdc-checklist:30-months"
+    sourceRefs:
+      - sourceId: cdc-positive-parenting-toddlers-2-3
+        relationship: primary
+        locator:
+          section: "Child safety first"
+          paragraphHint: >-
+            Sit when eating and chew thoroughly; check toys for loose or broken parts; no
+            pencils or crayons in the mouth; no hot drinks with the child on your lap; back
+            seat, harnessed car seat; water supervision, fenced pools. Paraphrased.
+        verifiedAt: 2026-09-03
+      - sourceId: cdc-milestones-30-months
+        relationship: direct-support
+        locator:
+          section: "Tips and Activities"
+          paragraphHint: >-
+            Screen time no more than 1 hour per day of a children's program with an adult
+            present; outdoor play on equipment and running in safe areas. Paraphrased.
+        verifiedAt: 2026-09-03
+    reviewedAt: 2026-09-03
+    reviewStatus: source-verified
+
+  - id: development.30-36m.what-not-to-force
+    textKey: development.30-36m.what-not-to-force
+    publicSlug: development-30-36-months-what-not-to-force
+    guidanceClass: practical-interpretation
+    precisionClass: product-heuristic
+    safetyLevel: caution
+    applicability:
+      - "development-stage:dev-30-36m"
+      - "cdc-checklist:30-months"
+    sourceRefs:
+      - sourceId: cdc-milestones-30-months
+        relationship: direct-support
+        locator:
+          section: "Tips and Activities"
+          paragraphHint: >-
+            Allow the child to eat as much or as little as they want; ask the doctor or teachers
+            about toilet-training readiness; help the child learn to play with others by showing
+            how to share and take turns. Paraphrased.
+        verifiedAt: 2026-09-03
+    reviewedAt: 2026-09-03
+    reviewStatus: source-verified
+
+  - id: development.30-36m.what-to-observe
+    textKey: development.30-36m.what-to-observe
+    publicSlug: development-30-36-months-what-to-observe
+    guidanceClass: practical-interpretation
+    precisionClass: product-heuristic
+    safetyLevel: info
+    applicability:
+      - "development-stage:dev-30-36m"
+      - "cdc-checklist:30-months"
+    sourceRefs:
+      - sourceId: cdc-milestones-30-months
+        relationship: direct-support
+        locator:
+          section: "Ways to monitor milestones"
+          paragraphHint: >-
+            How a child plays, learns, speaks, acts and moves offers important clues about
+            development. HowToBaby turns this into things to notice during play.
+        verifiedAt: 2026-09-03
+    reviewedAt: 2026-09-03
+    reviewStatus: source-verified
+
+  - id: development.30-36m.clinician-cues
+    textKey: development.30-36m.clinician-cues
+    publicSlug: development-30-36-months-clinician-cues
+    guidanceClass: official-guidance
+    precisionClass: source-exact
+    safetyLevel: clinician
+    applicability:
+      - "development-stage:dev-30-36m"
+      - "cdc-checklist:30-months"
+    sourceRefs:
+      - sourceId: cdc-milestones-30-months
+        relationship: primary
+        locator:
+          section: "Share with your child's doctor"
+          paragraphHint: >-
+            Things to share and consider (what you do together, what the child likes, concerns,
+            lost skills, special needs or premature birth) and the don't-wait / act-early
+            guidance. Paraphrased.
+        verifiedAt: 2026-09-03
+      - sourceId: cdc-developmental-milestones
+        relationship: direct-support
+        locator:
+          heading: "CDC's Developmental Milestones"
+          paragraphHint: >-
+            AAP recommendation quoted by CDC: developmental screening at 9, 18 and 30 months;
+            autism screening at 18 and 24 months or whenever there is a concern.
+        verifiedAt: 2026-09-03
+    reviewedAt: 2026-09-03
+    reviewStatus: source-verified

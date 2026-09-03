@@ -1,0 +1,65 @@
+# SPDX-License-Identifier: CC-BY-NC-SA-4.0
+# Canonical English strings for Development stage dev-15-18m. English is authored first;
+# Vietnamese parity lives in translations/vi/development-15-18m.yaml. List claims keep one
+# lead line followed by `- item` lines; source qualifiers survive verbatim (no invented precision).
+
+locale: en
+strings:
+  development.15-18m.at-a-glance: |-
+    From 15 to under 18 months, the CDC 15-month checklist is the reference. Most children now take a few steps on their own, feed themselves some food with the fingers, try one or two words besides “mama” and “dada”, point to ask for things, follow a direction given with a gesture and words, stack two small objects and copy other children at play. Play is imitation and helping: everyday chores, songs with gestures, pretend talk with a stuffed animal.
+  development.15-18m.milestone-context: |-
+    For this stage (15 to under 18 months) the reference is CDC’s 15-month checklist: what most children (75% or more) do by 15 months. A child of 16 or 17 months is compared with the 15-month checklist, not with something in between; the 18-month checklist becomes the reference at 18 months. CDC notes that its milestone materials are not a substitute for standardized, validated developmental screening tools.
+  development.15-18m.development-focus: |-
+    First steps and first words arrive around the same time, and both are wobbly. Your child points to ask and to show, understands far more than they can say, and starts to use objects the “right” way — a cup to drink, a phone to the ear, a book to open. Copying you and other children is the main way of learning now, and affection becomes deliberate: hugs, cuddles and kisses.
+  development.15-18m.gross-motor: |-
+    Large-movement milestone most children reach by 15 months (CDC checklist):
+    - takes a few steps on their own
+    Walking without holding on to anyone or anything appears on the 18-month checklist.
+  development.15-18m.fine-motor: |-
+    Hand and hand–eye milestones most children reach by 15 months (CDC checklist):
+    - uses the fingers to feed themselves some food
+    - stacks at least two small objects, like blocks (CDC lists this under learning and thinking)
+    - tries to use things the right way, like a phone, cup or book (CDC lists this under learning and thinking)
+  development.15-18m.communication: |-
+    Communication milestones most children reach by 15 months (CDC checklist):
+    - tries to say one or two words besides “mama” or “dada”, like “ba” for ball or “da” for dog
+    - looks at a familiar object when you name it
+    - follows directions given with both a gesture and words, like handing you a toy when you hold out your hand and say “Give me the toy”
+    - points to ask for something or to get help
+  development.15-18m.cognitive: |-
+    Learning and thinking milestones most children reach by 15 months (CDC checklist):
+    - tries to use things the right way, like a phone, cup or book
+    - stacks at least two small objects, like blocks
+    HowToBaby also shows these two under hand and hand–eye skills, because they are as much about the hands as about thinking.
+  development.15-18m.social-emotional: |-
+    Social and emotional milestones most children reach by 15 months (CDC checklist):
+    - copies other children while playing, like taking toys out of a container when another child does
+    - shows you an object they like
+    - claps when excited
+    - hugs a stuffed doll or other toy
+    - shows you affection (hugs, cuddles or kisses you)
+  development.15-18m.activities: |-
+    Ideas CDC suggests for this age:
+    - repeat and add to what your child says: “ba” — “Ball, yes, that’s a ball”
+    - name what your child points to, then wait a few seconds for a sound before handing it over
+    - let your child help with everyday activities: getting shoes, putting socks in the basket, helping “clean up” to a song
+    - show an object and ask what it is for — “What do you do with a hat?” — then see if your child copies you
+    - sing songs with gestures, like “Wheels on the Bus”
+    - stack blocks and let your child knock them down; blow bubbles and let your child pop them
+    - make a “book” with pictures of the people and pets in your child’s life and name them together
+    - “pretend talk” with a stuffed animal and see if your child joins in
+  development.15-18m.variants: |-
+    Easier: hand over one block at a time and steady the bottom one; use large, light blocks. Harder: three or four blocks, or smaller ones, with your hands in your lap. Easier for words: accept any sound as the “word” and name it back. Harder: offer a choice — “ball or car?” — and wait for a point or a word. Easier for helping: one-step jobs with a gesture. Harder: the same request with words only, which is on the 18-month checklist.
+  development.15-18m.safety-environment: |-
+    Safety points CDC attaches to this age:
+    - never leave your child near or around water without someone watching — drowning is the leading cause of injury death at this age
+    - gates on stairs, covers on outlets, hot appliances out of reach and pot handles turned back; a new walker gets everywhere
+    - lock away medicines, chemicals and cleaning products, and save the Poison Help Line number, 800-222-1222, in all phones
+    - never leave your child alone in a vehicle, even for a few moments
+    - screen time is not recommended for children younger than 2 years except video calling
+  development.15-18m.what-not-to-force: |-
+    Don’t expect clear words: CDC notes that a child’s early words are not complete, so “ba” for ball counts — repeat it and add to it rather than correcting. Don’t fight tantrums; CDC says they are normal at this age, more likely when your child is tired or hungry, and it is fine to let one run its course while you stay nearby. Don’t insist on sharing or cooperative play with other children — copying them is the 15-month milestone, sharing comes much later. And don’t push walking practice past the wobbles; a few steps is the milestone.
+  development.15-18m.what-to-observe: |-
+    Notice what your child points at and why — to ask, to show you, to get help — and which words or sounds come with it. Notice imitation: what your child copies from you, from siblings, from other children at the park. Notice how objects are used — a cup to the mouth, a phone to the ear — and how your child recovers after a stumble or a tantrum. These are richer clues than any single item on a list.
+  development.15-18m.clinician-cues: |-
+    The reference for this stage is CDC’s 15-month checklist. CDC suggests bringing to the visit: what you and your child do together, what your child likes to do, anything your child does or does not do that concerns you, whether your child has lost any skills they once had, and whether your child has special healthcare needs or was born prematurely. If your child is not doing one or more of the 15-month milestones, has lost skills, or you have other concerns, don’t wait — talk with your child’s doctor and ask about developmental screening.

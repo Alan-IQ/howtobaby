@@ -1,0 +1,59 @@
+# SPDX-License-Identifier: CC-BY-NC-SA-4.0
+# Canonical English strings for Development stage dev-00-02m. English is authored first;
+# Vietnamese parity lives in translations/vi/development-00-02m.yaml. List claims keep one
+# lead line followed by `- item` lines; source qualifiers survive verbatim (no invented precision).
+
+locale: en
+strings:
+  development.00-02m.at-a-glance: |-
+    Under 2 months, your baby is getting used to the world: looking at your face, calming when held or spoken to, and building neck strength during short, supervised tummy time. There is no CDC checklist before 2 months; the 2-month checklist is the first reference and describes what most babies do by 2 months. Play at this stage is simply responsive care — your face, your voice and your touch.
+  development.00-02m.milestone-context: |-
+    CDC does not publish a milestone checklist before 2 months. The 2-month checklist is the first one; it describes what most babies (75% or more) do by 2 months — skills a newborn is growing toward, not skills expected today. CDC also notes that its milestone materials are not a substitute for standardized, validated developmental screening tools.
+  development.00-02m.development-focus: |-
+    The themes of this stage are connection and regulation: your baby learns that a familiar face and voice bring comfort, and begins to look, listen and settle. Physically, the focus is head and neck control, practiced in brief awake tummy time while you watch. Everything is short, gentle and led by your baby’s signals.
+  development.00-02m.gross-motor: |-
+    Large-movement milestones most babies reach by 2 months — skills your newborn is working toward:
+    - holds the head up when on the tummy
+    - moves both arms and both legs
+  development.00-02m.fine-motor: |-
+    Hand skills most babies reach by 2 months — a skill your newborn is working toward:
+    - opens the hands briefly
+    Newborn hands are often held in fists; brief opening is the beginning of reaching and grasping later on.
+  development.00-02m.communication: |-
+    Communication milestones most babies reach by 2 months — skills your newborn is working toward:
+    - makes sounds other than crying
+    - reacts to loud sounds
+  development.00-02m.cognitive: |-
+    Learning and thinking milestones most babies reach by 2 months — skills your newborn is working toward:
+    - watches you as you move
+    - looks at a toy for several seconds
+  development.00-02m.social-emotional: |-
+    Social and emotional milestones most babies reach by 2 months — skills your newborn is working toward:
+    - calms down when spoken to or picked up
+    - looks at your face
+    - seems happy to see you when you walk up
+    - smiles when you talk to or smile at them
+  development.00-02m.activities: |-
+    Ideas CDC and the AAP suggest for this age:
+    - respond to your baby’s sounds with excitement, smiles and talking — this is the start of taking turns in conversation
+    - talk, read and sing to your baby; cuddling and holding will not spoil them
+    - hold a rattle to one side of your baby’s head, shake it and see if they look for the sound
+    - place a baby-safe mirror or pictures with bright colors or faces nearby and talk about them
+    - from the first day home, put your baby on the tummy while awake and watched, 2 to 3 times a day for a short time (3 to 5 minutes) with a toy at eye level, working up to 15 to 30 minutes a day by 7 weeks
+  development.00-02m.activities.note.who: |-
+    WHO’s global guideline recommends at least 30 minutes of tummy time spread through the day for infants who are not yet mobile; the AAP describes building up gradually to 15 to 30 minutes a day by 7 weeks. HowToBaby keeps both wordings visible rather than merging them.
+  development.00-02m.variants: |-
+    Easier: if tummy time upsets your baby, try it on your chest while you lie back, or across your lap, for just a minute or two, and stop when they have had enough. Harder: place a toy or your face slightly to one side so your baby turns the head to find it. Easier for social play: talk or sing from close up, about arm’s length from the face. Harder: pause after you speak and wait for your baby to answer with a sound or a movement.
+  development.00-02m.safety-environment: |-
+    Safety points CDC and the AAP attach to this age:
+    - tummy time is only for a baby who is awake and being watched; if your baby gets sleepy, put them on their back in a safe sleep area
+    - always place your baby on the back to sleep
+    - never shake your baby; if crying is overwhelming you, put your baby in a safe place and walk away for a few minutes
+    - don’t let your baby play with anything that could cover the face, and never carry hot drinks or food while holding your baby
+    - screen time is not recommended for children younger than 2 years, apart from video calling with loved ones
+  development.00-02m.what-not-to-force: |-
+    Don’t push tummy time past your baby’s tolerance — short sessions built up gradually are what the AAP describes, and a baby who is upset learns nothing extra from staying on the tummy longer. Don’t try to keep your baby “playing” when they turn away, yawn or fuss; CDC describes these as signals that your baby needs a break. And don’t treat the 2-month milestones as things a newborn should already do — they describe where most babies are by 2 months.
+  development.00-02m.what-to-observe: |-
+    Notice how your baby looks, listens and settles rather than counting skills: whether they quiet when you pick them up or speak, whether their eyes find your face, whether they startle or react to a loud sound, and how long they can lift the head during tummy time. Also notice the signals that mean “enough for now” — turning away, yawning, fussing. These observations are what make the next play session fit your baby.
+  development.00-02m.clinician-cues: |-
+    There is no CDC checklist for this age yet; the 2-month checklist is the first one, so the first milestone conversation usually happens around the 2-month visit. CDC suggests bringing to any visit: what you and your baby do together, what your baby likes to do, anything your baby does or does not do that concerns you, and whether your baby has special healthcare needs or was born prematurely. If you are concerned at any point, don’t wait — talk with your baby’s doctor.

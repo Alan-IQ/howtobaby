@@ -1,0 +1,68 @@
+# SPDX-License-Identifier: CC-BY-NC-SA-4.0
+# Vietnamese parity strings for Development stage dev-48-60m: natural, professional Vietnamese that
+# preserves every quantity, age boundary, qualifier, negation and applicability condition of the
+# canonical English (GUIDANCE_CONTENT_CONTRACT.md §10). Same lead line + `- item` structure.
+
+locale: vi
+strings:
+  development.48-60m.at-a-glance: |-
+    Từ 4 đến dưới 5 tuổi, danh sách 4 tuổi của CDC là tham chiếu. Phần lớn trẻ ở tuổi này đã biết đóng vai người khác khi chơi, xin được chơi với trẻ khác, an ủi người bị đau, tránh nguy hiểm rõ ràng, thích làm “người giúp việc”, nói câu từ bốn từ trở lên, kể cho bạn nghe về ngày của mình, gọi tên vài màu, vẽ người có từ ba bộ phận cơ thể trở lên, bắt được bóng to trong hầu hết lần ném, rót nước khi có người lớn trông và cầm bút sáp bằng các ngón tay và ngón cái. Chơi lúc này mang tính xã hội và tưởng tượng: hóa trang, trò chơi ngoài trời với bạn bè, trò chơi bàn cờ đơn giản, đếm số, kể chuyện và những câu hỏi “tại sao”.
+  development.48-60m.milestone-context: |-
+    Với giai đoạn này (từ 4 đến dưới 5 tuổi), tham chiếu là danh sách 4 tuổi của CDC: điều phần lớn trẻ (từ 75% trở lên) làm được khi được 4 tuổi. Bé 4 tuổi rưỡi được đối chiếu với danh sách 4 tuổi, không phải với một mức ở giữa; danh sách 5 tuổi của CDC là danh sách tiếp theo và nằm ngoài độ tuổi HowToBaby hiện bao quát. CDC lưu ý rằng các tài liệu về cột mốc không thay thế cho các công cụ sàng lọc phát triển đã được chuẩn hóa và kiểm định.
+  development.48-60m.development-focus: |-
+    Trí tưởng tượng và tình bạn dẫn dắt: bé nhập vai, tìm đến trẻ khác, và bắt đầu biết an ủi, giúp đỡ và điều chỉnh hành vi theo nơi mình đang ở. Ngôn ngữ chuyên chở những câu chuyện — hôm nay có chuyện gì, tiếp theo trong cuốn sách quen sẽ ra sao. Tư duy thể hiện qua màu sắc, đếm số và vẽ người. Đôi tay đủ khéo để cởi cúc và cầm bút đúng cách, và bé bắt được quả bóng to.
+  development.48-60m.gross-motor: |-
+    Cột mốc vận động thô mà phần lớn trẻ làm được khi được 4 tuổi (danh sách của CDC):
+    - bắt được quả bóng to trong hầu hết lần ném
+    Các gợi ý của CDC cho độ tuổi này bổ sung trò chơi ngoài trời với bạn bè — đuổi bắt, làm theo người dẫn đầu, trốn tìm — và vận động mỗi ngày, tốt nhất là để bé tự chọn hoạt động.
+  development.48-60m.fine-motor: |-
+    Các cột mốc bàn tay và phối hợp tay–mắt mà phần lớn trẻ làm được khi được 4 tuổi (danh sách của CDC):
+    - tự lấy thức ăn hoặc rót nước, khi có người lớn trông
+    - tự cởi được một số cúc áo
+    - cầm bút sáp hoặc bút chì bằng các ngón tay và ngón cái, không nắm cả bàn tay
+    - vẽ người có từ ba bộ phận cơ thể trở lên (CDC xếp mục này vào nhóm học hỏi và tư duy)
+  development.48-60m.communication: |-
+    Các cột mốc giao tiếp mà phần lớn trẻ làm được khi được 4 tuổi (danh sách của CDC):
+    - nói câu có từ bốn từ trở lên
+    - nói được vài từ trong một bài hát, câu chuyện hay bài đồng dao
+    - kể về ít nhất một chuyện đã xảy ra trong ngày, như “Con đá bóng”
+    - trả lời những câu hỏi đơn giản như “Áo khoác để làm gì?” hay “Bút sáp để làm gì?”
+  development.48-60m.cognitive: |-
+    Các cột mốc học hỏi và tư duy mà phần lớn trẻ làm được khi được 4 tuổi (danh sách của CDC):
+    - gọi tên vài màu của đồ vật
+    - kể được điều xảy ra tiếp theo trong một câu chuyện quen thuộc
+    CDC còn liệt kê vẽ người có từ ba bộ phận cơ thể trở lên, mục mà HowToBaby trình bày ở phần bàn tay và phối hợp tay–mắt.
+  development.48-60m.social-emotional: |-
+    Các cột mốc xã hội và cảm xúc mà phần lớn trẻ làm được khi được 4 tuổi (danh sách của CDC):
+    - đóng vai một ai đó hay cái gì đó khi chơi, như cô giáo, siêu anh hùng hay chú chó
+    - xin đi chơi với trẻ khác khi không có bạn nào xung quanh, như “Con chơi với bạn An được không?”
+    - an ủi người bị đau hay buồn, như ôm một người bạn đang khóc
+    - tránh nguy hiểm, như không nhảy từ trên cao xuống ở sân chơi
+    - thích làm “người giúp việc”
+    - thay đổi cách cư xử tùy theo nơi đang ở, như nơi thờ tự, thư viện hay sân chơi
+  development.48-60m.activities: |-
+    Những gợi ý của CDC cho độ tuổi này:
+    - cùng đọc sách và hỏi chuyện gì đang xảy ra, chuyện gì có thể xảy ra tiếp; đến thư viện và để bé tự chọn sách
+    - nói về màu sắc, hình dạng và kích thước của những thứ bạn thấy trong ngày, và đếm các vật hằng ngày như ngón tay, đồ chơi hay quả chuối
+    - cho bé quần áo hóa trang, khối gỗ và đồ chơi nấu ăn, và cùng tham gia chơi giả vờ — ăn món bé “nấu”
+    - dạy bé các trò ngoài trời với bạn bè: đuổi bắt, làm theo người dẫn đầu, trốn tìm; chơi đèn đỏ–đèn xanh hoặc nhảy rồi đứng hình để tập dừng lại và chờ
+    - chơi những trò đơn giản như cờ ca-rô hay ghép cặp; nhảy múa và thay phiên bắt chước động tác của nhau
+    - dành thời gian trả lời những câu hỏi “tại sao”, và nói “Bố/mẹ không biết” khi bạn không biết — rồi cùng nhau tìm hiểu
+    - dùng những từ như “đầu tiên”, “thứ hai” và “cuối cùng” khi chơi hay làm việc nhà
+    - để bé giúp những việc nhà đơn giản: lấy thư, cho thú cưng ăn, lau bàn
+  development.48-60m.variants: |-
+    Dễ hơn: với bắt bóng, dùng quả bóng to, mềm, tung nhẹ từ khoảng cách gần, hoặc lăn trước. Khó hơn: bóng nhỏ hơn, xa hơn, hoặc để bóng nảy một lần rồi mới bắt. Dễ hơn với kể chuyện: hỏi điều xảy ra tiếp theo trong cuốn sách đã đọc nhiều lần. Khó hơn: nhờ bé kể lại câu chuyện chỉ dựa vào tranh, hoặc tự bịa một câu chuyện. Dễ hơn với cúc áo: cúc to trên búp bê hoặc trên chiếc áo khoác trải phẳng. Khó hơn: cúc trên chính bộ đồ bé đang mặc.
+  development.48-60m.safety-environment: |-
+    Những lưu ý an toàn mà CDC gắn với độ tuổi này:
+    - tiếp tục giải thích vì sao bé phải tránh xa xe cộ và không bao giờ chạy ra đường theo quả bóng
+    - đi xe ba bánh chỉ trên vỉa hè và luôn đội mũ bảo hiểm
+    - kiểm tra thiết bị sân chơi xem có bộ phận lỏng lẻo hay cạnh sắc không, và luôn trông chừng bé khi bé chơi ngoài trời
+    - dạy bé bơi, nhưng luôn trông chừng bé khi bé ở trong hoặc gần bất kỳ vùng nước nào, kể cả bể bơi phao cho trẻ
+    - dạy bé cách giữ an toàn khi gặp người lạ
+    - giới hạn thời gian xem màn hình không quá 1 giờ mỗi ngày với chương trình dành cho trẻ em và có người lớn xem cùng, không đặt màn hình trong phòng ngủ, và tránh màn hình trong 1 đến 2 giờ trước khi đi ngủ
+  development.48-60m.what-not-to-force: |-
+    Đừng can thiệp ngay ở bất đồng đầu tiên giữa các bé: gợi ý của CDC là cho bé thời gian tự giải quyết, ở gần, và dùng câu hỏi để giúp nếu các bé không tự xử lý được. Đừng gạt đi nỗi sợ của bé — CDC gợi ý an ủi bé và nói về điều khiến bé sợ cùng những gì bé có thể làm. Đừng chỉ dựa vào từ “không”; CDC gợi ý giải thích đơn giản vì sao điều đó không được phép và cho bé lựa chọn việc khác có thể làm thay. Và đừng lên lịch cho từng phút vận động — bé sẽ vui hơn khi được tự chọn hoạt động.
+  development.48-60m.what-to-observe: |-
+    Hãy để ý cách bé chơi với trẻ khác: nhập vai, xin tham gia, xử lý lượt chơi và bất đồng, an ủi bạn. Để ý việc kể chuyện — kể lại ngày hôm nay, đoán trang tiếp theo — và những câu hỏi “tại sao” ngày càng nhiều. Để ý khả năng nhận biết nguy hiểm ở sân chơi và cách cư xử của bé thay đổi giữa các nơi. Trong các trò chơi dùng tay, để ý cách cầm bút, cởi cúc và rót nước. Đó là những chi tiết đáng chia sẻ ở lần khám tiếp theo.
+  development.48-60m.clinician-cues: |-
+    Tham chiếu cho giai đoạn này là danh sách 4 tuổi của CDC. CDC gợi ý mang đến lần khám: những việc bạn và bé thường làm cùng nhau, những gì bé thích làm, bất cứ điều gì bé làm hoặc chưa làm khiến bạn lo lắng, bé có mất đi kỹ năng nào từng có không, và bé có nhu cầu chăm sóc sức khỏe đặc biệt hay sinh non không. Nếu bé chưa làm được một hoặc nhiều cột mốc trong danh sách 4 tuổi, mất đi kỹ năng từng có, hoặc bạn có lo lắng khác, đừng chờ đợi — hãy trao đổi với bác sĩ của bé và hỏi về việc sàng lọc phát triển.

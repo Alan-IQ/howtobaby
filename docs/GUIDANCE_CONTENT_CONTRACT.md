@@ -99,6 +99,12 @@ Every stage includes: at-a-glance, milestone context, development focus, gross m
 
 Milestones are references, not deadlines or pass/fail scores.
 
+Implementation note (Phase 4): each stage's guidance blocks carry the section id above as
+`section` (the same kebab-case id the coverage matrix uses), and stage pages order blocks by that
+id rather than by block id. Under 2 months no CDC checklist exists yet; the checklist for
+2 months is the first reference. A corrected development age before the due date resolves to no
+stage and no checklist.
+
 ## 4. Feeding stages
 
 | Stage | Range | Primary focus |

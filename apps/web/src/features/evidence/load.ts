@@ -9,7 +9,7 @@
  * declares a source by hand.
  */
 
-import type { ClaimEvidenceEntry, SourceRecord } from "@howtobaby/knowledge";
+import type { ClaimEvidenceEntry, KnowledgeDomain, SourceRecord } from "@howtobaby/knowledge";
 import { GeneratedKnowledgeRepository } from "@howtobaby/knowledge/repository";
 import type { EvidenceMetaEntry, EvidenceSourceView, ReferenceEntry } from "@howtobaby/ui";
 
@@ -32,6 +32,8 @@ import {
   verifiedLabel,
   type UiLocale,
 } from "./labels";
+
+export { splitClaimText, type ClaimTextParts } from "./claim-text";
 
 let repository: GeneratedKnowledgeRepository | undefined;
 
@@ -130,11 +132,17 @@ export interface ClaimView {
 /** One guidance block localized for rendering (title + claims + the drawer/chips strings). */
 export interface GuidanceBlockView {
   blockId: string;
+  domain: KnowledgeDomain;
+  /** Stage bin the block belongs to (undefined for cross-stage blocks). */
+  stage?: string;
+  /** Contract section id (GUIDANCE_CONTENT_CONTRACT.md §3), used to order/group stage sections. */
+  section?: string;
   locale: UiLocale;
   title: string;
   claims: ClaimView[];
   strings: (typeof UI_STRINGS)[UiLocale];
 }
+
 
 export async function loadGuidanceBlockViews(route: string, locale: UiLocale): Promise<GuidanceBlockView[]> {
   const repo = knowledgeRepository();
@@ -158,7 +166,16 @@ export async function loadGuidanceBlockViews(route: string, locale: UiLocale): P
         ...(uncertaintyNote !== null && uncertaintyNote !== undefined ? { uncertaintyNote } : {}),
       });
     }
-    views.push({ blockId: block.id, locale, title, claims, strings: UI_STRINGS[locale] });
+    views.push({
+      blockId: block.id,
+      domain: block.domain,
+      ...(block.stage !== undefined ? { stage: block.stage } : {}),
+      ...(block.section !== undefined ? { section: block.section } : {}),
+      locale,
+      title,
+      claims,
+      strings: UI_STRINGS[locale],
+    });
   }
   return views;
 }

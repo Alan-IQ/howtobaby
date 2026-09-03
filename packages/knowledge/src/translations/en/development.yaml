@@ -1,0 +1,26 @@
+# SPDX-License-Identifier: CC-BY-NC-SA-4.0
+# Canonical English strings shared across Development stages: section titles and the cross-stage
+# "reading milestones" claims (GUIDANCE_CONTENT_CONTRACT.md §3, §10).
+
+locale: en
+strings:
+  development.milestones.reference: "Developmental milestones are skills such as a first smile, a first step or waving “bye-bye” — the things most children (75% or more) can do by a certain age, across play, learning, speech, behavior and movement. CDC publishes one milestone checklist for each age from 2 months to 5 years. CDC notes that these materials are not a substitute for standardized, validated developmental screening tools."
+  development.milestones.not-pass-fail: "HowToBaby shows milestones as references for noticing what your child is working on, not as deadlines, scores or pass/fail tests. A milestone list describes what most children do by an age; it does not say what your child must do on a given day, and it cannot tell you how your child is developing on its own. Use it to choose play that fits today, and to know what to bring up with your child’s doctor."
+  development.milestones.younger-checklist: "CDC checklists exist only for fixed ages. When your child’s age falls between two checklist ages, HowToBaby uses the younger checklist as the reference instead of estimating something in between. For example, at 7 or 8 months the reference is the 6-month checklist; the 9-month checklist becomes the reference at 9 months. Under 2 months there is no checklist yet."
+  development.milestones.corrected-age: "If your baby was born early, the AAP explains that during the first 2 years, using corrected age — counted from the original due date rather than the birth date — gives a better idea of when common developmental milestones may be reached. HowToBaby applies this by counting Play & Development age from the due date when the due date is more than 3 weeks after the birth date, until 24 months after birth. This is a rule for choosing guidance, not a diagnosis of prematurity."
+  development.milestones.act-early: "CDC’s advice is: you know your child best — don’t wait. If your child is not meeting one or more milestones, has lost skills they once had, or you have other concerns, talk with your child’s doctor, share your concerns and ask about developmental screening. If you or the doctor are still concerned, ask for a referral to a specialist and contact your state or territory’s early intervention program. CDC also cites the AAP recommendation that children be screened for general development with standardized, validated tools at 9, 18 and 30 months, and for autism at 18 and 24 months or whenever a parent or provider has a concern."
+  guidance.development.section.at-a-glance.title: "At a glance"
+  guidance.development.section.milestone-context.title: "Milestone context"
+  guidance.development.section.development-focus.title: "Development focus"
+  guidance.development.section.gross-motor.title: "Gross motor"
+  guidance.development.section.fine-motor.title: "Fine motor and hand–eye skills"
+  guidance.development.section.communication.title: "Communication"
+  guidance.development.section.cognitive.title: "Cognitive and problem solving"
+  guidance.development.section.social-emotional.title: "Social and emotional"
+  guidance.development.section.activities.title: "Activities"
+  guidance.development.section.variants.title: "Easier and harder variations"
+  guidance.development.section.safety-environment.title: "Safety and environment"
+  guidance.development.section.what-not-to-force.title: "What not to force"
+  guidance.development.section.what-to-observe.title: "What to observe"
+  guidance.development.section.clinician-cues.title: "Talking with your child's doctor"
+  guidance.development.section.reading-milestones.title: "How to read milestones"

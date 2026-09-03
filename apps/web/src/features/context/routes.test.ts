@@ -11,7 +11,7 @@ import { describe, expect, it } from "vitest";
 
 import { allStages, STAGE_DOMAINS, stagesFor } from "@howtobaby/core";
 
-import { STAGE_DESTINATIONS, stageForRoute, stageHref, stageStaticParams } from "./routes";
+import { ALL_STAGES_ROUTE, STAGE_DESTINATIONS, stageForRoute, stageHref, stageStaticParams } from "./routes";
 import { stageMetadata } from "./StagePage";
 
 const BROAD_STAGE_HREF = /^\/(play|feeding|sleep)\/\d{1,2}-\d{1,2}-(months|years)$/;
@@ -34,6 +34,9 @@ describe("static stage routes", () => {
     expect(stageHref(stagesFor("feeding")[2]!)).toBe("/feeding/6-8-months");
     expect(stageForRoute("feeding", "2025-01-01")).toBeUndefined();
     expect(stageForRoute("feeding", "6-9-months")).toBeUndefined(); // slugs are per-domain bins, not free-form ages
+    // The all-stages print route is a fixed static segment, never a stage slug.
+    expect(ALL_STAGES_ROUTE).not.toMatch(BROAD_STAGE_HREF);
+    expect(stageForRoute("development", "all-stages")).toBeUndefined();
   });
 
   it("route segments are declared with dynamicParams off (no request-time slugs)", () => {

@@ -1,0 +1,352 @@
+# SPDX-License-Identifier: CC-BY-NC-SA-4.0
+# Canonical Play & Development claims — stage dev-36-48m (docs/GUIDANCE_CONTENT_CONTRACT.md §3).
+# Milestone sections paraphrase the CDC checklist (interpret + cite + link); milestones are references,
+# never deadlines, scores or pass/fail tests. Parent-facing wording lives in translations/<locale>/.
+
+domain: development
+
+claims:
+  - id: development.36-48m.at-a-glance
+    textKey: development.36-48m.at-a-glance
+    publicSlug: development-3-4-years-at-a-glance
+    guidanceClass: practical-interpretation
+    precisionClass: product-heuristic
+    safetyLevel: info
+    applicability:
+      - "development-stage:dev-36-48m"
+      - "cdc-checklist:3-years"
+    sourceRefs:
+      - sourceId: cdc-milestones-3-years
+        relationship: direct-support
+        locator:
+          paragraphHint: >-
+            Overall picture drawn from the whole checklist for 3 years: the milestone lists and
+            the tips and activities. HowToBaby's own summary wording.
+        verifiedAt: 2026-09-03
+    reviewedAt: 2026-09-03
+    reviewStatus: source-verified
+
+  - id: development.36-48m.milestone-context
+    textKey: development.36-48m.milestone-context
+    publicSlug: development-3-4-years-milestone-context
+    guidanceClass: official-guidance
+    precisionClass: source-exact
+    safetyLevel: info
+    applicability:
+      - "development-stage:dev-36-48m"
+      - "cdc-checklist:3-years"
+    sourceRefs:
+      - sourceId: cdc-milestones-3-years
+        relationship: primary
+        locator:
+          section: "Ways to monitor milestones"
+          paragraphHint: >-
+            The checklist for 3 years describes what most children (75% or more) do by 3 years;
+            the materials are not a substitute for standardized developmental screening tools.
+            Paraphrased.
+        verifiedAt: 2026-09-03
+      - sourceId: cdc-developmental-milestones
+        relationship: direct-support
+        locator:
+          heading: "CDC's Developmental Milestones"
+          paragraphHint: >-
+            List of age-specific checklists (2 months through 5 years) — the fixed checklist
+            ages HowToBaby resolves between.
+        verifiedAt: 2026-09-03
+    reviewedAt: 2026-09-03
+    reviewStatus: source-verified
+
+  - id: development.36-48m.development-focus
+    textKey: development.36-48m.development-focus
+    publicSlug: development-3-4-years-development-focus
+    guidanceClass: practical-interpretation
+    precisionClass: product-heuristic
+    safetyLevel: info
+    applicability:
+      - "development-stage:dev-36-48m"
+      - "cdc-checklist:3-years"
+    sourceRefs:
+      - sourceId: cdc-milestones-3-years
+        relationship: direct-support
+        locator:
+          section: "What most children do by 3 years"
+          paragraphHint: >-
+            The four milestone groups on the checklist for 3 years, read together as the themes
+            of this stage. HowToBaby's interpretation, not source wording.
+        verifiedAt: 2026-09-03
+      - sourceId: aap-power-of-play-2018
+        relationship: contextual
+        locator:
+          section: "Abstract"
+          paragraphHint: >-
+            Developmentally appropriate play with parents and peers promotes social-emotional,
+            cognitive, language and self-regulation skills.
+        verifiedAt: 2026-09-03
+    reviewedAt: 2026-09-03
+    reviewStatus: source-verified
+
+  - id: development.36-48m.gross-motor
+    textKey: development.36-48m.gross-motor
+    publicSlug: development-3-4-years-gross-motor
+    guidanceClass: official-guidance
+    precisionClass: source-exact
+    safetyLevel: info
+    applicability:
+      - "development-stage:dev-36-48m"
+      - "cdc-checklist:3-years"
+    sourceRefs:
+      - sourceId: cdc-milestones-3-years
+        relationship: primary
+        locator:
+          section: "Movement/Physical Development Milestones"
+          paragraphHint: >-
+            Large-movement items on the checklist for 3 years (what most children do by 3
+            years). Paraphrased, not source wording.
+        verifiedAt: 2026-09-03
+      - sourceId: cdc-milestones-30-months
+        relationship: direct-support
+        locator:
+          section: "Movement/Physical Development Milestones"
+          paragraphHint: >-
+            Jumping off the ground with both feet — the most recent large-movement milestone
+            before the 3-year checklist.
+        verifiedAt: 2026-09-03
+    reviewedAt: 2026-09-03
+    reviewStatus: source-verified
+
+  - id: development.36-48m.fine-motor
+    textKey: development.36-48m.fine-motor
+    publicSlug: development-3-4-years-fine-motor
+    guidanceClass: official-guidance
+    precisionClass: source-exact
+    safetyLevel: info
+    applicability:
+      - "development-stage:dev-36-48m"
+      - "cdc-checklist:3-years"
+    sourceRefs:
+      - sourceId: cdc-milestones-3-years
+        relationship: primary
+        locator:
+          section: "Movement/Physical Development Milestones"
+          paragraphHint: >-
+            Stringing items together, putting on some clothes and using a fork (Movement), plus
+            drawing a circle when shown how (Cognitive Milestones). Paraphrased.
+        verifiedAt: 2026-09-03
+    reviewedAt: 2026-09-03
+    reviewStatus: source-verified
+
+  - id: development.36-48m.communication
+    textKey: development.36-48m.communication
+    publicSlug: development-3-4-years-communication
+    guidanceClass: official-guidance
+    precisionClass: source-exact
+    safetyLevel: info
+    applicability:
+      - "development-stage:dev-36-48m"
+      - "cdc-checklist:3-years"
+    sourceRefs:
+      - sourceId: cdc-milestones-3-years
+        relationship: primary
+        locator:
+          section: "Language/Communication Milestones"
+          paragraphHint: >-
+            Language/communication items on the checklist for 3 years (what most children do by
+            3 years). Paraphrased, not source wording.
+        verifiedAt: 2026-09-03
+    reviewedAt: 2026-09-03
+    reviewStatus: source-verified
+
+  - id: development.36-48m.cognitive
+    textKey: development.36-48m.cognitive
+    publicSlug: development-3-4-years-cognitive
+    guidanceClass: official-guidance
+    precisionClass: source-exact
+    safetyLevel: info
+    applicability:
+      - "development-stage:dev-36-48m"
+      - "cdc-checklist:3-years"
+    sourceRefs:
+      - sourceId: cdc-milestones-3-years
+        relationship: primary
+        locator:
+          section: "Cognitive Milestones (learning, thinking, problem-solving)"
+          paragraphHint: >-
+            Cognitive items on the checklist for 3 years (what most children do by 3 years).
+            Paraphrased, not source wording.
+        verifiedAt: 2026-09-03
+    reviewedAt: 2026-09-03
+    reviewStatus: source-verified
+
+  - id: development.36-48m.social-emotional
+    textKey: development.36-48m.social-emotional
+    publicSlug: development-3-4-years-social-emotional
+    guidanceClass: official-guidance
+    precisionClass: source-exact
+    safetyLevel: info
+    applicability:
+      - "development-stage:dev-36-48m"
+      - "cdc-checklist:3-years"
+    sourceRefs:
+      - sourceId: cdc-milestones-3-years
+        relationship: primary
+        locator:
+          section: "Social/Emotional Milestones"
+          paragraphHint: >-
+            Social/emotional items on the checklist for 3 years (what most children do by 3
+            years). Paraphrased, not source wording.
+        verifiedAt: 2026-09-03
+    reviewedAt: 2026-09-03
+    reviewStatus: source-verified
+
+  - id: development.36-48m.activities
+    textKey: development.36-48m.activities
+    publicSlug: development-3-4-years-activities
+    guidanceClass: official-guidance
+    precisionClass: source-exact
+    safetyLevel: info
+    applicability:
+      - "development-stage:dev-36-48m"
+      - "cdc-checklist:3-years"
+    sourceRefs:
+      - sourceId: cdc-milestones-3-years
+        relationship: primary
+        locator:
+          section: "Tips and Activities"
+          paragraphHint: >-
+            CDC's "What you can do for this age" tips and activities; HowToBaby selects and
+            paraphrases a few.
+        verifiedAt: 2026-09-03
+      - sourceId: aap-power-of-play-2018
+        relationship: corroborating
+        locator:
+          section: "Abstract"
+          paragraphHint: >-
+            Play with parents builds social-emotional, cognitive, language and self-regulation
+            skills — consistent with CDC's play-based tips.
+        verifiedAt: 2026-09-03
+    reviewedAt: 2026-09-03
+    reviewStatus: source-verified
+
+  - id: development.36-48m.variants
+    textKey: development.36-48m.variants
+    publicSlug: development-3-4-years-variants
+    guidanceClass: practical-interpretation
+    precisionClass: product-heuristic
+    safetyLevel: info
+    applicability:
+      - "development-stage:dev-36-48m"
+      - "cdc-checklist:3-years"
+    sourceRefs:
+      - sourceId: cdc-milestones-3-years
+        relationship: direct-support
+        locator:
+          section: "Tips and Activities"
+          paragraphHint: >-
+            CDC's tips for this age are the basis; the easier/harder adjustments are HowToBaby's
+            practical interpretation, not source wording.
+        verifiedAt: 2026-09-03
+    reviewedAt: 2026-09-03
+    reviewStatus: source-verified
+
+  - id: development.36-48m.safety-environment
+    textKey: development.36-48m.safety-environment
+    publicSlug: development-3-4-years-safety-environment
+    guidanceClass: official-guidance
+    precisionClass: source-exact
+    safetyLevel: caution
+    applicability:
+      - "development-stage:dev-36-48m"
+      - "cdc-checklist:3-years"
+    sourceRefs:
+      - sourceId: cdc-positive-parenting-preschoolers
+        relationship: primary
+        locator:
+          section: "Child safety first"
+          paragraphHint: >-
+            Stay out of traffic; tricycle on the sidewalk with a helmet; check playground
+            equipment; watch the child at all times, especially outdoors; water supervision
+            including kiddie pools; safety around strangers. Paraphrased.
+        verifiedAt: 2026-09-03
+      - sourceId: cdc-milestones-3-years
+        relationship: direct-support
+        locator:
+          section: "Tips and Activities"
+          paragraphHint: >-
+            Screen time no more than 1 hour per day of a children's program with an adult
+            present; no screens in the child's bedroom. Paraphrased.
+        verifiedAt: 2026-09-03
+    reviewedAt: 2026-09-03
+    reviewStatus: source-verified
+
+  - id: development.36-48m.what-not-to-force
+    textKey: development.36-48m.what-not-to-force
+    publicSlug: development-3-4-years-what-not-to-force
+    guidanceClass: practical-interpretation
+    precisionClass: product-heuristic
+    safetyLevel: caution
+    applicability:
+      - "development-stage:dev-36-48m"
+      - "cdc-checklist:3-years"
+    sourceRefs:
+      - sourceId: cdc-milestones-3-years
+        relationship: direct-support
+        locator:
+          section: "Tips and Activities"
+          paragraphHint: >-
+            Encourage the child to solve problems with support; give words for feelings and
+            calm-down strategies; set a few simple rules and show what to do instead when one is
+            broken; let the child choose what and how to play outside. Paraphrased.
+        verifiedAt: 2026-09-03
+    reviewedAt: 2026-09-03
+    reviewStatus: source-verified
+
+  - id: development.36-48m.what-to-observe
+    textKey: development.36-48m.what-to-observe
+    publicSlug: development-3-4-years-what-to-observe
+    guidanceClass: practical-interpretation
+    precisionClass: product-heuristic
+    safetyLevel: info
+    applicability:
+      - "development-stage:dev-36-48m"
+      - "cdc-checklist:3-years"
+    sourceRefs:
+      - sourceId: cdc-milestones-3-years
+        relationship: direct-support
+        locator:
+          section: "Ways to monitor milestones"
+          paragraphHint: >-
+            How a child plays, learns, speaks, acts and moves offers important clues about
+            development. HowToBaby turns this into things to notice during play.
+        verifiedAt: 2026-09-03
+    reviewedAt: 2026-09-03
+    reviewStatus: source-verified
+
+  - id: development.36-48m.clinician-cues
+    textKey: development.36-48m.clinician-cues
+    publicSlug: development-3-4-years-clinician-cues
+    guidanceClass: official-guidance
+    precisionClass: source-exact
+    safetyLevel: clinician
+    applicability:
+      - "development-stage:dev-36-48m"
+      - "cdc-checklist:3-years"
+    sourceRefs:
+      - sourceId: cdc-milestones-3-years
+        relationship: primary
+        locator:
+          section: "Share with your child's doctor"
+          paragraphHint: >-
+            Things to share and consider (what you do together, what the child likes, concerns,
+            lost skills, special needs or premature birth) and the don't-wait / act-early
+            guidance. Paraphrased.
+        verifiedAt: 2026-09-03
+      - sourceId: cdc-developmental-milestones
+        relationship: direct-support
+        locator:
+          heading: "CDC's Developmental Milestones"
+          paragraphHint: >-
+            AAP recommendation quoted by CDC: developmental screening at 9, 18 and 30 months;
+            autism screening at 18 and 24 months or whenever there is a concern.
+        verifiedAt: 2026-09-03
+    reviewedAt: 2026-09-03
+    reviewStatus: source-verified

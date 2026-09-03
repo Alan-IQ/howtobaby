@@ -45,7 +45,7 @@ const EN_APPROXIMATION = /\b(about|around|approximately|roughly|typically|usuall
 const VI_APPROXIMATION = /(khoảng|tầm|xấp xỉ|gần|thường|khi (?:bé |trẻ )?(?:đã )?sẵn sàng|có thể)/i;
 /** English negation/prohibition markers whose meaning must survive translation. */
 const EN_NEGATION = /\b(not recommended|do not|don't|never|avoid|no\b)/i;
-const VI_NEGATION = /(không|đừng|tránh|chưa nên)/i;
+const VI_NEGATION = /(không|đừng|tránh|chưa)/i;
 /** A numeric range expression for `source-range` claims. */
 const RANGE_EXPRESSION = /\d+\s*(?:–|—|-|to|through)\s*\d+/i;
 
@@ -77,15 +77,17 @@ const UNIT_PATTERNS: Record<"en" | "vi", Array<[RegExp, string]>> = {
     [/^(?:milliliters?|ml)\b/i, "ml"],
     [/^(?:ounces?|oz)\b/i, "oz"],
   ],
+  // `\b` is ASCII-only: after a Vietnamese letter with a diacritic ("giờ") it never matches, so
+  // the word end is checked with a Unicode "not followed by a letter" lookahead instead.
   vi: [
-    [/^tháng\b/i, "month"],
-    [/^tuần\b/i, "week"],
-    [/^ngày\b/i, "day"],
-    [/^năm\b/i, "year"],
-    [/^(?:giờ|tiếng)\b/i, "hour"],
-    [/^phút\b/i, "minute"],
-    [/^ml\b/i, "ml"],
-    [/^oz\b/i, "oz"],
+    [/^tháng(?!\p{L})/iu, "month"],
+    [/^tuần(?!\p{L})/iu, "week"],
+    [/^ngày(?!\p{L})/iu, "day"],
+    [/^(?:năm|tuổi)(?!\p{L})/iu, "year"],
+    [/^(?:giờ|tiếng)(?!\p{L})/iu, "hour"],
+    [/^phút(?!\p{L})/iu, "minute"],
+    [/^ml(?!\p{L})/iu, "ml"],
+    [/^oz(?!\p{L})/iu, "oz"],
   ],
 };
 
@@ -97,7 +99,8 @@ const QUALIFIER_PATTERNS: Record<"en" | "vi", Array<[RegExp, BoundaryQualifier]>
   ],
   vi: [
     [/(?:trước|dưới|chưa đầy|chưa đến|sớm hơn)\s*$/i, "before"],
-    [/(?:sau|trên|quá|muộn hơn)\s*$/i, "after"],
+    // "không quá 1 giờ" (= "no more than 1 hour") is an upper bound, not an "after" boundary.
+    [/(?<!không\s)(?:sau|trên|quá|muộn hơn)\s*$/i, "after"],
     [/(?:khoảng|tầm|xấp xỉ|gần)\s*$/i, "about"],
   ],
 };

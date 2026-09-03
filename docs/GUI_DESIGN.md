@@ -369,6 +369,38 @@ Common page anatomy:
 
 Manual browsing must be visually distinct from the actual child's current stage.
 
+### Play & Development stage pages (Phase 4)
+
+`/play/<stage>` renders the whole canonical stage graph for one Development bin, ordered by the
+contract sections of `GUIDANCE_CONTENT_CONTRACT.md` §3 (each guidance block carries the
+`section` id; the page orders by that id, never by block id): the **At a glance** card leads,
+then Why-this-stage, then milestone context, development focus, gross motor, fine motor and
+hand–eye, communication, cognitive and problem solving, social and emotional, activities, easier
+and harder variations, safety and environment, what not to force, what to observe, and talking
+with your child's doctor; the cross-stage **How to read milestones** block follows, then the
+previous/next pager and page References. Every card is the shared guidance evidence card
+(SourceChip + Evidence Drawer); a stage block's eyebrow is the stage range in ordinary language.
+
+Milestone semantics: a claim authored as a lead line plus `- item` lines renders as a plain
+list on screen, in the drawer and on paper. Milestones are references to read, never a
+checklist to tick — no checkboxes, no counts, no scores, no "on time/late" state, and the
+canonical wording is gated against pass/fail, score and deadline framing in both locales.
+
+CDC checklist resolution: Why-this-stage states the reference checklist for the browsed stage
+("Milestone reference for this stage: CDC's checklist for 6 months"); every age in a bin
+resolves to the same checklist because Development bins start at CDC checklist ages, and an
+age between two checklist ages uses the younger one (`resolveCdcChecklist` in
+`@howtobaby/core`). Under 2 months no checklist applies and the card says so. With a local
+profile, a second, client-only line names the checklist for the actual child's development age
+(corrected when the proxy applies) when it differs from the browsed stage. A corrected age before
+the due date resolves to no stage and no checklist; the card explains that the first stage
+begins on the due date instead of inventing one.
+
+`/play/all-stages` is the all-stage reference/print mode of §15: a static page with the reading
+block once, then every Development bin under its own heading (linking to the stage page) with all
+its sections, and one References list for the route; in print each stage starts on a new page.
+The Play landing page links to it.
+
 ## 9. Tools hub
 
 Tools is a first-class destination.

@@ -1,0 +1,158 @@
+# SPDX-License-Identifier: CC-BY-NC-SA-4.0
+# Guidance blocks for Development stage dev-06-09m: one block per required section, in the
+# contract's section order (the `section` id drives page grouping; block ids are not an order).
+
+blocks:
+  - id: guidance.development.06-09m.at-a-glance
+    domain: development
+    stage: dev-06-09m
+    section: at-a-glance
+    titleKey: guidance.development.section.at-a-glance.title
+    claimIds:
+      - development.06-09m.at-a-glance
+    routes:
+      - /play/6-9-months
+      - /play/all-stages
+
+  - id: guidance.development.06-09m.milestone-context
+    domain: development
+    stage: dev-06-09m
+    section: milestone-context
+    titleKey: guidance.development.section.milestone-context.title
+    claimIds:
+      - development.06-09m.milestone-context
+    routes:
+      - /play/6-9-months
+      - /play/all-stages
+
+  - id: guidance.development.06-09m.development-focus
+    domain: development
+    stage: dev-06-09m
+    section: development-focus
+    titleKey: guidance.development.section.development-focus.title
+    claimIds:
+      - development.06-09m.development-focus
+    routes:
+      - /play/6-9-months
+      - /play/all-stages
+
+  - id: guidance.development.06-09m.gross-motor
+    domain: development
+    stage: dev-06-09m
+    section: gross-motor
+    titleKey: guidance.development.section.gross-motor.title
+    claimIds:
+      - development.06-09m.gross-motor
+    routes:
+      - /play/6-9-months
+      - /play/all-stages
+
+  - id: guidance.development.06-09m.fine-motor
+    domain: development
+    stage: dev-06-09m
+    section: fine-motor
+    titleKey: guidance.development.section.fine-motor.title
+    claimIds:
+      - development.06-09m.fine-motor
+    routes:
+      - /play/6-9-months
+      - /play/all-stages
+
+  - id: guidance.development.06-09m.communication
+    domain: development
+    stage: dev-06-09m
+    section: communication
+    titleKey: guidance.development.section.communication.title
+    claimIds:
+      - development.06-09m.communication
+    routes:
+      - /play/6-9-months
+      - /play/all-stages
+
+  - id: guidance.development.06-09m.cognitive
+    domain: development
+    stage: dev-06-09m
+    section: cognitive
+    titleKey: guidance.development.section.cognitive.title
+    claimIds:
+      - development.06-09m.cognitive
+    routes:
+      - /play/6-9-months
+      - /play/all-stages
+
+  - id: guidance.development.06-09m.social-emotional
+    domain: development
+    stage: dev-06-09m
+    section: social-emotional
+    titleKey: guidance.development.section.social-emotional.title
+    claimIds:
+      - development.06-09m.social-emotional
+    routes:
+      - /play/6-9-months
+      - /play/all-stages
+
+  - id: guidance.development.06-09m.activities
+    domain: development
+    stage: dev-06-09m
+    section: activities
+    titleKey: guidance.development.section.activities.title
+    claimIds:
+      - development.06-09m.activities
+    routes:
+      - /play/6-9-months
+      - /play/all-stages
+
+  - id: guidance.development.06-09m.variants
+    domain: development
+    stage: dev-06-09m
+    section: variants
+    titleKey: guidance.development.section.variants.title
+    claimIds:
+      - development.06-09m.variants
+    routes:
+      - /play/6-9-months
+      - /play/all-stages
+
+  - id: guidance.development.06-09m.safety-environment
+    domain: development
+    stage: dev-06-09m
+    section: safety-environment
+    titleKey: guidance.development.section.safety-environment.title
+    claimIds:
+      - development.06-09m.safety-environment
+    routes:
+      - /play/6-9-months
+      - /play/all-stages
+
+  - id: guidance.development.06-09m.what-not-to-force
+    domain: development
+    stage: dev-06-09m
+    section: what-not-to-force
+    titleKey: guidance.development.section.what-not-to-force.title
+    claimIds:
+      - development.06-09m.what-not-to-force
+    routes:
+      - /play/6-9-months
+      - /play/all-stages
+
+  - id: guidance.development.06-09m.what-to-observe
+    domain: development
+    stage: dev-06-09m
+    section: what-to-observe
+    titleKey: guidance.development.section.what-to-observe.title
+    claimIds:
+      - development.06-09m.what-to-observe
+    routes:
+      - /play/6-9-months
+      - /play/all-stages
+
+  - id: guidance.development.06-09m.clinician-cues
+    domain: development
+    stage: dev-06-09m
+    section: clinician-cues
+    titleKey: guidance.development.section.clinician-cues.title
+    claimIds:
+      - development.06-09m.clinician-cues
+    routes:
+      - /play/6-9-months
+      - /play/all-stages

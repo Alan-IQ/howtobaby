@@ -100,10 +100,10 @@ describe("<T> renders page and site names as links", () => {
   });
 
   it("links other internal page references the same way (Feeding on the home page, Now in WhyThisStage)", () => {
-    expect(renderToStaticMarkup(<T id="page.home.how.p2" />)).toContain('beginning with <a href="/feeding">Feeding</a>,');
+    expect(renderToStaticMarkup(<T id="page.home.how.p2" />)).toContain('beginning with <a href="/feeding">Feeding</a> and <a href="/play">Play &amp; Development</a>,');
     expect(renderToStaticMarkup(<T id="why.noProfile" />)).toContain('on <a href="/">Now</a> and');
     language = "vi";
-    expect(renderToStaticMarkup(<T id="page.home.how.p2" />)).toContain('ở mục <a href="/feeding">Ăn uống</a>;');
+    expect(renderToStaticMarkup(<T id="page.home.how.p2" />)).toContain('ở mục <a href="/feeding">Ăn uống</a> và <a href="/play">Chơi &amp; Phát triển</a>;');
     expect(renderToStaticMarkup(<T id="why.noProfile" />)).toContain('ở trang <a href="/">Hiện tại</a>,');
   });
 

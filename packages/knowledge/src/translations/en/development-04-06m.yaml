@@ -1,0 +1,59 @@
+# SPDX-License-Identifier: CC-BY-NC-SA-4.0
+# Canonical English strings for Development stage dev-04-06m. English is authored first;
+# Vietnamese parity lives in translations/vi/development-04-06m.yaml. List claims keep one
+# lead line followed by `- item` lines; source qualifiers survive verbatim (no invented precision).
+
+locale: en
+strings:
+  development.04-06m.at-a-glance: |-
+    From 4 to under 6 months, the CDC 4-month checklist is the reference. Most babies now coo, chuckle, hold the head steady when held, push up onto the forearms during tummy time, bring hands to the mouth and swing at toys. Play becomes hands-on: reaching, kicking, mouthing safe objects and taking turns making sounds with you.
+  development.04-06m.milestone-context: |-
+    For this stage (4 to under 6 months) the reference is CDC’s 4-month checklist: what most babies (75% or more) do by 4 months. A baby of 5 months is compared with the 4-month checklist, not with something in between; the 6-month checklist becomes the reference at 6 months. CDC notes that its milestone materials are not a substitute for standardized, validated developmental screening tools.
+  development.04-06m.development-focus: |-
+    Hands and voice take center stage. Your baby discovers their own hands, swings at and holds toys, and brings everything to the mouth to explore. Cooing turns into real turn-taking: your baby makes a sound, you answer, and they answer back. On the tummy, pushing up onto the forearms builds the strength that rolling and sitting will need.
+  development.04-06m.gross-motor: |-
+    Large-movement milestones most babies reach by 4 months (CDC checklist):
+    - holds the head steady without support when you are holding them
+    - pushes up onto the elbows or forearms when on the tummy
+  development.04-06m.fine-motor: |-
+    Hand and hand–eye milestones most babies reach by 4 months (CDC checklist):
+    - holds a toy when you put it in their hand
+    - uses an arm to swing at toys
+    - brings hands to the mouth
+  development.04-06m.communication: |-
+    Communication milestones most babies reach by 4 months (CDC checklist):
+    - makes sounds like “oooo” and “aahh” (cooing)
+    - makes sounds back when you talk to them
+    - turns the head toward the sound of your voice
+  development.04-06m.cognitive: |-
+    Learning and thinking milestones most babies reach by 4 months (CDC checklist):
+    - if hungry, opens the mouth when they see the breast or bottle
+    - looks at their own hands with interest
+  development.04-06m.social-emotional: |-
+    Social and emotional milestones most babies reach by 4 months (CDC checklist):
+    - smiles on their own to get your attention
+    - chuckles (not yet a full laugh) when you try to make them laugh
+    - looks at you, moves, or makes sounds to get or keep your attention
+  development.04-06m.activities: |-
+    Ideas CDC suggests for this age:
+    - respond to your baby’s sounds with excitement, smiles and talking, and copy the sounds back to keep the “conversation” going
+    - put your baby on a blanket with safe toys so they can reach, kick and explore
+    - let your baby put safe things in the mouth — nothing sharp, hot or small enough to choke on
+    - talk, read and sing to your baby, and use their name often
+    - play peek-a-boo, and bounce your baby gently on your lap
+    - give floor time every day so your baby can move and interact with people and objects
+  development.04-06m.variants: |-
+    Easier: place a light toy so it touches your baby’s hand, so a small swing already makes contact. Harder: hold the toy just above the chest so your baby has to reach up and hold on. Easier for sound play: copy the exact coo and pause. Harder: answer with a slightly different sound, or wait longer before you answer, and watch whether your baby keeps the turn going. Easier for tummy time: a rolled towel under the chest. Harder: a toy slightly out of reach that invites a stretch.
+  development.04-06m.safety-environment: |-
+    Safety points CDC and the AAP attach to this age:
+    - mouthing is how babies learn, so only offer things that are not sharp, hot or small enough to choke on, and check toys for loose parts
+    - try not to keep your baby in swings, strollers, bouncy seats or exercise saucers for too long; floor time is where movement develops
+    - the AAP recommends against wheeled baby walkers at any age — they send thousands of children to hospitals each year and can actually delay walking; a stationary activity center or play yard is the safer choice
+    - sleep is always on the back; never shake your baby
+    - for children under 18 months, the AAP recommends no screen media other than video chatting
+  development.04-06m.what-not-to-force: |-
+    Don’t try to make rolling or sitting happen: at this stage most babies are still building the forearm push-up that comes first, and the 4-month checklist lists neither rolling nor sitting. Don’t use a wheeled walker or a jumper as a way to “teach” standing — the AAP says walkers offer no benefit and can delay walking. Don’t keep play going when your baby looks away, arches or fusses; take a break and come back later.
+  development.04-06m.what-to-observe: |-
+    Notice how your baby uses the hands and voice during play: do the hands come together or to the mouth, does a swing at a toy sometimes connect, does your baby answer your voice with a sound and wait for yours? On the tummy, notice whether the chest lifts on the forearms and how long the head stays up. Also notice which toys, sounds and games hold attention longest — that is your guide for the next session.
+  development.04-06m.clinician-cues: |-
+    The reference for this stage is CDC’s 4-month checklist. CDC suggests bringing to the visit: what you and your baby do together, what your baby likes to do, anything your baby does or does not do that concerns you, whether your baby has lost any skills they once had, and whether your baby has special healthcare needs or was born prematurely. If your baby is not doing one or more of the 4-month milestones, has lost skills, or you have other concerns, don’t wait — talk with your baby’s doctor and ask about developmental screening.

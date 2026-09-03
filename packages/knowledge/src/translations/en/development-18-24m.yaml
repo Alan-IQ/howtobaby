@@ -1,0 +1,62 @@
+# SPDX-License-Identifier: CC-BY-NC-SA-4.0
+# Canonical English strings for Development stage dev-18-24m. English is authored first;
+# Vietnamese parity lives in translations/vi/development-18-24m.yaml. List claims keep one
+# lead line followed by `- item` lines; source qualifiers survive verbatim (no invented precision).
+
+locale: en
+strings:
+  development.18-24m.at-a-glance: |-
+    From 18 to under 24 months, the CDC 18-month checklist is the reference. Most children now walk without holding on, climb on and off a couch, scribble, drink from an open cup (with spills), try a spoon, say three or more words besides “mama” and “dada”, follow a one-step direction without a gesture, copy chores and play simply with toys, like pushing a toy car. Play is pretend and participation: feeding a stuffed animal, sweeping alongside you, simple choices and picture books.
+  development.18-24m.milestone-context: |-
+    For this stage (18 to under 24 months) the reference is CDC’s 18-month checklist: what most children (75% or more) do by 18 months. A child of 19 to 23 months is compared with the 18-month checklist, not with something in between; the 2-year checklist becomes the reference at 24 months. CDC notes that its milestone materials are not a substitute for standardized, validated developmental screening tools.
+  development.18-24m.development-focus: |-
+    Confident walking and climbing turn your child into an explorer who checks that you are still nearby. Pretend play begins — a spoon feeds the teddy — and copying chores is serious work. Words are still few but understanding is strong: a one-step direction with no gesture is now enough. Self-help grows too: an open cup, a spoon, pushing an arm through a sleeve, hands out to be washed.
+  development.18-24m.gross-motor: |-
+    Large-movement milestones most children reach by 18 months (CDC checklist):
+    - walks without holding on to anyone or anything
+    - climbs on and off a couch or chair without help
+  development.18-24m.fine-motor: |-
+    Hand and hand–eye milestones most children reach by 18 months (CDC checklist):
+    - scribbles
+    - drinks from a cup without a lid and may spill sometimes
+    - feeds themselves with the fingers
+    - tries to use a spoon
+  development.18-24m.communication: |-
+    Communication milestones most children reach by 18 months (CDC checklist):
+    - tries to say three or more words besides “mama” or “dada”
+    - follows one-step directions without any gestures, like giving you the toy when you say “Give it to me”
+  development.18-24m.cognitive: |-
+    Learning and thinking milestones most children reach by 18 months (CDC checklist):
+    - copies you doing chores, like sweeping with a broom
+    - plays with toys in a simple way, like pushing a toy car
+  development.18-24m.social-emotional: |-
+    Social and emotional milestones most children reach by 18 months (CDC checklist):
+    - moves away from you, but looks to make sure you are close by
+    - points to show you something interesting
+    - puts the hands out for you to wash them
+    - looks at a few pages in a book with you
+    - helps you dress them by pushing an arm through a sleeve or lifting up a foot
+  development.18-24m.activities: |-
+    Ideas CDC suggests for this age:
+    - encourage pretend play: give a spoon so your child can feed a stuffed animal, and take turns pretending
+    - ask simple questions about what is around: “What is that?”
+    - give simple choices between two things, like the red or the blue shirt
+    - add to the words your child says: “Dog” — “Yes, that’s a dog. Dogs say woof, woof”
+    - talk face to face at your child’s eye level, and start naming body parts: “Here’s your nose, here’s my nose”
+    - roll balls back and forth, push toy cars, put blocks in and out of containers, and give toys that can be pushed or pulled safely
+    - let your child drink from a cup without a lid and practice with a spoon — messy, but that is the learning
+    - help your child notice others’ feelings: “He looks sad. Let’s bring him a teddy”
+  development.18-24m.variants: |-
+    Easier: for pretend play, start the story yourself — feed the teddy, then hand the spoon over. Harder: ask your child what the teddy wants next, or add a second character. Easier for directions: one step with the object already in view. Harder: one step about something in another room, still without a gesture. Easier for self-feeding: thick foods that stay on the spoon. Harder: an open cup with a small amount of water and a towel ready.
+  development.18-24m.safety-environment: |-
+    Safety points CDC attaches to this age:
+    - a climber needs a safe home: never leave your child near water without someone watching, gate the stairs, and keep hot appliances, sharp objects and poisons locked away or out of reach
+    - never leave your child alone in a vehicle, even for a few moments
+    - choose push and pull toys that are safe for a walker, and keep checking toys for loose or broken parts
+    - screen time is not recommended for children younger than 2 years except video calling
+  development.18-24m.what-not-to-force: |-
+    Don’t start toilet training on a schedule: CDC notes that most children are not successful at toilet training until 2 to 3 years old, that starting before your child is ready can cause stress and setbacks, and suggests asking your child’s doctor or teachers about readiness. Don’t expect sentences — three or more single words is the 18-month milestone. Don’t battle tantrums; CDC says they are normal, should become shorter and less frequent with age, and it is fine to let one run its course while you stay nearby.
+  development.18-24m.what-to-observe: |-
+    Notice how your child uses you as a base: wandering off, checking back, pointing to share something interesting. Notice pretend play starting — feeding a toy, “talking” on a block — and how your child copies household routines. Notice which words your child uses on purpose, and whether a direction without a gesture gets a response. On the move, notice climbing and how your child gets down again.
+  development.18-24m.clinician-cues: |-
+    The reference for this stage is CDC’s 18-month checklist. CDC cites the AAP recommendation for standardized developmental screening at 18 months and autism screening at 18 and 24 months, so this stage usually includes screening visits. Bring: what you and your child do together, what your child likes to do, anything your child does or does not do that concerns you, whether your child has lost any skills they once had, and whether your child has special healthcare needs or was born prematurely. If your child is not doing one or more of the 18-month milestones, has lost skills, or you have other concerns, don’t wait — talk with your child’s doctor.

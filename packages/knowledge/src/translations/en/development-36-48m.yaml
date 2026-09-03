@@ -1,0 +1,61 @@
+# SPDX-License-Identifier: CC-BY-NC-SA-4.0
+# Canonical English strings for Development stage dev-36-48m. English is authored first;
+# Vietnamese parity lives in translations/vi/development-36-48m.yaml. List claims keep one
+# lead line followed by `- item` lines; source qualifiers survive verbatim (no invented precision).
+
+locale: en
+strings:
+  development.36-48m.at-a-glance: |-
+    From 3 to under 4 years, the CDC 3-year checklist is the reference. Most children now hold a real conversation with at least two back-and-forth exchanges, ask “who”, “what”, “where” or “why”, say their first name, talk well enough for others to understand most of the time, draw a circle when shown, avoid touching hot things after a warning, string large beads, put on some clothes and use a fork. Play is talk-rich: stories and questions, counting games, playdough and crayons, pretend play, and plenty of outdoor play with other children.
+  development.36-48m.milestone-context: |-
+    For this stage (3 to under 4 years) the reference is CDC’s 3-year checklist: what most children (75% or more) do by 3 years. A child of 3½ is compared with the 3-year checklist, not with something in between; the 4-year checklist becomes the reference at 4 years. CDC notes that its milestone materials are not a substitute for standardized, validated developmental screening tools.
+  development.36-48m.development-focus: |-
+    Conversation is the headline: questions, answers, describing what is happening in a picture, and speech that strangers mostly understand. Your child starts to manage feelings with your help, joins other children in play, and can be warned rather than only physically stopped. Hands gain control for drawing shapes, stringing beads, dressing and using a fork.
+  development.36-48m.gross-motor: |-
+    CDC’s 3-year checklist lists no separate large-movement milestone; the most recent one is jumping off the ground with both feet, from the 30-month checklist, and running, kicking and stair-walking from the 2-year checklist remain part of daily play. CDC’s tips for 3-year-olds emphasize playing outside — parks and walking trails — with plenty of time for your child to choose what and how to play.
+  development.36-48m.fine-motor: |-
+    Hand and hand–eye milestones most children reach by 3 years (CDC checklist):
+    - strings items together, like large beads or macaroni
+    - puts on some clothes by themselves, like loose pants or a jacket
+    - uses a fork
+    - draws a circle when you show them how (CDC lists this under learning and thinking)
+  development.36-48m.communication: |-
+    Communication milestones most children reach by 3 years (CDC checklist):
+    - talks with you in conversation using at least two back-and-forth exchanges
+    - asks “who”, “what”, “where” or “why” questions, like “Where is mommy?”
+    - says what action is happening in a picture or book when asked, like “running” or “eating”
+    - says their first name when asked
+    - talks well enough for others to understand, most of the time
+  development.36-48m.cognitive: |-
+    Learning and thinking milestone most children reach by 3 years (CDC checklist):
+    - avoids touching hot objects, like a stove, when you warn them
+    CDC also lists drawing a circle when shown how, which HowToBaby shows under hand and hand–eye skills.
+  development.36-48m.social-emotional: |-
+    Social and emotional milestones most children reach by 3 years (CDC checklist):
+    - calms down within 10 minutes after you leave, like at childcare drop-off
+    - notices other children and joins them to play
+  development.36-48m.activities: |-
+    Ideas CDC suggests for this age:
+    - read together and ask “What is happening in the picture?” and “What do you think will happen next?”, then ask for more details
+    - play counting games with body parts, stairs and everyday things
+    - speak in longer sentences than your child’s, with real words: “need nana” — “I want a banana”
+    - give instructions with 2 or 3 steps: “Go to your room and get your shoes and coat”
+    - an “activity box” with paper, crayons and coloring books; playdough to squish, pinch and roll into balls
+    - games of opposites — big/small, fast/slow, quiet/loud — and matching games
+    - let your child help make meals: washing fruit and vegetables, stirring
+    - play outside, at a park or on a trail, and let your child choose what and how to play; encourage play with other children
+  development.36-48m.variants: |-
+    Easier: two-step instructions, then add a third step only when two are reliable; questions about the picture in front of you. Harder: three steps out of order, or a question about what happened before the picture. Easier for drawing: draw the circle first and let your child trace over it. Harder: a circle from memory, then a cross. Easier for group play: one familiar child and a shared activity you set up. Harder: a new child at the park, with you a few steps away.
+  development.36-48m.safety-environment: |-
+    Safety points CDC attaches to this age:
+    - explain why your child must stay out of traffic — no playing in the street or running after stray balls
+    - a tricycle stays on the sidewalk, away from the street, and your child wears a helmet
+    - check playground equipment for loose parts or sharp edges, and watch your child at all times when playing outside
+    - watch your child at all times in or around any water, including kiddie pools; teaching swimming does not replace supervision
+    - limit screen time to no more than 1 hour a day of a children’s program with an adult present, and keep screens out of your child’s bedroom
+  development.36-48m.what-not-to-force: |-
+    Don’t solve every problem for your child: CDC’s tip is to support them in solving it — ask questions, think of solutions together, try one. Don’t expect clear speech all the time; “most of the time” is the 3-year milestone. Don’t set many rules at once — CDC suggests a few simple, clear ones, showing what to do instead when one is broken. And when playing outside, don’t direct the play; CDC suggests letting your child choose what and how to play and following their lead.
+  development.36-48m.what-to-observe: |-
+    Notice conversation: how many turns your child keeps going, what kinds of questions they ask, and whether people outside the family understand them. Notice how your child handles separation and frustration, and what helps them calm down. Notice how they approach other children — watching first, joining, leading. In hands-on play, notice grip on crayons, beads and forks, and how dressing goes.
+  development.36-48m.clinician-cues: |-
+    The reference for this stage is CDC’s 3-year checklist. CDC suggests bringing to the visit: what you and your child do together, what your child likes to do, anything your child does or does not do that concerns you, whether your child has lost any skills they once had, and whether your child has special healthcare needs or was born prematurely. If your child is not doing one or more of the 3-year milestones, has lost skills, or you have other concerns, don’t wait — talk with your child’s doctor and ask about developmental screening.

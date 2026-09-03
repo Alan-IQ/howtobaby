@@ -1,0 +1,60 @@
+# SPDX-License-Identifier: CC-BY-NC-SA-4.0
+# Vietnamese parity strings for Development stage dev-06-09m: natural, professional Vietnamese that
+# preserves every quantity, age boundary, qualifier, negation and applicability condition of the
+# canonical English (GUIDANCE_CONTENT_CONTRACT.md §10). Same lead line + `- item` structure.
+
+locale: vi
+strings:
+  development.06-09m.at-a-glance: |-
+    Từ 6 đến dưới 9 tháng, danh sách 6 tháng của CDC là tham chiếu. Phần lớn trẻ ở tuổi này đã biết cười thành tiếng, luân phiên phát ra âm thanh, phun mưa, với lấy thứ mình muốn, lật từ sấp sang ngửa, chống thẳng tay nâng người và chống tay giữ thăng bằng khi ngồi. Trò chơi mở rộng ra sàn nhà: lăn về phía đồ chơi, với và ngậm đồ vật, cùng các trò qua lại với gương mặt, âm thanh và gương.
+  development.06-09m.milestone-context: |-
+    Với giai đoạn này (từ 6 đến dưới 9 tháng), tham chiếu là danh sách 6 tháng của CDC: điều phần lớn trẻ (từ 75% trở lên) làm được khi được 6 tháng. Bé 7 hoặc 8 tháng được đối chiếu với danh sách 6 tháng, không phải với một mức ở giữa; danh sách 9 tháng chỉ trở thành tham chiếu khi bé được 9 tháng. CDC lưu ý rằng các tài liệu về cột mốc không thay thế cho các công cụ sàng lọc phát triển đã được chuẩn hóa và kiểm định.
+  development.06-09m.development-focus: |-
+    Vận động mở ra cả thế giới: lật, chống thẳng tay nâng người và giữ thăng bằng khi ngồi có đỡ giúp bé với được thứ thu hút ánh nhìn của mình. Khám phá bằng miệng đang ở giai đoạn mạnh nhất. Về mặt xã hội, bé nhận ra người quen, cười thành tiếng và thích các trò luân phiên — bắt chước âm thanh, nét mặt của bạn và nhận ra mình trong gương.
+  development.06-09m.gross-motor: |-
+    Các cột mốc vận động thô mà phần lớn trẻ làm được khi được 6 tháng (danh sách của CDC):
+    - lật từ sấp sang ngửa
+    - chống thẳng hai tay nâng người lên khi nằm sấp
+    - chống tay để giữ thăng bằng khi ngồi
+  development.06-09m.fine-motor: |-
+    Các cột mốc bàn tay và phối hợp tay–mắt mà phần lớn trẻ làm được khi được 6 tháng (CDC xếp các mục này vào nhóm học hỏi và tư duy):
+    - với lấy món đồ chơi mà bé muốn
+    - đưa đồ vật vào miệng để khám phá
+  development.06-09m.communication: |-
+    Các cột mốc giao tiếp mà phần lớn trẻ làm được khi được 6 tháng (danh sách của CDC):
+    - luân phiên phát ra âm thanh cùng bạn
+    - “phun mưa” (thè lưỡi và thổi)
+    - phát ra tiếng ré, tiếng kêu the thé
+  development.06-09m.cognitive: |-
+    Các cột mốc học hỏi và tư duy mà phần lớn trẻ làm được khi được 6 tháng (danh sách của CDC):
+    - mím môi để cho biết bé không muốn ăn thêm
+    CDC còn xếp hai cột mốc học hỏi khác — với lấy đồ chơi bé muốn và khám phá đồ vật bằng miệng — mà HowToBaby trình bày ở phần bàn tay và phối hợp tay–mắt.
+  development.06-09m.social-emotional: |-
+    Các cột mốc xã hội và cảm xúc mà phần lớn trẻ làm được khi được 6 tháng (danh sách của CDC):
+    - nhận ra người quen
+    - thích nhìn mình trong gương
+    - cười thành tiếng
+  development.06-09m.activities: |-
+    Những gợi ý của CDC cho độ tuổi này:
+    - chơi “qua lại”: khi bé cười, bạn cười; khi bé phát ra âm thanh, bạn lặp lại
+    - “đọc sách” cho bé mỗi ngày bằng cách cùng xem tranh nhiều màu sắc và nói về chúng, và đáp lại khi bé bi bô
+    - chỉ cho bé những thứ mới và gọi tên chúng — xe, cây, con vật khi đi dạo
+    - đặt bé nằm sấp hoặc nằm ngửa với đồ chơi hơi ngoài tầm với và khuyến khích bé lật để lấy
+    - đỡ bé khi bé ngồi và đưa đồ chơi để bé nhìn trong lúc tập giữ thăng bằng
+    - khi bé làm rơi đồ chơi, nhặt lên và đưa lại cho bé — trò chơi này dạy bé về nguyên nhân và kết quả
+    - chơi trên sàn hoặc thảm chơi mỗi ngày
+  development.06-09m.variants: |-
+    Dễ hơn: đặt đồ chơi trong tầm vươn ngắn để bé với được ngay, và đỡ bé ngồi bằng tay hoặc bằng cơ thể bạn phía sau lưng bé. Khó hơn: đặt đồ chơi sang một bên để bé phải chuyển trọng tâm hoặc bắt đầu lật mới với được, và nới lỏng tay đỡ khi bé ngồi trong từng khoảnh khắc ngắn. Dễ hơn với trò chơi âm thanh: lặp lại y hệt. Khó hơn: đổi nhịp — hai âm rồi dừng — và xem bé có theo được mẫu đó không.
+  development.06-09m.safety-environment: |-
+    Những lưu ý an toàn mà CDC và AAP gắn với độ tuổi này:
+    - khi bé bắt đầu di chuyển và ngậm đồ vật nhiều hơn, hãy để những vật nhỏ có thể nuốt phải ngoài tầm với và kiểm tra đồ chơi xem có bộ phận lỏng lẻo không
+    - CDC gợi ý hỏi bác sĩ của bé xem những thực phẩm nào có nguy cơ gây hóc khi bạn trao đổi về việc bắt đầu ăn dặm
+    - AAP khuyến cáo không dùng xe tập đi có bánh; ghế hoạt động cố định hoặc cũi chơi là lựa chọn an toàn hơn, và nằm chơi dưới sàn vẫn là tốt nhất
+    - khi ngủ luôn đặt bé nằm ngửa; không bao giờ cầm chất lỏng nóng ở gần bé hoặc khi đang bế bé
+    - với trẻ dưới 18 tháng, AAP khuyến nghị không dùng bất kỳ phương tiện màn hình nào ngoài gọi video
+  development.06-09m.what-not-to-force: |-
+    Đừng để bé ngồi kê gối ở tư thế bé chưa tự giữ được — gợi ý của CDC là đỡ bé bằng tay trong lúc bé tập giữ thăng bằng, chứ không phải chèn gối quanh bé. Đừng dùng xe tập đi hay ghế nhún để thúc bé đứng sớm; AAP cho biết xe tập đi có thể làm bé biết đi muộn hơn. Đừng ép bé lật hay với khi bé mệt hoặc khó chịu: lời khuyên của CDC là đọc tâm trạng của bé và cho bé nghỉ. Ngồi không cần đỡ và bò thuộc về các danh sách sau, nên việc bé chưa làm được ở 6 đến 8 tháng là điều bình thường.
+  development.06-09m.what-to-observe: |-
+    Hãy để ý cách bé tiếp cận đồ vật: lật, xoay người, với bằng một tay hay cả hai tay. Để ý cách bé khám phá một món đồ mới — nhìn, ngậm, đập, chuyền qua lại giữa hai tay — và cách bé cho bạn biết bé đã xong, như mím môi trước thìa hay quay mặt đi. Trong trò chơi giao tiếp, để ý xem ai làm bé cười và trò nào giữ được nhịp luân phiên lâu nhất.
+  development.06-09m.clinician-cues: |-
+    Tham chiếu cho giai đoạn này là danh sách 6 tháng của CDC. CDC gợi ý mang đến lần khám: những việc bạn và bé thường làm cùng nhau, những gì bé thích làm, bất cứ điều gì bé làm hoặc chưa làm khiến bạn lo lắng, bé có mất đi kỹ năng nào từng có không, và bé có nhu cầu chăm sóc sức khỏe đặc biệt hay sinh non không. Nếu bé chưa làm được một hoặc nhiều cột mốc trong danh sách 6 tháng, mất đi kỹ năng từng có, hoặc bạn có lo lắng khác, đừng chờ đợi — hãy trao đổi với bác sĩ của bé và hỏi về việc sàng lọc phát triển.

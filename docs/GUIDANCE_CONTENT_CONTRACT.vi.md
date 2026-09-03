@@ -35,6 +35,8 @@ correctedDevelopmentAge = planDate - EDD
 
 Các cột mốc phát triển là thông tin tham khảo, không phải hạn chót hay điểm đạt/trượt. Khi dùng checklist của CDC và tuổi của trẻ nằm giữa hai mốc checklist, chọn checklist dành cho độ tuổi nhỏ hơn theo hướng dẫn của CDC; không tự nội suy thành một ngưỡng mới.
 
+Ghi chú triển khai (Phase 4): mỗi guidance block của một giai đoạn mang id mục (`section`, cùng id kebab-case mà coverage matrix dùng), và trang giai đoạn sắp xếp block theo id này thay vì theo id của block. Dưới 2 tháng chưa có checklist nào của CDC; checklist 2 tháng là tham chiếu đầu tiên. Tuổi phát triển hiệu chỉnh trước ngày dự sinh không gán giai đoạn hay checklist nào.
+
 ## Các giai đoạn Ăn uống
 
 - `0–<4m`: sữa mẹ/sữa công thức, cho bú theo tín hiệu của bé và an toàn khi bú/bình sữa.

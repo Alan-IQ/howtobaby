@@ -40,3 +40,398 @@ sources:
     notes: >-
       Global normative guidance used as corroboration for U.S.-primary feeding claims
       (GUIDANCE_CONTENT_CONTRACT.md §12: U.S. authority stays primary for the U.S. product).
+
+  # --- Play & Development (Phase 4 source audit, opened and verified 2026-09-03) ---------------
+
+  - id: cdc-developmental-milestones
+    organization: CDC
+    title: "CDC's Developmental Milestones"
+    canonicalUrl: "https://www.cdc.gov/act-early/milestones/index.html"
+    jurisdiction: US
+    sourceType: public-health-guidance
+    updatedAt: 2026-02-17
+    lastVerifiedAt: 2026-09-03
+    nextReviewAt: 2027-03-03
+    status: current
+    accessMode: link-only
+    approvalLevel: approved-primary
+    approvedScopes: [development]
+    notes: >-
+      "Learn the Signs. Act Early." overview: what developmental milestones are, the age-specific
+      checklists (2 months through 5 years) and the AAP screening recommendation it quotes.
+      Interpret + cite + link only.
+
+  - id: cdc-milestones-2-months
+    organization: CDC
+    title: "Milestones by 2 Months"
+    canonicalUrl: "https://www.cdc.gov/act-early/milestones/2-months.html"
+    jurisdiction: US
+    sourceType: public-health-guidance
+    updatedAt: 2026-05-16
+    lastVerifiedAt: 2026-09-03
+    nextReviewAt: 2027-03-03
+    status: current
+    accessMode: link-only
+    approvalLevel: approved-primary
+    approvedScopes: [development]
+    notes: >-
+      CDC "Learn the Signs. Act Early." checklist: what most children (75% or more) do by
+      2 months, tips and activities, and what to share with the doctor. HowToBaby paraphrases and
+      cites; the checklist wording stays CDC's.
+
+  - id: cdc-milestones-4-months
+    organization: CDC
+    title: "Milestones by 4 Months"
+    canonicalUrl: "https://www.cdc.gov/act-early/milestones/4-months.html"
+    jurisdiction: US
+    sourceType: public-health-guidance
+    updatedAt: 2026-05-16
+    lastVerifiedAt: 2026-09-03
+    nextReviewAt: 2027-03-03
+    status: current
+    accessMode: link-only
+    approvalLevel: approved-primary
+    approvedScopes: [development]
+    notes: >-
+      CDC "Learn the Signs. Act Early." checklist: what most children (75% or more) do by
+      4 months, tips and activities, and what to share with the doctor. HowToBaby paraphrases and
+      cites; the checklist wording stays CDC's.
+
+  - id: cdc-milestones-6-months
+    organization: CDC
+    title: "Milestones by 6 Months"
+    canonicalUrl: "https://www.cdc.gov/act-early/milestones/6-months.html"
+    jurisdiction: US
+    sourceType: public-health-guidance
+    updatedAt: 2026-05-16
+    lastVerifiedAt: 2026-09-03
+    nextReviewAt: 2027-03-03
+    status: current
+    accessMode: link-only
+    approvalLevel: approved-primary
+    approvedScopes: [development]
+    notes: >-
+      CDC "Learn the Signs. Act Early." checklist: what most children (75% or more) do by
+      6 months, tips and activities, and what to share with the doctor. HowToBaby paraphrases and
+      cites; the checklist wording stays CDC's.
+
+  - id: cdc-milestones-9-months
+    organization: CDC
+    title: "Milestones by 9 Months"
+    canonicalUrl: "https://www.cdc.gov/act-early/milestones/9-months.html"
+    jurisdiction: US
+    sourceType: public-health-guidance
+    updatedAt: 2026-05-16
+    lastVerifiedAt: 2026-09-03
+    nextReviewAt: 2027-03-03
+    status: current
+    accessMode: link-only
+    approvalLevel: approved-primary
+    approvedScopes: [development]
+    notes: >-
+      CDC "Learn the Signs. Act Early." checklist: what most children (75% or more) do by
+      9 months, tips and activities, and what to share with the doctor. HowToBaby paraphrases and
+      cites; the checklist wording stays CDC's.
+
+  - id: cdc-milestones-1-year
+    organization: CDC
+    title: "Milestones by 1 Year"
+    canonicalUrl: "https://www.cdc.gov/act-early/milestones/1-year.html"
+    jurisdiction: US
+    sourceType: public-health-guidance
+    updatedAt: 2026-05-16
+    lastVerifiedAt: 2026-09-03
+    nextReviewAt: 2027-03-03
+    status: current
+    accessMode: link-only
+    approvalLevel: approved-primary
+    approvedScopes: [development]
+    notes: >-
+      CDC "Learn the Signs. Act Early." checklist: what most children (75% or more) do by
+      1 year, tips and activities, and what to share with the doctor. HowToBaby paraphrases and
+      cites; the checklist wording stays CDC's.
+
+  - id: cdc-milestones-15-months
+    organization: CDC
+    title: "Milestones by 15 Months"
+    canonicalUrl: "https://www.cdc.gov/act-early/milestones/15-months.html"
+    jurisdiction: US
+    sourceType: public-health-guidance
+    updatedAt: 2026-05-16
+    lastVerifiedAt: 2026-09-03
+    nextReviewAt: 2027-03-03
+    status: current
+    accessMode: link-only
+    approvalLevel: approved-primary
+    approvedScopes: [development]
+    notes: >-
+      CDC "Learn the Signs. Act Early." checklist: what most children (75% or more) do by
+      15 months, tips and activities, and what to share with the doctor. HowToBaby paraphrases and
+      cites; the checklist wording stays CDC's.
+
+  - id: cdc-milestones-18-months
+    organization: CDC
+    title: "Milestones by 18 Months"
+    canonicalUrl: "https://www.cdc.gov/act-early/milestones/18-months.html"
+    jurisdiction: US
+    sourceType: public-health-guidance
+    updatedAt: 2026-05-16
+    lastVerifiedAt: 2026-09-03
+    nextReviewAt: 2027-03-03
+    status: current
+    accessMode: link-only
+    approvalLevel: approved-primary
+    approvedScopes: [development]
+    notes: >-
+      CDC "Learn the Signs. Act Early." checklist: what most children (75% or more) do by
+      18 months, tips and activities, and what to share with the doctor. HowToBaby paraphrases and
+      cites; the checklist wording stays CDC's.
+
+  - id: cdc-milestones-2-years
+    organization: CDC
+    title: "Milestones by 2 Years"
+    canonicalUrl: "https://www.cdc.gov/act-early/milestones/2-years.html"
+    jurisdiction: US
+    sourceType: public-health-guidance
+    updatedAt: 2026-05-16
+    lastVerifiedAt: 2026-09-03
+    nextReviewAt: 2027-03-03
+    status: current
+    accessMode: link-only
+    approvalLevel: approved-primary
+    approvedScopes: [development]
+    notes: >-
+      CDC "Learn the Signs. Act Early." checklist: what most children (75% or more) do by
+      2 years, tips and activities, and what to share with the doctor. HowToBaby paraphrases and
+      cites; the checklist wording stays CDC's.
+
+  - id: cdc-milestones-30-months
+    organization: CDC
+    title: "Milestones by 30 Months"
+    canonicalUrl: "https://www.cdc.gov/act-early/milestones/30-months.html"
+    jurisdiction: US
+    sourceType: public-health-guidance
+    updatedAt: 2026-05-16
+    lastVerifiedAt: 2026-09-03
+    nextReviewAt: 2027-03-03
+    status: current
+    accessMode: link-only
+    approvalLevel: approved-primary
+    approvedScopes: [development]
+    notes: >-
+      CDC "Learn the Signs. Act Early." checklist: what most children (75% or more) do by
+      30 months, tips and activities, and what to share with the doctor. HowToBaby paraphrases and
+      cites; the checklist wording stays CDC's.
+
+  - id: cdc-milestones-3-years
+    organization: CDC
+    title: "Milestones by 3 Years"
+    canonicalUrl: "https://www.cdc.gov/act-early/milestones/3-years.html"
+    jurisdiction: US
+    sourceType: public-health-guidance
+    updatedAt: 2026-05-16
+    lastVerifiedAt: 2026-09-03
+    nextReviewAt: 2027-03-03
+    status: current
+    accessMode: link-only
+    approvalLevel: approved-primary
+    approvedScopes: [development]
+    notes: >-
+      CDC "Learn the Signs. Act Early." checklist: what most children (75% or more) do by
+      3 years, tips and activities, and what to share with the doctor. HowToBaby paraphrases and
+      cites; the checklist wording stays CDC's.
+
+  - id: cdc-milestones-4-years
+    organization: CDC
+    title: "Milestones by 4 Years"
+    canonicalUrl: "https://www.cdc.gov/act-early/milestones/4-years.html"
+    jurisdiction: US
+    sourceType: public-health-guidance
+    updatedAt: 2026-05-16
+    lastVerifiedAt: 2026-09-03
+    nextReviewAt: 2027-03-03
+    status: current
+    accessMode: link-only
+    approvalLevel: approved-primary
+    approvedScopes: [development]
+    notes: >-
+      CDC "Learn the Signs. Act Early." checklist: what most children (75% or more) do by
+      4 years, tips and activities, and what to share with the doctor. HowToBaby paraphrases and
+      cites; the checklist wording stays CDC's.
+
+  - id: cdc-milestones-5-years
+    organization: CDC
+    title: "Milestones by 5 Years"
+    canonicalUrl: "https://www.cdc.gov/act-early/milestones/5-years.html"
+    jurisdiction: US
+    sourceType: public-health-guidance
+    updatedAt: 2026-05-16
+    lastVerifiedAt: 2026-09-03
+    nextReviewAt: 2027-03-03
+    status: current
+    accessMode: link-only
+    approvalLevel: approved-primary
+    approvedScopes: [development]
+    notes: >-
+      CDC "Learn the Signs. Act Early." checklist: what most children (75% or more) do by
+      5 years, tips and activities, and what to share with the doctor. HowToBaby paraphrases and
+      cites; the checklist wording stays CDC's.
+
+  - id: cdc-positive-parenting-infants
+    organization: CDC
+    title: "Positive Parenting Tips: Infants (0–1 years)"
+    canonicalUrl: "https://www.cdc.gov/child-development/positive-parenting-tips/infants.html"
+    jurisdiction: US
+    sourceType: public-health-guidance
+    updatedAt: 2026-02-20
+    lastVerifiedAt: 2026-09-03
+    nextReviewAt: 2027-03-03
+    status: current
+    accessMode: link-only
+    approvalLevel: approved-primary
+    approvedScopes: [development, safety]
+    notes: >-
+      CDC child-development page for the first year: parenting tips, "Child safety first" and
+      "Healthy bodies" (floor time, restraining devices, screen media under 18 months).
+
+  - id: cdc-positive-parenting-toddlers-1-2
+    organization: CDC
+    title: "Positive Parenting Tips: Toddlers (1–2 years old)"
+    canonicalUrl: "https://www.cdc.gov/child-development/positive-parenting-tips/toddlers-1-2-years.html"
+    jurisdiction: US
+    sourceType: public-health-guidance
+    updatedAt: 2026-02-20
+    lastVerifiedAt: 2026-09-03
+    nextReviewAt: 2027-03-03
+    status: current
+    accessMode: link-only
+    approvalLevel: approved-primary
+    approvedScopes: [development, safety]
+    notes: >-
+      CDC child-development page for the second year: parenting tips, "Child safety first"
+      (water, stairs, outlets, hot surfaces, poisons, vehicles) and "Healthy bodies".
+
+  - id: cdc-positive-parenting-toddlers-2-3
+    organization: CDC
+    title: "Positive Parenting Tips: Toddlers (2–3 years old)"
+    canonicalUrl: "https://www.cdc.gov/child-development/positive-parenting-tips/toddlers-2-3-years.html"
+    jurisdiction: US
+    sourceType: public-health-guidance
+    updatedAt: 2025-08-05
+    lastVerifiedAt: 2026-09-03
+    nextReviewAt: 2027-03-03
+    status: current
+    accessMode: link-only
+    approvalLevel: approved-primary
+    approvedScopes: [development, safety]
+    notes: >-
+      CDC child-development page for ages 2–3: parenting tips, "Child safety first" (choking
+      posture, toy parts, crayons, hot drinks, car seat, water) and "Healthy bodies" (free play).
+
+  - id: cdc-positive-parenting-preschoolers
+    organization: CDC
+    title: "Positive Parenting Tips: Preschoolers (3–5 years old)"
+    canonicalUrl: "https://www.cdc.gov/child-development/positive-parenting-tips/preschooler-3-5-years.html"
+    jurisdiction: US
+    sourceType: public-health-guidance
+    updatedAt: 2026-02-20
+    lastVerifiedAt: 2026-09-03
+    nextReviewAt: 2027-03-03
+    status: current
+    accessMode: link-only
+    approvalLevel: approved-primary
+    approvedScopes: [development, safety]
+    notes: >-
+      CDC child-development page for ages 3–5: "Child safety first" (traffic, tricycle helmet,
+      playground equipment, supervision, water, strangers) and "Healthy bodies" (active play).
+
+  - id: aap-corrected-age-for-preemies
+    organization: AAP
+    title: "Corrected Age For Preemies"
+    canonicalUrl: "https://www.healthychildren.org/English/ages-stages/baby/preemie/Pages/Corrected-Age-For-Preemies.aspx"
+    jurisdiction: US
+    sourceType: parent-guidance
+    updatedAt: 2018-12-10
+    lastVerifiedAt: 2026-09-03
+    nextReviewAt: 2027-03-03
+    status: current
+    accessMode: link-only
+    approvalLevel: approved-primary
+    approvedScopes: [development]
+    notes: >-
+      AAP HealthyChildren.org parent guidance (adapted from "Understanding the NICU", AAP 2017):
+      corrected age counted from the due date is the better reference for developmental
+      milestones during the first 2 years.
+
+  - id: aap-back-to-sleep-tummy-to-play
+    organization: AAP
+    title: "Back to Sleep, Tummy to Play"
+    canonicalUrl: "https://www.healthychildren.org/English/ages-stages/baby/sleep/Pages/Back-to-Sleep-Tummy-to-Play.aspx"
+    jurisdiction: US
+    sourceType: parent-guidance
+    updatedAt: 2023-09-08
+    lastVerifiedAt: 2026-09-03
+    nextReviewAt: 2027-03-03
+    status: current
+    accessMode: link-only
+    approvalLevel: approved-primary
+    approvedScopes: [development, safety, sleep]
+    notes: >-
+      AAP HealthyChildren.org parent guidance (adapted from the 2022 AAP material): supervised
+      awake tummy time from the first days home, building up gradually, and back sleeping.
+
+  - id: aap-baby-walkers-dangerous-choice
+    organization: AAP
+    title: "Baby Walkers: A Dangerous Choice"
+    canonicalUrl: "https://www.healthychildren.org/English/safety-prevention/at-home/Pages/Baby-Walkers-A-Dangerous-Choice.aspx"
+    jurisdiction: US
+    sourceType: parent-guidance
+    updatedAt: 2022-08-15
+    lastVerifiedAt: 2026-09-03
+    nextReviewAt: 2027-03-03
+    status: current
+    accessMode: link-only
+    approvalLevel: approved-primary
+    approvedScopes: [development, safety]
+    notes: >-
+      AAP HealthyChildren.org safety guidance: wheeled baby walkers cause injuries, offer no
+      benefit and can delay walking; stationary activity centers, play yards and high chairs are
+      the safer alternatives. The AAP has called for a ban on wheeled walkers.
+
+  - id: aap-power-of-play-2018
+    organization: AAP
+    title: "The Power of Play: A Pediatric Role in Enhancing Development in Young Children"
+    canonicalUrl: "https://publications.aap.org/pediatrics/article/142/3/e20182058/38649/The-Power-of-Play-A-Pediatric-Role-in-Enhancing"
+    jurisdiction: US
+    sourceType: clinical-report
+    publishedAt: 2018-09-01
+    lastVerifiedAt: 2026-09-03
+    nextReviewAt: 2027-09-03
+    status: current
+    accessMode: link-only
+    approvalLevel: approved-supporting
+    approvedScopes: [development]
+    notes: >-
+      AAP clinical report (Pediatrics 2018; reaffirmed 2025): developmentally appropriate play
+      with parents and peers promotes social-emotional, cognitive, language and self-regulation
+      skills. Used as corroborating/contextual support only, never as the primary basis of a
+      milestone statement.
+
+  - id: who-under-5-activity-sleep-guidelines-2019
+    organization: WHO
+    title: "Guidelines on physical activity, sedentary behaviour and sleep for children under 5 years of age"
+    canonicalUrl: "https://www.who.int/publications/i/item/9789241550536"
+    jurisdiction: global
+    sourceType: guideline
+    publishedAt: 2019-04-02
+    lastVerifiedAt: 2026-09-03
+    nextReviewAt: 2027-09-03
+    status: current
+    accessMode: link-only
+    approvalLevel: approved-primary
+    approvedScopes: [development, sleep]
+    notes: >-
+      Global normative guidance on daily physical activity (including tummy time for infants),
+      restrained/sedentary time and screen time for children under 5. Used as corroboration for
+      U.S.-primary development claims (GUIDANCE_CONTENT_CONTRACT.md §12); meaningful differences
+      from U.S. guidance stay visible.

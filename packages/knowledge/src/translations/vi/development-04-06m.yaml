@@ -1,0 +1,59 @@
+# SPDX-License-Identifier: CC-BY-NC-SA-4.0
+# Vietnamese parity strings for Development stage dev-04-06m: natural, professional Vietnamese that
+# preserves every quantity, age boundary, qualifier, negation and applicability condition of the
+# canonical English (GUIDANCE_CONTENT_CONTRACT.md §10). Same lead line + `- item` structure.
+
+locale: vi
+strings:
+  development.04-06m.at-a-glance: |-
+    Từ 4 đến dưới 6 tháng, danh sách 4 tháng của CDC là tham chiếu. Phần lớn trẻ ở tuổi này đã biết ê a, cười khúc khích, giữ đầu vững khi được bế, chống tay nâng người lên khi nằm sấp, đưa tay lên miệng và quơ tay về phía đồ chơi. Trò chơi bắt đầu dùng đến tay: với, đạp chân, ngậm những đồ vật an toàn và luân phiên phát ra âm thanh cùng bạn.
+  development.04-06m.milestone-context: |-
+    Với giai đoạn này (từ 4 đến dưới 6 tháng), tham chiếu là danh sách 4 tháng của CDC: điều phần lớn trẻ (từ 75% trở lên) làm được khi được 4 tháng. Bé 5 tháng được đối chiếu với danh sách 4 tháng, không phải với một mức ở giữa; danh sách 6 tháng chỉ trở thành tham chiếu khi bé được 6 tháng. CDC lưu ý rằng các tài liệu về cột mốc không thay thế cho các công cụ sàng lọc phát triển đã được chuẩn hóa và kiểm định.
+  development.04-06m.development-focus: |-
+    Bàn tay và giọng nói trở thành tâm điểm. Bé khám phá đôi tay của mình, quơ tay và cầm đồ chơi, rồi đưa mọi thứ lên miệng để tìm hiểu. Tiếng ê a chuyển thành sự luân phiên thực sự: bé phát ra âm thanh, bạn đáp lại, và bé đáp lại tiếp. Khi nằm sấp, việc chống cẳng tay nâng người lên tạo nền tảng sức mạnh cho việc lật và ngồi sau này.
+  development.04-06m.gross-motor: |-
+    Các cột mốc vận động thô mà phần lớn trẻ làm được khi được 4 tháng (danh sách của CDC):
+    - giữ đầu vững, không cần đỡ, khi bạn bế bé
+    - chống khuỷu tay hoặc cẳng tay nâng người lên khi nằm sấp
+  development.04-06m.fine-motor: |-
+    Các cột mốc bàn tay và phối hợp tay–mắt mà phần lớn trẻ làm được khi được 4 tháng (danh sách của CDC):
+    - cầm được đồ chơi khi bạn đặt vào tay bé
+    - dùng tay quơ về phía đồ chơi
+    - đưa tay lên miệng
+  development.04-06m.communication: |-
+    Các cột mốc giao tiếp mà phần lớn trẻ làm được khi được 4 tháng (danh sách của CDC):
+    - phát ra những âm như “ô ô”, “a a” (ê a)
+    - đáp lại bằng âm thanh khi bạn nói chuyện với bé
+    - quay đầu về phía giọng nói của bạn
+  development.04-06m.cognitive: |-
+    Các cột mốc học hỏi và tư duy mà phần lớn trẻ làm được khi được 4 tháng (danh sách của CDC):
+    - khi đói, mở miệng khi nhìn thấy bầu vú hoặc bình sữa
+    - nhìn đôi tay của mình một cách thích thú
+  development.04-06m.social-emotional: |-
+    Các cột mốc xã hội và cảm xúc mà phần lớn trẻ làm được khi được 4 tháng (danh sách của CDC):
+    - tự mỉm cười để thu hút sự chú ý của bạn
+    - cười khúc khích (chưa phải cười thành tiếng) khi bạn cố làm bé cười
+    - nhìn bạn, cử động hoặc phát ra âm thanh để thu hút hoặc giữ sự chú ý của bạn
+  development.04-06m.activities: |-
+    Những gợi ý của CDC cho độ tuổi này:
+    - đáp lại âm thanh của bé bằng vẻ hào hứng, nụ cười và lời nói, rồi lặp lại âm của bé để “cuộc trò chuyện” tiếp tục
+    - đặt bé trên một tấm chăn cùng đồ chơi an toàn để bé với, đạp chân và khám phá
+    - cho bé ngậm những thứ an toàn — không sắc nhọn, không nóng và không nhỏ đến mức có thể gây hóc
+    - nói chuyện, đọc sách, hát cho bé nghe và gọi tên bé thường xuyên
+    - chơi ú òa và nhún bé nhẹ nhàng trên đùi bạn
+    - dành thời gian nằm chơi dưới sàn mỗi ngày để bé cử động và tương tác với mọi người và đồ vật
+  development.04-06m.variants: |-
+    Dễ hơn: đặt một món đồ chơi nhẹ chạm vào tay bé, để chỉ một cái quơ nhỏ cũng chạm được. Khó hơn: giữ đồ chơi ngay phía trên ngực để bé phải với lên và giữ lấy. Dễ hơn với trò chơi âm thanh: lặp lại đúng tiếng ê a của bé rồi dừng. Khó hơn: đáp lại bằng một âm hơi khác, hoặc chờ lâu hơn trước khi đáp, và xem bé có tiếp tục lượt của mình không. Dễ hơn khi nằm sấp: kê một chiếc khăn cuộn dưới ngực. Khó hơn: đặt đồ chơi hơi xa tầm với để bé vươn người ra.
+  development.04-06m.safety-environment: |-
+    Những lưu ý an toàn mà CDC và AAP gắn với độ tuổi này:
+    - ngậm đồ vật là cách bé học hỏi, vì vậy chỉ đưa cho bé những thứ không sắc nhọn, không nóng và không nhỏ đến mức có thể gây hóc, đồng thời kiểm tra đồ chơi xem có bộ phận lỏng lẻo không
+    - cố gắng không để bé quá lâu trong ghế đu, xe đẩy, ghế nhún hay ghế tập đứng xoay; sàn nhà mới là nơi vận động phát triển
+    - AAP khuyến cáo không dùng xe tập đi có bánh ở bất kỳ độ tuổi nào — mỗi năm chúng khiến hàng nghìn trẻ phải nhập viện và thực tế có thể làm bé biết đi muộn hơn; ghế hoạt động cố định hoặc cũi chơi là lựa chọn an toàn hơn
+    - khi ngủ luôn đặt bé nằm ngửa; không bao giờ rung lắc bé
+    - với trẻ dưới 18 tháng, AAP khuyến nghị không dùng bất kỳ phương tiện màn hình nào ngoài gọi video
+  development.04-06m.what-not-to-force: |-
+    Đừng cố khiến bé lật hay ngồi: ở giai đoạn này phần lớn trẻ vẫn đang luyện động tác chống cẳng tay nâng người, là bước đến trước, và danh sách 4 tháng không có mục lật hay ngồi. Đừng dùng xe tập đi có bánh hay ghế nhún như một cách “dạy” bé đứng — AAP cho biết xe tập đi không mang lại lợi ích và có thể làm bé biết đi muộn hơn. Đừng tiếp tục chơi khi bé nhìn đi chỗ khác, ưỡn người hay quấy; hãy nghỉ và quay lại sau.
+  development.04-06m.what-to-observe: |-
+    Hãy để ý cách bé dùng tay và giọng khi chơi: hai tay có chụm lại hay đưa lên miệng không, cái quơ về phía đồ chơi thỉnh thoảng có chạm được không, bé có đáp lại giọng bạn bằng một âm thanh rồi chờ bạn không? Khi nằm sấp, hãy để ý ngực bé có nâng lên trên cẳng tay không và đầu giữ được bao lâu. Cũng hãy để ý món đồ chơi, âm thanh và trò chơi nào giữ được sự chú ý của bé lâu nhất — đó là kim chỉ nam cho lần chơi tiếp theo.
+  development.04-06m.clinician-cues: |-
+    Tham chiếu cho giai đoạn này là danh sách 4 tháng của CDC. CDC gợi ý mang đến lần khám: những việc bạn và bé thường làm cùng nhau, những gì bé thích làm, bất cứ điều gì bé làm hoặc chưa làm khiến bạn lo lắng, bé có mất đi kỹ năng nào từng có không, và bé có nhu cầu chăm sóc sức khỏe đặc biệt hay sinh non không. Nếu bé chưa làm được một hoặc nhiều cột mốc trong danh sách 4 tháng, mất đi kỹ năng từng có, hoặc bạn có lo lắng khác, đừng chờ đợi — hãy trao đổi với bác sĩ của bé và hỏi về việc sàng lọc phát triển.

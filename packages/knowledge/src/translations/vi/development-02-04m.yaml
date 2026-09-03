@@ -1,0 +1,58 @@
+# SPDX-License-Identifier: CC-BY-NC-SA-4.0
+# Vietnamese parity strings for Development stage dev-02-04m: natural, professional Vietnamese that
+# preserves every quantity, age boundary, qualifier, negation and applicability condition of the
+# canonical English (GUIDANCE_CONTENT_CONTRACT.md §10). Same lead line + `- item` structure.
+
+locale: vi
+strings:
+  development.02-04m.at-a-glance: |-
+    Từ 2 đến dưới 4 tháng, danh sách 2 tháng của CDC là tham chiếu. Phần lớn trẻ ở tuổi này đã biết cười đáp lại, phát ra âm thanh ngoài tiếng khóc, dõi mắt theo bạn và ngẩng đầu khi nằm sấp. Trò chơi chủ yếu là mặt đối mặt: nói chuyện, hát, bắt chước âm thanh của bé và những lần nằm sấp ngắn với một món đồ chơi trong tầm nhìn. Mọi thứ vẫn đi theo tín hiệu của bé.
+  development.02-04m.milestone-context: |-
+    Với giai đoạn này (từ 2 đến dưới 4 tháng), tham chiếu là danh sách 2 tháng của CDC: điều phần lớn trẻ (từ 75% trở lên) làm được khi được 2 tháng. Bé 3 tháng được đối chiếu với danh sách 2 tháng, không phải với một mức ở giữa; danh sách 4 tháng chỉ trở thành tham chiếu khi bé được 4 tháng. CDC lưu ý rằng các tài liệu về cột mốc không thay thế cho các công cụ sàng lọc phát triển đã được chuẩn hóa và kiểm định.
+  development.02-04m.development-focus: |-
+    Đây là giai đoạn của nụ cười xã hội và những “cuộc trò chuyện” đầu tiên: bé cười khi bạn cười, phát ra âm thanh rồi chờ bạn đáp lại. Khả năng nhìn và dõi theo trở nên tinh hơn — bé theo dõi bạn khi bạn đi qua phòng, chăm chú nhìn một món đồ chơi. Khi nằm sấp, khả năng kiểm soát đầu tiếp tục tiến bộ. Chơi lúc này là sự qua lại: phản hồi của bạn chính là phần thưởng cho bé.
+  development.02-04m.gross-motor: |-
+    Các cột mốc vận động thô mà phần lớn trẻ làm được khi được 2 tháng (danh sách của CDC):
+    - ngẩng đầu lên khi nằm sấp
+    - cử động cả hai tay và hai chân
+  development.02-04m.fine-motor: |-
+    Kỹ năng bàn tay mà phần lớn trẻ làm được khi được 2 tháng (danh sách của CDC):
+    - xòe tay ra trong chốc lát
+    Trong giai đoạn này, nhiều bé cũng bắt đầu chụm hai tay lại hoặc đưa tay về phía miệng; CDC xếp “đưa tay lên miệng” vào danh sách 4 tháng.
+  development.02-04m.communication: |-
+    Các cột mốc giao tiếp mà phần lớn trẻ làm được khi được 2 tháng (danh sách của CDC):
+    - phát ra âm thanh khác ngoài tiếng khóc
+    - phản ứng với âm thanh lớn
+  development.02-04m.cognitive: |-
+    Các cột mốc học hỏi và tư duy mà phần lớn trẻ làm được khi được 2 tháng (danh sách của CDC):
+    - dõi mắt theo bạn khi bạn di chuyển
+    - nhìn một món đồ chơi trong vài giây
+  development.02-04m.social-emotional: |-
+    Các cột mốc xã hội và cảm xúc mà phần lớn trẻ làm được khi được 2 tháng (danh sách của CDC):
+    - dịu lại khi được nói chuyện hoặc được bế lên
+    - nhìn vào mặt bạn
+    - có vẻ vui khi thấy bạn đến gần
+    - mỉm cười khi bạn nói chuyện hoặc cười với bé
+  development.02-04m.activities: |-
+    Những gợi ý của CDC cho độ tuổi này:
+    - bắt chước âm thanh của bé và xem bé “trò chuyện” qua lại với bạn được bao lâu
+    - nói chuyện và chơi với bé trong lúc cho ăn, thay đồ và tắm
+    - cầm một chiếc lục lạc ở một bên đầu bé, lắc nhẹ và xem bé có tìm tiếng động không
+    - cho bé nằm sấp khi bé thức, đặt đồ chơi ngang tầm mắt để bé tập ngẩng đầu
+    - cùng bé xem những bức tranh màu sắc tươi sáng hoặc có hình gương mặt, và nói với bé về chúng
+    - tập giữ bình tĩnh khi bé khó chịu — nói nhẹ nhàng, bế, đung đưa hoặc hát giúp bé dịu lại
+  development.02-04m.variants: |-
+    Dễ hơn: với trò chơi âm thanh, hãy bắt đầu bằng cách lặp lại đúng âm bé phát ra, giữ gương mặt gần và yên. Khó hơn: sau khi lặp lại, thêm một âm mới và chờ xem bé có thử theo không. Dễ hơn với nằm sấp: kê ngực bé lên một chiếc khăn cuộn hoặc cho bé nằm sấp trên ngực bạn, lấy gương mặt bạn làm “đồ chơi”. Khó hơn: di chuyển đồ chơi chậm rãi từ bên này sang bên kia để bé vừa ngẩng đầu vừa quay theo. Giữ mỗi lần chơi ngắn và dừng ngay khi bé bắt đầu quấy.
+  development.02-04m.safety-environment: |-
+    Những lưu ý an toàn mà CDC và AAP gắn với độ tuổi này:
+    - chỉ cho bé nằm sấp khi bé thức và có người trông; khi ngủ luôn đặt bé nằm ngửa
+    - cho bé thời gian nằm chơi dưới sàn để cử động; cố gắng không để bé quá lâu trong ghế đu, xe đẩy, ghế nhún hay ghế tập đứng xoay
+    - không bao giờ rung lắc bé
+    - không cho bé chơi với bất cứ thứ gì có thể che kín mặt, và không bao giờ cầm chất lỏng hay thức ăn nóng ở gần bé hoặc khi đang bế bé
+    - với trẻ dưới 18 tháng, AAP khuyến nghị không dùng bất kỳ phương tiện màn hình nào ngoài gọi video
+  development.02-04m.what-not-to-force: |-
+    Đừng kê hay giữ bé ở những tư thế cơ thể bé chưa đủ sức đảm nhận, như ngồi hay đứng, để chơi — các cột mốc của giai đoạn này là về đầu và bàn tay, không phải về ngồi. Đừng kéo dài thời gian nằm sấp hay chơi mặt đối mặt khi bé đã quay mặt đi, ngáp hoặc quấy; CDC mô tả đó là tín hiệu bé cần nghỉ. Và đừng vội đối chiếu bé với danh sách 4 tháng: cho đến khi bé được 4 tháng, danh sách 2 tháng vẫn là tham chiếu.
+  development.02-04m.what-to-observe: |-
+    Hãy quan sát cách bé tương tác thay vì đánh dấu từng mục: nụ cười của bé có đáp lại nụ cười của bạn không, âm thanh có theo nhịp qua lại không, mắt bé có dõi theo bạn khi bạn đi qua phòng không, và đầu bé vững hơn bao nhiêu khi nằm sấp so với vài tuần trước? Để ý xem bé thích gì — giọng nói, gương mặt, một món đồ chơi nào đó — và xây dựng lần chơi tiếp theo quanh điều đó.
+  development.02-04m.clinician-cues: |-
+    Tham chiếu cho giai đoạn này là danh sách 2 tháng của CDC. CDC gợi ý mang đến lần khám: những việc bạn và bé thường làm cùng nhau, những gì bé thích làm, bất cứ điều gì bé làm hoặc chưa làm khiến bạn lo lắng, bé có mất đi kỹ năng nào từng có không, và bé có nhu cầu chăm sóc sức khỏe đặc biệt hay sinh non không. Nếu bé chưa làm được một hoặc nhiều cột mốc trong danh sách 2 tháng, mất đi kỹ năng từng có, hoặc bạn có lo lắng khác, đừng chờ đợi — hãy trao đổi với bác sĩ của bé và hỏi về việc sàng lọc phát triển.

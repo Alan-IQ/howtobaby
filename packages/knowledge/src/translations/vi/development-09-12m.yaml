@@ -1,0 +1,62 @@
+# SPDX-License-Identifier: CC-BY-NC-SA-4.0
+# Vietnamese parity strings for Development stage dev-09-12m: natural, professional Vietnamese that
+# preserves every quantity, age boundary, qualifier, negation and applicability condition of the
+# canonical English (GUIDANCE_CONTENT_CONTRACT.md §10). Same lead line + `- item` structure.
+
+locale: vi
+strings:
+  development.09-12m.at-a-glance: |-
+    Từ 9 đến dưới 12 tháng, danh sách 9 tháng của CDC là tham chiếu. Phần lớn trẻ ở tuổi này đã ngồi không cần đỡ, tự chuyển sang tư thế ngồi, chuyền đồ vật từ tay này sang tay kia, cào thức ăn bằng các ngón tay, bi bô những chuỗi âm như “ma-ma-ma-ma”, tìm món đồ chơi bị rơi và nhìn khi bạn gọi tên bé. Chơi trở thành trò chơi thực sự: ú òa, đến lượt mẹ–đến lượt con, đổ ra rồi bỏ vào, và bò hay trườn về phía đồ chơi.
+  development.09-12m.milestone-context: |-
+    Với giai đoạn này (từ 9 đến dưới 12 tháng), tham chiếu là danh sách 9 tháng của CDC: điều phần lớn trẻ (từ 75% trở lên) làm được khi được 9 tháng. Bé 10 hoặc 11 tháng được đối chiếu với danh sách 9 tháng, không phải với một mức ở giữa; danh sách 1 tuổi chỉ trở thành tham chiếu khi bé được 12 tháng. CDC lưu ý rằng các tài liệu về cột mốc không thay thế cho các công cụ sàng lọc phát triển đã được chuẩn hóa và kiểm định.
+  development.09-12m.development-focus: |-
+    Sự tự lập bắt đầu: ngồi vững giúp giải phóng cả hai tay, và việc di chuyển — bò, trườn, lăn — đưa đồ chơi vào tầm với của bé. Bé bắt đầu hiểu rằng đồ vật vẫn tồn tại khi bị che đi, và một món đồ chơi bị rơi có thể tìm lại được. Cảm xúc thể hiện rõ hơn, kể cả sự e dè với người lạ và phản ứng khi bạn rời đi. Những trò chơi có luật — ú òa, luân phiên — trở thành trò yêu thích.
+  development.09-12m.gross-motor: |-
+    Các cột mốc vận động thô mà phần lớn trẻ làm được khi được 9 tháng (danh sách của CDC):
+    - tự chuyển sang tư thế ngồi
+    - ngồi không cần đỡ
+    Bò không có trong danh sách của CDC; các gợi ý của CDC khuyến khích bé bò, trườn hoặc lăn về phía đồ chơi, tùy cách bé di chuyển.
+  development.09-12m.fine-motor: |-
+    Các cột mốc bàn tay và phối hợp tay–mắt mà phần lớn trẻ làm được khi được 9 tháng (danh sách của CDC):
+    - chuyền đồ vật từ tay này sang tay kia
+    - dùng các ngón tay “cào” thức ăn về phía mình
+    - đập hai vật vào nhau (CDC xếp mục này vào nhóm học hỏi và tư duy)
+  development.09-12m.communication: |-
+    Các cột mốc giao tiếp mà phần lớn trẻ làm được khi được 9 tháng (danh sách của CDC):
+    - phát ra nhiều âm thanh khác nhau như “ma-ma-ma-ma” và “ba-ba-ba-ba-ba”
+    - giơ hai tay lên đòi bế
+  development.09-12m.cognitive: |-
+    Các cột mốc học hỏi và tư duy mà phần lớn trẻ làm được khi được 9 tháng (danh sách của CDC):
+    - tìm đồ vật khi chúng rơi khuất khỏi tầm mắt, như cái thìa hay món đồ chơi
+    CDC còn liệt kê “đập hai vật vào nhau”, mục mà HowToBaby trình bày ở phần bàn tay và phối hợp tay–mắt.
+  development.09-12m.social-emotional: |-
+    Các cột mốc xã hội và cảm xúc mà phần lớn trẻ làm được khi được 9 tháng (danh sách của CDC):
+    - e dè, bám người thân hoặc sợ khi gặp người lạ
+    - thể hiện nhiều nét mặt khác nhau, như vui, buồn, giận và ngạc nhiên
+    - nhìn khi bạn gọi tên bé
+    - phản ứng khi bạn rời đi (nhìn theo, với về phía bạn hoặc khóc)
+    - cười mỉm hoặc cười thành tiếng khi bạn chơi ú òa
+  development.09-12m.activities: |-
+    Những gợi ý của CDC cho độ tuổi này:
+    - lặp lại âm thanh của bé rồi biến thành từ đơn giản: “ba-ba-ba” — “bà”
+    - đặt đồ chơi hơi xa tầm với và khuyến khích bé bò, trườn hoặc lăn tới lấy; hoan hô khi bé đến nơi
+    - dạy bé vẫy tay “tạm biệt”, lắc đầu “không”, và vài ký hiệu đơn giản dành cho bé
+    - chơi ú òa — trùm khăn lên đầu bạn và xem bé có kéo khăn ra không
+    - đổ các khối gỗ ra khỏi hộp rồi cùng bé bỏ lại vào; chuyền đồ chơi qua lại, “đến lượt mẹ, đến lượt con”
+    - giấu đồ chơi dưới chăn và để bé tìm
+    - “đọc sách” bằng cách gọi tên hình ảnh khi bạn chỉ vào, và mô tả thứ bé đang nhìn: “quả bóng tròn màu đỏ”
+  development.09-12m.variants: |-
+    Dễ hơn: giấu đồ chơi khi bé đang nhìn và để lộ một góc; đưa cho bé chiếc hộp đã có sẵn một nửa. Khó hơn: che đồ chơi hoàn toàn, hoặc giấu dưới một trong hai chiếc khăn; để bé tự bỏ vào và đổ ra toàn bộ. Dễ hơn với vận động: đặt đồ chơi ngay quá đầu ngón tay bé. Khó hơn: đặt ở phía bên kia phòng hoặc trên một chiếc gối thấp để bé phải đổi tư thế mới tới được. Dễ hơn với lời nói: một âm, một từ. Khó hơn: dừng lại và chờ bé chủ động bắt đầu lượt trao đổi.
+  development.09-12m.safety-environment: |-
+    Những lưu ý an toàn mà CDC và AAP gắn với độ tuổi này:
+    - bắt đầu “bọc” an toàn cho ngôi nhà khi bé đã di chuyển: cất vật sắc nhọn hay dễ vỡ khỏi tầm với, khóa kỹ thuốc, hóa chất và chất tẩy rửa, và lưu số đường dây trợ giúp ngộ độc (Poison Help Line) 800-222-1222 vào mọi điện thoại
+    - tìm hiểu những thực phẩm nào có nguy cơ gây hóc, và cắt thức ăn thành miếng nhỏ
+    - ở gần khi bé khám phá, và đặt bé cạnh những thứ bé có thể bám vịn đứng lên một cách an toàn
+    - AAP khuyến cáo không dùng xe tập đi có bánh; ghế hoạt động cố định hoặc cũi chơi là lựa chọn an toàn hơn
+    - khi ngủ vẫn luôn đặt bé nằm ngửa; với trẻ dưới 18 tháng, AAP khuyến nghị không dùng bất kỳ phương tiện màn hình nào ngoài gọi video
+  development.09-12m.what-not-to-force: |-
+    Đừng nhất quyết bắt bé di chuyển theo một cách nhất định: bò không có trong danh sách của CDC, và gợi ý của CDC là khuyến khích bé bò, trườn hoặc lăn — tùy cách bé tới được món đồ chơi. Đừng giữ bé đứng để “tập đi” trong thời gian dài hay dùng xe tập đi; bám vịn đứng lên và men theo đồ đạc sẽ đến theo nhịp riêng của bé. Đừng ép bé thân thiết với người lạ — e dè với người lạ là một cột mốc 9 tháng, không phải vấn đề — và đừng lén rời đi khi bạn phải đi; CDC gợi ý một lời tạm biệt nhanh và vui vẻ.
+  development.09-12m.what-to-observe: |-
+    Hãy để ý cách bé giải quyết những vấn đề nhỏ: bé làm gì khi đồ chơi lăn xuống gầm ghế, bé chuyển từ nằm sang ngồi như thế nào, bé có dùng cả hai tay cùng lúc không. Để ý những cách giao tiếp chưa thành lời — chỉ tay, giơ tay đòi bế, bi bô với giọng lên cao, nhìn bạn trước khi chạm vào thứ gì mới. Và để ý cách bé ứng xử với người lạ và khi bạn rời đi; những phản ứng đó cho bạn biết nên giới thiệu người mới với nhịp độ nào.
+  development.09-12m.clinician-cues: |-
+    Tham chiếu cho giai đoạn này là danh sách 9 tháng của CDC. CDC dẫn khuyến nghị của AAP về sàng lọc phát triển chuẩn hóa khi bé được 9 tháng, nên giai đoạn này thường có một lần khám sàng lọc. Hãy mang theo: những việc bạn và bé thường làm cùng nhau, những gì bé thích làm, bất cứ điều gì bé làm hoặc chưa làm khiến bạn lo lắng, bé có mất đi kỹ năng nào từng có không, và bé có nhu cầu chăm sóc sức khỏe đặc biệt hay sinh non không. Nếu bé chưa làm được một hoặc nhiều cột mốc trong danh sách 9 tháng, mất đi kỹ năng từng có, hoặc bạn có lo lắng khác, đừng chờ đợi — hãy trao đổi với bác sĩ của bé.

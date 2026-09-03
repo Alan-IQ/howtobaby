@@ -28,6 +28,9 @@ export const STAGE_DESTINATIONS: Readonly<Record<StageDomain, StageDestination>>
   sleep: { domain: "sleep", base: "/sleep", icon: "sleep", accent: "sleep", titleKey: "domain.sleep.title", ledeKey: "page.sleep.lede", metadataTitle: "Sleep" },
 };
 
+/** Static all-stages reference/print page for Play & Development (docs/GUI_DESIGN.md §15 "all-stage reference mode"). */
+export const ALL_STAGES_ROUTE = "/play/all-stages";
+
 export function stageHref(stage: StageDefinition): string {
   return `${STAGE_DESTINATIONS[stage.domain].base}/${stage.slug}`;
 }

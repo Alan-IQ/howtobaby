@@ -1,0 +1,158 @@
+# SPDX-License-Identifier: CC-BY-NC-SA-4.0
+# Guidance blocks for Development stage dev-02-04m: one block per required section, in the
+# contract's section order (the `section` id drives page grouping; block ids are not an order).
+
+blocks:
+  - id: guidance.development.02-04m.at-a-glance
+    domain: development
+    stage: dev-02-04m
+    section: at-a-glance
+    titleKey: guidance.development.section.at-a-glance.title
+    claimIds:
+      - development.02-04m.at-a-glance
+    routes:
+      - /play/2-4-months
+      - /play/all-stages
+
+  - id: guidance.development.02-04m.milestone-context
+    domain: development
+    stage: dev-02-04m
+    section: milestone-context
+    titleKey: guidance.development.section.milestone-context.title
+    claimIds:
+      - development.02-04m.milestone-context
+    routes:
+      - /play/2-4-months
+      - /play/all-stages
+
+  - id: guidance.development.02-04m.development-focus
+    domain: development
+    stage: dev-02-04m
+    section: development-focus
+    titleKey: guidance.development.section.development-focus.title
+    claimIds:
+      - development.02-04m.development-focus
+    routes:
+      - /play/2-4-months
+      - /play/all-stages
+
+  - id: guidance.development.02-04m.gross-motor
+    domain: development
+    stage: dev-02-04m
+    section: gross-motor
+    titleKey: guidance.development.section.gross-motor.title
+    claimIds:
+      - development.02-04m.gross-motor
+    routes:
+      - /play/2-4-months
+      - /play/all-stages
+
+  - id: guidance.development.02-04m.fine-motor
+    domain: development
+    stage: dev-02-04m
+    section: fine-motor
+    titleKey: guidance.development.section.fine-motor.title
+    claimIds:
+      - development.02-04m.fine-motor
+    routes:
+      - /play/2-4-months
+      - /play/all-stages
+
+  - id: guidance.development.02-04m.communication
+    domain: development
+    stage: dev-02-04m
+    section: communication
+    titleKey: guidance.development.section.communication.title
+    claimIds:
+      - development.02-04m.communication
+    routes:
+      - /play/2-4-months
+      - /play/all-stages
+
+  - id: guidance.development.02-04m.cognitive
+    domain: development
+    stage: dev-02-04m
+    section: cognitive
+    titleKey: guidance.development.section.cognitive.title
+    claimIds:
+      - development.02-04m.cognitive
+    routes:
+      - /play/2-4-months
+      - /play/all-stages
+
+  - id: guidance.development.02-04m.social-emotional
+    domain: development
+    stage: dev-02-04m
+    section: social-emotional
+    titleKey: guidance.development.section.social-emotional.title
+    claimIds:
+      - development.02-04m.social-emotional
+    routes:
+      - /play/2-4-months
+      - /play/all-stages
+
+  - id: guidance.development.02-04m.activities
+    domain: development
+    stage: dev-02-04m
+    section: activities
+    titleKey: guidance.development.section.activities.title
+    claimIds:
+      - development.02-04m.activities
+    routes:
+      - /play/2-4-months
+      - /play/all-stages
+
+  - id: guidance.development.02-04m.variants
+    domain: development
+    stage: dev-02-04m
+    section: variants
+    titleKey: guidance.development.section.variants.title
+    claimIds:
+      - development.02-04m.variants
+    routes:
+      - /play/2-4-months
+      - /play/all-stages
+
+  - id: guidance.development.02-04m.safety-environment
+    domain: development
+    stage: dev-02-04m
+    section: safety-environment
+    titleKey: guidance.development.section.safety-environment.title
+    claimIds:
+      - development.02-04m.safety-environment
+    routes:
+      - /play/2-4-months
+      - /play/all-stages
+
+  - id: guidance.development.02-04m.what-not-to-force
+    domain: development
+    stage: dev-02-04m
+    section: what-not-to-force
+    titleKey: guidance.development.section.what-not-to-force.title
+    claimIds:
+      - development.02-04m.what-not-to-force
+    routes:
+      - /play/2-4-months
+      - /play/all-stages
+
+  - id: guidance.development.02-04m.what-to-observe
+    domain: development
+    stage: dev-02-04m
+    section: what-to-observe
+    titleKey: guidance.development.section.what-to-observe.title
+    claimIds:
+      - development.02-04m.what-to-observe
+    routes:
+      - /play/2-4-months
+      - /play/all-stages
+
+  - id: guidance.development.02-04m.clinician-cues
+    domain: development
+    stage: dev-02-04m
+    section: clinician-cues
+    titleKey: guidance.development.section.clinician-cues.title
+    claimIds:
+      - development.02-04m.clinician-cues
+    routes:
+      - /play/2-4-months
+      - /play/all-stages

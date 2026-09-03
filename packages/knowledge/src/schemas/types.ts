@@ -181,6 +181,12 @@ export interface GuidanceBlock {
   /** Stage bin from GUIDANCE_CONTENT_CONTRACT.md §3–§5 (e.g. `feed-06-08m`); optional for cross-stage blocks. */
   stage?: string;
   titleKey: string;
+  /**
+   * Stable kebab-case section id within the stage (GUIDANCE_CONTENT_CONTRACT.md §3 required
+   * sections, e.g. `gross-motor`); it matches the coverage-matrix section id so a stage page can
+   * order and group its blocks by section instead of by block id. Optional for cross-stage blocks.
+   */
+  section?: string;
   /** Claims rendered by this block, in presentation order. */
   claimIds: string[];
   /** App routes on which this block renders; the route-evidence index derives from this mapping. */

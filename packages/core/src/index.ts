@@ -10,3 +10,4 @@ export * from "./types/index.ts";
 export * from "./age/index.ts";
 export * from "./context/index.ts";
 export * from "./applicability/index.ts";
+export * from "./milestones/index.ts";

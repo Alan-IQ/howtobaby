@@ -16,3 +16,1170 @@ cells:
         minimumReviewStatus: source-verified
         requiredLocales: [en, vi]
         requireApprovedPrimarySource: true
+
+  # --- Play & Development (Phase 4): every stage × every contract §3 section, EN + VI,
+  # official-guidance sections require an approved primary source covering `development`.
+  - domain: development
+    stage: dev-00-02m
+    sections:
+      - section: at-a-glance
+        requiredClaimIds:
+          - development.00-02m.at-a-glance
+        minimumReviewStatus: source-verified
+        requiredLocales: [en, vi]
+        requireApprovedPrimarySource: false
+      - section: milestone-context
+        requiredClaimIds:
+          - development.00-02m.milestone-context
+        minimumReviewStatus: source-verified
+        requiredLocales: [en, vi]
+        requireApprovedPrimarySource: true
+      - section: development-focus
+        requiredClaimIds:
+          - development.00-02m.development-focus
+        minimumReviewStatus: source-verified
+        requiredLocales: [en, vi]
+        requireApprovedPrimarySource: false
+      - section: gross-motor
+        requiredClaimIds:
+          - development.00-02m.gross-motor
+        minimumReviewStatus: source-verified
+        requiredLocales: [en, vi]
+        requireApprovedPrimarySource: true
+      - section: fine-motor
+        requiredClaimIds:
+          - development.00-02m.fine-motor
+        minimumReviewStatus: source-verified
+        requiredLocales: [en, vi]
+        requireApprovedPrimarySource: true
+      - section: communication
+        requiredClaimIds:
+          - development.00-02m.communication
+        minimumReviewStatus: source-verified
+        requiredLocales: [en, vi]
+        requireApprovedPrimarySource: true
+      - section: cognitive
+        requiredClaimIds:
+          - development.00-02m.cognitive
+        minimumReviewStatus: source-verified
+        requiredLocales: [en, vi]
+        requireApprovedPrimarySource: true
+      - section: social-emotional
+        requiredClaimIds:
+          - development.00-02m.social-emotional
+        minimumReviewStatus: source-verified
+        requiredLocales: [en, vi]
+        requireApprovedPrimarySource: true
+      - section: activities
+        requiredClaimIds:
+          - development.00-02m.activities
+        minimumReviewStatus: source-verified
+        requiredLocales: [en, vi]
+        requireApprovedPrimarySource: true
+      - section: variants
+        requiredClaimIds:
+          - development.00-02m.variants
+        minimumReviewStatus: source-verified
+        requiredLocales: [en, vi]
+        requireApprovedPrimarySource: false
+      - section: safety-environment
+        requiredClaimIds:
+          - development.00-02m.safety-environment
+        minimumReviewStatus: source-verified
+        requiredLocales: [en, vi]
+        requireApprovedPrimarySource: true
+      - section: what-not-to-force
+        requiredClaimIds:
+          - development.00-02m.what-not-to-force
+        minimumReviewStatus: source-verified
+        requiredLocales: [en, vi]
+        requireApprovedPrimarySource: false
+      - section: what-to-observe
+        requiredClaimIds:
+          - development.00-02m.what-to-observe
+        minimumReviewStatus: source-verified
+        requiredLocales: [en, vi]
+        requireApprovedPrimarySource: false
+      - section: clinician-cues
+        requiredClaimIds:
+          - development.00-02m.clinician-cues
+        minimumReviewStatus: source-verified
+        requiredLocales: [en, vi]
+        requireApprovedPrimarySource: true
+      - section: reading-milestones
+        requiredClaimIds:
+          - development.milestones.reference
+          - development.milestones.not-pass-fail
+          - development.milestones.younger-checklist
+          - development.milestones.corrected-age
+          - development.milestones.act-early
+        minimumReviewStatus: source-verified
+        requiredLocales: [en, vi]
+        requireApprovedPrimarySource: false
+  - domain: development
+    stage: dev-02-04m
+    sections:
+      - section: at-a-glance
+        requiredClaimIds:
+          - development.02-04m.at-a-glance
+        minimumReviewStatus: source-verified
+        requiredLocales: [en, vi]
+        requireApprovedPrimarySource: false
+      - section: milestone-context
+        requiredClaimIds:
+          - development.02-04m.milestone-context
+        minimumReviewStatus: source-verified
+        requiredLocales: [en, vi]
+        requireApprovedPrimarySource: true
+      - section: development-focus
+        requiredClaimIds:
+          - development.02-04m.development-focus
+        minimumReviewStatus: source-verified
+        requiredLocales: [en, vi]
+        requireApprovedPrimarySource: false
+      - section: gross-motor
+        requiredClaimIds:
+          - development.02-04m.gross-motor
+        minimumReviewStatus: source-verified
+        requiredLocales: [en, vi]
+        requireApprovedPrimarySource: true
+      - section: fine-motor
+        requiredClaimIds:
+          - development.02-04m.fine-motor
+        minimumReviewStatus: source-verified
+        requiredLocales: [en, vi]
+        requireApprovedPrimarySource: true
+      - section: communication
+        requiredClaimIds:
+          - development.02-04m.communication
+        minimumReviewStatus: source-verified
+        requiredLocales: [en, vi]
+        requireApprovedPrimarySource: true
+      - section: cognitive
+        requiredClaimIds:
+          - development.02-04m.cognitive
+        minimumReviewStatus: source-verified
+        requiredLocales: [en, vi]
+        requireApprovedPrimarySource: true
+      - section: social-emotional
+        requiredClaimIds:
+          - development.02-04m.social-emotional
+        minimumReviewStatus: source-verified
+        requiredLocales: [en, vi]
+        requireApprovedPrimarySource: true
+      - section: activities
+        requiredClaimIds:
+          - development.02-04m.activities
+        minimumReviewStatus: source-verified
+        requiredLocales: [en, vi]
+        requireApprovedPrimarySource: true
+      - section: variants
+        requiredClaimIds:
+          - development.02-04m.variants
+        minimumReviewStatus: source-verified
+        requiredLocales: [en, vi]
+        requireApprovedPrimarySource: false
+      - section: safety-environment
+        requiredClaimIds:
+          - development.02-04m.safety-environment
+        minimumReviewStatus: source-verified
+        requiredLocales: [en, vi]
+        requireApprovedPrimarySource: true
+      - section: what-not-to-force
+        requiredClaimIds:
+          - development.02-04m.what-not-to-force
+        minimumReviewStatus: source-verified
+        requiredLocales: [en, vi]
+        requireApprovedPrimarySource: false
+      - section: what-to-observe
+        requiredClaimIds:
+          - development.02-04m.what-to-observe
+        minimumReviewStatus: source-verified
+        requiredLocales: [en, vi]
+        requireApprovedPrimarySource: false
+      - section: clinician-cues
+        requiredClaimIds:
+          - development.02-04m.clinician-cues
+        minimumReviewStatus: source-verified
+        requiredLocales: [en, vi]
+        requireApprovedPrimarySource: true
+      - section: reading-milestones
+        requiredClaimIds:
+          - development.milestones.reference
+          - development.milestones.not-pass-fail
+          - development.milestones.younger-checklist
+          - development.milestones.corrected-age
+          - development.milestones.act-early
+        minimumReviewStatus: source-verified
+        requiredLocales: [en, vi]
+        requireApprovedPrimarySource: false
+  - domain: development
+    stage: dev-04-06m
+    sections:
+      - section: at-a-glance
+        requiredClaimIds:
+          - development.04-06m.at-a-glance
+        minimumReviewStatus: source-verified
+        requiredLocales: [en, vi]
+        requireApprovedPrimarySource: false
+      - section: milestone-context
+        requiredClaimIds:
+          - development.04-06m.milestone-context
+        minimumReviewStatus: source-verified
+        requiredLocales: [en, vi]
+        requireApprovedPrimarySource: true
+      - section: development-focus
+        requiredClaimIds:
+          - development.04-06m.development-focus
+        minimumReviewStatus: source-verified
+        requiredLocales: [en, vi]
+        requireApprovedPrimarySource: false
+      - section: gross-motor
+        requiredClaimIds:
+          - development.04-06m.gross-motor
+        minimumReviewStatus: source-verified
+        requiredLocales: [en, vi]
+        requireApprovedPrimarySource: true
+      - section: fine-motor
+        requiredClaimIds:
+          - development.04-06m.fine-motor
+        minimumReviewStatus: source-verified
+        requiredLocales: [en, vi]
+        requireApprovedPrimarySource: true
+      - section: communication
+        requiredClaimIds:
+          - development.04-06m.communication
+        minimumReviewStatus: source-verified
+        requiredLocales: [en, vi]
+        requireApprovedPrimarySource: true
+      - section: cognitive
+        requiredClaimIds:
+          - development.04-06m.cognitive
+        minimumReviewStatus: source-verified
+        requiredLocales: [en, vi]
+        requireApprovedPrimarySource: true
+      - section: social-emotional
+        requiredClaimIds:
+          - development.04-06m.social-emotional
+        minimumReviewStatus: source-verified
+        requiredLocales: [en, vi]
+        requireApprovedPrimarySource: true
+      - section: activities
+        requiredClaimIds:
+          - development.04-06m.activities
+        minimumReviewStatus: source-verified
+        requiredLocales: [en, vi]
+        requireApprovedPrimarySource: true
+      - section: variants
+        requiredClaimIds:
+          - development.04-06m.variants
+        minimumReviewStatus: source-verified
+        requiredLocales: [en, vi]
+        requireApprovedPrimarySource: false
+      - section: safety-environment
+        requiredClaimIds:
+          - development.04-06m.safety-environment
+        minimumReviewStatus: source-verified
+        requiredLocales: [en, vi]
+        requireApprovedPrimarySource: true
+      - section: what-not-to-force
+        requiredClaimIds:
+          - development.04-06m.what-not-to-force
+        minimumReviewStatus: source-verified
+        requiredLocales: [en, vi]
+        requireApprovedPrimarySource: false
+      - section: what-to-observe
+        requiredClaimIds:
+          - development.04-06m.what-to-observe
+        minimumReviewStatus: source-verified
+        requiredLocales: [en, vi]
+        requireApprovedPrimarySource: false
+      - section: clinician-cues
+        requiredClaimIds:
+          - development.04-06m.clinician-cues
+        minimumReviewStatus: source-verified
+        requiredLocales: [en, vi]
+        requireApprovedPrimarySource: true
+      - section: reading-milestones
+        requiredClaimIds:
+          - development.milestones.reference
+          - development.milestones.not-pass-fail
+          - development.milestones.younger-checklist
+          - development.milestones.corrected-age
+          - development.milestones.act-early
+        minimumReviewStatus: source-verified
+        requiredLocales: [en, vi]
+        requireApprovedPrimarySource: false
+  - domain: development
+    stage: dev-06-09m
+    sections:
+      - section: at-a-glance
+        requiredClaimIds:
+          - development.06-09m.at-a-glance
+        minimumReviewStatus: source-verified
+        requiredLocales: [en, vi]
+        requireApprovedPrimarySource: false
+      - section: milestone-context
+        requiredClaimIds:
+          - development.06-09m.milestone-context
+        minimumReviewStatus: source-verified
+        requiredLocales: [en, vi]
+        requireApprovedPrimarySource: true
+      - section: development-focus
+        requiredClaimIds:
+          - development.06-09m.development-focus
+        minimumReviewStatus: source-verified
+        requiredLocales: [en, vi]
+        requireApprovedPrimarySource: false
+      - section: gross-motor
+        requiredClaimIds:
+          - development.06-09m.gross-motor
+        minimumReviewStatus: source-verified
+        requiredLocales: [en, vi]
+        requireApprovedPrimarySource: true
+      - section: fine-motor
+        requiredClaimIds:
+          - development.06-09m.fine-motor
+        minimumReviewStatus: source-verified
+        requiredLocales: [en, vi]
+        requireApprovedPrimarySource: true
+      - section: communication
+        requiredClaimIds:
+          - development.06-09m.communication
+        minimumReviewStatus: source-verified
+        requiredLocales: [en, vi]
+        requireApprovedPrimarySource: true
+      - section: cognitive
+        requiredClaimIds:
+          - development.06-09m.cognitive
+        minimumReviewStatus: source-verified
+        requiredLocales: [en, vi]
+        requireApprovedPrimarySource: true
+      - section: social-emotional
+        requiredClaimIds:
+          - development.06-09m.social-emotional
+        minimumReviewStatus: source-verified
+        requiredLocales: [en, vi]
+        requireApprovedPrimarySource: true
+      - section: activities
+        requiredClaimIds:
+          - development.06-09m.activities
+        minimumReviewStatus: source-verified
+        requiredLocales: [en, vi]
+        requireApprovedPrimarySource: true
+      - section: variants
+        requiredClaimIds:
+          - development.06-09m.variants
+        minimumReviewStatus: source-verified
+        requiredLocales: [en, vi]
+        requireApprovedPrimarySource: false
+      - section: safety-environment
+        requiredClaimIds:
+          - development.06-09m.safety-environment
+        minimumReviewStatus: source-verified
+        requiredLocales: [en, vi]
+        requireApprovedPrimarySource: true
+      - section: what-not-to-force
+        requiredClaimIds:
+          - development.06-09m.what-not-to-force
+        minimumReviewStatus: source-verified
+        requiredLocales: [en, vi]
+        requireApprovedPrimarySource: false
+      - section: what-to-observe
+        requiredClaimIds:
+          - development.06-09m.what-to-observe
+        minimumReviewStatus: source-verified
+        requiredLocales: [en, vi]
+        requireApprovedPrimarySource: false
+      - section: clinician-cues
+        requiredClaimIds:
+          - development.06-09m.clinician-cues
+        minimumReviewStatus: source-verified
+        requiredLocales: [en, vi]
+        requireApprovedPrimarySource: true
+      - section: reading-milestones
+        requiredClaimIds:
+          - development.milestones.reference
+          - development.milestones.not-pass-fail
+          - development.milestones.younger-checklist
+          - development.milestones.corrected-age
+          - development.milestones.act-early
+        minimumReviewStatus: source-verified
+        requiredLocales: [en, vi]
+        requireApprovedPrimarySource: false
+  - domain: development
+    stage: dev-09-12m
+    sections:
+      - section: at-a-glance
+        requiredClaimIds:
+          - development.09-12m.at-a-glance
+        minimumReviewStatus: source-verified
+        requiredLocales: [en, vi]
+        requireApprovedPrimarySource: false
+      - section: milestone-context
+        requiredClaimIds:
+          - development.09-12m.milestone-context
+        minimumReviewStatus: source-verified
+        requiredLocales: [en, vi]
+        requireApprovedPrimarySource: true
+      - section: development-focus
+        requiredClaimIds:
+          - development.09-12m.development-focus
+        minimumReviewStatus: source-verified
+        requiredLocales: [en, vi]
+        requireApprovedPrimarySource: false
+      - section: gross-motor
+        requiredClaimIds:
+          - development.09-12m.gross-motor
+        minimumReviewStatus: source-verified
+        requiredLocales: [en, vi]
+        requireApprovedPrimarySource: true
+      - section: fine-motor
+        requiredClaimIds:
+          - development.09-12m.fine-motor
+        minimumReviewStatus: source-verified
+        requiredLocales: [en, vi]
+        requireApprovedPrimarySource: true
+      - section: communication
+        requiredClaimIds:
+          - development.09-12m.communication
+        minimumReviewStatus: source-verified
+        requiredLocales: [en, vi]
+        requireApprovedPrimarySource: true
+      - section: cognitive
+        requiredClaimIds:
+          - development.09-12m.cognitive
+        minimumReviewStatus: source-verified
+        requiredLocales: [en, vi]
+        requireApprovedPrimarySource: true
+      - section: social-emotional
+        requiredClaimIds:
+          - development.09-12m.social-emotional
+        minimumReviewStatus: source-verified
+        requiredLocales: [en, vi]
+        requireApprovedPrimarySource: true
+      - section: activities
+        requiredClaimIds:
+          - development.09-12m.activities
+        minimumReviewStatus: source-verified
+        requiredLocales: [en, vi]
+        requireApprovedPrimarySource: true
+      - section: variants
+        requiredClaimIds:
+          - development.09-12m.variants
+        minimumReviewStatus: source-verified
+        requiredLocales: [en, vi]
+        requireApprovedPrimarySource: false
+      - section: safety-environment
+        requiredClaimIds:
+          - development.09-12m.safety-environment
+        minimumReviewStatus: source-verified
+        requiredLocales: [en, vi]
+        requireApprovedPrimarySource: true
+      - section: what-not-to-force
+        requiredClaimIds:
+          - development.09-12m.what-not-to-force
+        minimumReviewStatus: source-verified
+        requiredLocales: [en, vi]
+        requireApprovedPrimarySource: false
+      - section: what-to-observe
+        requiredClaimIds:
+          - development.09-12m.what-to-observe
+        minimumReviewStatus: source-verified
+        requiredLocales: [en, vi]
+        requireApprovedPrimarySource: false
+      - section: clinician-cues
+        requiredClaimIds:
+          - development.09-12m.clinician-cues
+        minimumReviewStatus: source-verified
+        requiredLocales: [en, vi]
+        requireApprovedPrimarySource: true
+      - section: reading-milestones
+        requiredClaimIds:
+          - development.milestones.reference
+          - development.milestones.not-pass-fail
+          - development.milestones.younger-checklist
+          - development.milestones.corrected-age
+          - development.milestones.act-early
+        minimumReviewStatus: source-verified
+        requiredLocales: [en, vi]
+        requireApprovedPrimarySource: false
+  - domain: development
+    stage: dev-12-15m
+    sections:
+      - section: at-a-glance
+        requiredClaimIds:
+          - development.12-15m.at-a-glance
+        minimumReviewStatus: source-verified
+        requiredLocales: [en, vi]
+        requireApprovedPrimarySource: false
+      - section: milestone-context
+        requiredClaimIds:
+          - development.12-15m.milestone-context
+        minimumReviewStatus: source-verified
+        requiredLocales: [en, vi]
+        requireApprovedPrimarySource: true
+      - section: development-focus
+        requiredClaimIds:
+          - development.12-15m.development-focus
+        minimumReviewStatus: source-verified
+        requiredLocales: [en, vi]
+        requireApprovedPrimarySource: false
+      - section: gross-motor
+        requiredClaimIds:
+          - development.12-15m.gross-motor
+        minimumReviewStatus: source-verified
+        requiredLocales: [en, vi]
+        requireApprovedPrimarySource: true
+      - section: fine-motor
+        requiredClaimIds:
+          - development.12-15m.fine-motor
+        minimumReviewStatus: source-verified
+        requiredLocales: [en, vi]
+        requireApprovedPrimarySource: true
+      - section: communication
+        requiredClaimIds:
+          - development.12-15m.communication
+        minimumReviewStatus: source-verified
+        requiredLocales: [en, vi]
+        requireApprovedPrimarySource: true
+      - section: cognitive
+        requiredClaimIds:
+          - development.12-15m.cognitive
+        minimumReviewStatus: source-verified
+        requiredLocales: [en, vi]
+        requireApprovedPrimarySource: true
+      - section: social-emotional
+        requiredClaimIds:
+          - development.12-15m.social-emotional
+        minimumReviewStatus: source-verified
+        requiredLocales: [en, vi]
+        requireApprovedPrimarySource: true
+      - section: activities
+        requiredClaimIds:
+          - development.12-15m.activities
+        minimumReviewStatus: source-verified
+        requiredLocales: [en, vi]
+        requireApprovedPrimarySource: true
+      - section: variants
+        requiredClaimIds:
+          - development.12-15m.variants
+        minimumReviewStatus: source-verified
+        requiredLocales: [en, vi]
+        requireApprovedPrimarySource: false
+      - section: safety-environment
+        requiredClaimIds:
+          - development.12-15m.safety-environment
+        minimumReviewStatus: source-verified
+        requiredLocales: [en, vi]
+        requireApprovedPrimarySource: true
+      - section: what-not-to-force
+        requiredClaimIds:
+          - development.12-15m.what-not-to-force
+        minimumReviewStatus: source-verified
+        requiredLocales: [en, vi]
+        requireApprovedPrimarySource: false
+      - section: what-to-observe
+        requiredClaimIds:
+          - development.12-15m.what-to-observe
+        minimumReviewStatus: source-verified
+        requiredLocales: [en, vi]
+        requireApprovedPrimarySource: false
+      - section: clinician-cues
+        requiredClaimIds:
+          - development.12-15m.clinician-cues
+        minimumReviewStatus: source-verified
+        requiredLocales: [en, vi]
+        requireApprovedPrimarySource: true
+      - section: reading-milestones
+        requiredClaimIds:
+          - development.milestones.reference
+          - development.milestones.not-pass-fail
+          - development.milestones.younger-checklist
+          - development.milestones.corrected-age
+          - development.milestones.act-early
+        minimumReviewStatus: source-verified
+        requiredLocales: [en, vi]
+        requireApprovedPrimarySource: false
+  - domain: development
+    stage: dev-15-18m
+    sections:
+      - section: at-a-glance
+        requiredClaimIds:
+          - development.15-18m.at-a-glance
+        minimumReviewStatus: source-verified
+        requiredLocales: [en, vi]
+        requireApprovedPrimarySource: false
+      - section: milestone-context
+        requiredClaimIds:
+          - development.15-18m.milestone-context
+        minimumReviewStatus: source-verified
+        requiredLocales: [en, vi]
+        requireApprovedPrimarySource: true
+      - section: development-focus
+        requiredClaimIds:
+          - development.15-18m.development-focus
+        minimumReviewStatus: source-verified
+        requiredLocales: [en, vi]
+        requireApprovedPrimarySource: false
+      - section: gross-motor
+        requiredClaimIds:
+          - development.15-18m.gross-motor
+        minimumReviewStatus: source-verified
+        requiredLocales: [en, vi]
+        requireApprovedPrimarySource: true
+      - section: fine-motor
+        requiredClaimIds:
+          - development.15-18m.fine-motor
+        minimumReviewStatus: source-verified
+        requiredLocales: [en, vi]
+        requireApprovedPrimarySource: true
+      - section: communication
+        requiredClaimIds:
+          - development.15-18m.communication
+        minimumReviewStatus: source-verified
+        requiredLocales: [en, vi]
+        requireApprovedPrimarySource: true
+      - section: cognitive
+        requiredClaimIds:
+          - development.15-18m.cognitive
+        minimumReviewStatus: source-verified
+        requiredLocales: [en, vi]
+        requireApprovedPrimarySource: true
+      - section: social-emotional
+        requiredClaimIds:
+          - development.15-18m.social-emotional
+        minimumReviewStatus: source-verified
+        requiredLocales: [en, vi]
+        requireApprovedPrimarySource: true
+      - section: activities
+        requiredClaimIds:
+          - development.15-18m.activities
+        minimumReviewStatus: source-verified
+        requiredLocales: [en, vi]
+        requireApprovedPrimarySource: true
+      - section: variants
+        requiredClaimIds:
+          - development.15-18m.variants
+        minimumReviewStatus: source-verified
+        requiredLocales: [en, vi]
+        requireApprovedPrimarySource: false
+      - section: safety-environment
+        requiredClaimIds:
+          - development.15-18m.safety-environment
+        minimumReviewStatus: source-verified
+        requiredLocales: [en, vi]
+        requireApprovedPrimarySource: true
+      - section: what-not-to-force
+        requiredClaimIds:
+          - development.15-18m.what-not-to-force
+        minimumReviewStatus: source-verified
+        requiredLocales: [en, vi]
+        requireApprovedPrimarySource: false
+      - section: what-to-observe
+        requiredClaimIds:
+          - development.15-18m.what-to-observe
+        minimumReviewStatus: source-verified
+        requiredLocales: [en, vi]
+        requireApprovedPrimarySource: false
+      - section: clinician-cues
+        requiredClaimIds:
+          - development.15-18m.clinician-cues
+        minimumReviewStatus: source-verified
+        requiredLocales: [en, vi]
+        requireApprovedPrimarySource: true
+      - section: reading-milestones
+        requiredClaimIds:
+          - development.milestones.reference
+          - development.milestones.not-pass-fail
+          - development.milestones.younger-checklist
+          - development.milestones.corrected-age
+          - development.milestones.act-early
+        minimumReviewStatus: source-verified
+        requiredLocales: [en, vi]
+        requireApprovedPrimarySource: false
+  - domain: development
+    stage: dev-18-24m
+    sections:
+      - section: at-a-glance
+        requiredClaimIds:
+          - development.18-24m.at-a-glance
+        minimumReviewStatus: source-verified
+        requiredLocales: [en, vi]
+        requireApprovedPrimarySource: false
+      - section: milestone-context
+        requiredClaimIds:
+          - development.18-24m.milestone-context
+        minimumReviewStatus: source-verified
+        requiredLocales: [en, vi]
+        requireApprovedPrimarySource: true
+      - section: development-focus
+        requiredClaimIds:
+          - development.18-24m.development-focus
+        minimumReviewStatus: source-verified
+        requiredLocales: [en, vi]
+        requireApprovedPrimarySource: false
+      - section: gross-motor
+        requiredClaimIds:
+          - development.18-24m.gross-motor
+        minimumReviewStatus: source-verified
+        requiredLocales: [en, vi]
+        requireApprovedPrimarySource: true
+      - section: fine-motor
+        requiredClaimIds:
+          - development.18-24m.fine-motor
+        minimumReviewStatus: source-verified
+        requiredLocales: [en, vi]
+        requireApprovedPrimarySource: true
+      - section: communication
+        requiredClaimIds:
+          - development.18-24m.communication
+        minimumReviewStatus: source-verified
+        requiredLocales: [en, vi]
+        requireApprovedPrimarySource: true
+      - section: cognitive
+        requiredClaimIds:
+          - development.18-24m.cognitive
+        minimumReviewStatus: source-verified
+        requiredLocales: [en, vi]
+        requireApprovedPrimarySource: true
+      - section: social-emotional
+        requiredClaimIds:
+          - development.18-24m.social-emotional
+        minimumReviewStatus: source-verified
+        requiredLocales: [en, vi]
+        requireApprovedPrimarySource: true
+      - section: activities
+        requiredClaimIds:
+          - development.18-24m.activities
+        minimumReviewStatus: source-verified
+        requiredLocales: [en, vi]
+        requireApprovedPrimarySource: true
+      - section: variants
+        requiredClaimIds:
+          - development.18-24m.variants
+        minimumReviewStatus: source-verified
+        requiredLocales: [en, vi]
+        requireApprovedPrimarySource: false
+      - section: safety-environment
+        requiredClaimIds:
+          - development.18-24m.safety-environment
+        minimumReviewStatus: source-verified
+        requiredLocales: [en, vi]
+        requireApprovedPrimarySource: true
+      - section: what-not-to-force
+        requiredClaimIds:
+          - development.18-24m.what-not-to-force
+        minimumReviewStatus: source-verified
+        requiredLocales: [en, vi]
+        requireApprovedPrimarySource: false
+      - section: what-to-observe
+        requiredClaimIds:
+          - development.18-24m.what-to-observe
+        minimumReviewStatus: source-verified
+        requiredLocales: [en, vi]
+        requireApprovedPrimarySource: false
+      - section: clinician-cues
+        requiredClaimIds:
+          - development.18-24m.clinician-cues
+        minimumReviewStatus: source-verified
+        requiredLocales: [en, vi]
+        requireApprovedPrimarySource: true
+      - section: reading-milestones
+        requiredClaimIds:
+          - development.milestones.reference
+          - development.milestones.not-pass-fail
+          - development.milestones.younger-checklist
+          - development.milestones.corrected-age
+          - development.milestones.act-early
+        minimumReviewStatus: source-verified
+        requiredLocales: [en, vi]
+        requireApprovedPrimarySource: false
+  - domain: development
+    stage: dev-24-30m
+    sections:
+      - section: at-a-glance
+        requiredClaimIds:
+          - development.24-30m.at-a-glance
+        minimumReviewStatus: source-verified
+        requiredLocales: [en, vi]
+        requireApprovedPrimarySource: false
+      - section: milestone-context
+        requiredClaimIds:
+          - development.24-30m.milestone-context
+        minimumReviewStatus: source-verified
+        requiredLocales: [en, vi]
+        requireApprovedPrimarySource: true
+      - section: development-focus
+        requiredClaimIds:
+          - development.24-30m.development-focus
+        minimumReviewStatus: source-verified
+        requiredLocales: [en, vi]
+        requireApprovedPrimarySource: false
+      - section: gross-motor
+        requiredClaimIds:
+          - development.24-30m.gross-motor
+        minimumReviewStatus: source-verified
+        requiredLocales: [en, vi]
+        requireApprovedPrimarySource: true
+      - section: fine-motor
+        requiredClaimIds:
+          - development.24-30m.fine-motor
+        minimumReviewStatus: source-verified
+        requiredLocales: [en, vi]
+        requireApprovedPrimarySource: true
+      - section: communication
+        requiredClaimIds:
+          - development.24-30m.communication
+        minimumReviewStatus: source-verified
+        requiredLocales: [en, vi]
+        requireApprovedPrimarySource: true
+      - section: cognitive
+        requiredClaimIds:
+          - development.24-30m.cognitive
+        minimumReviewStatus: source-verified
+        requiredLocales: [en, vi]
+        requireApprovedPrimarySource: true
+      - section: social-emotional
+        requiredClaimIds:
+          - development.24-30m.social-emotional
+        minimumReviewStatus: source-verified
+        requiredLocales: [en, vi]
+        requireApprovedPrimarySource: true
+      - section: activities
+        requiredClaimIds:
+          - development.24-30m.activities
+        minimumReviewStatus: source-verified
+        requiredLocales: [en, vi]
+        requireApprovedPrimarySource: true
+      - section: variants
+        requiredClaimIds:
+          - development.24-30m.variants
+        minimumReviewStatus: source-verified
+        requiredLocales: [en, vi]
+        requireApprovedPrimarySource: false
+      - section: safety-environment
+        requiredClaimIds:
+          - development.24-30m.safety-environment
+        minimumReviewStatus: source-verified
+        requiredLocales: [en, vi]
+        requireApprovedPrimarySource: true
+      - section: what-not-to-force
+        requiredClaimIds:
+          - development.24-30m.what-not-to-force
+        minimumReviewStatus: source-verified
+        requiredLocales: [en, vi]
+        requireApprovedPrimarySource: false
+      - section: what-to-observe
+        requiredClaimIds:
+          - development.24-30m.what-to-observe
+        minimumReviewStatus: source-verified
+        requiredLocales: [en, vi]
+        requireApprovedPrimarySource: false
+      - section: clinician-cues
+        requiredClaimIds:
+          - development.24-30m.clinician-cues
+        minimumReviewStatus: source-verified
+        requiredLocales: [en, vi]
+        requireApprovedPrimarySource: true
+      - section: reading-milestones
+        requiredClaimIds:
+          - development.milestones.reference
+          - development.milestones.not-pass-fail
+          - development.milestones.younger-checklist
+          - development.milestones.corrected-age
+          - development.milestones.act-early
+        minimumReviewStatus: source-verified
+        requiredLocales: [en, vi]
+        requireApprovedPrimarySource: false
+  - domain: development
+    stage: dev-30-36m
+    sections:
+      - section: at-a-glance
+        requiredClaimIds:
+          - development.30-36m.at-a-glance
+        minimumReviewStatus: source-verified
+        requiredLocales: [en, vi]
+        requireApprovedPrimarySource: false
+      - section: milestone-context
+        requiredClaimIds:
+          - development.30-36m.milestone-context
+        minimumReviewStatus: source-verified
+        requiredLocales: [en, vi]
+        requireApprovedPrimarySource: true
+      - section: development-focus
+        requiredClaimIds:
+          - development.30-36m.development-focus
+        minimumReviewStatus: source-verified
+        requiredLocales: [en, vi]
+        requireApprovedPrimarySource: false
+      - section: gross-motor
+        requiredClaimIds:
+          - development.30-36m.gross-motor
+        minimumReviewStatus: source-verified
+        requiredLocales: [en, vi]
+        requireApprovedPrimarySource: true
+      - section: fine-motor
+        requiredClaimIds:
+          - development.30-36m.fine-motor
+        minimumReviewStatus: source-verified
+        requiredLocales: [en, vi]
+        requireApprovedPrimarySource: true
+      - section: communication
+        requiredClaimIds:
+          - development.30-36m.communication
+        minimumReviewStatus: source-verified
+        requiredLocales: [en, vi]
+        requireApprovedPrimarySource: true
+      - section: cognitive
+        requiredClaimIds:
+          - development.30-36m.cognitive
+        minimumReviewStatus: source-verified
+        requiredLocales: [en, vi]
+        requireApprovedPrimarySource: true
+      - section: social-emotional
+        requiredClaimIds:
+          - development.30-36m.social-emotional
+        minimumReviewStatus: source-verified
+        requiredLocales: [en, vi]
+        requireApprovedPrimarySource: true
+      - section: activities
+        requiredClaimIds:
+          - development.30-36m.activities
+        minimumReviewStatus: source-verified
+        requiredLocales: [en, vi]
+        requireApprovedPrimarySource: true
+      - section: variants
+        requiredClaimIds:
+          - development.30-36m.variants
+        minimumReviewStatus: source-verified
+        requiredLocales: [en, vi]
+        requireApprovedPrimarySource: false
+      - section: safety-environment
+        requiredClaimIds:
+          - development.30-36m.safety-environment
+        minimumReviewStatus: source-verified
+        requiredLocales: [en, vi]
+        requireApprovedPrimarySource: true
+      - section: what-not-to-force
+        requiredClaimIds:
+          - development.30-36m.what-not-to-force
+        minimumReviewStatus: source-verified
+        requiredLocales: [en, vi]
+        requireApprovedPrimarySource: false
+      - section: what-to-observe
+        requiredClaimIds:
+          - development.30-36m.what-to-observe
+        minimumReviewStatus: source-verified
+        requiredLocales: [en, vi]
+        requireApprovedPrimarySource: false
+      - section: clinician-cues
+        requiredClaimIds:
+          - development.30-36m.clinician-cues
+        minimumReviewStatus: source-verified
+        requiredLocales: [en, vi]
+        requireApprovedPrimarySource: true
+      - section: reading-milestones
+        requiredClaimIds:
+          - development.milestones.reference
+          - development.milestones.not-pass-fail
+          - development.milestones.younger-checklist
+          - development.milestones.corrected-age
+          - development.milestones.act-early
+        minimumReviewStatus: source-verified
+        requiredLocales: [en, vi]
+        requireApprovedPrimarySource: false
+  - domain: development
+    stage: dev-36-48m
+    sections:
+      - section: at-a-glance
+        requiredClaimIds:
+          - development.36-48m.at-a-glance
+        minimumReviewStatus: source-verified
+        requiredLocales: [en, vi]
+        requireApprovedPrimarySource: false
+      - section: milestone-context
+        requiredClaimIds:
+          - development.36-48m.milestone-context
+        minimumReviewStatus: source-verified
+        requiredLocales: [en, vi]
+        requireApprovedPrimarySource: true
+      - section: development-focus
+        requiredClaimIds:
+          - development.36-48m.development-focus
+        minimumReviewStatus: source-verified
+        requiredLocales: [en, vi]
+        requireApprovedPrimarySource: false
+      - section: gross-motor
+        requiredClaimIds:
+          - development.36-48m.gross-motor
+        minimumReviewStatus: source-verified
+        requiredLocales: [en, vi]
+        requireApprovedPrimarySource: true
+      - section: fine-motor
+        requiredClaimIds:
+          - development.36-48m.fine-motor
+        minimumReviewStatus: source-verified
+        requiredLocales: [en, vi]
+        requireApprovedPrimarySource: true
+      - section: communication
+        requiredClaimIds:
+          - development.36-48m.communication
+        minimumReviewStatus: source-verified
+        requiredLocales: [en, vi]
+        requireApprovedPrimarySource: true
+      - section: cognitive
+        requiredClaimIds:
+          - development.36-48m.cognitive
+        minimumReviewStatus: source-verified
+        requiredLocales: [en, vi]
+        requireApprovedPrimarySource: true
+      - section: social-emotional
+        requiredClaimIds:
+          - development.36-48m.social-emotional
+        minimumReviewStatus: source-verified
+        requiredLocales: [en, vi]
+        requireApprovedPrimarySource: true
+      - section: activities
+        requiredClaimIds:
+          - development.36-48m.activities
+        minimumReviewStatus: source-verified
+        requiredLocales: [en, vi]
+        requireApprovedPrimarySource: true
+      - section: variants
+        requiredClaimIds:
+          - development.36-48m.variants
+        minimumReviewStatus: source-verified
+        requiredLocales: [en, vi]
+        requireApprovedPrimarySource: false
+      - section: safety-environment
+        requiredClaimIds:
+          - development.36-48m.safety-environment
+        minimumReviewStatus: source-verified
+        requiredLocales: [en, vi]
+        requireApprovedPrimarySource: true
+      - section: what-not-to-force
+        requiredClaimIds:
+          - development.36-48m.what-not-to-force
+        minimumReviewStatus: source-verified
+        requiredLocales: [en, vi]
+        requireApprovedPrimarySource: false
+      - section: what-to-observe
+        requiredClaimIds:
+          - development.36-48m.what-to-observe
+        minimumReviewStatus: source-verified
+        requiredLocales: [en, vi]
+        requireApprovedPrimarySource: false
+      - section: clinician-cues
+        requiredClaimIds:
+          - development.36-48m.clinician-cues
+        minimumReviewStatus: source-verified
+        requiredLocales: [en, vi]
+        requireApprovedPrimarySource: true
+      - section: reading-milestones
+        requiredClaimIds:
+          - development.milestones.reference
+          - development.milestones.not-pass-fail
+          - development.milestones.younger-checklist
+          - development.milestones.corrected-age
+          - development.milestones.act-early
+        minimumReviewStatus: source-verified
+        requiredLocales: [en, vi]
+        requireApprovedPrimarySource: false
+  - domain: development
+    stage: dev-48-60m
+    sections:
+      - section: at-a-glance
+        requiredClaimIds:
+          - development.48-60m.at-a-glance
+        minimumReviewStatus: source-verified
+        requiredLocales: [en, vi]
+        requireApprovedPrimarySource: false
+      - section: milestone-context
+        requiredClaimIds:
+          - development.48-60m.milestone-context
+        minimumReviewStatus: source-verified
+        requiredLocales: [en, vi]
+        requireApprovedPrimarySource: true
+      - section: development-focus
+        requiredClaimIds:
+          - development.48-60m.development-focus
+        minimumReviewStatus: source-verified
+        requiredLocales: [en, vi]
+        requireApprovedPrimarySource: false
+      - section: gross-motor
+        requiredClaimIds:
+          - development.48-60m.gross-motor
+        minimumReviewStatus: source-verified
+        requiredLocales: [en, vi]
+        requireApprovedPrimarySource: true
+      - section: fine-motor
+        requiredClaimIds:
+          - development.48-60m.fine-motor
+        minimumReviewStatus: source-verified
+        requiredLocales: [en, vi]
+        requireApprovedPrimarySource: true
+      - section: communication
+        requiredClaimIds:
+          - development.48-60m.communication
+        minimumReviewStatus: source-verified
+        requiredLocales: [en, vi]
+        requireApprovedPrimarySource: true
+      - section: cognitive
+        requiredClaimIds:
+          - development.48-60m.cognitive
+        minimumReviewStatus: source-verified
+        requiredLocales: [en, vi]
+        requireApprovedPrimarySource: true
+      - section: social-emotional
+        requiredClaimIds:
+          - development.48-60m.social-emotional
+        minimumReviewStatus: source-verified
+        requiredLocales: [en, vi]
+        requireApprovedPrimarySource: true
+      - section: activities
+        requiredClaimIds:
+          - development.48-60m.activities
+        minimumReviewStatus: source-verified
+        requiredLocales: [en, vi]
+        requireApprovedPrimarySource: true
+      - section: variants
+        requiredClaimIds:
+          - development.48-60m.variants
+        minimumReviewStatus: source-verified
+        requiredLocales: [en, vi]
+        requireApprovedPrimarySource: false
+      - section: safety-environment
+        requiredClaimIds:
+          - development.48-60m.safety-environment
+        minimumReviewStatus: source-verified
+        requiredLocales: [en, vi]
+        requireApprovedPrimarySource: true
+      - section: what-not-to-force
+        requiredClaimIds:
+          - development.48-60m.what-not-to-force
+        minimumReviewStatus: source-verified
+        requiredLocales: [en, vi]
+        requireApprovedPrimarySource: false
+      - section: what-to-observe
+        requiredClaimIds:
+          - development.48-60m.what-to-observe
+        minimumReviewStatus: source-verified
+        requiredLocales: [en, vi]
+        requireApprovedPrimarySource: false
+      - section: clinician-cues
+        requiredClaimIds:
+          - development.48-60m.clinician-cues
+        minimumReviewStatus: source-verified
+        requiredLocales: [en, vi]
+        requireApprovedPrimarySource: true
+      - section: reading-milestones
+        requiredClaimIds:
+          - development.milestones.reference
+          - development.milestones.not-pass-fail
+          - development.milestones.younger-checklist
+          - development.milestones.corrected-age
+          - development.milestones.act-early
+        minimumReviewStatus: source-verified
+        requiredLocales: [en, vi]
+        requireApprovedPrimarySource: false

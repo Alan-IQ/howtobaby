@@ -1,0 +1,146 @@
+# SPDX-License-Identifier: CC-BY-NC-SA-4.0
+# Cross-stage Play & Development claims: how to read CDC milestone checklists, the younger-checklist
+# rule, corrected age and when to act early (docs/GUIDANCE_CONTENT_CONTRACT.md §2–§3).
+
+domain: development
+
+claims:
+  - id: development.milestones.reference
+    textKey: development.milestones.reference
+    publicSlug: development-milestones-reference
+    guidanceClass: official-guidance
+    precisionClass: source-exact
+    safetyLevel: info
+    applicability:
+      - "development-stage:all"
+    sourceRefs:
+      - sourceId: cdc-developmental-milestones
+        relationship: primary
+        locator:
+          heading: "What are developmental milestones?"
+          paragraphHint: >-
+            Opening definition of developmental milestones (first step, first smile, waving)
+            across play, learning, speech, behavior and movement, and the list of age-specific
+            checklists. Paraphrased.
+        verifiedAt: 2026-09-03
+      - sourceId: cdc-milestones-2-months
+        relationship: direct-support
+        locator:
+          section: "Ways to monitor milestones"
+          paragraphHint: >-
+            Statement that milestones are things most children (75% or more) can do by a certain
+            age, and the note that the materials are not a substitute for standardized,
+            validated developmental screening tools. Paraphrased.
+        verifiedAt: 2026-09-03
+    reviewedAt: 2026-09-03
+    reviewStatus: source-verified
+
+  - id: development.milestones.not-pass-fail
+    textKey: development.milestones.not-pass-fail
+    publicSlug: development-milestones-not-pass-fail
+    guidanceClass: practical-interpretation
+    precisionClass: product-heuristic
+    safetyLevel: info
+    applicability:
+      - "development-stage:all"
+    sourceRefs:
+      - sourceId: cdc-developmental-milestones
+        relationship: direct-support
+        locator:
+          heading: "What are developmental milestones?"
+          paragraphHint: >-
+            Milestones described as skills most children reach by a certain age; the checklists
+            are for noticing development and starting a conversation with the doctor.
+            Paraphrased context for HowToBaby's framing.
+        verifiedAt: 2026-09-03
+      - sourceId: aap-power-of-play-2018
+        relationship: contextual
+        locator:
+          section: "Abstract"
+          paragraphHint: >-
+            Developmentally appropriate play with parents and peers promotes social-emotional,
+            cognitive, language and self-regulation skills. Context for presenting milestones as
+            play and connection, not testing.
+        verifiedAt: 2026-09-03
+    reviewedAt: 2026-09-03
+    reviewStatus: source-verified
+
+  - id: development.milestones.younger-checklist
+    textKey: development.milestones.younger-checklist
+    publicSlug: development-milestones-younger-checklist
+    guidanceClass: product-heuristic
+    precisionClass: product-heuristic
+    safetyLevel: info
+    applicability:
+      - "development-stage:all"
+    sourceRefs:
+      - sourceId: cdc-developmental-milestones
+        relationship: contextual
+        locator:
+          heading: "What are developmental milestones?"
+          paragraphHint: >-
+            CDC publishes checklists for fixed ages only (2, 4, 6, 9, 12, 15, 18, 24, 30, 36, 48
+            and 60 months); nothing in between. Context for HowToBaby's resolution rule.
+        verifiedAt: 2026-09-03
+    reviewedAt: 2026-09-03
+    reviewStatus: source-verified
+
+  - id: development.milestones.corrected-age
+    textKey: development.milestones.corrected-age
+    publicSlug: development-milestones-corrected-age
+    guidanceClass: official-guidance
+    precisionClass: source-exact
+    safetyLevel: info
+    applicability:
+      - "development-stage:all"
+      - "corrected-development-age:eligible"
+    sourceRefs:
+      - sourceId: aap-corrected-age-for-preemies
+        relationship: primary
+        locator:
+          heading: "Corrected Age For Preemies"
+          paragraphHint: >-
+            Corrected age is counted from the original due date; during the first 2 years it
+            gives a better idea of when common developmental goals may be reached, with the
+            32-week / 4-months-old example. Paraphrased.
+        verifiedAt: 2026-09-03
+      - sourceId: cdc-milestones-2-months
+        relationship: contextual
+        locator:
+          section: "Share with your child's doctor"
+          paragraphHint: >-
+            The checklist asks whether the child has special healthcare needs or was born
+            prematurely — context for discussing corrected age at the visit.
+        verifiedAt: 2026-09-03
+    reviewedAt: 2026-09-03
+    reviewStatus: source-verified
+
+  - id: development.milestones.act-early
+    textKey: development.milestones.act-early
+    publicSlug: development-milestones-act-early
+    guidanceClass: official-guidance
+    precisionClass: source-exact
+    safetyLevel: clinician
+    applicability:
+      - "development-stage:all"
+    sourceRefs:
+      - sourceId: cdc-developmental-milestones
+        relationship: primary
+        locator:
+          heading: "CDC's Developmental Milestones"
+          paragraphHint: >-
+            The AAP recommendation quoted by CDC: screening for general development with
+            standardized, validated tools at 9, 18 and 30 months, and for autism at 18 and 24
+            months or whenever a parent or provider has a concern. Paraphrased.
+        verifiedAt: 2026-09-03
+      - sourceId: cdc-milestones-9-months
+        relationship: direct-support
+        locator:
+          section: "Share with your child's doctor"
+          paragraphHint: >-
+            The "don't wait, act early" guidance: not meeting one or more milestones, lost
+            skills or other concerns → talk with the doctor and ask about developmental
+            screening; referral and early intervention options. Paraphrased.
+        verifiedAt: 2026-09-03
+    reviewedAt: 2026-09-03
+    reviewStatus: source-verified

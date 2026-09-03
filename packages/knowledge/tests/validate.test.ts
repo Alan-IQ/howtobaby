@@ -8,7 +8,7 @@
 
 import { describe, expect, it } from "vitest";
 
-import { loadCanonicalKnowledge, validateKnowledge } from "../src/index.ts";
+import { loadCanonicalKnowledge, semanticNumberTokens, validateKnowledge } from "../src/index.ts";
 import { VALID_FIXTURE, cleanupFixture, loadFixture, rules } from "./helpers.ts";
 
 function check(overrides: Record<string, string | null>): string[] {
@@ -337,6 +337,26 @@ describe("EN/VI semantic order parity", () => {
     expect(check({
       "translations/vi/feeding.yaml": VALID_FIXTURE["translations/vi/feeding.yaml"]!.replace("khoảng 6 tháng", "khoảng 7 tháng"),
     })).toContain("quantity-parity");
+  });
+
+  it("recognizes units whose last letter carries a diacritic (giờ) and the year unit tuổi", () => {
+    expect(semanticNumberTokens("không quá 1 giờ mỗi ngày", "vi")).toEqual([{ value: "1", unit: "hour" }]);
+    expect(semanticNumberTokens("trẻ dưới 2 tuổi", "vi")).toEqual([{ value: "2", unit: "year", qualifier: "before" }]);
+    expect(semanticNumberTokens("children younger than 2 years", "en")).toEqual([{ value: "2", unit: "year", qualifier: "before" }]);
+    expect(semanticNumberTokens("2 tuổi rưỡi", "vi")).toEqual([{ value: "2", unit: "year" }]);
+  });
+
+  it("does not read the negated upper bound `không quá` as an `after` boundary", () => {
+    expect(semanticNumberTokens("no more than 1 hour a day", "en")).toEqual([{ value: "1", unit: "hour" }]);
+    expect(semanticNumberTokens("quá 1 giờ", "vi")[0]?.qualifier).toBe("after");
+    expect(semanticNumberTokens("sau 2 tuổi", "vi")[0]?.qualifier).toBe("after");
+  });
+
+  it("accepts `chưa` as the Vietnamese counterpart of an English `no … yet`", () => {
+    expect(check({
+      "translations/en/feeding.yaml": VALID_FIXTURE["translations/en/feeding.yaml"]!.replace("Starting before 4 months is not recommended.", "There is no checklist before 4 months yet."),
+      "translations/vi/feeding.yaml": VALID_FIXTURE["translations/vi/feeding.yaml"]!.replace("Không khuyến nghị bắt đầu trước 4 tháng tuổi.", "Chưa có danh sách nào trước 4 tháng tuổi."),
+    })).not.toContain("negation-parity");
   });
 });
 

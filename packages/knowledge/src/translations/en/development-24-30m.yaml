@@ -1,0 +1,63 @@
+# SPDX-License-Identifier: CC-BY-NC-SA-4.0
+# Canonical English strings for Development stage dev-24-30m. English is authored first;
+# Vietnamese parity lives in translations/vi/development-24-30m.yaml. List claims keep one
+# lead line followed by `- item` lines; source qualifiers survive verbatim (no invented precision).
+
+locale: en
+strings:
+  development.24-30m.at-a-glance: |-
+    From 2 to under 2½ years (24 to under 30 months), the CDC 2-year checklist is the reference. Most children now run, kick a ball, walk up a few stairs, eat with a spoon, put two words together, point to body parts and pictures on request, use gestures like blowing a kiss, work switches and buttons on toys, and notice when someone is hurt or upset. Play is active and imaginative: balls to kick, dress-up, simple puzzles, blocks, sand and water, and “ready, set, go”.
+  development.24-30m.milestone-context: |-
+    For this stage (24 to under 30 months) the reference is CDC’s 2-year checklist: what most children (75% or more) do by 2 years. A child of 25 to 29 months is compared with the 2-year checklist, not with something in between; the 30-month checklist becomes the reference at 30 months. CDC notes that its milestone materials are not a substitute for standardized, validated developmental screening tools.
+  development.24-30m.development-focus: |-
+    Two-word phrases open real conversation, and gestures multiply. Your child works out how things function — lids, switches, buttons — and starts using several toys together in one game. Running, kicking and climbing stairs make outdoor play the highlight of the day. Feelings are noticed in others, and your child reads your face to decide how to react to something new.
+  development.24-30m.gross-motor: |-
+    Large-movement milestones most children reach by 2 years (CDC checklist):
+    - kicks a ball
+    - runs
+    - walks (not climbs) up a few stairs with or without help
+  development.24-30m.fine-motor: |-
+    Hand and hand–eye milestones most children reach by 2 years (CDC checklist):
+    - eats with a spoon
+    - holds something in one hand while using the other hand, like holding a container and taking the lid off (CDC lists this under learning and thinking)
+    - tries to use switches, knobs or buttons on a toy (CDC lists this under learning and thinking)
+  development.24-30m.communication: |-
+    Communication milestones most children reach by 2 years (CDC checklist):
+    - points to things in a book when you ask, like “Where is the bear?”
+    - says at least two words together, like “More milk”
+    - points to at least two body parts when you ask
+    - uses more gestures than just waving and pointing, like blowing a kiss or nodding yes
+  development.24-30m.cognitive: |-
+    Learning and thinking milestone most children reach by 2 years (CDC checklist):
+    - plays with more than one toy at the same time, like putting toy food on a toy plate
+    CDC also lists holding something in one hand while using the other, and trying switches, knobs or buttons — both shown by HowToBaby under hand and hand–eye skills.
+  development.24-30m.social-emotional: |-
+    Social and emotional milestones most children reach by 2 years (CDC checklist):
+    - notices when others are hurt or upset, like pausing or looking sad when someone is crying
+    - looks at your face to see how to react in a new situation
+  development.24-30m.activities: |-
+    Ideas CDC suggests for this age:
+    - help your child hear how words sound: “or nana” — “You want more banana”
+    - give balls to kick, roll and throw, and play “ready, set, go” on a swing
+    - offer toys that make something happen when a button is pushed, and simple puzzles with shapes, colors or animals — name each piece as it goes in
+    - let your child dress up in grown-up shoes, hats and shirts to start pretend play
+    - crayons or finger paint on paper, sand toys, and containers, spoons or a funnel in the tub
+    - build block towers together and knock them down
+    - let your child help get ready for meals by carrying cups or napkins, and thank them
+    - watch playdates closely: children this age play next to each other and need you to show sharing and turns
+  development.24-30m.variants: |-
+    Easier: puzzles with two or three big pieces and a knob on each; a large, light ball rolled straight to the feet. Harder: more pieces without knobs; a smaller ball, or kicking toward a target. Easier for language: repeat the two-word phrase your child said. Harder: add one word — “more milk” → “more cold milk” — and wait. Easier for pretend play: you set the scene with two toys. Harder: ask your child what happens next.
+  development.24-30m.safety-environment: |-
+    Safety points CDC attaches to this age:
+    - encourage your child to sit while eating and to chew food thoroughly, to prevent choking
+    - check toys often for loose or broken parts, and steer crayons and pencils away from the mouth
+    - don’t hold hot drinks while your child sits on your lap
+    - never leave your child near or around water — bathtubs, pools, ponds — without someone watching, and fence off backyard pools
+    - in the car, your child sits in the back seat, buckled into a car seat with a harness
+    - limit screen time to no more than 1 hour a day of a children’s program with an adult present
+  development.24-30m.what-not-to-force: |-
+    Don’t force sharing: CDC notes that children this age play next to each other and do not yet know how to share and solve problems — your job is to show how, not to demand it. Don’t press food: CDC suggests letting your child eat as much or as little as they want at each meal while you offer healthy foods. Don’t start toilet training just because your child turned 2; CDC says most children are not able to toilet train until 2 to 3 years old, and starting too early can cause stress and setbacks — ask your child’s doctor or teachers about readiness.
+  development.24-30m.what-to-observe: |-
+    Notice how your child combines words and gestures to get a message across, and whether they look at your face before deciding how to react to something new. Notice problem solving with objects — the lid that has to come off, the button that makes the toy go — and how many toys get used together in one game. Outdoors, notice running, stopping, and how stairs are managed with or without a hand.
+  development.24-30m.clinician-cues: |-
+    The reference for this stage is CDC’s 2-year checklist. CDC cites the AAP recommendation for autism screening at 24 months, so this stage usually includes a screening visit. Bring: what you and your child do together, what your child likes to do, anything your child does or does not do that concerns you, whether your child has lost any skills they once had, and whether your child has special healthcare needs or was born prematurely. If your child is not doing one or more of the 2-year milestones, has lost skills, or you have other concerns, don’t wait — talk with your child’s doctor and ask about developmental screening.

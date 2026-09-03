@@ -1170,6 +1170,8 @@ button.htb-source-chip:focus-visible {
 .htb-evidence-drawer__claim p {
   margin: var(--htb-space-2xs) 0 0;
   color: var(--htb-text-primary);
+  /* A claim authored as a lead line + `- item` lines keeps its line structure in the drawer. */
+  white-space: pre-line;
 }
 .htb-evidence-drawer__class {
   font-size: var(--htb-font-size-xs);
