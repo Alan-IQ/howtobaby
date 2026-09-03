@@ -25,6 +25,7 @@ claims:
         verifiedAt: 2026-09-03
     reviewedAt: 2026-09-03
     reviewStatus: source-verified
+    reviewedBy: ai-assisted
 
   - id: development.04-06m.milestone-context
     textKey: development.04-06m.milestone-context
@@ -55,6 +56,7 @@ claims:
         verifiedAt: 2026-09-03
     reviewedAt: 2026-09-03
     reviewStatus: source-verified
+    reviewedBy: ai-assisted
 
   - id: development.04-06m.development-focus
     textKey: development.04-06m.development-focus
@@ -84,6 +86,7 @@ claims:
         verifiedAt: 2026-09-03
     reviewedAt: 2026-09-03
     reviewStatus: source-verified
+    reviewedBy: ai-assisted
 
   - id: development.04-06m.gross-motor
     textKey: development.04-06m.gross-motor
@@ -105,6 +108,7 @@ claims:
         verifiedAt: 2026-09-03
     reviewedAt: 2026-09-03
     reviewStatus: source-verified
+    reviewedBy: ai-assisted
 
   - id: development.04-06m.fine-motor
     textKey: development.04-06m.fine-motor
@@ -126,6 +130,7 @@ claims:
         verifiedAt: 2026-09-03
     reviewedAt: 2026-09-03
     reviewStatus: source-verified
+    reviewedBy: ai-assisted
 
   - id: development.04-06m.communication
     textKey: development.04-06m.communication
@@ -147,6 +152,7 @@ claims:
         verifiedAt: 2026-09-03
     reviewedAt: 2026-09-03
     reviewStatus: source-verified
+    reviewedBy: ai-assisted
 
   - id: development.04-06m.cognitive
     textKey: development.04-06m.cognitive
@@ -168,6 +174,7 @@ claims:
         verifiedAt: 2026-09-03
     reviewedAt: 2026-09-03
     reviewStatus: source-verified
+    reviewedBy: ai-assisted
 
   - id: development.04-06m.social-emotional
     textKey: development.04-06m.social-emotional
@@ -189,6 +196,7 @@ claims:
         verifiedAt: 2026-09-03
     reviewedAt: 2026-09-03
     reviewStatus: source-verified
+    reviewedBy: ai-assisted
 
   - id: development.04-06m.activities
     textKey: development.04-06m.activities
@@ -218,6 +226,7 @@ claims:
         verifiedAt: 2026-09-03
     reviewedAt: 2026-09-03
     reviewStatus: source-verified
+    reviewedBy: ai-assisted
 
   - id: development.04-06m.variants
     textKey: development.04-06m.variants
@@ -239,6 +248,7 @@ claims:
         verifiedAt: 2026-09-03
     reviewedAt: 2026-09-03
     reviewStatus: source-verified
+    reviewedBy: ai-assisted
 
   - id: development.04-06m.safety-environment
     textKey: development.04-06m.safety-environment
@@ -272,12 +282,13 @@ claims:
         relationship: direct-support
         locator:
           paragraphHint: >-
-            Wheeled baby walkers send thousands of children to hospitals, can delay walking and
-            offer no benefit; the AAP recommends stationary activity centers, play yards or high
-            chairs instead. Paraphrased.
+            Wheeled walkers: thousands of hospital visits a year, no benefit, can delay walking,
+            never safe even with an adult close by; stationary activity centers, play yards or
+            high chairs instead. Paraphrased.
         verifiedAt: 2026-09-03
     reviewedAt: 2026-09-03
     reviewStatus: source-verified
+    reviewedBy: ai-assisted
 
   - id: development.04-06m.what-not-to-force
     textKey: development.04-06m.what-not-to-force
@@ -292,19 +303,38 @@ claims:
       - sourceId: cdc-milestones-4-months
         relationship: direct-support
         locator:
-          section: "Tips and Activities"
+          section: "Movement/Physical Development Milestones"
           paragraphHint: >-
-            Let the baby have time to move and interact rather than staying in swings, strollers
-            or bouncy seats for too long; follow the baby's reactions. Paraphrased.
+            The 4-month checklist lists pushing up onto elbows/forearms on the tummy; it lists
+            neither rolling nor sitting. Tips: pay close attention to how the baby reacts.
+            Paraphrased.
+        verifiedAt: 2026-09-03
+      - sourceId: cdc-milestones-6-months
+        relationship: direct-support
+        locator:
+          section: "Movement/Physical Development Milestones"
+          paragraphHint: >-
+            "Rolls from tummy to back" is a 6-month checklist item — the checklist membership
+            fact, not a statement about any individual baby.
+        verifiedAt: 2026-09-03
+      - sourceId: cdc-milestones-9-months
+        relationship: direct-support
+        locator:
+          section: "Movement/Physical Development Milestones"
+          paragraphHint: >-
+            "Sits without support" is a 9-month checklist item — the checklist membership fact,
+            not a statement about any individual baby.
         verifiedAt: 2026-09-03
       - sourceId: aap-baby-walkers-dangerous-choice
         relationship: direct-support
         locator:
           paragraphHint: >-
-            Walkers do not help a baby walk and can delay walking. Paraphrased.
+            Wheeled baby walkers: no benefits, and they can actually delay when a child starts to
+            walk. Paraphrased.
         verifiedAt: 2026-09-03
     reviewedAt: 2026-09-03
     reviewStatus: source-verified
+    reviewedBy: ai-assisted
 
   - id: development.04-06m.what-to-observe
     textKey: development.04-06m.what-to-observe
@@ -326,6 +356,7 @@ claims:
         verifiedAt: 2026-09-03
     reviewedAt: 2026-09-03
     reviewStatus: source-verified
+    reviewedBy: ai-assisted
 
   - id: development.04-06m.clinician-cues
     textKey: development.04-06m.clinician-cues
@@ -356,3 +387,4 @@ claims:
         verifiedAt: 2026-09-03
     reviewedAt: 2026-09-03
     reviewStatus: source-verified
+    reviewedBy: ai-assisted

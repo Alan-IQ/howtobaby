@@ -27,6 +27,7 @@ function checkWarnings(overrides: Record<string, string | null>): string[] {
 function cdcSource(lines: string): string {
   return VALID_FIXTURE["sources/registry.yaml"]!.replace(
     `    lastVerifiedAt: 2026-08-30
+    verifiedBy: maintainer
     status: current
     accessMode: link-only
     approvalLevel: approved-primary
@@ -67,6 +68,7 @@ describe("source gates", () => {
 
   describe("source-date provenance contract (publishedAt/updatedAt are the authority's dates)", () => {
     const base = `    lastVerifiedAt: 2026-08-30
+    verifiedBy: maintainer
     status: current
     accessMode: link-only
     approvalLevel: approved-primary
@@ -135,12 +137,14 @@ describe("provenance gates", () => {
   it("fails official-guidance whose only direct support is superseded", () => {
     const sources = VALID_FIXTURE["sources/registry.yaml"]!.replace(
       `    lastVerifiedAt: 2026-08-30
+    verifiedBy: maintainer
     status: current
     accessMode: link-only
     approvalLevel: approved-primary
     approvedScopes: [feeding]
   - id: who-complementary-feeding`,
       `    lastVerifiedAt: 2026-08-30
+    verifiedBy: maintainer
     status: superseded
     supersededBy: who-complementary-feeding
     accessMode: link-only
@@ -192,13 +196,53 @@ strings:
     })).toContain("quantity-parity");
   });
 
-  it("fails when VI loses the negation", () => {
-    expect(check({
-      "translations/vi/feeding.yaml": VALID_FIXTURE["translations/vi/feeding.yaml"]!.replace(
-        "Không khuyến nghị bắt đầu trước 4 tháng tuổi.",
-        "Có thể cân nhắc bắt đầu trước 4 tháng tuổi.",
-      ),
-    })).toContain("negation-parity");
+  // Regression: `chưa` ("not yet") used to satisfy the single generic negation check, so a
+  // Vietnamese "has not yet started before 4 months" could pass against an English
+  // "is not recommended". Prohibition strength must survive translation for safety copy.
+  describe("prohibition strength survives translation (`chưa` is not a prohibition)", () => {
+    const viText = (line: string) =>
+      VALID_FIXTURE["translations/vi/feeding.yaml"]!.replace("Không khuyến nghị bắt đầu trước 4 tháng tuổi.", line);
+
+    it("fails when VI drops the negation entirely", () => {
+      expect(check({ "translations/vi/feeding.yaml": viText("Có thể cân nhắc bắt đầu trước 4 tháng tuổi.") }))
+        .toContain("prohibition-parity");
+    });
+
+    it("fails when an EN prohibition is rendered with `chưa` alone", () => {
+      expect(check({ "translations/vi/feeding.yaml": viText("Bé chưa bắt đầu ăn dặm trước 4 tháng tuổi.") }))
+        .toContain("prohibition-parity");
+    });
+
+    it.each(["Không khuyến nghị bắt đầu trước 4 tháng tuổi.", "Đừng bắt đầu trước 4 tháng tuổi.", "Tránh bắt đầu trước 4 tháng tuổi.", "Chớ bắt đầu trước 4 tháng tuổi."])(
+      "accepts the prohibition marker in %j",
+      (line) => {
+        expect(check({ "translations/vi/feeding.yaml": viText(line) })).not.toContain("prohibition-parity");
+      },
+    );
+
+    it("still accepts `chưa` for an EN \u201cnot yet\u201d, which is a timing statement", () => {
+      const en = VALID_FIXTURE["translations/en/feeding.yaml"]!.replace(
+        "Starting before 4 months is not recommended.",
+        "Many babies are not yet ready before 4 months.",
+      );
+      const errors = check({
+        "translations/en/feeding.yaml": en,
+        "translations/vi/feeding.yaml": viText("Nhiều bé chưa sẵn sàng trước 4 tháng tuổi."),
+      });
+      expect(errors).not.toContain("prohibition-parity");
+      expect(errors).not.toContain("negation-parity");
+    });
+
+    it("fails when an EN \u201cnot yet\u201d loses every VI negation", () => {
+      const en = VALID_FIXTURE["translations/en/feeding.yaml"]!.replace(
+        "Starting before 4 months is not recommended.",
+        "Many babies are not yet ready before 4 months.",
+      );
+      expect(check({
+        "translations/en/feeding.yaml": en,
+        "translations/vi/feeding.yaml": viText("Nhiều bé đã sẵn sàng trước 4 tháng tuổi."),
+      })).toContain("negation-parity");
+    });
   });
 
   it("fails when VI loses the approximation qualifier of a source-approximate claim", () => {
@@ -260,6 +304,7 @@ describe("source approval boundary", () => {
   it("rejects a source missing the approval metadata entirely", () => {
     expect(check({
       "sources/registry.yaml": cdcSource(`    lastVerifiedAt: 2026-08-30
+    verifiedBy: maintainer
     status: current
     accessMode: link-only`),
     })).toContain("invalid-enum"); // approvalLevel is required and machine-checkable
@@ -268,6 +313,7 @@ describe("source approval boundary", () => {
   it("fails when a primary relationship points to an unapproved source (a blog cannot become primary by declaration)", () => {
     const errors = check({
       "sources/registry.yaml": cdcSource(`    lastVerifiedAt: 2026-08-30
+    verifiedBy: maintainer
     status: current
     accessMode: link-only
     approvalLevel: unapproved`),
@@ -279,6 +325,7 @@ describe("source approval boundary", () => {
   it("fails official-guidance when the approved primary source does not cover the claim's domain", () => {
     const errors = check({
       "sources/registry.yaml": cdcSource(`    lastVerifiedAt: 2026-08-30
+    verifiedBy: maintainer
     status: current
     accessMode: link-only
     approvalLevel: approved-primary
@@ -292,6 +339,7 @@ describe("source approval boundary", () => {
   it("rejects an approved source that declares no scopes", () => {
     expect(check({
       "sources/registry.yaml": cdcSource(`    lastVerifiedAt: 2026-08-30
+    verifiedBy: maintainer
     status: current
     accessMode: link-only
     approvalLevel: approved-primary`),
@@ -363,6 +411,7 @@ describe("EN/VI semantic order parity", () => {
 describe("source lifecycle propagation", () => {
   const CHANGED_CDC = `    updatedAt: 2026-08-31
     lastVerifiedAt: 2026-08-30
+    verifiedBy: maintainer
     status: changed-review-required
     accessMode: link-only
     approvalLevel: approved-primary
@@ -371,6 +420,7 @@ describe("source lifecycle propagation", () => {
   it("warns when a claim depends on a changed-review-required source (support is not fully current)", () => {
     expect(checkWarnings({
       "sources/registry.yaml": cdcSource(`    lastVerifiedAt: 2026-08-30
+    verifiedBy: maintainer
     status: changed-review-required
     accessMode: link-only
     approvalLevel: approved-primary
@@ -454,5 +504,88 @@ describe("rights boundary for locator hints", () => {
         verifiedAt: 2026-08-30`,
       ),
     })).not.toContain("verbatim-locator-hint");
+  });
+});
+
+describe("honest review states (contract §14, CLAUDE.md §5)", () => {
+  const claim = (from: string, to: string) => ({
+    "claims/feeding/solids.yaml": VALID_FIXTURE["claims/feeding/solids.yaml"]!.replace(from, to),
+  });
+
+  it("rejects an ai-assisted review that claims a human clinical review", () => {
+    expect(check(claim("reviewStatus: source-verified\n    reviewedBy: maintainer", "reviewStatus: clinically-reviewed\n    reviewedBy: ai-assisted")))
+      .toContain("ai-assisted-clinical-review");
+  });
+
+  it("rejects an ai-assisted review that claims release approval", () => {
+    expect(check(claim("reviewStatus: source-verified\n    reviewedBy: maintainer", "reviewStatus: release-approved\n    reviewedBy: ai-assisted")))
+      .toContain("ai-assisted-clinical-review");
+  });
+
+  it("accepts a maintainer-reviewed claim in the same states", () => {
+    const errors = check(claim("reviewStatus: source-verified", "reviewStatus: clinically-reviewed"));
+    expect(errors).not.toContain("ai-assisted-clinical-review");
+    expect(errors).not.toContain("ai-verified-source-under-clinical-claim");
+  });
+
+  it("rejects urgent/emergency wording resting on an ai-assisted review", () => {
+    expect(check(claim("safetyLevel: info", "safetyLevel: urgent"))).not.toContain("ai-assisted-urgent-wording");
+    expect(check({
+      "claims/feeding/solids.yaml": VALID_FIXTURE["claims/feeding/solids.yaml"]!
+        .replace("safetyLevel: info", "safetyLevel: emergency")
+        .replace("reviewedBy: maintainer", "reviewedBy: ai-assisted"),
+    })).toContain("ai-assisted-urgent-wording");
+  });
+
+  it("rejects a clinician-asserting claim standing on an ai-verified source", () => {
+    expect(check({
+      "sources/registry.yaml": VALID_FIXTURE["sources/registry.yaml"]!.replace("verifiedBy: maintainer", "verifiedBy: ai-assisted"),
+      "claims/feeding/solids.yaml": VALID_FIXTURE["claims/feeding/solids.yaml"]!.replace("reviewStatus: source-verified", "reviewStatus: clinically-reviewed"),
+    })).toContain("ai-verified-source-under-clinical-claim");
+  });
+
+  it("requires `reviewedBy` and `verifiedBy` to be recorded at all", () => {
+    expect(check({
+      "claims/feeding/solids.yaml": VALID_FIXTURE["claims/feeding/solids.yaml"]!.replace("    reviewedBy: maintainer\n", ""),
+    })).toContain("invalid-enum");
+    expect(check({
+      "sources/registry.yaml": VALID_FIXTURE["sources/registry.yaml"]!.replaceAll("    verifiedBy: maintainer\n", ""),
+    })).toContain("invalid-enum");
+  });
+});
+
+describe("safety-bearing prohibitions need real provenance", () => {
+  // Regression: `development.06-09m.what-not-to-force` attributed a jumper/bouncer prohibition to
+  // an AAP source that only covers wheeled walkers. A prohibition is a recommendation; a merely
+  // contextual reference cannot carry one.
+  const prohibitionText = VALID_FIXTURE["translations/en/feeding.yaml"]!.replace(
+    "Starting before 4 months is not recommended.",
+    "Never start before 4 months.",
+  );
+
+  it("fails a caution-level prohibition whose references are only contextual", () => {
+    expect(check({
+      "translations/en/feeding.yaml": prohibitionText,
+      "claims/feeding/solids.yaml": VALID_FIXTURE["claims/feeding/solids.yaml"]!
+        .replace("guidanceClass: official-guidance", "guidanceClass: practical-interpretation")
+        .replace("safetyLevel: info", "safetyLevel: caution")
+        .replace("relationship: primary", "relationship: contextual"),
+    })).toContain("unsupported-prohibition");
+  });
+
+  it("accepts the same prohibition when a direct/primary reference carries it", () => {
+    expect(check({
+      "translations/en/feeding.yaml": prohibitionText,
+      "claims/feeding/solids.yaml": VALID_FIXTURE["claims/feeding/solids.yaml"]!.replace("safetyLevel: info", "safetyLevel: caution"),
+    })).not.toContain("unsupported-prohibition");
+  });
+
+  it("does not police info-level text, which carries no safety recommendation", () => {
+    expect(check({
+      "translations/en/feeding.yaml": prohibitionText,
+      "claims/feeding/solids.yaml": VALID_FIXTURE["claims/feeding/solids.yaml"]!
+        .replace("guidanceClass: official-guidance", "guidanceClass: practical-interpretation")
+        .replace("relationship: primary", "relationship: contextual"),
+    })).not.toContain("unsupported-prohibition");
   });
 });

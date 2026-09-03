@@ -1,7 +1,15 @@
 # SPDX-License-Identifier: CC-BY-NC-SA-4.0
 # Canonical source registry (docs/EVIDENCE_PROVENANCE.md §2, docs/REPOSITORY_STRUCTURE.md §8).
 # A source record identifies the original authority; it is not permission to reproduce the work.
-# Every `lastVerifiedAt` date means a maintainer actually opened the source on that date.
+# Every `lastVerifiedAt` date means the source was actually opened on that date; `verifiedBy`
+# records WHO opened it (`maintainer` or `ai-assisted`) so a date can never imply a human sign-off
+# that did not happen (CLAUDE.md §5, GUIDANCE_CONTENT_CONTRACT.md §14).
+#
+# `publishedAt`/`updatedAt` are the authority's OWN calendar dates, copied exactly as the authority
+# prints them to readers. Never derive them from machine metadata and never timezone-convert them:
+# CDC pages, for example, print "Content last reviewed on Feb. 16, 2026" while their `og:updated_time`,
+# `cdc:last_reviewed` metas and the desktop `<time datetime>` attribute carry the same instant shifted
+# into UTC (2026-02-17T00:00) — reading those is how a +1 day drift gets into the registry.
 # `approvalLevel`/`approvedScopes` are the machine-checkable approval boundary: only an
 # approved-primary source can back `relationship: primary`/`direct-support`, and only inside
 # its approved domains — a blog/retailer/influencer source can never become primary by declaration.
@@ -15,6 +23,7 @@ sources:
     sourceType: public-health-guidance
     updatedAt: 2026-04-14
     lastVerifiedAt: 2026-08-31
+    verifiedBy: ai-assisted
     nextReviewAt: 2027-08-31
     status: current
     accessMode: link-only
@@ -32,6 +41,7 @@ sources:
     sourceType: fact-sheet
     updatedAt: 2026-08-04
     lastVerifiedAt: 2026-08-31
+    verifiedBy: ai-assisted
     nextReviewAt: 2027-08-31
     status: current
     accessMode: link-only
@@ -41,7 +51,7 @@ sources:
       Global normative guidance used as corroboration for U.S.-primary feeding claims
       (GUIDANCE_CONTENT_CONTRACT.md §12: U.S. authority stays primary for the U.S. product).
 
-  # --- Play & Development (Phase 4 source audit, opened and verified 2026-09-03) ---------------
+  # --- Play & Development (Phase 4; every page re-opened and re-verified 2026-09-03) ------------
 
   - id: cdc-developmental-milestones
     organization: CDC
@@ -49,8 +59,9 @@ sources:
     canonicalUrl: "https://www.cdc.gov/act-early/milestones/index.html"
     jurisdiction: US
     sourceType: public-health-guidance
-    updatedAt: 2026-02-17
+    updatedAt: 2026-02-16
     lastVerifiedAt: 2026-09-03
+    verifiedBy: ai-assisted
     nextReviewAt: 2027-03-03
     status: current
     accessMode: link-only
@@ -67,8 +78,9 @@ sources:
     canonicalUrl: "https://www.cdc.gov/act-early/milestones/2-months.html"
     jurisdiction: US
     sourceType: public-health-guidance
-    updatedAt: 2026-05-16
+    updatedAt: 2026-05-15
     lastVerifiedAt: 2026-09-03
+    verifiedBy: ai-assisted
     nextReviewAt: 2027-03-03
     status: current
     accessMode: link-only
@@ -85,8 +97,9 @@ sources:
     canonicalUrl: "https://www.cdc.gov/act-early/milestones/4-months.html"
     jurisdiction: US
     sourceType: public-health-guidance
-    updatedAt: 2026-05-16
+    updatedAt: 2026-05-15
     lastVerifiedAt: 2026-09-03
+    verifiedBy: ai-assisted
     nextReviewAt: 2027-03-03
     status: current
     accessMode: link-only
@@ -103,8 +116,9 @@ sources:
     canonicalUrl: "https://www.cdc.gov/act-early/milestones/6-months.html"
     jurisdiction: US
     sourceType: public-health-guidance
-    updatedAt: 2026-05-16
+    updatedAt: 2026-05-15
     lastVerifiedAt: 2026-09-03
+    verifiedBy: ai-assisted
     nextReviewAt: 2027-03-03
     status: current
     accessMode: link-only
@@ -121,8 +135,9 @@ sources:
     canonicalUrl: "https://www.cdc.gov/act-early/milestones/9-months.html"
     jurisdiction: US
     sourceType: public-health-guidance
-    updatedAt: 2026-05-16
+    updatedAt: 2026-05-15
     lastVerifiedAt: 2026-09-03
+    verifiedBy: ai-assisted
     nextReviewAt: 2027-03-03
     status: current
     accessMode: link-only
@@ -139,8 +154,9 @@ sources:
     canonicalUrl: "https://www.cdc.gov/act-early/milestones/1-year.html"
     jurisdiction: US
     sourceType: public-health-guidance
-    updatedAt: 2026-05-16
+    updatedAt: 2026-05-15
     lastVerifiedAt: 2026-09-03
+    verifiedBy: ai-assisted
     nextReviewAt: 2027-03-03
     status: current
     accessMode: link-only
@@ -157,8 +173,9 @@ sources:
     canonicalUrl: "https://www.cdc.gov/act-early/milestones/15-months.html"
     jurisdiction: US
     sourceType: public-health-guidance
-    updatedAt: 2026-05-16
+    updatedAt: 2026-05-15
     lastVerifiedAt: 2026-09-03
+    verifiedBy: ai-assisted
     nextReviewAt: 2027-03-03
     status: current
     accessMode: link-only
@@ -175,8 +192,9 @@ sources:
     canonicalUrl: "https://www.cdc.gov/act-early/milestones/18-months.html"
     jurisdiction: US
     sourceType: public-health-guidance
-    updatedAt: 2026-05-16
+    updatedAt: 2026-05-15
     lastVerifiedAt: 2026-09-03
+    verifiedBy: ai-assisted
     nextReviewAt: 2027-03-03
     status: current
     accessMode: link-only
@@ -193,8 +211,9 @@ sources:
     canonicalUrl: "https://www.cdc.gov/act-early/milestones/2-years.html"
     jurisdiction: US
     sourceType: public-health-guidance
-    updatedAt: 2026-05-16
+    updatedAt: 2026-05-15
     lastVerifiedAt: 2026-09-03
+    verifiedBy: ai-assisted
     nextReviewAt: 2027-03-03
     status: current
     accessMode: link-only
@@ -211,8 +230,9 @@ sources:
     canonicalUrl: "https://www.cdc.gov/act-early/milestones/30-months.html"
     jurisdiction: US
     sourceType: public-health-guidance
-    updatedAt: 2026-05-16
+    updatedAt: 2026-05-15
     lastVerifiedAt: 2026-09-03
+    verifiedBy: ai-assisted
     nextReviewAt: 2027-03-03
     status: current
     accessMode: link-only
@@ -229,8 +249,9 @@ sources:
     canonicalUrl: "https://www.cdc.gov/act-early/milestones/3-years.html"
     jurisdiction: US
     sourceType: public-health-guidance
-    updatedAt: 2026-05-16
+    updatedAt: 2026-05-15
     lastVerifiedAt: 2026-09-03
+    verifiedBy: ai-assisted
     nextReviewAt: 2027-03-03
     status: current
     accessMode: link-only
@@ -247,8 +268,9 @@ sources:
     canonicalUrl: "https://www.cdc.gov/act-early/milestones/4-years.html"
     jurisdiction: US
     sourceType: public-health-guidance
-    updatedAt: 2026-05-16
+    updatedAt: 2026-05-15
     lastVerifiedAt: 2026-09-03
+    verifiedBy: ai-assisted
     nextReviewAt: 2027-03-03
     status: current
     accessMode: link-only
@@ -265,8 +287,9 @@ sources:
     canonicalUrl: "https://www.cdc.gov/act-early/milestones/5-years.html"
     jurisdiction: US
     sourceType: public-health-guidance
-    updatedAt: 2026-05-16
+    updatedAt: 2026-05-15
     lastVerifiedAt: 2026-09-03
+    verifiedBy: ai-assisted
     nextReviewAt: 2027-03-03
     status: current
     accessMode: link-only
@@ -285,6 +308,7 @@ sources:
     sourceType: public-health-guidance
     updatedAt: 2026-02-20
     lastVerifiedAt: 2026-09-03
+    verifiedBy: ai-assisted
     nextReviewAt: 2027-03-03
     status: current
     accessMode: link-only
@@ -302,6 +326,7 @@ sources:
     sourceType: public-health-guidance
     updatedAt: 2026-02-20
     lastVerifiedAt: 2026-09-03
+    verifiedBy: ai-assisted
     nextReviewAt: 2027-03-03
     status: current
     accessMode: link-only
@@ -317,8 +342,9 @@ sources:
     canonicalUrl: "https://www.cdc.gov/child-development/positive-parenting-tips/toddlers-2-3-years.html"
     jurisdiction: US
     sourceType: public-health-guidance
-    updatedAt: 2025-08-05
+    updatedAt: 2026-01-29
     lastVerifiedAt: 2026-09-03
+    verifiedBy: ai-assisted
     nextReviewAt: 2027-03-03
     status: current
     accessMode: link-only
@@ -336,6 +362,7 @@ sources:
     sourceType: public-health-guidance
     updatedAt: 2026-02-20
     lastVerifiedAt: 2026-09-03
+    verifiedBy: ai-assisted
     nextReviewAt: 2027-03-03
     status: current
     accessMode: link-only
@@ -353,6 +380,7 @@ sources:
     sourceType: parent-guidance
     updatedAt: 2018-12-10
     lastVerifiedAt: 2026-09-03
+    verifiedBy: ai-assisted
     nextReviewAt: 2027-03-03
     status: current
     accessMode: link-only
@@ -371,6 +399,7 @@ sources:
     sourceType: parent-guidance
     updatedAt: 2023-09-08
     lastVerifiedAt: 2026-09-03
+    verifiedBy: ai-assisted
     nextReviewAt: 2027-03-03
     status: current
     accessMode: link-only
@@ -388,6 +417,7 @@ sources:
     sourceType: parent-guidance
     updatedAt: 2022-08-15
     lastVerifiedAt: 2026-09-03
+    verifiedBy: ai-assisted
     nextReviewAt: 2027-03-03
     status: current
     accessMode: link-only
@@ -406,6 +436,7 @@ sources:
     sourceType: clinical-report
     publishedAt: 2018-09-01
     lastVerifiedAt: 2026-09-03
+    verifiedBy: ai-assisted
     nextReviewAt: 2027-09-03
     status: current
     accessMode: link-only
@@ -425,6 +456,7 @@ sources:
     sourceType: guideline
     publishedAt: 2019-04-02
     lastVerifiedAt: 2026-09-03
+    verifiedBy: ai-assisted
     nextReviewAt: 2027-09-03
     status: current
     accessMode: link-only

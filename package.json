@@ -24,7 +24,7 @@
     "check:repo-health": "node scripts/check-repo-health.ts",
     "check:theme-boundary": "node scripts/check-theme-boundary.ts",
     "check:knowledge-determinism": "node scripts/check-knowledge-determinism.ts",
-    "validate:knowledge": "node scripts/validate-sources.ts && node scripts/validate-content.ts && node scripts/validate-provenance.ts && node scripts/validate-translations.ts",
+    "validate:knowledge": "node scripts/validate-sources.ts && node scripts/validate-content.ts && node scripts/validate-provenance.ts && node scripts/validate-translations.ts && node scripts/validate-review.ts",
     "report:licenses": "node scripts/report-licenses.ts",
     "clean:modules": "node scripts/clean.ts modules",
     "clean:build": "node scripts/clean.ts build",

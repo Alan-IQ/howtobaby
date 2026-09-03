@@ -15,8 +15,12 @@
  *     dependent claim (warning; error when a release-approved claim's support went stale);
  *   - precision classes cannot invent precision (qualifiers/ranges must appear in the text);
  *   - urgent/emergency wording requires a source-reviewed state;
+ *   - review states stay honest: an `ai-assisted` review can never occupy a state that asserts a
+ *     human clinical review, and a safety-bearing prohibition needs a primary/direct-support
+ *     reference rather than a merely contextual one;
  *   - EN is canonical and VI must keep semantic-critical parity: quantities in order, their
- *     units, boundary qualifiers (before/after/about), and negation;
+ *     units, boundary qualifiers (before/after/about), and negation BY STRENGTH — Vietnamese
+ *     `chưa` ("not yet") cannot stand in for an English prohibition;
  *   - the coverage matrix validates stage × domain × section × locales × source coverage ×
  *     review status;
  *   - locator hints stay concise paraphrased context, never long verbatim quotations;
@@ -29,6 +33,7 @@ import type { CanonicalKnowledge } from "./loader.ts";
 import type { IssueCollector } from "./schemas/issues.ts";
 import {
   CANONICAL_LOCALE,
+  CLINICIAN_ASSERTING_STATUSES,
   DIRECT_SUPPORT_RELATIONSHIPS,
   LOCALES,
   RELEASE_ELIGIBLE_STATUSES,
@@ -43,9 +48,30 @@ import {
 const EN_APPROXIMATION = /\b(about|around|approximately|roughly|typically|usually|when (?:developmentally )?ready|may)\b/i;
 /** Vietnamese approximation qualifiers with the same semantic role. */
 const VI_APPROXIMATION = /(khoảng|tầm|xấp xỉ|gần|thường|khi (?:bé |trẻ )?(?:đã )?sẵn sàng|có thể)/i;
-/** English negation/prohibition markers whose meaning must survive translation. */
-const EN_NEGATION = /\b(not recommended|do not|don't|never|avoid|no\b)/i;
-const VI_NEGATION = /(không|đừng|tránh|chưa)/i;
+// ---------------------------------------------------------------------------------------------
+// EN/VI negation parity, by STRENGTH (GUIDANCE_CONTENT_CONTRACT.md §10).
+//
+// Vietnamese has two very different negations and they are not interchangeable in safety copy:
+//   - prohibition / absolute negation: `không`, `đừng`, `tránh`, `chớ`, `cấm`, `không được`, …
+//   - "not yet": `chưa` — a statement about timing, not a prohibition.
+// "Never leave your child near water" rendered with `chưa` would read as "does not yet leave the
+// child near water", so `chưa` must not be able to satisfy an EN prohibition. It stays a valid
+// counterpart only for EN's own "not yet" forms, which are checked as the weaker tier.
+// ---------------------------------------------------------------------------------------------
+
+/** English prohibitions and absolute negations: the VI text must carry a prohibition marker. */
+const EN_PROHIBITION = /\b(?:never|do not|don't|does not|doesn't|cannot|can't|must not|should not|shouldn't|not recommended|not safe|not a substitute|avoid|without)\b/i;
+/** English "not yet"-style negations: a timing statement, which `chưa` renders correctly. */
+const EN_SOFT_NEGATION = /\b(?:not yet|no longer|not until|isn't yet|aren't yet)\b/i;
+/** Any remaining English negation marker (e.g. a bare "no"), satisfied by any VI negation. */
+const EN_ANY_NEGATION = /\b(?:no|not|nor|neither)\b/i;
+
+/** Vietnamese prohibition / absolute-negation markers. `chưa` is deliberately NOT one of them. */
+const VI_PROHIBITION = /(không|đừng|tránh|chớ|cấm|nghiêm cấm)/i;
+/** Vietnamese "not yet". Valid on its own only against an EN "not yet". */
+const VI_SOFT_NEGATION = /(chưa)/i;
+/** Any Vietnamese negation marker, either strength. */
+const VI_ANY_NEGATION = /(không|đừng|tránh|chớ|cấm|chưa)/i;
 /** A numeric range expression for `source-range` claims. */
 const RANGE_EXPRESSION = /\d+\s*(?:–|—|-|to|through)\s*\d+/i;
 
@@ -293,6 +319,23 @@ function validateClaims(knowledge: CanonicalKnowledge, issues: IssueCollector, s
       issues.error("schema", "unreviewed-urgency", `safetyLevel \`${claim.safetyLevel}\` requires a source-reviewed state (got \`${claim.reviewStatus}\`)`, claim.id, file);
     }
 
+    // Honest review states (GUIDANCE_CONTENT_CONTRACT.md §14, CLAUDE.md §5). AI may assist
+    // retrieval, drafting and translation, so `ai-assisted` is a legitimate recorded actor — but
+    // it can never occupy a state that asserts a human clinician signed the claim off, and it can
+    // never be the last word on urgent/emergency wording.
+    if (claim.reviewedBy === "ai-assisted" && (CLINICIAN_ASSERTING_STATUSES as readonly string[]).includes(claim.reviewStatus)) {
+      issues.error("review", "ai-assisted-clinical-review", `reviewStatus \`${claim.reviewStatus}\` asserts a human clinical review, but \`reviewedBy\` is \`ai-assisted\`; AI output is never canonical without the required review path`, claim.id, file);
+    }
+    if (claim.reviewedBy === "ai-assisted" && (claim.safetyLevel === "urgent" || claim.safetyLevel === "emergency")) {
+      issues.error("review", "ai-assisted-urgent-wording", `safetyLevel \`${claim.safetyLevel}\` wording cannot rest on an \`ai-assisted\` review; §14 requires \`clinical-review-required\` until a qualified reviewer confirms it`, claim.id, file);
+    }
+    for (const ref of claim.sourceRefs) {
+      const source = sources.get(ref.sourceId);
+      if (source && source.verifiedBy === "ai-assisted" && (CLINICIAN_ASSERTING_STATUSES as readonly string[]).includes(claim.reviewStatus)) {
+        issues.error("review", "ai-verified-source-under-clinical-claim", `reviewStatus \`${claim.reviewStatus}\` rests on source \`${ref.sourceId}\` whose \`verifiedBy\` is \`ai-assisted\`; the source needs maintainer verification first`, claim.id, file);
+      }
+    }
+
     // No invented precision (GUIDANCE_CONTENT_CONTRACT.md §1: approximate/range language must survive).
     const enText = en[claim.textKey];
     if (enText !== undefined) {
@@ -301,6 +344,11 @@ function validateClaims(knowledge: CanonicalKnowledge, issues: IssueCollector, s
       }
       if (claim.precisionClass === "source-range" && !RANGE_EXPRESSION.test(enText)) {
         issues.error("schema", "invented-precision", "precisionClass `source-range` but the canonical EN text contains no numeric range", claim.id, file);
+      }
+      // A safety-bearing prohibition is a recommendation, so it needs real provenance behind it —
+      // a `contextual`/`corroborating` reference is not enough to invent "never do X" (CLAUDE.md §5).
+      if (claim.safetyLevel !== "info" && EN_PROHIBITION.test(enText) && !claim.sourceRefs.some((ref) => DIRECT_SUPPORT_RELATIONSHIPS.includes(ref.relationship))) {
+        issues.error("provenance", "unsupported-prohibition", `safetyLevel \`${claim.safetyLevel}\` text states a prohibition but the claim has no \`primary\`/\`direct-support\` reference to carry it`, claim.id, file);
       }
     }
   }
@@ -377,8 +425,24 @@ function validateTranslations(knowledge: CanonicalKnowledge, issues: IssueCollec
         }
       }
     }
-    if (EN_NEGATION.test(enText) && !VI_NEGATION.test(viText)) {
-      issues.error("translation", "negation-parity", "EN text contains a negation/prohibition the VI text does not preserve", key);
+    // Strength matters: a prohibition needs a VI prohibition marker, and `chưa` ("not yet") on its
+    // own can never stand in for `never` / `do not` / `not recommended`.
+    if (EN_PROHIBITION.test(enText) && !VI_PROHIBITION.test(viText)) {
+      const softOnly = VI_SOFT_NEGATION.test(viText);
+      issues.error(
+        "translation",
+        "prohibition-parity",
+        softOnly
+          ? "EN text contains a prohibition/absolute negation but the VI text negates only with `chưa` (\u201cnot yet\u201d); a prohibition needs không/đừng/tránh/chớ"
+          : "EN text contains a prohibition/absolute negation the VI text does not preserve (không/đừng/tránh/chớ)",
+        key,
+      );
+    }
+    if (EN_SOFT_NEGATION.test(enText) && !VI_ANY_NEGATION.test(viText)) {
+      issues.error("translation", "negation-parity", "EN text contains a \u201cnot yet\u201d negation the VI text does not preserve", key);
+    }
+    if (!EN_PROHIBITION.test(enText) && !EN_SOFT_NEGATION.test(enText) && EN_ANY_NEGATION.test(enText) && !VI_ANY_NEGATION.test(viText)) {
+      issues.error("translation", "negation-parity", "EN text contains a negation the VI text does not preserve", key);
     }
   }
   for (const { claim } of knowledge.claims) {

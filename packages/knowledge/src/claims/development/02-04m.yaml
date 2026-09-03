@@ -25,6 +25,7 @@ claims:
         verifiedAt: 2026-09-03
     reviewedAt: 2026-09-03
     reviewStatus: source-verified
+    reviewedBy: ai-assisted
 
   - id: development.02-04m.milestone-context
     textKey: development.02-04m.milestone-context
@@ -55,6 +56,7 @@ claims:
         verifiedAt: 2026-09-03
     reviewedAt: 2026-09-03
     reviewStatus: source-verified
+    reviewedBy: ai-assisted
 
   - id: development.02-04m.development-focus
     textKey: development.02-04m.development-focus
@@ -84,6 +86,7 @@ claims:
         verifiedAt: 2026-09-03
     reviewedAt: 2026-09-03
     reviewStatus: source-verified
+    reviewedBy: ai-assisted
 
   - id: development.02-04m.gross-motor
     textKey: development.02-04m.gross-motor
@@ -105,6 +108,7 @@ claims:
         verifiedAt: 2026-09-03
     reviewedAt: 2026-09-03
     reviewStatus: source-verified
+    reviewedBy: ai-assisted
 
   - id: development.02-04m.fine-motor
     textKey: development.02-04m.fine-motor
@@ -126,6 +130,7 @@ claims:
         verifiedAt: 2026-09-03
     reviewedAt: 2026-09-03
     reviewStatus: source-verified
+    reviewedBy: ai-assisted
 
   - id: development.02-04m.communication
     textKey: development.02-04m.communication
@@ -147,6 +152,7 @@ claims:
         verifiedAt: 2026-09-03
     reviewedAt: 2026-09-03
     reviewStatus: source-verified
+    reviewedBy: ai-assisted
 
   - id: development.02-04m.cognitive
     textKey: development.02-04m.cognitive
@@ -168,6 +174,7 @@ claims:
         verifiedAt: 2026-09-03
     reviewedAt: 2026-09-03
     reviewStatus: source-verified
+    reviewedBy: ai-assisted
 
   - id: development.02-04m.social-emotional
     textKey: development.02-04m.social-emotional
@@ -189,6 +196,7 @@ claims:
         verifiedAt: 2026-09-03
     reviewedAt: 2026-09-03
     reviewStatus: source-verified
+    reviewedBy: ai-assisted
 
   - id: development.02-04m.activities
     textKey: development.02-04m.activities
@@ -218,6 +226,7 @@ claims:
         verifiedAt: 2026-09-03
     reviewedAt: 2026-09-03
     reviewStatus: source-verified
+    reviewedBy: ai-assisted
 
   - id: development.02-04m.variants
     textKey: development.02-04m.variants
@@ -239,6 +248,7 @@ claims:
         verifiedAt: 2026-09-03
     reviewedAt: 2026-09-03
     reviewStatus: source-verified
+    reviewedBy: ai-assisted
 
   - id: development.02-04m.safety-environment
     textKey: development.02-04m.safety-environment
@@ -268,6 +278,7 @@ claims:
         verifiedAt: 2026-09-03
     reviewedAt: 2026-09-03
     reviewStatus: source-verified
+    reviewedBy: ai-assisted
 
   - id: development.02-04m.what-not-to-force
     textKey: development.02-04m.what-not-to-force
@@ -284,8 +295,8 @@ claims:
         locator:
           section: "Healthy bodies"
           paragraphHint: >-
-            Keep the baby active on the floor rather than in restraining devices for long
-            periods. Paraphrased.
+            Getting down on the floor to move helps the baby; try not to keep the baby in swings,
+            strollers, bouncer seats and exercise saucers for too long. Paraphrased.
         verifiedAt: 2026-09-03
       - sourceId: cdc-milestones-2-months
         relationship: direct-support
@@ -297,6 +308,7 @@ claims:
         verifiedAt: 2026-09-03
     reviewedAt: 2026-09-03
     reviewStatus: source-verified
+    reviewedBy: ai-assisted
 
   - id: development.02-04m.what-to-observe
     textKey: development.02-04m.what-to-observe
@@ -318,6 +330,7 @@ claims:
         verifiedAt: 2026-09-03
     reviewedAt: 2026-09-03
     reviewStatus: source-verified
+    reviewedBy: ai-assisted
 
   - id: development.02-04m.clinician-cues
     textKey: development.02-04m.clinician-cues
@@ -348,3 +361,4 @@ claims:
         verifiedAt: 2026-09-03
     reviewedAt: 2026-09-03
     reviewStatus: source-verified
+    reviewedBy: ai-assisted

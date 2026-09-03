@@ -21,6 +21,7 @@ sources:
     jurisdiction: US
     sourceType: public-health-guidance
     lastVerifiedAt: 2026-08-30
+    verifiedBy: maintainer
     status: current
     accessMode: link-only
     approvalLevel: approved-primary
@@ -32,6 +33,7 @@ sources:
     jurisdiction: global
     sourceType: fact-sheet
     lastVerifiedAt: 2026-08-30
+    verifiedBy: maintainer
     status: current
     accessMode: link-only
     approvalLevel: approved-primary
@@ -55,6 +57,7 @@ claims:
         verifiedAt: 2026-08-30
     reviewedAt: 2026-08-30
     reviewStatus: source-verified
+    reviewedBy: maintainer
 `,
   "guidance/feeding/solids.yaml": `
 blocks:

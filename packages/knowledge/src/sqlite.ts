@@ -34,6 +34,7 @@ CREATE TABLE sources (
   published_at TEXT,
   updated_at TEXT,
   last_verified_at TEXT NOT NULL,
+  verified_by TEXT NOT NULL,
   next_review_at TEXT,
   status TEXT NOT NULL,
   superseded_by TEXT,
@@ -53,7 +54,8 @@ CREATE TABLE claims (
   safety_level TEXT NOT NULL,
   uncertainty_note_key TEXT,
   reviewed_at TEXT NOT NULL,
-  review_status TEXT NOT NULL
+  review_status TEXT NOT NULL,
+  reviewed_by TEXT NOT NULL
 ) WITHOUT ROWID;
 
 CREATE TABLE claim_applicability (
@@ -140,21 +142,21 @@ function populate(db: DatabaseSync, compiled: CompiledKnowledge): void {
   }
 
   const insertSource = db.prepare(
-    "INSERT INTO sources (id, organization, title, canonical_url, jurisdiction, source_type, published_at, updated_at, last_verified_at, next_review_at, status, superseded_by, access_mode, approval_level, approved_scopes, notes) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
+    "INSERT INTO sources (id, organization, title, canonical_url, jurisdiction, source_type, published_at, updated_at, last_verified_at, verified_by, next_review_at, status, superseded_by, access_mode, approval_level, approved_scopes, notes) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
   );
   for (const s of compiled.sources) {
-    insertSource.run(s.id, s.organization, s.title, s.canonicalUrl, s.jurisdiction, s.sourceType, s.publishedAt ?? null, s.updatedAt ?? null, s.lastVerifiedAt, s.nextReviewAt ?? null, s.status, s.supersededBy ?? null, s.accessMode, s.approvalLevel, s.approvedScopes !== undefined ? JSON.stringify(s.approvedScopes) : null, s.notes ?? null);
+    insertSource.run(s.id, s.organization, s.title, s.canonicalUrl, s.jurisdiction, s.sourceType, s.publishedAt ?? null, s.updatedAt ?? null, s.lastVerifiedAt, s.verifiedBy, s.nextReviewAt ?? null, s.status, s.supersededBy ?? null, s.accessMode, s.approvalLevel, s.approvedScopes !== undefined ? JSON.stringify(s.approvedScopes) : null, s.notes ?? null);
   }
 
   const insertClaim = db.prepare(
-    "INSERT INTO claims (id, domain, text_key, public_slug, guidance_class, precision_class, safety_level, uncertainty_note_key, reviewed_at, review_status) VALUES (?,?,?,?,?,?,?,?,?,?)",
+    "INSERT INTO claims (id, domain, text_key, public_slug, guidance_class, precision_class, safety_level, uncertainty_note_key, reviewed_at, review_status, reviewed_by) VALUES (?,?,?,?,?,?,?,?,?,?,?)",
   );
   const insertApplicability = db.prepare("INSERT INTO claim_applicability (claim_id, kind, tag) VALUES (?,?,?)");
   const insertRef = db.prepare(
     "INSERT INTO claim_source_refs (claim_id, position, source_id, relationship, verified_at, support_note_key, locator_heading, locator_section, locator_anchor, locator_page, locator_table, locator_figure, locator_paragraph_hint, locator_source_version_hint) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
   );
   for (const c of compiled.claims) {
-    insertClaim.run(c.id, c.domain, c.textKey, c.publicSlug, c.guidanceClass, c.precisionClass, c.safetyLevel, c.uncertaintyNoteKey ?? null, c.reviewedAt, c.reviewStatus);
+    insertClaim.run(c.id, c.domain, c.textKey, c.publicSlug, c.guidanceClass, c.precisionClass, c.safetyLevel, c.uncertaintyNoteKey ?? null, c.reviewedAt, c.reviewStatus, c.reviewedBy);
     for (const tag of [...(c.applicability ?? [])].sort()) insertApplicability.run(c.id, "applicability", tag);
     for (const tag of [...(c.exclusions ?? [])].sort()) insertApplicability.run(c.id, "exclusion", tag);
     c.sourceRefs.forEach((ref, position) => {

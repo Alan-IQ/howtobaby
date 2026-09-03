@@ -143,12 +143,14 @@ describe("source lifecycle propagation into the read model", () => {
     const { knowledge, dir } = loadFixture({
       "sources/registry.yaml": VALID_FIXTURE["sources/registry.yaml"]!.replace(
         `    lastVerifiedAt: 2026-08-30
+    verifiedBy: maintainer
     status: current
     accessMode: link-only
     approvalLevel: approved-primary
     approvedScopes: [feeding]
   - id: who-complementary-feeding`,
         `    lastVerifiedAt: 2026-08-30
+    verifiedBy: maintainer
     status: changed-review-required
     accessMode: link-only
     approvalLevel: approved-primary

@@ -25,6 +25,7 @@ claims:
         verifiedAt: 2026-09-03
     reviewedAt: 2026-09-03
     reviewStatus: source-verified
+    reviewedBy: ai-assisted
 
   - id: development.18-24m.milestone-context
     textKey: development.18-24m.milestone-context
@@ -55,6 +56,7 @@ claims:
         verifiedAt: 2026-09-03
     reviewedAt: 2026-09-03
     reviewStatus: source-verified
+    reviewedBy: ai-assisted
 
   - id: development.18-24m.development-focus
     textKey: development.18-24m.development-focus
@@ -84,6 +86,7 @@ claims:
         verifiedAt: 2026-09-03
     reviewedAt: 2026-09-03
     reviewStatus: source-verified
+    reviewedBy: ai-assisted
 
   - id: development.18-24m.gross-motor
     textKey: development.18-24m.gross-motor
@@ -105,6 +108,7 @@ claims:
         verifiedAt: 2026-09-03
     reviewedAt: 2026-09-03
     reviewStatus: source-verified
+    reviewedBy: ai-assisted
 
   - id: development.18-24m.fine-motor
     textKey: development.18-24m.fine-motor
@@ -126,6 +130,7 @@ claims:
         verifiedAt: 2026-09-03
     reviewedAt: 2026-09-03
     reviewStatus: source-verified
+    reviewedBy: ai-assisted
 
   - id: development.18-24m.communication
     textKey: development.18-24m.communication
@@ -147,6 +152,7 @@ claims:
         verifiedAt: 2026-09-03
     reviewedAt: 2026-09-03
     reviewStatus: source-verified
+    reviewedBy: ai-assisted
 
   - id: development.18-24m.cognitive
     textKey: development.18-24m.cognitive
@@ -168,6 +174,7 @@ claims:
         verifiedAt: 2026-09-03
     reviewedAt: 2026-09-03
     reviewStatus: source-verified
+    reviewedBy: ai-assisted
 
   - id: development.18-24m.social-emotional
     textKey: development.18-24m.social-emotional
@@ -189,6 +196,7 @@ claims:
         verifiedAt: 2026-09-03
     reviewedAt: 2026-09-03
     reviewStatus: source-verified
+    reviewedBy: ai-assisted
 
   - id: development.18-24m.activities
     textKey: development.18-24m.activities
@@ -218,6 +226,7 @@ claims:
         verifiedAt: 2026-09-03
     reviewedAt: 2026-09-03
     reviewStatus: source-verified
+    reviewedBy: ai-assisted
 
   - id: development.18-24m.variants
     textKey: development.18-24m.variants
@@ -239,6 +248,7 @@ claims:
         verifiedAt: 2026-09-03
     reviewedAt: 2026-09-03
     reviewStatus: source-verified
+    reviewedBy: ai-assisted
 
   - id: development.18-24m.safety-environment
     textKey: development.18-24m.safety-environment
@@ -255,9 +265,9 @@ claims:
         locator:
           section: "Child safety first"
           paragraphHint: >-
-            Water supervision (drowning is the leading cause of injury death at this age); stair
-            gates; outlet covers; hot appliances and pot handles; sharp objects; never alone in
-            a vehicle; poisons locked up; guns stored safely. Paraphrased.
+            Water supervision (drowning is the leading cause of injury and death in this age
+            group); stair gates; outlet covers; hot appliances and pot handles; sharp objects;
+            never alone in a vehicle; poisons locked up. Paraphrased.
         verifiedAt: 2026-09-03
       - sourceId: cdc-milestones-18-months
         relationship: direct-support
@@ -269,6 +279,7 @@ claims:
         verifiedAt: 2026-09-03
     reviewedAt: 2026-09-03
     reviewStatus: source-verified
+    reviewedBy: ai-assisted
 
   - id: development.18-24m.what-not-to-force
     textKey: development.18-24m.what-not-to-force
@@ -291,6 +302,7 @@ claims:
         verifiedAt: 2026-09-03
     reviewedAt: 2026-09-03
     reviewStatus: source-verified
+    reviewedBy: ai-assisted
 
   - id: development.18-24m.what-to-observe
     textKey: development.18-24m.what-to-observe
@@ -312,6 +324,7 @@ claims:
         verifiedAt: 2026-09-03
     reviewedAt: 2026-09-03
     reviewStatus: source-verified
+    reviewedBy: ai-assisted
 
   - id: development.18-24m.clinician-cues
     textKey: development.18-24m.clinician-cues
@@ -342,3 +355,4 @@ claims:
         verifiedAt: 2026-09-03
     reviewedAt: 2026-09-03
     reviewStatus: source-verified
+    reviewedBy: ai-assisted

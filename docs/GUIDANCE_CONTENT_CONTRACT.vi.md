@@ -88,6 +88,12 @@ English canonical → kiểm chứng tài liệu → review → dịch tiếng V
 
 Bản tiếng Việt phải giữ nguyên các mốc tuổi, khoảng/xấp xỉ, phủ định, mức độ khẩn cấp, số lượng, chống chỉ định, điều kiện áp dụng và điều kiện dừng.
 
+Phủ định phải giữ đúng **mức độ** của bản gốc. Tiếng Việt phân biệt rõ phủ định cấm đoán/tuyệt đối
+(`không`, `đừng`, `tránh`, `chớ`, `cấm`) với "chưa" (nghĩa là chưa xảy ra ở thời điểm này), và hai
+nhóm này không thể thay thế cho nhau trong nội dung an toàn: dịch "walkers are not recommended"
+thành một câu chỉ có `chưa` biến một khuyến cáo cấm thành một nhận định về thời điểm. `chưa` chỉ hợp
+lệ khi bản English cũng là "not yet"; validation kiểm tra điều này bằng quy tắc `prohibition-parity`.
+
 ### Chất lượng câu chữ tiếng Việt
 
 Đúng nghĩa là bắt buộc nhưng chưa đủ. Nội dung dành cho phụ huynh phải đọc tự nhiên, rõ ràng và chuyên nghiệp như được biên soạn trực tiếp bằng tiếng Việt, không mang cấu trúc của một câu tiếng Anh được dịch từng chữ.
@@ -148,6 +154,16 @@ source superseded → dependent claims review-required → affected pages/tools 
 ## Trạng thái rà soát phải phản ánh đúng thực tế
 
 Không ghi `clinically-reviewed` nếu chưa thực sự có người đủ chuyên môn thực hiện clinical review. Nội dung diễn đạt lại trung thành từ hướng dẫn chính thức có thể ở trạng thái `source-verified`; nội dung tổng hợp làm thay đổi cách diễn giải/chống chỉ định hoặc dùng wording `urgent`/`emergency` thường cần `clinical-review-required`, trừ khi nó ánh xạ trực tiếp và rõ ràng từ chỉ dẫn chính thức.
+
+`reviewStatus`/`reviewedAt` ghi lại **đã rà soát cái gì và khi nào**; `reviewedBy` (`maintainer` |
+`ai-assisted`) — cùng với `verifiedBy` trên source record — ghi lại **ai đã làm**. Đây là hai trục
+tách biệt có chủ đích: AI được phép hỗ trợ tra cứu, soạn thảo và dịch (CLAUDE.md §5), nên
+`ai-assisted` là một trạng thái hợp lệ chứ không phải trạng thái kém hơn — nó chỉ không được thay
+thế cho con người. Gate `review` (`scripts/validate-review.ts`) bảo đảm: bản rà soát `ai-assisted`
+không bao giờ ở `clinically-reviewed`/`release-approved`; wording `urgent`/`emergency` không dựa
+trên rà soát của AI; claim khẳng định có clinician review không đứng trên tài liệu chưa được
+maintainer kiểm chứng; và mọi câu cấm đoán ở mức trên `safetyLevel: info` phải có ít nhất một
+tham chiếu `primary`/`direct-support`.
 
 ## Provenance v0.6.0
 

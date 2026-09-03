@@ -9,6 +9,7 @@ export type IssueCategory =
   | "source"
   | "provenance"
   | "translation"
+  | "review"
   | "coverage"
   | "tool";
 

@@ -60,6 +60,7 @@ interface SourceRecord {
   publishedAt?: string;
   updatedAt?: string;
   lastVerifiedAt: string;
+  verifiedBy: ReviewActor;
   nextReviewAt?: string;
   status: SourceStatus;
   supersededBy?: string;
@@ -76,7 +77,17 @@ Date fields carry three distinct meanings and must never be conflated:
 
 - `publishedAt` — the publication date, only when the authority provides one and it can be determined;
 - `updatedAt` — the source's current revision/update date, only when the authority provides one (CDC "last reviewed/updated", WHO fact-sheet revision date, …). Authorities label these dates differently, so HowToBaby never calls every date "Published";
-- `lastVerifiedAt` — the date HowToBaby's maintainer/review workflow actually opened, checked and confirmed the source. This is HowToBaby's verification, entirely separate from the source dates: it is **not** a crawl/fetch time (Evidence Watch snapshots record their own `fetchedAt`) and **not** a deploy/build time.
+- `lastVerifiedAt` — the date HowToBaby's maintainer/review workflow actually opened, checked and confirmed the source. This is HowToBaby's verification, entirely separate from the source dates: it is **not** a crawl/fetch time (Evidence Watch snapshots record their own `fetchedAt`) and **not** a deploy/build time;
+- `verifiedBy` — **who** performed that verification: `maintainer` or `ai-assisted`. A date alone can never imply a human sign-off, and AI-assisted retrieval is a legitimate recorded state (CLAUDE.md §5) that validation keeps out of the clinician-asserting review states (GUIDANCE_CONTENT_CONTRACT.md §14).
+
+An authority's calendar date is copied **exactly as the authority prints it to readers**, and never
+re-derived from machine metadata. Pages routinely publish the same instant twice at different
+precisions: CDC's "Learn the Signs. Act Early." pages state "Content last reviewed on Feb. 16, 2026"
+in the visible date bar while `og:updated_time`, `cdc:last_reviewed` and the desktop
+`<time datetime>` attribute carry that instant shifted into UTC (`2026-02-17T00:00`). Reading the
+machine value silently moves an authority's date by a day, so the human-readable date on the page
+is the one that goes into the registry — never a timezone conversion of it, and never a summariser's
+report of it.
 
 `publishedAt` and `updatedAt` are **different upstream facts** and are never inferred from each other: a missing `publishedAt` is never filled from `updatedAt`, a missing `updatedAt` never from `publishedAt`, and neither is ever guessed from a crawl, a copyright line or a deploy. Both are copied verbatim from the original source page into canonical YAML and propagate unchanged through every derived read model (`knowledge.sqlite`, `source-public-index.json`, `PublicSourceEntry`) to the evidence presenters — no UI layer keeps its own copy of source dates. Their public presentation follows one deterministic matrix (§14, "Source date provenance contract").
 
@@ -173,6 +184,7 @@ sourceRefs:
 
 reviewStatus: source-verified
 reviewedAt: 2026-08-26
+reviewedBy: maintainer
 ```
 
 The parent-facing wording may be simplified, but qualifiers such as “about” must remain when the source is approximate.
@@ -324,6 +336,7 @@ interface PublishedClaimAudit {
   contentVersion: string;
   reviewedAt: string;
   reviewStatus: string;
+  reviewedBy: ReviewActor;
   sourceRefs: ClaimSourceRef[];
 }
 ```

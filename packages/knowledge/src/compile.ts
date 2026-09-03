@@ -41,6 +41,8 @@ export interface ClaimEvidenceEntry {
   safetyLevel: string;
   reviewStatus: string;
   reviewedAt: string;
+  /** Who performed that review (`maintainer` | `ai-assisted`) — never inferred by a surface. */
+  reviewedBy: string;
   /**
    * Source-lifecycle propagation (EVIDENCE_PROVENANCE.md §14/§16): true when any supporting
    * source is `changed-review-required`, so surfaces can show a calm "reviewing an update"
@@ -173,6 +175,7 @@ export function compileKnowledge(knowledge: CanonicalKnowledge): CompiledKnowled
     safetyLevel: claim.safetyLevel,
     reviewStatus: claim.reviewStatus,
     reviewedAt: claim.reviewedAt,
+    reviewedBy: claim.reviewedBy,
     sourceReviewPending: claim.sourceRefs.some((ref) => sourceById.get(ref.sourceId)?.status === "changed-review-required"),
     ...(claim.uncertaintyNoteKey !== undefined ? { uncertaintyNoteKey: claim.uncertaintyNoteKey } : {}),
     sourceRefs: claim.sourceRefs,

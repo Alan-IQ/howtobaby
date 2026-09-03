@@ -40,6 +40,21 @@ export type SourceAccessMode = (typeof SOURCE_ACCESS_MODES)[number];
 export const SOURCE_APPROVAL_LEVELS = ["approved-primary", "approved-supporting", "unapproved"] as const;
 export type SourceApprovalLevel = (typeof SOURCE_APPROVAL_LEVELS)[number];
 
+/**
+ * Who actually performed a verification/review (CLAUDE.md §5, GUIDANCE_CONTENT_CONTRACT.md §14).
+ *
+ * `lastVerifiedAt`/`reviewedAt` say WHEN; this says WHO, so an AI-assisted authoring pass can
+ * never read as a maintainer or clinician having signed the record off. AI may assist retrieval,
+ * drafting and translation, so `ai-assisted` is a legitimate recorded state — it is simply not
+ * allowed to occupy the states that assert human clinical review (see validate.ts, category
+ * `review`).
+ */
+export const REVIEW_ACTORS = ["maintainer", "ai-assisted"] as const;
+export type ReviewActor = (typeof REVIEW_ACTORS)[number];
+
+/** Review states that assert a human clinician actually reviewed the claim. */
+export const CLINICIAN_ASSERTING_STATUSES = ["clinically-reviewed", "release-approved"] as const;
+
 export interface SourceRecord {
   id: string;
   organization: string;
@@ -50,6 +65,8 @@ export interface SourceRecord {
   publishedAt?: string;
   updatedAt?: string;
   lastVerifiedAt: string;
+  /** Who performed the `lastVerifiedAt` verification — never inferred, always recorded. */
+  verifiedBy: ReviewActor;
   nextReviewAt?: string;
   status: SourceStatus;
   supersededBy?: string;
@@ -166,6 +183,8 @@ export interface Claim {
   uncertaintyNoteKey?: string;
   reviewedAt: string;
   reviewStatus: ReviewStatus;
+  /** Who performed the review recorded by `reviewStatus`/`reviewedAt`. */
+  reviewedBy: ReviewActor;
 }
 
 // ---------------------------------------------------------------------------------------------

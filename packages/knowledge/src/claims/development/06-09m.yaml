@@ -25,6 +25,7 @@ claims:
         verifiedAt: 2026-09-03
     reviewedAt: 2026-09-03
     reviewStatus: source-verified
+    reviewedBy: ai-assisted
 
   - id: development.06-09m.milestone-context
     textKey: development.06-09m.milestone-context
@@ -55,6 +56,7 @@ claims:
         verifiedAt: 2026-09-03
     reviewedAt: 2026-09-03
     reviewStatus: source-verified
+    reviewedBy: ai-assisted
 
   - id: development.06-09m.development-focus
     textKey: development.06-09m.development-focus
@@ -84,6 +86,7 @@ claims:
         verifiedAt: 2026-09-03
     reviewedAt: 2026-09-03
     reviewStatus: source-verified
+    reviewedBy: ai-assisted
 
   - id: development.06-09m.gross-motor
     textKey: development.06-09m.gross-motor
@@ -105,6 +108,7 @@ claims:
         verifiedAt: 2026-09-03
     reviewedAt: 2026-09-03
     reviewStatus: source-verified
+    reviewedBy: ai-assisted
 
   - id: development.06-09m.fine-motor
     textKey: development.06-09m.fine-motor
@@ -127,6 +131,7 @@ claims:
         verifiedAt: 2026-09-03
     reviewedAt: 2026-09-03
     reviewStatus: source-verified
+    reviewedBy: ai-assisted
 
   - id: development.06-09m.communication
     textKey: development.06-09m.communication
@@ -148,6 +153,7 @@ claims:
         verifiedAt: 2026-09-03
     reviewedAt: 2026-09-03
     reviewStatus: source-verified
+    reviewedBy: ai-assisted
 
   - id: development.06-09m.cognitive
     textKey: development.06-09m.cognitive
@@ -169,6 +175,7 @@ claims:
         verifiedAt: 2026-09-03
     reviewedAt: 2026-09-03
     reviewStatus: source-verified
+    reviewedBy: ai-assisted
 
   - id: development.06-09m.social-emotional
     textKey: development.06-09m.social-emotional
@@ -190,6 +197,7 @@ claims:
         verifiedAt: 2026-09-03
     reviewedAt: 2026-09-03
     reviewStatus: source-verified
+    reviewedBy: ai-assisted
 
   - id: development.06-09m.activities
     textKey: development.06-09m.activities
@@ -219,6 +227,7 @@ claims:
         verifiedAt: 2026-09-03
     reviewedAt: 2026-09-03
     reviewStatus: source-verified
+    reviewedBy: ai-assisted
 
   - id: development.06-09m.variants
     textKey: development.06-09m.variants
@@ -240,6 +249,7 @@ claims:
         verifiedAt: 2026-09-03
     reviewedAt: 2026-09-03
     reviewStatus: source-verified
+    reviewedBy: ai-assisted
 
   - id: development.06-09m.safety-environment
     textKey: development.06-09m.safety-environment
@@ -277,6 +287,7 @@ claims:
         verifiedAt: 2026-09-03
     reviewedAt: 2026-09-03
     reviewStatus: source-verified
+    reviewedBy: ai-assisted
 
   - id: development.06-09m.what-not-to-force
     textKey: development.06-09m.what-not-to-force
@@ -293,17 +304,37 @@ claims:
         locator:
           section: "Tips and Activities"
           paragraphHint: >-
-            Hold the baby up while sitting and let them learn to balance; read the baby's moods
-            and take a break when upset. Paraphrased.
+            Hold the baby up while she sits, with toys to look at while she learns to balance;
+            read the baby's moods and take a break when upset. Paraphrased — CDC's tips say
+            nothing about pillows.
+        verifiedAt: 2026-09-03
+      - sourceId: cdc-milestones-9-months
+        relationship: direct-support
+        locator:
+          section: "Movement/Physical Development Milestones"
+          paragraphHint: >-
+            "Sits without support" is a 9-month checklist item, and no CDC checklist lists
+            crawling at any age — the checklist membership facts behind the reference reminder.
+        verifiedAt: 2026-09-03
+      - sourceId: cdc-positive-parenting-infants
+        relationship: direct-support
+        locator:
+          section: "Healthy bodies"
+          paragraphHint: >-
+            Try not to keep the baby in swings, bouncer seats or exercise saucers for too long;
+            floor time builds strength. Paraphrased — a limit on time spent, not a ban on seats.
         verifiedAt: 2026-09-03
       - sourceId: aap-baby-walkers-dangerous-choice
         relationship: direct-support
         locator:
           paragraphHint: >-
-            Walkers can delay walking and are unsafe even with supervision. Paraphrased.
+            Wheeled walkers offer no benefit and can delay walking; stationary activity centers
+            (no wheels; seats rotate, tip and bounce) are the safer alternative. Paraphrased —
+            this AAP guidance covers wheeled walkers only.
         verifiedAt: 2026-09-03
     reviewedAt: 2026-09-03
     reviewStatus: source-verified
+    reviewedBy: ai-assisted
 
   - id: development.06-09m.what-to-observe
     textKey: development.06-09m.what-to-observe
@@ -325,6 +356,7 @@ claims:
         verifiedAt: 2026-09-03
     reviewedAt: 2026-09-03
     reviewStatus: source-verified
+    reviewedBy: ai-assisted
 
   - id: development.06-09m.clinician-cues
     textKey: development.06-09m.clinician-cues
@@ -355,3 +387,4 @@ claims:
         verifiedAt: 2026-09-03
     reviewedAt: 2026-09-03
     reviewStatus: source-verified
+    reviewedBy: ai-assisted

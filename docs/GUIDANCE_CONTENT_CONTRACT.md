@@ -264,6 +264,12 @@ English authoring → source verification → review → Vietnamese translation 
 
 Vietnamese must preserve age boundaries, approximate/range language, negation, urgency, quantities, contraindications, stop conditions, applicability conditions, and evidence meaning.
 
+Negation must survive **at its original strength**. Vietnamese separates prohibition/absolute
+negation (`không`, `đừng`, `tránh`, `chớ`, `cấm`) from "not yet" (`chưa`), and the two are not
+interchangeable in safety copy: rendering "walkers are not recommended" with `chưa` turns a
+prohibition into a statement about timing. `chưa` is a valid counterpart only for an English
+"not yet"; validation enforces this as `prohibition-parity`.
+
 ### Vietnamese writing quality
 
 Semantic parity is necessary but not sufficient. Parent-facing Vietnamese must read as natural, professional Vietnamese written for Vietnamese-speaking parents, not as English syntax translated word by word.
@@ -368,6 +374,19 @@ For a solo-maintained product:
 - faithful restatements of current official guidance may ship as `source-verified` after normal release checks;
 - original synthesis that materially changes interpretation, contraindication branching, or urgent/emergency wording should become `clinical-review-required` unless it maps directly and unambiguously to an approved official instruction;
 - content awaiting required review must not be presented as clinician-approved.
+
+`reviewStatus`/`reviewedAt` record what was reviewed and when; `reviewedBy` (`maintainer` |
+`ai-assisted`) records **who**, alongside `verifiedBy` on the source record. The two are separate
+axes on purpose: AI may assist retrieval, drafting and translation (CLAUDE.md §5), so `ai-assisted`
+is a legitimate recorded state rather than a lesser one — it simply may not stand in for a person.
+Build validation (category `review`, `scripts/validate-review.ts`) enforces that:
+
+- an `ai-assisted` review can never occupy `clinically-reviewed` or `release-approved`;
+- `urgent`/`emergency` wording never rests on an `ai-assisted` review;
+- a clinician-asserting claim never stands on a source no maintainer has verified;
+- a claim above `safetyLevel: info` whose text states a prohibition carries at least one
+  `primary`/`direct-support` reference — a contextual or corroborating reference cannot originate a
+  "never do X".
 
 ## 15. Definition of done for a content change
 

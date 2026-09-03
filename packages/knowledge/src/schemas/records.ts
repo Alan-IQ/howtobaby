@@ -15,6 +15,7 @@ import {
   KNOWLEDGE_DOMAINS,
   LOCALES,
   PRECISION_CLASSES,
+  REVIEW_ACTORS,
   REVIEW_STATUSES,
   SAFETY_LEVELS,
   SOURCE_ACCESS_MODES,
@@ -180,7 +181,7 @@ function asRaw(value: unknown, issues: IssueCollector, category: IssueCategory, 
 
 const SOURCE_KEYS = [
   "id", "organization", "title", "canonicalUrl", "jurisdiction", "sourceType",
-  "publishedAt", "updatedAt", "lastVerifiedAt", "nextReviewAt", "status", "supersededBy", "accessMode",
+  "publishedAt", "updatedAt", "lastVerifiedAt", "verifiedBy", "nextReviewAt", "status", "supersededBy", "accessMode",
   "approvalLevel", "approvedScopes", "notes",
 ] as const;
 
@@ -203,6 +204,7 @@ export function parseSourceRecord(value: unknown, issues: IssueCollector, file?:
   const publishedAt = r.optionalDate("publishedAt");
   const updatedAt = r.optionalDate("updatedAt");
   const lastVerifiedAt = r.requireDate("lastVerifiedAt");
+  const verifiedBy = r.requireEnum("verifiedBy", REVIEW_ACTORS);
   const nextReviewAt = r.optionalDate("nextReviewAt");
   const status = r.requireEnum("status", SOURCE_STATUSES);
   const supersededBy = r.optionalString("supersededBy");
@@ -234,9 +236,9 @@ export function parseSourceRecord(value: unknown, issues: IssueCollector, file?:
     r.fail("successor-without-superseded", "`supersededBy` is only valid on a source whose status is `superseded`");
   }
 
-  if (r.failed || !id || !organization || !title || !canonicalUrl || !jurisdiction || !sourceType || !lastVerifiedAt || !status || !accessMode || !approvalLevel) return undefined;
+  if (r.failed || !id || !organization || !title || !canonicalUrl || !jurisdiction || !sourceType || !lastVerifiedAt || !verifiedBy || !status || !accessMode || !approvalLevel) return undefined;
   return {
-    id, organization, title, canonicalUrl, jurisdiction, sourceType, lastVerifiedAt, status, accessMode, approvalLevel,
+    id, organization, title, canonicalUrl, jurisdiction, sourceType, lastVerifiedAt, verifiedBy, status, accessMode, approvalLevel,
     ...(approvedScopes !== undefined ? { approvedScopes } : {}),
     ...(publishedAt !== undefined ? { publishedAt } : {}),
     ...(updatedAt !== undefined ? { updatedAt } : {}),
@@ -304,7 +306,7 @@ export function parseClaimSourceRef(value: unknown, issues: IssueCollector, clai
 
 const CLAIM_KEYS = [
   "id", "textKey", "publicSlug", "guidanceClass", "precisionClass", "safetyLevel",
-  "sourceRefs", "applicability", "exclusions", "uncertaintyNoteKey", "reviewedAt", "reviewStatus",
+  "sourceRefs", "applicability", "exclusions", "uncertaintyNoteKey", "reviewedAt", "reviewStatus", "reviewedBy",
 ] as const;
 
 export function parseClaim(value: unknown, issues: IssueCollector, file?: string): Claim | undefined {
@@ -322,6 +324,7 @@ export function parseClaim(value: unknown, issues: IssueCollector, file?: string
   const safetyLevel = r.requireEnum("safetyLevel", SAFETY_LEVELS);
   const reviewedAt = r.requireDate("reviewedAt");
   const reviewStatus = r.requireEnum("reviewStatus", REVIEW_STATUSES);
+  const reviewedBy = r.requireEnum("reviewedBy", REVIEW_ACTORS);
   const applicability = r.optionalStringArray("applicability");
   const exclusions = r.optionalStringArray("exclusions");
   const uncertaintyNoteKey = r.optionalString("uncertaintyNoteKey");
@@ -344,9 +347,9 @@ export function parseClaim(value: unknown, issues: IssueCollector, file?: string
     }
   }
 
-  if (r.failed || !id || !textKey || !publicSlug || !guidanceClass || !precisionClass || !safetyLevel || !reviewedAt || !reviewStatus || sourceRefs === undefined) return undefined;
+  if (r.failed || !id || !textKey || !publicSlug || !guidanceClass || !precisionClass || !safetyLevel || !reviewedAt || !reviewStatus || !reviewedBy || sourceRefs === undefined) return undefined;
   return {
-    id, textKey, publicSlug, guidanceClass, precisionClass, safetyLevel, sourceRefs, reviewedAt, reviewStatus,
+    id, textKey, publicSlug, guidanceClass, precisionClass, safetyLevel, sourceRefs, reviewedAt, reviewStatus, reviewedBy,
     ...(applicability !== undefined ? { applicability } : {}),
     ...(exclusions !== undefined ? { exclusions } : {}),
     ...(uncertaintyNoteKey !== undefined ? { uncertaintyNoteKey } : {}),

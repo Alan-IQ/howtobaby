@@ -25,6 +25,7 @@ claims:
         verifiedAt: 2026-09-03
     reviewedAt: 2026-09-03
     reviewStatus: source-verified
+    reviewedBy: ai-assisted
 
   - id: development.30-36m.milestone-context
     textKey: development.30-36m.milestone-context
@@ -55,6 +56,7 @@ claims:
         verifiedAt: 2026-09-03
     reviewedAt: 2026-09-03
     reviewStatus: source-verified
+    reviewedBy: ai-assisted
 
   - id: development.30-36m.development-focus
     textKey: development.30-36m.development-focus
@@ -84,6 +86,7 @@ claims:
         verifiedAt: 2026-09-03
     reviewedAt: 2026-09-03
     reviewStatus: source-verified
+    reviewedBy: ai-assisted
 
   - id: development.30-36m.gross-motor
     textKey: development.30-36m.gross-motor
@@ -105,6 +108,7 @@ claims:
         verifiedAt: 2026-09-03
     reviewedAt: 2026-09-03
     reviewStatus: source-verified
+    reviewedBy: ai-assisted
 
   - id: development.30-36m.fine-motor
     textKey: development.30-36m.fine-motor
@@ -126,6 +130,7 @@ claims:
         verifiedAt: 2026-09-03
     reviewedAt: 2026-09-03
     reviewStatus: source-verified
+    reviewedBy: ai-assisted
 
   - id: development.30-36m.communication
     textKey: development.30-36m.communication
@@ -147,6 +152,7 @@ claims:
         verifiedAt: 2026-09-03
     reviewedAt: 2026-09-03
     reviewStatus: source-verified
+    reviewedBy: ai-assisted
 
   - id: development.30-36m.cognitive
     textKey: development.30-36m.cognitive
@@ -168,6 +174,7 @@ claims:
         verifiedAt: 2026-09-03
     reviewedAt: 2026-09-03
     reviewStatus: source-verified
+    reviewedBy: ai-assisted
 
   - id: development.30-36m.social-emotional
     textKey: development.30-36m.social-emotional
@@ -189,6 +196,7 @@ claims:
         verifiedAt: 2026-09-03
     reviewedAt: 2026-09-03
     reviewStatus: source-verified
+    reviewedBy: ai-assisted
 
   - id: development.30-36m.activities
     textKey: development.30-36m.activities
@@ -218,6 +226,7 @@ claims:
         verifiedAt: 2026-09-03
     reviewedAt: 2026-09-03
     reviewStatus: source-verified
+    reviewedBy: ai-assisted
 
   - id: development.30-36m.variants
     textKey: development.30-36m.variants
@@ -239,6 +248,7 @@ claims:
         verifiedAt: 2026-09-03
     reviewedAt: 2026-09-03
     reviewStatus: source-verified
+    reviewedBy: ai-assisted
 
   - id: development.30-36m.safety-environment
     textKey: development.30-36m.safety-environment
@@ -269,6 +279,7 @@ claims:
         verifiedAt: 2026-09-03
     reviewedAt: 2026-09-03
     reviewStatus: source-verified
+    reviewedBy: ai-assisted
 
   - id: development.30-36m.what-not-to-force
     textKey: development.30-36m.what-not-to-force
@@ -285,12 +296,13 @@ claims:
         locator:
           section: "Tips and Activities"
           paragraphHint: >-
-            Allow the child to eat as much or as little as they want; ask the doctor or teachers
-            about toilet-training readiness; help the child learn to play with others by showing
-            how to share and take turns. Paraphrased.
+            Eat as much or as little as they want; ask the doctor or teachers about
+            toilet-training readiness; show how to share and take turns; use positive words and
+            more attention for wanted behaviors than unwanted ones. Paraphrased.
         verifiedAt: 2026-09-03
     reviewedAt: 2026-09-03
     reviewStatus: source-verified
+    reviewedBy: ai-assisted
 
   - id: development.30-36m.what-to-observe
     textKey: development.30-36m.what-to-observe
@@ -312,6 +324,7 @@ claims:
         verifiedAt: 2026-09-03
     reviewedAt: 2026-09-03
     reviewStatus: source-verified
+    reviewedBy: ai-assisted
 
   - id: development.30-36m.clinician-cues
     textKey: development.30-36m.clinician-cues
@@ -342,3 +355,4 @@ claims:
         verifiedAt: 2026-09-03
     reviewedAt: 2026-09-03
     reviewStatus: source-verified
+    reviewedBy: ai-assisted

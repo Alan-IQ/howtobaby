@@ -32,6 +32,7 @@ const baseSource: SourceRecord = {
   jurisdiction: "US",
   sourceType: "public-health-guidance",
   lastVerifiedAt: "2026-08-31",
+  verifiedBy: "maintainer",
   status: "current",
   accessMode: "link-only",
   approvalLevel: "approved-primary",

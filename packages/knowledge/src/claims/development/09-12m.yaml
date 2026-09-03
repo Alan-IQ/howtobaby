@@ -25,6 +25,7 @@ claims:
         verifiedAt: 2026-09-03
     reviewedAt: 2026-09-03
     reviewStatus: source-verified
+    reviewedBy: ai-assisted
 
   - id: development.09-12m.milestone-context
     textKey: development.09-12m.milestone-context
@@ -55,6 +56,7 @@ claims:
         verifiedAt: 2026-09-03
     reviewedAt: 2026-09-03
     reviewStatus: source-verified
+    reviewedBy: ai-assisted
 
   - id: development.09-12m.development-focus
     textKey: development.09-12m.development-focus
@@ -84,6 +86,7 @@ claims:
         verifiedAt: 2026-09-03
     reviewedAt: 2026-09-03
     reviewStatus: source-verified
+    reviewedBy: ai-assisted
 
   - id: development.09-12m.gross-motor
     textKey: development.09-12m.gross-motor
@@ -105,6 +108,7 @@ claims:
         verifiedAt: 2026-09-03
     reviewedAt: 2026-09-03
     reviewStatus: source-verified
+    reviewedBy: ai-assisted
 
   - id: development.09-12m.fine-motor
     textKey: development.09-12m.fine-motor
@@ -127,6 +131,7 @@ claims:
         verifiedAt: 2026-09-03
     reviewedAt: 2026-09-03
     reviewStatus: source-verified
+    reviewedBy: ai-assisted
 
   - id: development.09-12m.communication
     textKey: development.09-12m.communication
@@ -148,6 +153,7 @@ claims:
         verifiedAt: 2026-09-03
     reviewedAt: 2026-09-03
     reviewStatus: source-verified
+    reviewedBy: ai-assisted
 
   - id: development.09-12m.cognitive
     textKey: development.09-12m.cognitive
@@ -169,6 +175,7 @@ claims:
         verifiedAt: 2026-09-03
     reviewedAt: 2026-09-03
     reviewStatus: source-verified
+    reviewedBy: ai-assisted
 
   - id: development.09-12m.social-emotional
     textKey: development.09-12m.social-emotional
@@ -190,6 +197,7 @@ claims:
         verifiedAt: 2026-09-03
     reviewedAt: 2026-09-03
     reviewStatus: source-verified
+    reviewedBy: ai-assisted
 
   - id: development.09-12m.activities
     textKey: development.09-12m.activities
@@ -219,6 +227,7 @@ claims:
         verifiedAt: 2026-09-03
     reviewedAt: 2026-09-03
     reviewStatus: source-verified
+    reviewedBy: ai-assisted
 
   - id: development.09-12m.variants
     textKey: development.09-12m.variants
@@ -240,6 +249,7 @@ claims:
         verifiedAt: 2026-09-03
     reviewedAt: 2026-09-03
     reviewStatus: source-verified
+    reviewedBy: ai-assisted
 
   - id: development.09-12m.safety-environment
     textKey: development.09-12m.safety-environment
@@ -278,6 +288,7 @@ claims:
         verifiedAt: 2026-09-03
     reviewedAt: 2026-09-03
     reviewStatus: source-verified
+    reviewedBy: ai-assisted
 
   - id: development.09-12m.what-not-to-force
     textKey: development.09-12m.what-not-to-force
@@ -294,18 +305,19 @@ claims:
         locator:
           section: "Tips and Activities"
           paragraphHint: >-
-            Encourage crawling, scooting or rolling — whichever way the baby gets around; say a
-            quick cheerful goodbye instead of sneaking away; pay attention to how the baby
-            reacts to new people. Paraphrased.
+            Encourage crawling, scooting or rolling, whichever way the baby gets around; put the
+            baby close to things she can pull up on safely; a quick cheerful goodbye rather than
+            sneaking away. Paraphrased.
         verifiedAt: 2026-09-03
       - sourceId: aap-baby-walkers-dangerous-choice
         relationship: direct-support
         locator:
           paragraphHint: >-
-            Walkers offer no benefit and can delay walking. Paraphrased.
+            Wheeled baby walkers offer no benefit and can delay walking. Paraphrased.
         verifiedAt: 2026-09-03
     reviewedAt: 2026-09-03
     reviewStatus: source-verified
+    reviewedBy: ai-assisted
 
   - id: development.09-12m.what-to-observe
     textKey: development.09-12m.what-to-observe
@@ -327,6 +339,7 @@ claims:
         verifiedAt: 2026-09-03
     reviewedAt: 2026-09-03
     reviewStatus: source-verified
+    reviewedBy: ai-assisted
 
   - id: development.09-12m.clinician-cues
     textKey: development.09-12m.clinician-cues
@@ -357,3 +370,4 @@ claims:
         verifiedAt: 2026-09-03
     reviewedAt: 2026-09-03
     reviewStatus: source-verified
+    reviewedBy: ai-assisted

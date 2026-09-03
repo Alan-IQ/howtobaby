@@ -32,6 +32,7 @@ claims:
         verifiedAt: 2026-09-03
     reviewedAt: 2026-09-03
     reviewStatus: source-verified
+    reviewedBy: ai-assisted
 
   - id: development.00-02m.milestone-context
     textKey: development.00-02m.milestone-context
@@ -62,6 +63,7 @@ claims:
         verifiedAt: 2026-09-03
     reviewedAt: 2026-09-03
     reviewStatus: source-verified
+    reviewedBy: ai-assisted
 
   - id: development.00-02m.development-focus
     textKey: development.00-02m.development-focus
@@ -98,6 +100,7 @@ claims:
         verifiedAt: 2026-09-03
     reviewedAt: 2026-09-03
     reviewStatus: source-verified
+    reviewedBy: ai-assisted
 
   - id: development.00-02m.gross-motor
     textKey: development.00-02m.gross-motor
@@ -119,6 +122,7 @@ claims:
         verifiedAt: 2026-09-03
     reviewedAt: 2026-09-03
     reviewStatus: source-verified
+    reviewedBy: ai-assisted
 
   - id: development.00-02m.fine-motor
     textKey: development.00-02m.fine-motor
@@ -140,6 +144,7 @@ claims:
         verifiedAt: 2026-09-03
     reviewedAt: 2026-09-03
     reviewStatus: source-verified
+    reviewedBy: ai-assisted
 
   - id: development.00-02m.communication
     textKey: development.00-02m.communication
@@ -161,6 +166,7 @@ claims:
         verifiedAt: 2026-09-03
     reviewedAt: 2026-09-03
     reviewStatus: source-verified
+    reviewedBy: ai-assisted
 
   - id: development.00-02m.cognitive
     textKey: development.00-02m.cognitive
@@ -182,6 +188,7 @@ claims:
         verifiedAt: 2026-09-03
     reviewedAt: 2026-09-03
     reviewStatus: source-verified
+    reviewedBy: ai-assisted
 
   - id: development.00-02m.social-emotional
     textKey: development.00-02m.social-emotional
@@ -203,6 +210,7 @@ claims:
         verifiedAt: 2026-09-03
     reviewedAt: 2026-09-03
     reviewStatus: source-verified
+    reviewedBy: ai-assisted
 
   - id: development.00-02m.activities
     textKey: development.00-02m.activities
@@ -250,6 +258,7 @@ claims:
         verifiedAt: 2026-09-03
     reviewedAt: 2026-09-03
     reviewStatus: source-verified
+    reviewedBy: ai-assisted
 
   - id: development.00-02m.variants
     textKey: development.00-02m.variants
@@ -278,6 +287,7 @@ claims:
         verifiedAt: 2026-09-03
     reviewedAt: 2026-09-03
     reviewStatus: source-verified
+    reviewedBy: ai-assisted
 
   - id: development.00-02m.safety-environment
     textKey: development.00-02m.safety-environment
@@ -310,12 +320,13 @@ claims:
         locator:
           section: "Tips and Activities"
           paragraphHint: >-
-            Tummy time with toys at eye level, never leaving the baby alone; if sleepy, back to
-            a safe sleep area; never shake; screen time not recommended under 2 years except
-            video calling. Paraphrased.
+            Tummy time with toys at eye level, never alone; if sleepy, back to a safe sleep
+            area; never shake — safe place and walk away when crying overwhelms, checking every
+            5-10 minutes; screen time under 2 years: video calling only. Paraphrased.
         verifiedAt: 2026-09-03
     reviewedAt: 2026-09-03
     reviewStatus: source-verified
+    reviewedBy: ai-assisted
 
   - id: development.00-02m.what-not-to-force
     textKey: development.00-02m.what-not-to-force
@@ -344,6 +355,7 @@ claims:
         verifiedAt: 2026-09-03
     reviewedAt: 2026-09-03
     reviewStatus: source-verified
+    reviewedBy: ai-assisted
 
   - id: development.00-02m.what-to-observe
     textKey: development.00-02m.what-to-observe
@@ -365,6 +377,7 @@ claims:
         verifiedAt: 2026-09-03
     reviewedAt: 2026-09-03
     reviewStatus: source-verified
+    reviewedBy: ai-assisted
 
   - id: development.00-02m.clinician-cues
     textKey: development.00-02m.clinician-cues
@@ -395,3 +408,4 @@ claims:
         verifiedAt: 2026-09-03
     reviewedAt: 2026-09-03
     reviewStatus: source-verified
+    reviewedBy: ai-assisted

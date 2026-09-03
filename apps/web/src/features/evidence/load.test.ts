@@ -30,6 +30,7 @@ const cdc: SourceRecord = {
   publishedAt: "2025-01-10",
   updatedAt: "2026-04-14",
   lastVerifiedAt: "2026-08-31",
+  verifiedBy: "maintainer",
   status: "current",
   accessMode: "link-only",
   approvalLevel: "approved-primary",
