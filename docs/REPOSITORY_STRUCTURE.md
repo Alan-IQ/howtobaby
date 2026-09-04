@@ -441,7 +441,7 @@ The monitor may persist:
 - monitored-section hashes;
 - check timestamps;
 - parser version;
-- source availability, the normalized effective URL and locator resolution states;
+- source availability, the public-safe normalized effective URL, the monitored locator set (`locatorSetDigest`) and per-locator resolution states keyed by a derived `locatorKey`;
 - the `acceptedObservation` (the complete accepted source condition) and the last observed observation, kept distinct and compared only through their `sourceObservationDigest`;
 - the `comparisonBaseline` fingerprint — the last accepted **available** material — kept distinct from the accepted observation and compared only through its `comparisonDigest`;
 - change classification.
@@ -517,8 +517,9 @@ Evidence Watch, separate from `pipeline.yml`. The file is a manual-only placehol
 Behaviour it must implement at Phase 9:
 
 - deterministic fetch, fingerprint, diff, classification and impact analysis, with no dependency on AI;
-- durable watcher operational state on the `evidence-watch/state` branch (§9), with explicit manual `bootstrap`, `rebaseline`, `reconcile` and `retry-ai` dispatch modes — a scheduled run never establishes or replaces a baseline by itself, never retries a failed AI attempt for an unchanged digest, and reconciles outstanding merged reviews before classifying anything;
+- durable watcher operational state on the `evidence-watch/state` branch (§9), with explicit manual `bootstrap`, `rebaseline`, `reconcile` and `retry-ai` dispatch modes — a scheduled run never establishes or replaces a baseline by itself, never automatically retries a failed AI attempt for the same `sourceObservationDigest`, and reconciles outstanding merged reviews before classifying anything;
 - every unresolved source maps to exactly one `evidence-watch/review/<sourceId>` branch and one Draft Pull Request, idempotently, carrying the deterministic review payload plus the AI Review Summary or an explicit unavailable/failed status, and further upstream revisions update that same Pull Request;
+- one unresolved review per source: a historical merged or closed Pull Request is never adopted as the current review, a resolved review's branch is cleaned up idempotently once its state reconciliation succeeded, and the next evidence event for that source starts a fresh branch from current `main` (`EVIDENCE_UPDATE_ENGINE.md` §21);
 - three required checks gate an Evidence Watch review Pull Request — deterministic review-integrity, a source freshness check over the complete source observation whose PASS is reported only after the acceptance is durably written, and a review-resolution check that blocks a merge leaving the evidence event unresolved — and an idempotent post-merge reconciliation advances the watcher baselines only against that verified Pull Request head;
 - an operational failure (fetch, parser, authentication, adapter) may fail the workflow and optionally open or update a GitHub Issue;
 - GitHub Issues are for operational failures only — never a substitute for the evidence-review Draft Pull Request, and never created for `UNCHANGED` or deterministic metadata-only results;

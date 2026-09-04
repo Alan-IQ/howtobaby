@@ -160,6 +160,7 @@ Evidence Watch is a network fetcher running with repository credentials, so its 
 - bound the response size, and give every request a timeout;
 - validate the adapter's expected content type where that is practical for its channel;
 - never replay credentials or authorization headers to a redirect target on an unapproved host;
+- keep every credential in the secret or ephemeral request context: no credential-bearing or signed request URL, and no other secret, may reach persisted observation/review state, a digest input, a Pull Request body, an AI prompt or the workflow logs (§8);
 - a normal scheduled fetch uses the canonical reviewed monitor configuration only;
 - a proposed URL or monitor configuration that exists only on an Evidence Watch review branch MAY be fetched by the freshness and review-integrity checks (§21), but only after passing exactly the same URL and network-safety validation.
 
@@ -343,7 +344,7 @@ comparisonDigestVersion
 sourceObservationDigestVersion
 ```
 
-that makes the stored baseline and a newly observed fingerprint non-comparable produces `REBASELINE_REQUIRED` (§21) — never a fabricated evidence diff.
+that makes the stored baselines and a newly observed source condition non-comparable produces `REBASELINE_REQUIRED` (§21) — never a fabricated evidence diff.
 
 ### Source observation identity — `SourceObservation`
 
@@ -361,6 +362,9 @@ type LocatorObservationStatus =
   | "moved"
   | "missing";
 
+/** Derived operational locator identity — see "Locator identity" below. */
+type LocatorKey = string;
+
 interface SourceObservation {
   schemaVersion: "1";
   sourceId: string;
@@ -373,7 +377,9 @@ interface SourceObservation {
 
   fingerprint?: SourceFingerprint; // present only when material is available
 
-  locatorStates: Record<string, {
+  locatorSetDigest: string;
+
+  locatorStates: Record<LocatorKey, {
     status: LocatorObservationStatus;
     resolvedLocatorDigest?: string;
   }>;
@@ -389,13 +395,57 @@ Semantics:
 - `observedAt` is observation metadata and never participates in equality;
 - `fingerprint` carries the current `comparisonDigest` whenever the source material could be fetched and canonicalized, and is **absent** otherwise;
 - `availability = "confirmed-missing"` needs no fabricated `SourceFingerprint` and no fabricated `comparisonDigest`;
-- `normalizedEffectiveUrl` is produced by the approved URL-identity normalization of §9 — the same rule that decides whether a URL difference is identity-preserving;
-- `locatorStates` is keyed by the stable locator identity canonical `SourceLocator` records already carry (`EVIDENCE_PROVENANCE.md`), never by array position;
-- `classificationSignals` carries only bounded, deterministic, adapter-specific facts the classifier actually consumes. It never carries a fetched source body, a long third-party excerpt, or any AI output (§21).
+- `normalizedEffectiveUrl` is produced by the approved URL-identity normalization of §9 — the same rule that decides whether a URL difference is identity-preserving — and must be public-safe (below);
+- `locatorSetDigest` identifies **which** locators HowToBaby currently monitors for this source (below);
+- `locatorStates` is keyed by the derived operational `locatorKey` defined below — never by array position, and never by a canonical identifier that does not exist;
+- `classificationSignals` carries only bounded, deterministic, adapter-specific facts the classifier actually consumes. It never carries a fetched source body, a long third-party excerpt, any AI output (§21), or any secret (below).
 
 > **Every source-side fact used to produce an evidence-change classification MUST be represented in `SourceObservation`, and therefore in `sourceObservationDigest`.**
 
 A classifier may not depend on a source-side fact that the freshness check and the revert logic cannot reproduce from the observation. If a signal matters enough to change a classification, it belongs in the observation.
+
+### Locator identity: the derived `locatorKey`
+
+Canonical `SourceLocator` records carry **no identifier**. The canonical schema is `heading?`, `section?`, `anchor?`, `page?`, `table?`, `figure?`, `paragraphHint?`, `sourceVersionHint?` (`EVIDENCE_PROVENANCE.md` §3), and Phase 9 does not add one — canonical authored knowledge gains no field for the watcher's convenience. Evidence Watch therefore derives a deterministic **operational** key:
+
+```text
+locatorKey = locator-v1:<lowercase-hex-sha256>
+```
+
+hashed over the canonical JSON v1 of:
+
+```text
+{
+  sourceId,
+  heading,
+  section,
+  anchor,
+  page,
+  table,
+  figure,
+  sourceVersionHint
+}
+```
+
+Rules:
+
+- absent optional locator fields are omitted, exactly as canonical JSON v1 requires;
+- `paragraphHint` does **not** participate. It is concise paraphrased context (`EVIDENCE_PROVENANCE.md` §3), so editing it must never look like a locator change;
+- `supportNoteKey` does **not** participate. It belongs to `ClaimSourceRef`, not to the structural locator;
+- two claims referencing exactly the same structural locator of the same source share one `locatorKey`, and the watcher resolves that locator once;
+- a `locatorKey` is an operational derived identity: never written into canonical authored files, never citable as provenance, and never a canonical `SourceLocator` field.
+
+### Locator monitoring scope: `locatorSetDigest`
+
+Which locators HowToBaby monitors for a source is itself a fact that changes — through a reviewed canonical Pull Request that adds, removes or edits a `ClaimSourceRef.locator`. That scope needs its own deterministic identity, so a canonical edit is never mistaken for an upstream source change (§9):
+
+```text
+locatorSetDigest = sha256-v1:<lowercase-hex-sha256>
+```
+
+hashed over the canonical JSON v1 of the sorted, de-duplicated list of `locatorKey` values the canonical claim graph currently maps to this `sourceId`.
+
+`SourceObservation` carries `locatorSetDigest`, and `sourceObservationDigest` binds it. An observation therefore records both *what the source looked like* and *what HowToBaby was looking at*.
 
 ### Frozen source-observation digest — `sha256-v1`
 
@@ -425,6 +475,7 @@ The hashed input is the UTF-8 canonical JSON v1 of:
   normalizedEffectiveUrl: <string-or-null>,
   comparisonDigest: <string-or-null>,
 
+  locatorSetDigest,
   locatorStates,
   classificationSignals
 }
@@ -444,7 +495,7 @@ Git SHA
 fetch timing
 ```
 
-`classificationSignals` and `locatorStates` MUST be deterministic. A signal that differs between two runs against the same source condition does not belong in either of them.
+`classificationSignals`, `locatorSetDigest` and `locatorStates` MUST be deterministic. A signal that differs between two runs against the same source condition and the same monitored locator set does not belong in any of them.
 
 Changing the observation digest version changes how HowToBaby measures the source condition; it never means the source changed:
 
@@ -454,6 +505,29 @@ sourceObservationDigestVersion mismatch
 ```
 
 never an evidence diff.
+
+### Public-safe observation state
+
+The HowToBaby repository is public and `evidence-watch/state` is a readable branch on it, so everything an observation persists is public-facing:
+
+```text
+normalizedEffectiveUrl persisted in SourceObservation
+MUST be a public-safe identity URL.
+```
+
+None of the following may ever be persisted into observation or review state, hashed into any digest, rendered into a Pull Request body or report, sent to an AI provider, or written to workflow logs:
+
+```text
+URL userinfo (user:password@)
+Authorization headers or other credential material
+cookies
+signed download tokens
+session identifiers
+secret query parameters
+temporary credential-bearing URLs
+```
+
+Where policy permits an authenticated fetch (§6, §25), the credential stays in the secret or ephemeral request context. If the effective request URL carries sensitive query data, the adapter derives a sanitized public-safe identity URL **before** the observation is built, and the secret-bearing request URL itself never enters state, the review payload, the AI prompt or the logs. `classificationSignals` is bound by the same rule and MUST NOT carry secrets. The direct official-source links a Draft Pull Request renders for verification (§12) are safe canonical/public links, never authenticated or signed request URLs.
 
 ### Which digest decides what
 
@@ -547,6 +621,46 @@ locator resolved → locator moved
 ```
 
 A locator failure is never absorbed into a metadata-only outcome because the monitored page hash happened not to move.
+
+### Canonical locator scope change is not an upstream change
+
+`locatorSetDigest` (§8) can also change because a reviewed canonical Pull Request added, removed or edited a `ClaimSourceRef.locator`: HowToBaby changed what it monitors, upstream changed nothing. Before normal source classification, a run therefore separates
+
+```text
+source condition changed
+```
+
+from
+
+```text
+canonical locator monitoring scope changed
+```
+
+When the scope changed and everything still resolves:
+
+```text
+canonical locator set changed
++ every newly monitored locator resolves
++ every still-monitored locator retains a valid state
+→ deterministic monitoring-scope sync
+→ no AI
+→ no evidence Pull Request
+→ no Issue
+→ acceptedObservation MAY advance operationally
+```
+
+That travels the existing deterministic metadata-only path (§11, §21); it creates no new evidence category.
+
+When it does not all resolve:
+
+```text
+a newly monitored locator fails to resolve
+OR a still-monitored locator went resolved → missing/moved
+→ actionable locator-resolution change
+→ the normal Draft Pull Request path (§11, §12)
+```
+
+A locator that a reviewed canonical edit **removed** from the claim graph is out of monitoring scope from that moment. Its disappearance from `locatorStates` is a scope change and is never read as an upstream source change.
 
 ### Deterministic source absence: `SOURCE_MISSING`
 
@@ -657,7 +771,7 @@ Watcher operational state is persisted on the dedicated non-canonical `evidence-
 
 ### Deterministic metadata-only change
 
-A `METADATA_CHANGED` result that an explicitly approved deterministic rule proves does not affect monitored content, medical meaning, or provenance — for example an irrelevant publication timestamp with no monitored-section difference, or an identity-preserving URL normalization/redirect that satisfies the deterministic rule in §9.
+A `METADATA_CHANGED` result that an explicitly approved deterministic rule proves does not affect monitored content, medical meaning, or provenance — for example an irrelevant publication timestamp with no monitored-section difference, an identity-preserving URL normalization/redirect that satisfies the deterministic rule in §9, or a canonical locator monitoring-scope change in which every monitored locator still resolves (§9).
 
 - handle deterministically;
 - do not call AI;
@@ -762,7 +876,7 @@ The Draft Pull Request MUST contain:
 - deterministic policy risk;
 - current source/review state;
 - recommended review action;
-- direct official-source links needed for verification;
+- direct official-source links needed for verification — safe canonical/public links only, never an authenticated or signed request URL (§8);
 - the AI Review Summary, or an explicit AI-unavailable/AI-failed status (§16).
 
 The Pull Request SHOULD use stable labels such as:
@@ -808,6 +922,7 @@ deterministic policy risk
 diffEvidence
 
 monitorConfigHash
+locatorSetDigest
 parserVersion
 comparisonDigestVersion
 sourceObservationDigestVersion
@@ -964,7 +1079,7 @@ same sourceObservationDigest + status = unavailable | failed
 
 The attempt is keyed to the observation, not to the content digest, because the source location, a locator state or availability can change while the monitored material stays byte-identical. A summary written for the old source condition would then be presented as a review of the new one.
 
-A failed or unavailable attempt is therefore not retried by every cron. Retrying the current digest is an explicit manual operation:
+A failed or unavailable attempt is therefore not retried by every cron. Retrying the current `sourceObservationDigest` is an explicit manual operation:
 
 ```text
 workflow_dispatch:
@@ -1280,7 +1395,9 @@ Security contract:
 - grant only what is needed to read repository content, create/update Evidence Watch branches, create/update Draft Pull Requests, and optionally manage operational Issues;
 - store AI provider credentials in GitHub Secrets or another approved secret store;
 - never expose secrets in workflow logs, generated reports, Pull Request bodies, or committed files;
-- never grant the Evidence Watch identity permission to bypass branch/ruleset review requirements.
+- never grant the Evidence Watch identity permission to bypass branch/ruleset review requirements;
+- treat monitor configuration that exists only on a review branch as **validated data**, never as code: the trusted Evidence Watch implementation parses and schema-validates it and applies the §6 fetch-security checks before using it, and no arbitrary code from a review branch executes in the privileged workflow (§21);
+- keep credentials, signed request URLs, session identifiers and secret query parameters out of state, review payloads, AI prompts and logs (§8).
 
 ### Branch protection and ruleset requirement
 
@@ -1599,6 +1716,15 @@ interface EvidenceWatchSourceState {
     reviewBaseSha: string;
     reviewHeadSha?: string;
 
+    // The observation semantics every artifact of THIS review is produced under.
+    reviewObservationSemantics: {
+      monitorConfigHash: string;
+      locatorSetDigest: string;
+      parserVersion: string;
+      comparisonDigestVersion: string;
+      sourceObservationDigestVersion: string;
+    };
+
     baselineSourceObservationDigest: string;
     latestObservedSourceObservationDigest: string;
 
@@ -1622,6 +1748,7 @@ interface EvidenceWatchSourceState {
       reviewPayloadDigest: string;
 
       monitorConfigHash: string;
+      locatorSetDigest: string;
       parserVersion: string;
       comparisonDigestVersion: string;
       sourceObservationDigestVersion: string;
@@ -1639,7 +1766,75 @@ interface EvidenceWatchSourceState {
 
 Each digest field is the digest its name states — a `comparisonDigest` or a `sourceObservationDigest` as defined in §8, except `reviewPayloadDigest`, which is the deterministic review-payload digest of §12. State comparisons therefore never depend on observation metadata or on serialized fingerprint/observation objects. `reviewKey` is derived deterministically from the `sourceId`, so the same unresolved review is always addressable without consulting state that may not have been written yet. `reviewBaseSha` is the `main` commit the payload was computed against, and `reviewHeadSha` is the review branch head the open Pull Request currently carries — absent only while the review is still `reserved`.
 
-`freshnessAccepted` retains the exact compact `SourceObservation` it accepted, not only its digest, because the finalizer installs that observation as the new `acceptedObservation` (below). Like everything else on this branch it stays compact: operational fields, status values and hashes only, never a fetched source body, a long third-party excerpt, an AI prompt or AI output.
+`freshnessAccepted` retains the exact compact `SourceObservation` it accepted, not only its digest, because the finalizer installs that observation as the new `acceptedObservation` (below). Like everything else on this branch it stays compact and public-safe (§8): operational fields, status values and hashes only — never a fetched source body, a long third-party excerpt, an AI prompt, AI output, or any credential-bearing URL or other secret.
+
+### Observation semantics are pinned to the open review
+
+A normal scheduled fetch uses the canonical reviewed monitor configuration on `main`, while the freshness and review-integrity checks may fetch a URL or configuration that so far exists only on the review branch (§6). That is exactly what a review of a `SOURCE_MOVED`, a new URL, a selector change, a canonicalization-profile change or a locator-set change is *for* — and it means one open review must never end up mixing observations produced under two different sets of semantics.
+
+`pendingReview.reviewObservationSemantics` is the pin:
+
+> **Every `latestObservedSourceObservationDigest`, AI attempt, deterministic review payload and freshness acceptance belonging to one open review MUST be produced under that review's `reviewObservationSemantics`.**
+
+When the review is created:
+
+```text
+reviewObservationSemantics = the current reviewed monitor/locator semantics
+```
+
+When a maintainer or the bot changes anything on the review branch that affects observation semantics —
+
+```text
+url
+adapter
+selector
+include/exclude patterns
+canonicalization profile / version
+compareMode
+the monitored locator set
+```
+
+— the review is repinned rather than left comparing two things:
+
+```text
+→ derive new reviewObservationSemantics from the current Pull Request head
+→ invalidate the review's current latest observed observation
+→ invalidate aiAttempt as the current attempt
+→ invalidate freshnessAccepted
+→ re-observe the source under the NEW review semantics
+→ recompute sourceObservationDigest
+→ recompute reviewPayloadDigest
+→ produce a new review head generation
+→ require review and both head-bound checks on the latest head again
+```
+
+That is a change of **review semantics**, not an upstream source change. It is never classified as `CONTENT_CHANGED`, `SOURCE_MOVED` or any other evidence category merely because a configuration hash moved, and it never advances a baseline.
+
+#### Scheduled runs while a review carries proposed semantics
+
+If a source has an open `pendingReview` whose
+
+```text
+pendingReview.reviewObservationSemantics.monitorConfigHash
+```
+
+or `locatorSetDigest` differs from the accepted/current-`main` semantics, a scheduled run MUST NOT overwrite that review's observation with one produced from the older `main` configuration. Phase 9 v1 fixes the behavior:
+
+```text
+source has an open pendingReview
+→ every source refresh for THAT review uses the current review Pull Request
+  semantics
+→ trusted Evidence Watch code observes using the monitor configuration data
+  read from the current review head, after schema validation and the
+  fetch-security validation of §6
+→ a scheduled run MAY invoke that same review-refresh path
+→ it MUST NOT write a pending observation produced under the older
+  `main` semantics
+```
+
+Review-branch monitor configuration is **data**, not code: it is parsed and validated by the trusted Evidence Watch implementation, and no arbitrary code from a review branch runs in the privileged workflow (§20).
+
+The pre-merge freshness check uses exactly the same `reviewObservationSemantics`, and the post-merge finalizer installs only the semantics bound to the accepted freshness snapshot (below).
 
 `phase` tracks where the review actually is, so a crashed or half-finished transition is recoverable rather than ambiguous:
 
@@ -1822,13 +2017,33 @@ reviewKey
 evidence-watch/review/<sourceId>
 ```
 
+`reviewKey` is the **deduplication key of the current unresolved review**, derived from `sourceId`. It is deliberately not a globally unique identifier for every historical review event: the same `sourceId` produces the same `reviewKey` again for the next evidence event. Historical review identity is carried by the Pull Request number and Git history, never by `reviewKey`.
+
+A run may therefore adopt an existing Pull Request only when all of:
+
+```text
+state      = open
+base       = main
+head branch = evidence-watch/review/<sourceId>
+it matches the currently reserved pendingReview / reviewKey
+```
+
+> **A merged or closed Pull Request MUST NEVER be adopted as the current review**, however well its branch name or `reviewKey` matches.
+
+If more than one open Pull Request matches the same source:
+
+```text
+REVIEW_STATE_MISMATCH
+→ fail closed
+```
+
 Crash recovery is therefore deterministic:
 
 ```text
-reserved state + no Pull Request
+reserved state + no open Pull Request
 → resume creation
 
-reserved state + a Pull Request already exists
+reserved state + a matching OPEN Pull Request already exists
 → adopt that Pull Request and finish the state sync
 
 state says open + the Pull Request is missing
@@ -1861,6 +2076,66 @@ REVIEW_BRANCH_CONFLICT
 ```
 
 > **Evidence Watch MUST NOT reset or force-push `evidence-watch/review/<sourceId>`.**
+
+### Review branch lifecycle across successive evidence events
+
+The branch name `evidence-watch/review/<sourceId>` is reused across evidence events, so its lifecycle has to be explicit. The invariants above — no reset, no force-push, preserve human edits — apply while a review is **unresolved**. They are not a prohibition on cleaning up a branch whose review has terminally resolved.
+
+**After a merged, reconciled review.** Cleanup never runs before state reconciliation succeeds. Once the finalizer has
+
+```text
+installed acceptedObservation
+cleared pendingReview
+moved the manifest lifecycle to active (or inactive)
+```
+
+automation MAY — and SHOULD — delete `evidence-watch/review/<sourceId>` idempotently. If GitHub already auto-deleted the head branch on merge, that delete is a no-op, not an error.
+
+**After a verified `REVIEW_REVERTED_TO_BASELINE` close.** Once the human close is verified, `pendingReview` is cleared and the manifest lifecycle is back to `active`, the branch is cleaned up idempotently in the same way.
+
+**While recovery is outstanding.** The branch MUST be preserved for as long as any of
+
+```text
+REVIEW_CLOSED_UNMERGED
+REVIEW_BRANCH_CONFLICT
+REVIEW_STATE_MISMATCH
+REVIEW_ARTIFACT_MISSING
+```
+
+is unresolved, so maintainer edits and recovery evidence are never lost. Cleanup happens only after the explicit recovery completes.
+
+**Starting the next evidence event.** When
+
+```text
+pendingReview absent
+manifest lifecycle = active
+a new actionable observation is detected
+```
+
+the new review MUST start from a branch freshly based on current `main`, targeting `evidence-watch/review/<sourceId>`:
+
+```text
+the branch does not exist
+→ create it from current main
+```
+
+If a stale historical branch of that name still exists, automation may delete and recreate it **only** when deterministic verification proves all of:
+
+```text
+no pendingReview for this source
+no open Evidence Watch Pull Request for that branch or source
+the branch belongs to a terminally resolved historical review
+no unresolved human work exists on it
+```
+
+If that cannot be proven:
+
+```text
+REVIEW_STATE_MISMATCH
+→ fail closed
+```
+
+A stale historical branch is never force-reset or rebased into a new review. Because each event's branch is created afresh from `main` rather than reused, this contract behaves identically whether the repository merges with merge commits, squash merges or rebase merges.
 
 ### Every new source observation must produce a new review head SHA
 
@@ -1912,7 +2187,7 @@ Any head change:
 → rerun the required source freshness check
 ```
 
-A maintainer-authored commit does **not** re-run AI merely because the Git SHA changed: the AI decision depends on the upstream `comparisonDigest`, never on the branch SHA. If canonical edits on the branch change the affected claim/source mapping, the deterministic impact payload is recomputed and `reviewPayloadDigest` is updated with it.
+A maintainer-authored commit does **not** re-run AI merely because the Git SHA changed: the AI decision depends on the current `sourceObservationDigest`, never on the branch SHA. The exception is a commit that changes the review's observation semantics — URL, adapter, selector, include/exclude patterns, canonicalization profile/version, `compareMode` or the monitored locator set — which repins the review, re-observes the source and therefore produces a new observation to decide on (above). If canonical edits on the branch change the affected claim/source mapping, the deterministic impact payload is recomputed and `reviewPayloadDigest` is updated with it.
 
 ### Keeping the review branch current with `main`
 
@@ -1989,8 +2264,11 @@ Behavior:
 Evidence Watch never closes that Pull Request itself. When a human closes it and the condition is verified:
 
 ```text
+acceptedObservation  unchanged
 comparisonBaseline   unchanged
 pendingReview        cleared
+manifest lifecycle   → active
+review branch        cleaned up idempotently (above)
 canonical Git        unchanged
 no REVIEW_CLOSED_UNMERGED recovery
 operational/audit history preserved
@@ -2056,7 +2334,9 @@ workflow_dispatch:
   sourceId = <id>
 ```
 
-A manual rebaseline MUST verify source identity and the configured locator before replacing the baseline. Identity and locator alone are not sufficient: when the old and new comparison semantics are **not comparable** — a changed `monitorConfigHash`, `parserVersion` or `comparisonDigestVersion` means the two digests describe different measurements, so no diff can prove the meaning is unchanged — the maintainer must additionally verify that the current official source's meaning and support are still consistent with the canonical claims that rely on it.
+A manual rebaseline MUST verify source identity and the configured locators before replacing the baselines. Identity and locators alone are not sufficient: when the old and new semantics are **not comparable** — a changed `monitorConfigHash`, `locatorSetDigest`, `parserVersion`, `comparisonDigestVersion` or `sourceObservationDigestVersion` means the two digests describe different measurements, so no diff can prove the meaning is unchanged — the maintainer must additionally verify that the current official source's meaning and support are still consistent with the canonical claims that rely on it.
+
+A monitor-configuration or locator-scope change is never presented as an upstream evidence diff. Where the locator monitoring scope alone moved and every monitored locator still resolves, the deterministic monitoring-scope sync of §9 applies instead of a rebaseline.
 
 If that verification finds a material change to source identity, provenance, meaning or content:
 
@@ -2075,6 +2355,7 @@ A successful manual rebaseline records `authority = manual-rebaseline` together 
   verifiedAt: string,
   canonicalGitSha: string,
   monitorConfigHash: string,
+  locatorSetDigest: string,
   parserVersion: string,
   comparisonDigestVersion: string,
   sourceObservationDigestVersion: string
@@ -2153,6 +2434,8 @@ canonicalGitSha     = the canonical merge commit
 pendingReview       = cleared
 ```
 
+Only after that state write succeeds may automation clean up `evidence-watch/review/<sourceId>`, idempotently (above).
+
 The accepted observation is installed from that retained snapshot, never rebuilt from a fresh fetch: the finalizer accepts exactly the source condition that passed the freshness gate for that head.
 
 What happens to `comparisonBaseline` depends on the accepted observation.
@@ -2164,10 +2447,11 @@ comparisonBaseline = freshnessAccepted.sourceObservation.fingerprint
 authority          = reviewed-pr
 ```
 
-and the finalizer installs the exact reviewed comparison semantics:
+and the finalizer installs the exact reviewed observation semantics that were bound to the accepted freshness snapshot — never a fresher set read from `main` at reconciliation time:
 
 ```text
 monitorConfigHash
+locatorSetDigest
 parserVersion
 comparisonDigestVersion
 sourceObservationDigestVersion
@@ -2282,7 +2566,7 @@ A PASS is bound to an exact pair — the Pull Request head SHA it ran against an
 - if a scheduled run observes a further upstream revision, it updates the same review Pull Request, updates `reviewHeadSha` and `latestObservedSourceObservationDigest`, invalidates the old `freshnessAccepted`, and human review plus a fresh freshness check are required again;
 - the post-merge finalizer may use `freshnessAccepted` only when `merged PR head SHA == freshnessAccepted.prHeadSha`.
 
-This does not promise that upstream cannot change a moment after the check. The requirement is narrower and enforceable: a Pull Request must not merge against a known stale reviewed fingerprint.
+This does not promise that upstream cannot change a moment after the check. The requirement is narrower and enforceable: a Pull Request must not merge against a known stale reviewed source observation.
 
 ### Operational conditions
 
@@ -2334,7 +2618,19 @@ For every one of them:
 `STATE_MISSING` and `STATE_CORRUPT` mean the expected state for an **already-initialized** source is absent or unreadable. Recovery is explicit and ordered:
 
 1. restore the most recent valid state from the Git history of `evidence-watch/state`;
-2. validate the restored record — schema version, `sourceId`, and `monitorConfigHash`/`parserVersion` compatibility;
+2. validate the restored record for compatibility across **every** semantics field, not just two of them:
+
+```text
+schemaVersion
+sourceId
+monitorConfigHash
+locator monitoring semantics (locatorSetDigest)
+parserVersion
+comparisonDigestVersion
+sourceObservationDigestVersion
+```
+
+   an incompatible digest version, parser version, monitor configuration or locator scope makes the restored record non-comparable — that is `REBASELINE_REQUIRED`, never a fabricated evidence diff;
 3. never derive a new baseline from current upstream merely because the current state was lost.
 
 If no valid baseline can be recovered from that history:
@@ -2434,8 +2730,11 @@ Track:
 - reviews stuck in the `reserved` phase, and `REVIEW_STATE_MISMATCH` / `REVIEW_BRANCH_CONFLICT` occurrences;
 - reviews resolved as `REVIEW_REVERTED_TO_BASELINE`;
 - reviews whose branch is behind `main`, and review-integrity check failures;
-- AI attempts recorded as `unavailable`/`failed` for the current digest and awaiting an explicit `retry-ai`;
-- open `pendingReview` entries whose observed fingerprint has moved past the last reviewed one;
+- AI attempts recorded as `unavailable`/`failed` for the current `sourceObservationDigest` and awaiting an explicit `retry-ai`;
+- open `pendingReview` entries whose observed source condition has moved past the last reviewed one;
+- reviews repinned because their observation semantics changed on the review branch, and scheduled runs that declined to overwrite a pending observation produced under older `main` semantics;
+- deterministic locator monitoring-scope syncs, and locator resolutions that turned actionable;
+- review branches awaiting cleanup after a terminal resolution, and stale historical branches that could not be proven safe (`REVIEW_STATE_MISMATCH`);
 - source freshness check failures on Evidence Watch review Pull Requests, and freshness acceptances that could not be persisted;
 - sources whose accepted observation is a confirmed absence, and `SOURCE_RETURNED` detections;
 - source-condition changes detected with an unchanged content digest (moves, locator failures), and the `diffEvidence` basis each open review is running on;
@@ -2457,7 +2756,7 @@ Track:
 2. durable watcher operational state on the `evidence-watch/state` branch — a `manifest.json` initialization registry plus per-source state — with explicit manual `bootstrap`, `rebaseline`, `reconcile` and `retry-ai` modes (§21);
 3. observe the complete source condition into a compact `SourceObservation` identified by the frozen `sha256-v1` `sourceObservationDigest` over canonical JSON v1, compared against a named `acceptedObservation`; plus monitored material compared through the frozen `sha256-v1` `comparisonDigest` against a `comparisonBaseline` kept distinct from it, with `monitorConfigHash` defined over comparison/identity-affecting monitor configuration only (§8);
 4. diff + deterministic actionable-change classification, including the conditions that do not depend on a content digest — deterministic source absence (`SOURCE_MISSING`), return (`SOURCE_RETURNED`), moves and locator-resolution failures;
-5. source-locator resolution/move detection where configured;
+5. source-locator resolution/move detection where configured, over a derived operational `locatorKey` and a `locatorSetDigest` that separates a canonical monitoring-scope change from an upstream source change;
 6. source→claim impact mapping through canonical provenance indexes;
 7. deterministic structured review payload + Markdown rendering;
 8. one idempotent Draft Pull Request per unresolved source, updated in place as further revisions arrive, carrying the AI Review Summary when AI is available and an explicit unavailable/failed status when it is not;
@@ -2466,8 +2765,8 @@ Track:
 11. no automatic semantic rewriting of canonical content, and no automatic canonical write into `main` for any outcome — watcher runs persist operational state and the review artifact only;
 12. no baseline advancement without a valid resolution, and no silent bootstrap or rebaseline — an initialized source is never re-bootstrapped, and lost state is recovered from state-branch history or by explicit maintainer verification;
 13. serialized compare-and-swap writes to a protected `evidence-watch/state` branch, never force-pushed, with state-sync failure failing closed instead of duplicating a review, and a reserve-first review saga so a crash between the GitHub and state writes resumes instead of opening a second Pull Request;
-14. review branches that preserve maintainer canonical edits — never reset, never force-pushed — with `REVIEW_BRANCH_CONFLICT` failing closed, a new review head SHA for every new upstream digest, and a deterministic `REVIEW_REVERTED_TO_BASELINE` path when upstream returns to the accepted baseline;
-15. a fetch security contract (scheme/private-network/redirect/size/timeout limits) and a `licenseMode` boundary on what source material may reach an external AI provider (§6, §14);
+14. review branches that preserve maintainer canonical edits while a review is unresolved — never reset, never force-pushed — with `REVIEW_BRANCH_CONFLICT` failing closed, a new review head SHA for every new `sourceObservationDigest`, observation semantics pinned per open review and repinned when the branch changes them, idempotent branch cleanup after a terminal resolution with each next event branching afresh from `main`, adoption restricted to an open matching Pull Request, and a deterministic `REVIEW_REVERTED_TO_BASELINE` path when upstream returns to the accepted observation;
+15. a fetch security contract (scheme/private-network/redirect/size/timeout limits), a public-safe boundary that keeps credentials, signed tokens, session identifiers and secret query parameters out of persisted state, digests, review payloads, AI prompts and logs, and a `licenseMode` boundary on what source material may reach an external AI provider (§6, §8, §14);
 16. repository enforcement that keeps populated `evidence/state/**` files off `main` (§20);
 17. no requirement that the public production site reflect pending watcher state before the reviewed merge.
 

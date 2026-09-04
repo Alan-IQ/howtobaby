@@ -55,6 +55,8 @@ interface ClaimSourceRef {
 
 Locator giúp maintainer/user tìm đúng đoạn gốc mà không phải copy cả bài. `paragraphHint` là locator/context đã paraphrase ngắn gọn, không lưu quote verbatim dài (validation cảnh báo `verbatim-locator-hint`).
 
+`SourceLocator` **không có** identifier, và Phase 9 cũng không thêm. Để theo dõi trạng thái resolve của từng locator, Evidence Watch tự derive một `locatorKey` ở mức operational từ các structural field của locator — `sourceId`, `heading`, `section`, `anchor`, `page`, `table`, `figure`, `sourceVersionHint` — cố ý loại `paragraphHint` và `supportNoteKey`, để sửa một hint hay một support note không bao giờ bị đọc thành locator đã đổi. Key đó, cùng `locatorSetDigest` trên tập locator đang được monitor cho một source, là identity vận hành của watcher: không bao giờ được ghi vào canonical file, không bao giờ dùng làm provenance công khai, và không phải field của canonical `SourceLocator` (`EVIDENCE_UPDATE_ENGINE.md`). Một reviewed canonical edit thêm/bớt locator là đổi phạm vi monitor của HowToBaby, không phải upstream source đổi.
+
 Source record còn mang ranh giới approval machine-checkable: `approvalLevel`
 (`approved-primary` / `approved-supporting` / `unapproved`) và `approvedScopes` (các domain được
 duyệt). Chỉ source `approved-primary` đúng scope mới được khai `relationship: primary`/

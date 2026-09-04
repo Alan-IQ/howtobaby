@@ -65,7 +65,7 @@ Tính đúng đắn của Evidence Watch không được phụ thuộc việc gi
 
 ### Watcher operational state không bao giờ nằm trên `main`
 
-Evidence Watch persist state gọn đó — gồm cả các bản `SourceObservation` gọn nhẹ và bản observation mà một freshness acceptance giữ lại, và không bao giờ có source body đã fetch, AI prompt hay output của AI — trên branch non-canonical `evidence-watch/state`, không bao giờ trên `main`. Phase 9 mở rộng gate repository-health/baseline để state đã có nội dung không lọt vào `main` do sơ suất:
+Evidence Watch persist state gọn đó — gồm cả các bản `SourceObservation` gọn nhẹ và bản observation mà một freshness acceptance giữ lại, và không bao giờ có source body đã fetch, AI prompt hay output của AI — trên branch non-canonical `evidence-watch/state`, không bao giờ trên `main`. Branch đó đọc được trên một public repository, nên mọi URL nó lưu đều là identity URL public-safe đã sanitize, và không credential, signed token, session ID, cookie hay secret query parameter nào được ghi vào đó, đưa vào input của digest, hay render vào review payload. Phase 9 mở rộng gate repository-health/baseline để state đã có nội dung không lọt vào `main` do sơ suất:
 
 ```text
 main:

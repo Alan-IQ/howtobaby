@@ -170,7 +170,7 @@ Evidence Watch correctness must not depend on that retention. Its review payload
 
 ### Watcher operational state never lands on `main`
 
-Evidence Watch persists that compact state — including its compact `SourceObservation` records and the observation snapshot a freshness acceptance retains, and never a fetched source body, AI prompt or AI output — on the dedicated non-canonical `evidence-watch/state` branch, never on `main` (`EVIDENCE_UPDATE_ENGINE.md` §21, `REPOSITORY_STRUCTURE.md` §9). Phase 9 extends the repository-health/baseline gate so populated operational state cannot enter `main` by accident:
+Evidence Watch persists that compact state — including its compact `SourceObservation` records and the observation snapshot a freshness acceptance retains, and never a fetched source body, AI prompt or AI output — on the dedicated non-canonical `evidence-watch/state` branch, never on `main` (`EVIDENCE_UPDATE_ENGINE.md` §21, `REPOSITORY_STRUCTURE.md` §9). That branch is readable on a public repository, so every URL it stores is a sanitized public-safe identity URL and no credential material, signed token, session identifier, cookie or secret query parameter may be written into it, hashed into a digest, or rendered into a review payload (`EVIDENCE_UPDATE_ENGINE.md` §8). Phase 9 extends the repository-health/baseline gate so populated operational state cannot enter `main` by accident:
 
 ```text
 main:

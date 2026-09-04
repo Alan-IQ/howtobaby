@@ -133,6 +133,8 @@ interface ClaimSourceRef {
 
 Locators should be specific enough for a maintainer or parent to find the supporting portion without HowToBaby copying large source passages. `paragraphHint` is concise paraphrased locator/context, never a stored long verbatim quotation — validation warns on quote-length hints (`verbatim-locator-hint`).
 
+`SourceLocator` carries **no identifier**, and Phase 9 adds none. To track locator resolution per locator, Evidence Watch derives its own operational `locatorKey` from the structural locator fields — `sourceId`, `heading`, `section`, `anchor`, `page`, `table`, `figure`, `sourceVersionHint` — deliberately excluding `paragraphHint` and `supportNoteKey`, so editing a hint or a support note never reads as a locator change. That key, and the `locatorSetDigest` over the locators currently monitored for a source, are watcher operational identities: never authored into canonical files, never citable as provenance, and never a canonical `SourceLocator` field (`EVIDENCE_UPDATE_ENGINE.md` §8). A reviewed canonical edit that adds or removes a locator changes HowToBaby's monitoring scope, not the upstream source (`EVIDENCE_UPDATE_ENGINE.md` §9).
+
 ## 4. Minimum provenance rules by guidance class
 
 ### `official-guidance`
