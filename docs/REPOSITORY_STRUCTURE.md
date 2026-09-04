@@ -443,7 +443,7 @@ The monitor may persist:
 - parser version;
 - source availability, the public-safe normalized effective URL, the monitored locator set (`locatorSetDigest`) and per-locator resolution states keyed by a derived `locatorKey`;
 - the `acceptedObservation` (the complete accepted source condition) and the last observed observation, kept distinct and compared only through their `sourceObservationDigest`;
-- the `comparisonBaseline` fingerprint — the last accepted **available** material — kept distinct from the accepted observation and compared only through its `comparisonDigest`;
+- the `comparisonBaseline` fingerprint — the last accepted **available** material — kept distinct from the accepted observation, stored with the comparison semantics it was measured under, and compared only through its `comparisonDigest` within those semantics;
 - change classification.
 
 Phase 9 v1 persists that state on one dedicated non-canonical branch:

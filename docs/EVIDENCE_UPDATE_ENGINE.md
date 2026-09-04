@@ -346,6 +346,40 @@ sourceObservationDigestVersion
 
 that makes the stored baselines and a newly observed source condition non-comparable produces `REBASELINE_REQUIRED` (§21) — never a fabricated evidence diff.
 
+### Comparison semantics compatibility
+
+Two `comparisonDigest` values are comparable only when they were produced under the **same comparison semantics**. `comparisonBaseline` therefore records the semantics its fingerprint was produced under (§21):
+
+```ts
+semantics: {
+  monitorConfigHash: string;
+  parserVersion: string;
+  comparisonDigestVersion: string;
+}
+```
+
+Before any content diff, the watcher checks that triple against the semantics the current fingerprint was produced under. When they differ, the two digests measure different things and no content conclusion may be drawn from their inequality:
+
+```text
+comparisonBaseline.semantics != current fingerprint semantics
+→ MUST NOT conclude CONTENT_CHANGED from comparisonDigest alone
+→ MUST NOT claim an exact old → new content diff
+→ content comparison result = non-comparable
+→ diffEvidence = current-source-vs-canonical
+   (or structural-hash-only where the surviving section identities are
+    themselves genuinely comparable)
+```
+
+> **`diffEvidence = "before-after"` is available only when both materials were actually compared under one set of comparison semantics (§12).**
+
+This is not a rare corner. It applies wherever a baseline legitimately outlives a semantics change:
+
+- a review branch that repinned the URL, adapter, selector, canonicalization profile/version or `compareMode`, so the review's observations run under `pendingReview.reviewObservationSemantics` rather than the semantics the stored baseline was taken under (§21);
+- `SOURCE_RETURNED`, where returned material is compared against an older `comparisonBaseline` (§9);
+- an accepted `confirmed-missing` observation, where the retained last-available fingerprint keeps its own older semantics (§21).
+
+This rule and `REBASELINE_REQUIRED` answer different questions and do not replace each other. `REBASELINE_REQUIRED` is about the **stored state** no longer being comparable with the **current canonical monitor configuration**, and it stops classification for that run entirely (above, §21). This rule is about what a single comparison or review may legitimately claim about content when a baseline and a fingerprint were measured differently. Where both apply, `REBASELINE_REQUIRED` wins and no diff is reported at all.
+
 ### Source observation identity — `SourceObservation`
 
 `comparisonDigest` identifies the monitored material. Phase 9 v1 also needs one deterministic identity for the **complete source-side condition** a run observed, because an actionable evidence change does not always change that material — and sometimes there is no material to hash at all.
@@ -587,6 +621,8 @@ Two further conditions are in neither list, and neither is a statement about sou
 
 A content change is not automatically a recommendation change.
 
+`CONTENT_CHANGED` additionally requires that the two fingerprints being compared were measured under the **same comparison semantics** (§8). When the stored `comparisonBaseline.semantics` and the current fingerprint's semantics differ, the content comparison is reported as non-comparable — never as a content change inferred from unequal digests.
+
 Each category resolves deterministically into exactly one operational outcome (§11), which decides what the workflow creates. A source whose state is missing, corrupt or no longer comparable is not classified as a diff result at all (§21).
 
 ### Classification boundary: URL change vs moved source
@@ -700,7 +736,7 @@ current observation.availability = available
 
 `SOURCE_RETURNED` is an **actionable** evidence change (§11). The canonical source may have been accepted as `temporarily-unreachable`, `retired` or `superseded`, and dependent claims may have been adjusted in the review that accepted the absence, so a URL that starts answering again is never automatically `UNCHANGED`.
 
-Where the previous `comparisonBaseline` still exists, the review payload uses it to tell the maintainer whether the returned material differs from the last accepted available material (§21).
+Where the previous `comparisonBaseline` still exists, the review payload uses it to tell the maintainer whether the returned material differs from the last accepted available material (§21) — but only when that baseline's recorded `semantics` still match the semantics the returned material was measured under. When they do not, the review states the content comparison as non-comparable and carries `diffEvidence = "current-source-vs-canonical"` (or `structural-hash-only` where that is genuinely supported) instead of an old → new content diff (§8, §12).
 
 ## 10. Dependency graph
 
@@ -866,7 +902,7 @@ The Draft Pull Request MUST contain:
 - canonical official-source URL;
 - deterministic change classification;
 - the accepted source observation and the latest observed source observation, each identified by its `sourceObservationDigest` (§8), with the source-condition facts that differ;
-- the `comparisonBaseline` fingerprint and the latest observed fingerprint where material is available, each identified by its `comparisonDigest` (§8), with the metadata that differs;
+- the `comparisonBaseline` fingerprint and the latest observed fingerprint where material is available, each identified by its `comparisonDigest` (§8), with the metadata that differs — or an explicit statement that the two were measured under different comparison semantics and are therefore non-comparable;
 - deterministic diff summary, together with its diff basis (`diffEvidence`, below);
 - changed sections, locator states, availability and effective location;
 - impacted claim IDs;
@@ -974,11 +1010,13 @@ diffEvidence:
   | "current-source-vs-canonical"
 ```
 
-`before-after` — the prior normalized material is legally and operationally available:
+`before-after` — the prior normalized material is legally and operationally available **and** both sides were measured under the same comparison semantics (§8):
 
 ```text
 → a bounded exact source delta may be computed and shown
 ```
+
+A semantics mismatch alone disqualifies `before-after`, even when the prior material is fully retained: a delta computed across two different measurements is not a source delta.
 
 `structural-hash-only` — only hashes, section identities and locator states survived:
 
@@ -1688,6 +1726,15 @@ interface EvidenceWatchSourceState {
   // May stay unchanged while acceptedObservation is confirmed-missing.
   comparisonBaseline: {
     fingerprint: SourceFingerprint;
+
+    // The comparison semantics THIS fingerprint was produced under.
+    // Never re-labelled with newer semantics (§8).
+    semantics: {
+      monitorConfigHash: string;
+      parserVersion: string;
+      comparisonDigestVersion: string;
+    };
+
     establishedAt: string;
 
     authority:
@@ -1809,6 +1856,8 @@ the monitored locator set
 ```
 
 That is a change of **review semantics**, not an upstream source change. It is never classified as `CONTENT_CHANGED`, `SOURCE_MOVED` or any other evidence category merely because a configuration hash moved, and it never advances a baseline.
+
+After a repin, the review's observations may no longer be comparable with the stored `comparisonBaseline` at all. The review then reports the content comparison as non-comparable and carries the appropriate `diffEvidence`, rather than presenting a digest inequality across two measurements as a content change (§8, §12).
 
 #### Scheduled runs while a review carries proposed semantics
 
@@ -2296,7 +2345,9 @@ canonical reviewed monitor config
 → generate the first fingerprint
 → build the first complete SourceObservation
 → acceptedObservation     = that observation
-→ comparisonBaseline      = that observation's fingerprint
+→ comparisonBaseline      = that observation's fingerprint, together with
+   the semantics it was produced under (monitorConfigHash, parserVersion,
+   comparisonDigestVersion)
 → lastObservedObservation = that observation
 → authority = bootstrap
 → record the canonical `main` SHA + monitorConfigHash + parserVersion
@@ -2347,6 +2398,8 @@ If that verification finds a material change to source identity, provenance, mea
 ```
 
 A successful manual rebaseline records `authority = manual-rebaseline` together with operational audit metadata equivalent to:
+
+A successful rebaseline writes the new `comparisonBaseline` fingerprint together with the `semantics` it was just measured under (§8); it never keeps an old fingerprint beside new semantics.
 
 ```text
 {
@@ -2443,11 +2496,18 @@ What happens to `comparisonBaseline` depends on the accepted observation.
 **Accepted observation is `available`:**
 
 ```text
-comparisonBaseline = freshnessAccepted.sourceObservation.fingerprint
-authority          = reviewed-pr
+comparisonBaseline.fingerprint = freshnessAccepted.sourceObservation.fingerprint
+comparisonBaseline.semantics   = {
+    monitorConfigHash,
+    parserVersion,
+    comparisonDigestVersion
+  } from freshnessAccepted
+authority                      = reviewed-pr
 ```
 
-and the finalizer installs the exact reviewed observation semantics that were bound to the accepted freshness snapshot — never a fresher set read from `main` at reconciliation time:
+The fingerprint and its `semantics` are written **together, in one update**. A baseline fingerprint is never stored beside semantics it was not produced under (§8).
+
+The finalizer installs the exact reviewed observation semantics that were bound to the accepted freshness snapshot — never a fresher set read from `main` at reconciliation time:
 
 ```text
 monitorConfigHash
@@ -2461,10 +2521,11 @@ sourceObservationDigestVersion
 
 ```text
 acceptedObservation advances to the missing observation
-comparisonBaseline  remains the last accepted AVAILABLE fingerprint
+comparisonBaseline  remains UNTOUCHED — the last accepted AVAILABLE
+                    fingerprint together with its own recorded semantics
 ```
 
-The finalizer MUST NOT fabricate a `SourceFingerprint` for a missing source, and MUST NOT discard the last available one. That is exactly what makes the following two runs correct:
+The finalizer MUST NOT fabricate a `SourceFingerprint` for a missing source, MUST NOT discard the last available one, and MUST NOT re-label that retained fingerprint with the newly reviewed semantics. The state-level pinned semantics may move on with the review; `comparisonBaseline.semantics` keeps describing the measurement that actually produced that fingerprint, which is what later makes a `SOURCE_RETURNED` comparison honest about whether it is comparable at all (§8). That is exactly what makes the following two runs correct:
 
 ```text
 the same missing observation on the next cron
@@ -2472,8 +2533,9 @@ the same missing observation on the next cron
 
 the source later returns
 → SOURCE_RETURNED
-→ the retained comparisonBaseline still supports a useful comparison
-  against the last accepted available material
+→ the retained comparisonBaseline still supports a comparison against the
+   last accepted available material, when the semantics still match (§8);
+   otherwise the review reports it as non-comparable rather than as a diff
 ```
 
 This matters most when the Pull Request is what resolved a `SOURCE_MOVED`, a new URL or selector, a canonicalization change, or any other monitor-configuration change. A successfully reviewed source-move or configuration change must not immediately produce a fake `REBASELINE_REQUIRED` on the next run because operational state still carries the old configuration hash.
@@ -2526,7 +2588,7 @@ equal     → the source condition still matches the reviewed one
               prHeadSha,
               sourceObservation,
               sourceObservationDigest, reviewPayloadDigest,
-              monitorConfigHash, parserVersion,
+              monitorConfigHash, locatorSetDigest, parserVersion,
               comparisonDigestVersion, sourceObservationDigestVersion,
               checkedAt
             }
@@ -2628,6 +2690,8 @@ locator monitoring semantics (locatorSetDigest)
 parserVersion
 comparisonDigestVersion
 sourceObservationDigestVersion
+comparisonBaseline.semantics (present, and consistent with the
+                              fingerprint it accompanies)
 ```
 
    an incompatible digest version, parser version, monitor configuration or locator scope makes the restored record non-comparable — that is `REBASELINE_REQUIRED`, never a fabricated evidence diff;
@@ -2754,7 +2818,7 @@ Track:
 
 1. registry + adapters;
 2. durable watcher operational state on the `evidence-watch/state` branch — a `manifest.json` initialization registry plus per-source state — with explicit manual `bootstrap`, `rebaseline`, `reconcile` and `retry-ai` modes (§21);
-3. observe the complete source condition into a compact `SourceObservation` identified by the frozen `sha256-v1` `sourceObservationDigest` over canonical JSON v1, compared against a named `acceptedObservation`; plus monitored material compared through the frozen `sha256-v1` `comparisonDigest` against a `comparisonBaseline` kept distinct from it, with `monitorConfigHash` defined over comparison/identity-affecting monitor configuration only (§8);
+3. observe the complete source condition into a compact `SourceObservation` identified by the frozen `sha256-v1` `sourceObservationDigest` over canonical JSON v1, compared against a named `acceptedObservation`; plus monitored material compared through the frozen `sha256-v1` `comparisonDigest` against a `comparisonBaseline` kept distinct from it and stored with the comparison semantics it was measured under, so a content diff is attempted only within one set of semantics, with `monitorConfigHash` defined over comparison/identity-affecting monitor configuration only (§8);
 4. diff + deterministic actionable-change classification, including the conditions that do not depend on a content digest — deterministic source absence (`SOURCE_MISSING`), return (`SOURCE_RETURNED`), moves and locator-resolution failures;
 5. source-locator resolution/move detection where configured, over a derived operational `locatorKey` and a `locatorSetDigest` that separates a canonical monitoring-scope change from an upstream source change;
 6. source→claim impact mapping through canonical provenance indexes;
