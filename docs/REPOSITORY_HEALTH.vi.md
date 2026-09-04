@@ -61,6 +61,20 @@ Fixture nhỏ có thể commit nếu cần cho dev/test, license cho phép và n
 
 Watcher có thể tải full document tạm thời. Persistent proof là URL + locator + fingerprint + timestamp + parser version + review/change history; không phải bản copy vĩnh viễn của mọi CDC/AAP/WHO/FDA document.
 
+### Watcher operational state không bao giờ nằm trên `main`
+
+Evidence Watch persist state gọn đó trên branch non-canonical `evidence-watch/state`, không bao giờ trên `main`. Phase 9 mở rộng gate repository-health/baseline để state đã có nội dung không lọt vào `main` do sơ suất:
+
+```text
+main:
+  evidence/state/.gitkeep         → cho phép
+  README nhỏ (optional)           → cho phép nếu có tài liệu hóa
+  evidence/state/manifest.json    → cấm
+  evidence/state/sources/**       → cấm
+```
+
+Branch `evidence-watch/state` được miễn trừ có chủ đích khỏi rule này. Check là deliverable và gate của Phase 9, chưa triển khai trước Phase 9.
+
 ## 10. Backup
 
 Không coi GitHub là bản copy duy nhất. Nên định kỳ mirror/archive canonical repository + Git history ở nơi khác. Generated DB/cache không cần backup nếu rebuild được.

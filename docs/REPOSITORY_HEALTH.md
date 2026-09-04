@@ -165,6 +165,20 @@ Store compact persistent state when useful:
 
 Retain full snapshots only when a specific legal/licensing/audit requirement justifies them and place them in an appropriate restricted store rather than assuming public Git is acceptable.
 
+### Watcher operational state never lands on `main`
+
+Evidence Watch persists that compact state on the dedicated non-canonical `evidence-watch/state` branch, never on `main` (`EVIDENCE_UPDATE_ENGINE.md` §21, `REPOSITORY_STRUCTURE.md` §9). Phase 9 extends the repository-health/baseline gate so populated operational state cannot enter `main` by accident:
+
+```text
+main:
+  evidence/state/.gitkeep         → allowed
+  optional small README           → allowed if documented
+  evidence/state/manifest.json    → forbidden
+  evidence/state/sources/**       → forbidden
+```
+
+The `evidence-watch/state` branch is intentionally exempt from this `main`-branch content rule. The check is a Phase 9 deliverable and gate (`IMPLEMENTATION_ROADMAP.md`); it is not implemented before Phase 9.
+
 ## 11. Backup and portability
 
 GitHub hosting is not the only copy of canonical knowledge. Periodically maintain a restorable mirror/archive of the repository and Git history outside the primary GitHub repository. Generated caches/databases need not be backed up if they are reproducible.
