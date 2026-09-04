@@ -114,7 +114,7 @@ howtobaby/
 │  ├─ diff/
 │  ├─ dependency-graph/
 │  ├─ reports/
-│  ├─ state/                        # Fingerprints/metadata only where appropriate
+│  ├─ state/                        # Path convention only on `main`; state files live on evidence-watch/state
 │  ├─ cache/                        # Temporary fetched material; gitignored
 │  └─ schemas/
 │
@@ -441,8 +441,18 @@ The monitor may persist:
 - monitored-section hashes;
 - check timestamps;
 - parser version;
-- prior normalized fingerprints;
+- the `comparisonBaseline` fingerprint and the last observed normalized fingerprint, kept distinct;
 - change classification.
+
+Phase 9 v1 persists that state on one dedicated non-canonical branch:
+
+```text
+evidence-watch/state
+  evidence/state/manifest.json
+  evidence/state/sources/<sourceId>.json
+```
+
+That branch is the authoritative durable store — GitHub Actions artifacts/caches are a transient optimization only. It is never merged into `main`, never opened as a review Pull Request, and never triggers a deployment; it carries compact metadata and hashes only, never fetched source bodies, secrets, AI prompts or long excerpts. On `main`, `evidence/state/` stays the empty placeholder directory that owns the path convention (§2). Evidence review branches are a separate namespace, `evidence-watch/review/<sourceId>`, and are never used as the state store. The full state schema and its transitions are `EVIDENCE_UPDATE_ENGINE.md` §21.
 
 Everything in that list is **watcher operational state**: Evidence Watch owns it, a watcher run may refresh it automatically, and it is not canonical product knowledge. `evidence/state/` and `evidence/cache/` are therefore never canonical source metadata — canonical `SourceRecord` values live in `packages/knowledge` and change only through the reviewed merge path (`EVIDENCE_UPDATE_ENGINE.md` §11, §13). A watcher run must not write canonical authored files to `main`, and a value that exists only in watcher state is never citable as public provenance.
 
@@ -503,7 +513,9 @@ Evidence Watch, separate from `pipeline.yml`. The file is a manual-only placehol
 Behaviour it must implement at Phase 9:
 
 - deterministic fetch, fingerprint, diff, classification and impact analysis, with no dependency on AI;
-- every actionable evidence change creates or updates **exactly one** Draft Pull Request, idempotently, carrying the deterministic review payload plus the AI Review Summary or an explicit unavailable/failed status;
+- durable watcher operational state on the `evidence-watch/state` branch (§9), with explicit manual `bootstrap` and `rebaseline` dispatch modes — a scheduled run never establishes or replaces a baseline by itself;
+- every unresolved source maps to exactly one `evidence-watch/review/<sourceId>` branch and one Draft Pull Request, idempotently, carrying the deterministic review payload plus the AI Review Summary or an explicit unavailable/failed status, and further upstream revisions update that same Pull Request;
+- a required deterministic source freshness check blocks merging an Evidence Watch review Pull Request whose source moved past the reviewed fingerprint;
 - an operational failure (fetch, parser, authentication, adapter) may fail the workflow and optionally open or update a GitHub Issue;
 - GitHub Issues are for operational failures only — never a substitute for the evidence-review Draft Pull Request, and never created for `UNCHANGED` or deterministic metadata-only results;
 - no canonical medical prose is written by the workflow, no canonical authored file (including `SourceRecord` metadata) is written to `main` outside the reviewed path, and the release review path is never bypassed.

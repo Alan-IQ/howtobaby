@@ -77,7 +77,7 @@ Date fields carry three distinct meanings and must never be conflated:
 
 - `publishedAt` — the publication date, only when the authority provides one and it can be determined;
 - `updatedAt` — the source's current revision/update date, only when the authority provides one (CDC "last reviewed/updated", WHO fact-sheet revision date, …). Authorities label these dates differently, so HowToBaby never calls every date "Published";
-- `lastVerifiedAt` — the date HowToBaby's maintainer/review workflow actually opened, checked and confirmed the source. This is HowToBaby's verification, entirely separate from the source dates: it is **not** a crawl/fetch time (Evidence Watch snapshots record their own `fetchedAt`) and **not** a deploy/build time;
+- `lastVerifiedAt` — the date HowToBaby's maintainer/review workflow actually opened, checked and confirmed the source. This is HowToBaby's verification, entirely separate from the source dates: it is **not** a crawl/fetch time (Evidence Watch snapshots record their own `fetchedAt`) and **not** a deploy/build time. When an Evidence Watch review resolves, `lastVerifiedAt` and `verifiedBy` are updated by the maintainer inside that reviewed Pull Request, together with the source's lifecycle state — never by the watcher, and never by closing the Pull Request (`EVIDENCE_UPDATE_ENGINE.md` §21);
 - `verifiedBy` — **who** performed that verification: `maintainer` or `ai-assisted`. A date alone can never imply a human sign-off, and AI-assisted retrieval is a legitimate recorded state (CLAUDE.md §5) that validation keeps out of the clinician-asserting review states (GUIDANCE_CONTENT_CONTRACT.md §14).
 
 An authority's calendar date is copied **exactly as the authority prints it to readers**, and never

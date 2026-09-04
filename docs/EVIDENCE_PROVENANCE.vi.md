@@ -171,7 +171,7 @@ Ba trường ngày trong `SourceRecord` mang ba nghĩa khác nhau, không đư�
 
 - `publishedAt` = ngày xuất bản, chỉ khi authority cung cấp và xác định được;
 - `updatedAt` = ngày revision/cập nhật hiện tại của nguồn, chỉ khi authority cung cấp (CDC "last reviewed/updated", ngày revision fact sheet WHO, …) — mỗi authority gọi tên ngày khác nhau nên không gọi mọi ngày là "Published";
-- `lastVerifiedAt` = ngày maintainer/review workflow của HowToBaby thực sự mở, kiểm tra và xác nhận nguồn — hoàn toàn khác với ngày của nguồn; **không phải** thời điểm crawl/fetch (snapshot Evidence Watch có `fetchedAt` riêng) và **không phải** thời điểm deploy/build.
+- `lastVerifiedAt` = ngày maintainer/review workflow của HowToBaby thực sự mở, kiểm tra và xác nhận nguồn — hoàn toàn khác với ngày của nguồn; **không phải** thời điểm crawl/fetch (snapshot Evidence Watch có `fetchedAt` riêng) và **không phải** thời điểm deploy/build. Khi một review của Evidence Watch được resolve, `lastVerifiedAt` và `verifiedBy` do maintainer cập nhật ngay trong reviewed Pull Request đó cùng với lifecycle state của tài liệu — không phải do watcher, và không phải bằng cách close PR.
 
 `publishedAt` và `updatedAt` là **hai metadata upstream khác nhau**, không bao giờ suy đoán từ nhau: thiếu `publishedAt` không lấy `updatedAt` bù, thiếu `updatedAt` không lấy `publishedAt` bù, và không đoán từ crawl, dòng copyright hay ngày deploy. Cả hai được sao đúng từ trang nguồn gốc vào YAML canonical và đi nguyên vẹn qua mọi read model dẫn xuất (`knowledge.sqlite`, `source-public-index.json`, `PublicSourceEntry`) tới evidence presenters — không UI layer nào giữ bản sao ngày nguồn riêng.
 

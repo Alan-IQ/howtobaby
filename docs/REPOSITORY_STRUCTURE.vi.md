@@ -91,7 +91,7 @@ sleep.safe.back_to_sleep
 
 ## 7. Evidence monitor state
 
-Có thể lưu ETag, Last-Modified, hash, section hash, check time, parser version và change classification. Tất cả những thứ đó là **watcher operational state**: do Evidence Watch sở hữu, một lần chạy watcher được tự refresh, và không phải canonical product knowledge. Vì vậy `evidence/state/` và `evidence/cache/` không bao giờ là canonical source metadata — giá trị canonical của `SourceRecord` nằm ở `packages/knowledge` và chỉ đổi qua reviewed merge path (`EVIDENCE_UPDATE_ENGINE.md`). Một lần chạy watcher không được ghi canonical authored file vào `main`, và giá trị chỉ tồn tại trong watcher state không bao giờ được dùng làm provenance công khai. Với source có copyright/restricted, ưu tiên:
+Có thể lưu ETag, Last-Modified, hash, section hash, check time, parser version và change classification. Phase 9 v1 persist state đó trên đúng một branch non-canonical dành riêng `evidence-watch/state` (`evidence/state/manifest.json`, `evidence/state/sources/<sourceId>.json`); artifact/cache chỉ là transient optimization. Branch đó không merge vào `main`, không mở thành review PR, không trigger deployment, chỉ chứa metadata/hash gọn — không chứa source body, secret, AI prompt hay excerpt dài. Trên `main`, `evidence/state/` chỉ là thư mục placeholder rỗng giữ quy ước đường dẫn. Review branch là namespace riêng `evidence-watch/review/<sourceId>` và không bao giờ dùng làm state store. Schema và transition đầy đủ ở `EVIDENCE_UPDATE_ENGINE.md`. Tất cả những thứ đó là **watcher operational state**: do Evidence Watch sở hữu, một lần chạy watcher được tự refresh, và không phải canonical product knowledge. Vì vậy `evidence/state/` và `evidence/cache/` không bao giờ là canonical source metadata — giá trị canonical của `SourceRecord` nằm ở `packages/knowledge` và chỉ đổi qua reviewed merge path (`EVIDENCE_UPDATE_ENGINE.md`). Một lần chạy watcher không được ghi canonical authored file vào `main`, và giá trị chỉ tồn tại trong watcher state không bao giờ được dùng làm provenance công khai. Với source có copyright/restricted, ưu tiên:
 
 ```text
 metadata + URL + locator + hash + temporary cache
@@ -119,7 +119,9 @@ Git history hỗ trợ audit nhưng không thay thế provenance schema.
 `evidence-watch.yml` là workflow riêng của Evidence Watch. Hiện tại file mới là placeholder manual-only; target của Phase 9 là workflow scheduled + manual dispatch chạy deterministic source monitoring theo `EVIDENCE_UPDATE_ENGINE.md`:
 
 - fetch/fingerprint/diff/classification/impact analysis deterministic, không phụ thuộc AI;
-- mỗi actionable evidence change tạo hoặc cập nhật **đúng một** Draft Pull Request, idempotent, mang deterministic review payload kèm AI Review Summary hoặc trạng thái unavailable/failed rõ ràng;
+- watcher operational state bền trên branch `evidence-watch/state`, có manual dispatch mode `bootstrap` và `rebaseline` tường minh — scheduled run không bao giờ tự lập hay thay baseline;
+- mỗi source chưa resolve ứng với đúng một branch `evidence-watch/review/<sourceId>` và một Draft Pull Request, idempotent, mang deterministic review payload kèm AI Review Summary hoặc trạng thái unavailable/failed rõ ràng, revision upstream tiếp theo cập nhật chính PR đó;
+- một required deterministic source freshness check chặn merge khi source đã đi quá fingerprint đã review;
 - operational failure (fetch, parser, authentication, adapter) có thể fail workflow và optionally mở/cập nhật GitHub Issue;
 - GitHub Issue **chỉ** dành cho operational failure — không bao giờ thay thế Draft PR review, và không tạo cho `UNCHANGED` hay deterministic metadata-only;
 - workflow không viết canonical medical prose, không ghi canonical authored file (kể cả `SourceRecord` metadata) vào `main` ngoài reviewed path, và không bypass release review path.

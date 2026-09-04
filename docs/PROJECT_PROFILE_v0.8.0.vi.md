@@ -237,7 +237,7 @@ Xem `DOCS_INDEX.md`. Project Profile chỉ giữ product-level contract; detaile
 - `EVIDENCE_PROVENANCE.md` là canonical contract cho `SourceRecord → ClaimSourceRef/Locator → Claim → UI`, Evidence Drawer, page References, original-source link và audit history.
 - `official-guidance` phải có approved primary/direct source.
 - Citation ở card, Evidence Drawer, References cuối page, print và guidance-linked Tool phải sinh từ cùng provenance graph; không maintain nhiều list riêng.
-- Evidence Watch khi phát hiện source đổi chỉ flag/review, không xóa provenance cũ hoặc tự publish medical wording mới. Watcher operational state được tự cập nhật; canonical `SourceRecord` metadata thì không, nó chỉ đổi qua reviewed merge path — và một Draft PR đang chờ review, tự nó, không đổi gì trên public site.
+- Evidence Watch khi phát hiện source đổi chỉ flag/review, không xóa provenance cũ hoặc tự publish medical wording mới. Watcher operational state nằm trên branch non-canonical riêng và được tự cập nhật; canonical `SourceRecord` metadata thì không, nó chỉ đổi qua reviewed merge path — và một Draft PR đang chờ review, tự nó, không đổi gì trên public site.
 - Full HTML/PDF tải để diff nằm temporary cache/gitignored theo mặc định; public repo chỉ giữ metadata/hash/locator cần thiết trừ khi reuse rights cho phép.
 
 ## Bổ sung v0.7.0 — repository/storage health

@@ -230,7 +230,10 @@ Deliverables:
 - source-locator resolution/move detection where configured;
 - source→claim reverse dependency index reused from canonical provenance;
 - temporary evidence cache + metadata/fingerprint persistence policy;
-- watcher operational state persistence kept separate from canonical knowledge, so a run refreshes fingerprints/check metadata without writing canonical `SourceRecord` metadata — or any other canonical authored file — to `main` (`EVIDENCE_UPDATE_ENGINE.md` §11, §13);
+- durable watcher operational state on the dedicated non-canonical `evidence-watch/state` branch (`evidence/state/manifest.json`, `evidence/state/sources/<sourceId>.json`), kept separate from canonical knowledge, so a run refreshes fingerprints/check metadata without writing canonical `SourceRecord` metadata — or any other canonical authored file — to `main` (`EVIDENCE_UPDATE_ENGINE.md` §11, §13, §21);
+- per-source state with a `comparisonBaseline` distinct from `lastObservedFingerprint`, pinned `monitorConfigHash`/`parserVersion`, and `pendingReview` tracking including `lastAiReviewedFingerprintHash`;
+- explicit manual `bootstrap` and `rebaseline` dispatch modes, separate from the scheduled run;
+- a deterministic pre-merge source freshness check wired as a required status check on Evidence Watch review Pull Requests;
 - deterministic actionable-change classification separating unchanged, deterministic metadata-only, actionable evidence change, and operational failure;
 - deterministic structured review payload (JSON) + deterministic Markdown renderer;
 - automatic idempotent Draft Pull Request creation/update for every actionable evidence change;
@@ -246,7 +249,7 @@ Gate:
 
 - unchanged sources do not create noise;
 - a test source change flags only dependent claims/routes/tools;
-- every actionable evidence change creates or updates exactly one Draft Pull Request, and repeated runs do not duplicate branches or Pull Requests;
+- every actionable evidence change creates or updates exactly one Draft Pull Request for that `sourceId`, and repeated runs do not duplicate branches or Pull Requests;
 - AI runs only after deterministic actionable-change detection and impact analysis;
 - AI failure or absence never suppresses the deterministic review artifact, and never marks a changed source unchanged;
 - an operational failure never masquerades as an evidence-change Pull Request;
@@ -255,6 +258,13 @@ Gate:
 - a deterministic metadata-only result creates no Pull Request, no Issue and no canonical write to `main`: a canonical `SourceRecord` correction it reveals is either left for a maintainer's normal reviewed Pull Request or promoted to an actionable evidence change;
 - watcher operational state and canonical knowledge state stay distinct: nothing held only in watcher state/cache is treated as canonical source metadata or as public provenance;
 - the pending Draft Pull Request is the Phase 9 maintainer-facing pending-review signal; the public production site is not required to reflect pending watcher state before the reviewed merge, and no backend or runtime freshness service is introduced to publish it;
+- the dedicated `evidence-watch/state` branch exists and is used as the durable operational store; artifacts/caches are transient only, and that branch never merges into `main`, never opens as a review Pull Request and never deploys;
+- initial bootstrap is explicit and tested; lost or corrupt state never silently rebaselines and never reports `UNCHANGED`;
+- a monitor-config or parser mismatch raises `REBASELINE_REQUIRED` and requires an explicit manual rebaseline, which verifies source identity/locator and aborts into an actionable evidence change when it finds a material change;
+- `comparisonBaseline` and `lastObservedFingerprint` are separate, and an actionable detection never advances `comparisonBaseline` before a valid resolution;
+- exactly one open review Pull Request exists per `sourceId`, repeated upstream revisions update that same Pull Request on the cumulative `comparisonBaseline → latest observed` diff, and an unchanged pending fingerprint triggers no further AI call;
+- a merged reviewed Pull Request advances the baseline only to the fingerprint that was actually reviewed, and a closed-unmerged Pull Request advances nothing;
+- the Evidence Watch Pull Request freshness check blocks a merge against a known stale reviewed fingerprint;
 - an unavailable or failed AI review is reported as such and carries no synthesized semantic assessment or summary;
 - a detected source change never mutates `Claim.reviewStatus`; dependent claims carry only the derived review signal from `SourceRecord.status`;
 - `main` enforcement is configured and verified: the Evidence Watch identity cannot push semantic evidence changes directly to `main`, cannot bypass the Draft PR review path, and cannot bypass required approval/status checks, so only a reviewed merge reaches the production pipeline;
