@@ -216,7 +216,7 @@ Gate:
 
 ## Phase 9 — Evidence Watch v1
 
-**Goal:** automate source-change detection without autonomous medical rewriting.
+**Goal:** automate source-change detection and route every actionable change through the mandatory Draft-PR review path, without autonomous medical rewriting. Contract: `EVIDENCE_UPDATE_ENGINE.md`.
 
 Deliverables:
 
@@ -230,14 +230,26 @@ Deliverables:
 - source-locator resolution/move detection where configured;
 - source→claim reverse dependency index reused from canonical provenance;
 - temporary evidence cache + metadata/fingerprint persistence policy;
-- Markdown/JSON change reports;
-- scheduled GitHub Actions workflow.
+- deterministic actionable-change classification separating unchanged, deterministic metadata-only, actionable evidence change, and operational failure;
+- deterministic structured review payload (JSON) + deterministic Markdown renderer;
+- automatic idempotent Draft Pull Request creation/update for every actionable evidence change;
+- structured, versioned, schema-validated AI Review Summary rendered into that Pull Request;
+- AI failure fallback that still creates/updates the deterministic Draft PR with an explicit unavailable/failed status;
+- Pull Request/branch deduplication and workflow concurrency control;
+- least-privilege GitHub Actions permissions and secret handling for the AI provider credential;
+- human-review/merge boundary tests;
+- scheduled/manual GitHub Actions workflow.
 
 Gate:
 
 - unchanged sources do not create noise;
 - a test source change flags only dependent claims/routes/tools;
-- semantic changes cannot auto-deploy canonical medical prose;
+- every actionable evidence change creates or updates exactly one Draft Pull Request, and repeated runs do not duplicate branches or Pull Requests;
+- AI runs only after deterministic actionable-change detection and impact analysis;
+- AI failure or absence never suppresses the deterministic review artifact, and never marks a changed source unchanged;
+- an operational failure never masquerades as an evidence-change Pull Request;
+- AI cannot lower deterministic policy risk, satisfy a required human/clinical review, approve, merge, or publish;
+- semantic changes cannot auto-deploy canonical medical prose and cannot reach production before required human review and merge;
 - changed source preserves prior provenance/history and enters review-required workflow;
 - watcher does not commit full third-party source documents by default.
 
@@ -296,7 +308,7 @@ Candidate work, not required for launch:
 - optional logs/reminders;
 - multi-child/sync;
 - real-time recall alerts;
-- Evidence Watch AI-assisted semantic diff/draft PRs;
+- AI-generated canonical EN/VI patch drafting on existing Evidence Watch review PR branches;
 - source-grounded Ask HowToBaby;
 - additional evidence domains/locales.
 

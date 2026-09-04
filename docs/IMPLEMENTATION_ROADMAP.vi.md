@@ -40,7 +40,9 @@ Tool Registry/Hub/Shell, shared AudioSession, Lullaby Player, Ambient/Frequency 
 
 ## Phase 9 — Evidence Watch v1
 
-Source monitor registry, adapters CDC/FDA/AAP/WHO phù hợp, hash/section diff, source→claim impact, reports, scheduled GitHub Actions. Semantic change không auto-deploy.
+Source monitor registry, adapters CDC/FDA/AAP/WHO phù hợp, hash/section diff, source→claim impact, deterministic actionable-change classification, deterministic structured review payload + Markdown renderer, Draft Pull Request tự động và idempotent cho mọi actionable evidence change, AI Review Summary có schema và version, fallback khi AI unavailable/failed, dedup/concurrency control, least-privilege GitHub Actions permissions, human-review/merge boundary tests, scheduled/manual GitHub Actions. Contract: `EVIDENCE_UPDATE_ENGINE.md`.
+
+Gate: mỗi actionable evidence change tạo/cập nhật đúng một Draft PR; AI chỉ chạy sau deterministic detection; AI failure không suppress deterministic review artifact; operational failure không giả thành evidence-change PR; AI không hạ được policy risk, không approve/merge/publish; semantic medical change không tới production trước human review + merge.
 
 ## Phase 10 — Trust/SEO/print/accessibility
 
@@ -52,7 +54,7 @@ Full source audit, content version freeze, EN/VI parity, tests/build, rollback, 
 
 ## Phase 12 — Post-v1
 
-PWA/offline, more Tools, logs/reminders, multi-child/sync, recalls, AI-assisted Evidence Watch, Ask HowToBaby, additional domains/locales.
+PWA/offline, more Tools, logs/reminders, multi-child/sync, recalls, AI draft canonical EN/VI patch trên Evidence Watch review PR branch có sẵn, Ask HowToBaby, additional domains/locales.
 
 ## Cross-phase rules
 
@@ -71,7 +73,7 @@ PWA/offline, more Tools, logs/reminders, multi-child/sync, recalls, AI-assisted 
 - **Phase 4–6:** domain claim khi ship phải mở được provenance/original source, không đợi tới cuối project mới gắn citation.
 - **Phase 7:** Now reuse cùng claim IDs + provenance với public pages.
 - **Phase 8:** guidance-linked Tool reuse claim provenance, không source URL riêng.
-- **Phase 9:** watcher detect locator move, dùng canonical reverse index, cache full source temporary/gitignored và giữ history khi source đổi.
+- **Phase 9:** watcher detect locator move, dùng canonical reverse index, cache full source temporary/gitignored, giữ history khi source đổi, và đưa mọi actionable change qua canonical Draft-PR review path.
 - **Phase 10:** hoàn thiện `/sources`, `/evidence/...`, revision history và trust UX.
 - **Phase 11:** mọi release-approved health/safety claim phải pass provenance + original-source-link/status validation.
 
