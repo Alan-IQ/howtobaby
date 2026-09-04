@@ -97,7 +97,7 @@ The platform architecture must support an internal **Evidence Update Engine** th
 - prepare review artifacts or pull requests;
 - publish only after the required validation/review gate.
 
-The change-detection core should be deterministic and rule-based. AI is optional assistance, never the authority or approval mechanism.
+The change-detection core is deterministic and rule-based and must keep working with no AI configured. AI assists the review of a detected change; it is never the authority or approval mechanism.
 
 Detailed contract: `EVIDENCE_UPDATE_ENGINE.md`.
 
@@ -335,16 +335,16 @@ Core state transition:
 source checked
   → unchanged: record check
   → changed: create diff + identify dependent claims
-  → dependent claims become review-required
+  → dependent claims carry a derived review signal
   → reviewer approves/revises canonical English
   → VI parity/update
   → validation/build
   → deploy
 ```
 
-AI may summarize diffs or draft proposed edits, but it cannot turn a detected source change directly into production medical guidance without the required review gate.
+AI reviews and explains a detected change inside that review path, but it cannot turn a detected source change directly into production medical guidance without the required review gate.
 
-Monitoring state must align with public provenance: a detected material source change can mark the source/claims `changed-review-required`, but it must not erase prior provenance or silently replace the parent-facing claim. Full fetched third-party documents are temporary monitoring inputs by default, not canonical Git content.
+Monitoring state must align with public provenance: a detected material source change can move the source to `changed-review-required` and propagate a derived review signal to its dependent claims, but it must not erase prior provenance, write claim review state, or silently replace the parent-facing claim. Full fetched third-party documents are temporary monitoring inputs by default, not canonical Git content.
 
 Detailed contracts: `EVIDENCE_UPDATE_ENGINE.md` and `EVIDENCE_PROVENANCE.md`.
 
@@ -366,11 +366,11 @@ Tools may eventually participate in paid plans only when core safety/evidence ac
 
 No live AI medical advice in v1.
 
-Future AI may:
+Evidence Watch AI Review Summary is a first-class Phase 9 review capability: it explains a deterministically detected source change inside the mandatory Draft-PR review path. Deterministic Evidence Watch must keep working when AI is unavailable or fails (`EVIDENCE_UPDATE_ENGINE.md` §14–§16).
 
-- assist source-change triage;
-- summarize diffs;
-- propose claim mappings/drafts;
+Later AI capabilities may:
+
+- propose claim mappings and draft canonical EN/VI patches on an existing Evidence Watch review PR branch;
 - assist translation with parity checks;
 - power a source-grounded assistant after the content graph is stable.
 
@@ -448,7 +448,8 @@ Those belong to their specialist documents so the product contract stays stable 
 | Public app remains static-first | Retained | Privacy, performance, simple hosting. |
 | Scheduled evidence monitoring is allowed outside request-time runtime | Accepted | A source watcher is operational infrastructure, not a user-profile backend. |
 | Evidence change detection should work without AI | Accepted | Deterministic monitoring is safer, auditable, cheaper, and sufficient for change detection. |
-| AI is optional for semantic triage/drafting | Accepted | Useful acceleration without making AI the evidence authority. |
+| AI Review Summary is a first-class Phase 9 capability, not optional assistance | Revised in v0.8.0 | Supersedes “AI is optional for semantic triage/drafting”. AI review belongs inside the mandatory Draft-PR path, while deterministic Evidence Watch still works with no AI configured and an unavailable/failed AI review never breaks it or fabricates an assessment. |
+| AI-generated canonical EN/VI patch drafting remains a later/post-v1 capability | Revised in v0.8.0 | Explaining a deterministically detected change is Phase 9 work; drafting canonical medical prose is separate and later. |
 | Source changes do not silently auto-publish semantic medical changes | Accepted | Protects safety and traceability. |
 | 432 Hz/audio tools may exist without therapeutic claims | Accepted | Utility value is separable from evidence of health benefit. |
 | Detailed contracts are split into specialist docs | Accepted | Reduces duplication and drift in Project Profile. |

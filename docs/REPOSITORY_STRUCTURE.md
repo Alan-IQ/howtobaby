@@ -158,7 +158,7 @@ howtobaby/
 │  ├─ PULL_REQUEST_TEMPLATE.md
 │  └─ workflows/
 │     ├─ pipeline.yml               # Primary pipeline: repository-health ∥ quality-build → deploy-production
-│     └─ evidence-watch.yml         # Separate manual-only Phase 9 concern
+│     └─ evidence-watch.yml         # Evidence Watch: manual-only placeholder today; scheduled + manual at Phase 9
 │
 ├─ LICENSE.md                     # Multi-license scope map
 ├─ LICENSES/                      # Full standard license texts
@@ -483,7 +483,17 @@ The single primary workflow. One run per push to `main`, pull request, weekly sc
 
 ### `evidence-watch.yml`
 
-Runs source monitoring and creates reports/issues/PRs. It must not bypass release review.
+Evidence Watch, separate from `pipeline.yml`. The file is a manual-only placeholder today; the Phase 9 target is a scheduled and manually dispatchable workflow running deterministic source monitoring. Canonical contract: `EVIDENCE_UPDATE_ENGINE.md`.
+
+Behaviour it must implement at Phase 9:
+
+- deterministic fetch, fingerprint, diff, classification and impact analysis, with no dependency on AI;
+- every actionable evidence change creates or updates **exactly one** Draft Pull Request, idempotently, carrying the deterministic review payload plus the AI Review Summary or an explicit unavailable/failed status;
+- an operational failure (fetch, parser, authentication, adapter) may fail the workflow and optionally open or update a GitHub Issue;
+- GitHub Issues are for operational failures only — never a substitute for the evidence-review Draft Pull Request, and never created for `UNCHANGED` or deterministic metadata-only results;
+- no canonical medical prose is written by the workflow, and the release review path is never bypassed.
+
+Only a reviewed merge into `main` enters `pipeline.yml`. The Evidence Watch identity must not be able to push semantic evidence changes to `main` or bypass required review/checks; Phase 9 configures the ruleset/branch protection that enforces this (`EVIDENCE_UPDATE_ENGINE.md` §20).
 
 ## 13. Initial implementation simplification
 

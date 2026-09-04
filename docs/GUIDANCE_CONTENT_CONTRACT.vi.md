@@ -151,6 +151,8 @@ Seed registry tối thiểu phải bao phủ các nguồn hiện hành cần thi
 source superseded → dependent claims review-required → affected pages/tools flag → verify replacement → revise/approve
 ```
 
+`review-required` trong luồng này là điều kiện review suy ra từ `SourceRecord.status` cộng source→claim dependency mapping (`EVIDENCE_UPDATE_ENGINE.md`), không phải một giá trị của `reviewStatus`. Automated monitoring không bao giờ ghi `Claim.reviewStatus`; review state của chính claim chỉ đổi trong một reviewed canonical content change.
+
 ## Trạng thái rà soát phải phản ánh đúng thực tế
 
 Không ghi `clinically-reviewed` nếu chưa thực sự có người đủ chuyên môn thực hiện clinical review. Nội dung diễn đạt lại trung thành từ hướng dẫn chính thức có thể ở trạng thái `source-verified`; nội dung tổng hợp làm thay đổi cách diễn giải/chống chỉ định hoặc dùng wording `urgent`/`emergency` thường cần `clinical-review-required`, trừ khi nó ánh xạ trực tiếp và rõ ràng từ chỉ dẫn chính thức.

@@ -58,7 +58,7 @@ Không compliance scoring, không tự diagnosis, không guilt-based streak. Loc
 
 Tool có health/safety guidance chỉ tham chiếu canonical `guidanceClaimIds`; Tool không hard-code medical prose hoặc source URL riêng. Khi render claim, Tool kế thừa cùng `ClaimSourceRef/Locator`, SourceChip/EvidenceDrawer và source status như guidance page.
 
-Nếu source/claim vào trạng thái `changed-review-required`, safety-sensitive Tool phải theo release/safety gate của claim thay vì tiếp tục dùng stale copy ẩn.
+Nếu một source mà claim phụ thuộc vào trạng thái `changed-review-required` và claim đó thuộc nhóm safety-sensitive, Tool phải theo release/safety gate của claim thay vì tiếp tục dùng stale copy ẩn.
 
 ## Theme independence — v0.6.0
 

@@ -38,7 +38,7 @@ howtobaby/
 ├─ scripts/
 ├─ docs/
 ├─ tests/
-└─ .github/workflows/            # pipeline.yml (repository-health ∥ quality-build → deploy-production) + evidence-watch.yml
+└─ .github/workflows/            # pipeline.yml (repository-health ∥ quality-build → deploy-production) + evidence-watch.yml (placeholder manual-only, target Phase 9: scheduled + manual)
 ```
 
 ## 3. Ownership quan trọng
@@ -112,7 +112,21 @@ Content PR nên cho reviewer nhìn được cùng lúc:
 
 Git history hỗ trợ audit nhưng không thay thế provenance schema.
 
-## 9. Definition of done
+## 9. Workflow ownership
+
+`pipeline.yml` là workflow chính: `repository-health` ∥ `quality-build` → `deploy-production`, deploy chỉ chạy trên `main`.
+
+`evidence-watch.yml` là workflow riêng của Evidence Watch. Hiện tại file mới là placeholder manual-only; target của Phase 9 là workflow scheduled + manual dispatch chạy deterministic source monitoring theo `EVIDENCE_UPDATE_ENGINE.md`:
+
+- fetch/fingerprint/diff/classification/impact analysis deterministic, không phụ thuộc AI;
+- mỗi actionable evidence change tạo hoặc cập nhật **đúng một** Draft Pull Request, idempotent, mang deterministic review payload kèm AI Review Summary hoặc trạng thái unavailable/failed rõ ràng;
+- operational failure (fetch, parser, authentication, adapter) có thể fail workflow và optionally mở/cập nhật GitHub Issue;
+- GitHub Issue **chỉ** dành cho operational failure — không bao giờ thay thế Draft PR review, và không tạo cho `UNCHANGED` hay deterministic metadata-only;
+- workflow không viết canonical medical prose và không bypass release review path.
+
+Chỉ merge đã review vào `main` mới đi vào `pipeline.yml`. Evidence Watch identity không được push semantic evidence change vào `main` hay bypass required review/check; Phase 9 cấu hình ruleset/branch protection để enforce điều này.
+
+## 10. Definition of done
 
 Repo baseline đạt khi mỗi loại artifact có owner rõ, medical prose không nằm trong UI/logic, source/claim refs validate được, cache external source không lọt vào Git, generated files rebuild được, dependency không vòng và public build không lộ child data/internal evidence cache.
 

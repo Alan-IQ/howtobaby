@@ -70,6 +70,14 @@ Canonicalization loại navigation/script/dynamic noise nhưng không được l
 
 Content change không đồng nghĩa recommendation change. Mỗi category phải quy về đúng một trong bốn operational outcome bên dưới.
 
+### Ranh giới phân loại: URL đổi hay source đã move
+
+`SOURCE_MOVED` nghĩa là vị trí của tài liệu thực sự đã thay đổi. Đây **luôn** là actionable evidence change và không bao giờ là metadata-only outcome.
+
+Nếu URL khác nhau nhưng một deterministic rule đã duyệt chứng minh được rằng URL đó **giữ nguyên identity** — canonical URL normalization, redirect protocol/host ổn định, hoặc khác nhau ở tracking parameter — vẫn resolve đúng phần nội dung được monitor, và source identity cùng provenance không đổi, thì phân loại là `METADATA_CHANGED`, không phải `SOURCE_MOVED`.
+
+Rule này chỉ chạy một chiều: chứng minh deterministic giữ cho một khác biệt URL không rơi vào `SOURCE_MOVED`. Không có cơ chế nào được hạ một kết quả `SOURCE_MOVED` xuống metadata-only sau đó. Còn nghi ngờ về source identity thì phân loại là `SOURCE_MOVED`.
+
 ## Bốn operational outcome
 
 Outcome được quyết định deterministic, **trước** mọi lời gọi AI, và nó quyết định workflow tạo ra cái gì.
@@ -80,9 +88,9 @@ Cập nhật watcher state nếu cần; không gọi AI; không tạo Pull Reque
 
 ### Deterministic metadata-only change
 
-Là `METADATA_CHANGED` mà một deterministic rule đã được duyệt chứng minh là không ảnh hưởng monitored content, medical meaning hay provenance (ví dụ publication timestamp đổi nhưng monitored section không đổi).
+Là `METADATA_CHANGED` mà một deterministic rule đã được duyệt chứng minh là không ảnh hưởng monitored content, medical meaning hay provenance — ví dụ publication timestamp đổi nhưng monitored section không đổi, hoặc URL normalization/redirect giữ nguyên identity theo rule deterministic ở phần trên.
 
-Xử lý deterministic; mặc định không gọi AI; watcher state có thể tự cập nhật; canonical source metadata chỉ được tự cập nhật khi có deterministic rule đã duyệt cho phép và vẫn đi qua validation gate; tuyệt đối không được đổi medical meaning. Còn nghi ngờ thì nâng thành actionable.
+Xử lý deterministic; mặc định không gọi AI; không tạo Pull Request; không tạo Issue; watcher state có thể tự cập nhật; canonical source metadata chỉ được tự cập nhật khi có deterministic rule đã duyệt cho phép và vẫn đi qua validation gate; tuyệt đối không được đổi medical meaning; tuyệt đối không được dùng nhóm này để nuốt một kết quả `SOURCE_MOVED`. Còn nghi ngờ thì nâng thành actionable.
 
 ### Actionable evidence change
 
@@ -98,6 +106,8 @@ material SourceLocator resolution failure
 material provenance change
 ```
 
+`SOURCE_MOVED` luôn actionable, bất kể diff của monitored section cho thấy gì. Một thay đổi vị trí thật cũng có thể là re-publication, thay thế, ngừng phát hành, hoặc locator không còn resolve được — chỉ human review mới kết luận được. Nó không bao giờ được xử lý như deterministic metadata-only change.
+
 Bắt buộc: tạo hoặc cập nhật **đúng một** Draft Pull Request cho thay đổi chưa resolve đó; đưa source và các claim phụ thuộc vào trạng thái review-required chưa resolve; giữ nguyên provenance, citation và review history cũ cho đến khi con người xử lý xong.
 
 GitHub Issue không bao giờ thay thế được Draft Pull Request cho actionable evidence change.
@@ -107,6 +117,8 @@ GitHub Issue không bao giờ thay thế được Draft Pull Request cho actiona
 `FETCH_ERROR`, `PARSER_ERROR`, authentication/access failure, persistent adapter failure.
 
 Đây không phải evidence change. Có thể fail workflow và/hoặc tạo/cập nhật GitHub Issue theo retry/escalation policy, nhưng **không được** tạo evidence-change Pull Request nếu chưa xác định có evidence/provenance change thật. Phải phân biệt deterministic giữa lỗi transport/parser và `SOURCE_MISSING`/`SOURCE_MOVED` thật trước khi chọn outcome.
+
+GitHub Issue **chỉ** dành cho operational failure. Không outcome nào khác tạo Issue: `UNCHANGED` và deterministic metadata-only không tạo Issue, còn actionable evidence change do Draft Pull Request gánh, không bao giờ do Issue.
 
 ## Draft Pull Request contract
 
@@ -132,9 +144,27 @@ Body PR do deterministic renderer sinh ra, không phải do model. Mọi field d
 current → changed-review-required
 ```
 
-Claim phụ thuộc bị flag nhưng provenance/history cũ vẫn giữ cho đến khi review xong. Detected change không được âm thầm xóa citation, thay source hay vô hiệu hóa provenance. Sau review: source không đổi nghĩa → `current` + refresh verification; source đổi nghĩa → sửa claim liên quan + `current`; source bị thay thế → `superseded` + map replacement.
+Giống mọi canonical change khác, transition này được đề xuất trên Evidence Watch branch và do Draft Pull Request mang theo; nó chỉ vào `main` qua review path.
 
-Metadata-only rủi ro thấp có thể tự cập nhật sau validation theo deterministic rule. Content change không có mapping đã duyệt → claim `review-required`, không tự viết lại prose. Structured exact-source data chỉ được mirror field non-interpretive theo rule đã duyệt và vẫn đi qua Draft PR + validation gate. Safety-critical/urgent/contraindication luôn cần human review và clinician review khi content contract yêu cầu.
+### `review-required` của dependent claim nghĩa là gì
+
+```text
+SourceRecord.status = changed-review-required
++ source→claim dependency mapping
+→ dependent claim mang derived review-required signal
+```
+
+Đây là **derived review signal** — một điều kiện review chưa được giải quyết, tính ra từ `SourceRecord.status = changed-review-required` cộng với source→claim dependency mapping, đúng cơ chế propagation mà `EVIDENCE_PROVENANCE.md` §16 đã định nghĩa cho validation và public surface. Nó nói rằng **phần tài liệu hỗ trợ** của claim đang được rà soát, không nói rằng review state của chính claim đã đổi.
+
+`Claim.reviewStatus` không có giá trị `review-required`, và contract này không thêm giá trị đó.
+
+> **Evidence Watch KHÔNG được sửa `Claim.reviewStatus` chỉ vì phát hiện source thay đổi.**
+
+`Claim.reviewStatus` canonical là reviewed content state thuộc sở hữu của `GUIDANCE_CONTENT_CONTRACT.md`. Nó chỉ đổi bên trong một reviewed canonical content change theo content/review contract hiện có — trên thực tế là trong kết quả đã review của Draft PR path, do con người quyết định. Bản thân Evidence Watch chỉ ghi watcher state và review artifact, và đề xuất `SourceRecord` lifecycle transition ở trên.
+
+Claim phụ thuộc bị flag bằng derived signal đó nhưng provenance/history cũ vẫn giữ cho đến khi review xong. Detected change không được âm thầm xóa citation, thay source hay vô hiệu hóa provenance. Sau review: source không đổi nghĩa → `current` + refresh verification; source đổi nghĩa → sửa claim liên quan + `current`; source bị thay thế → `superseded` + map replacement.
+
+Metadata-only rủi ro thấp (publication timestamp, URL normalization/redirect giữ nguyên identity) có thể tự cập nhật sau validation theo deterministic rule; `SOURCE_MOVED` không thuộc nhóm này và luôn đi qua Draft PR review path. Content change không có mapping đã duyệt → bật derived review-required signal cho claim phụ thuộc, không tự viết lại prose và không ghi `Claim.reviewStatus`. Structured exact-source data chỉ được mirror field non-interpretive theo rule đã duyệt và vẫn đi qua Draft PR + validation gate. Safety-critical/urgent/contraindication luôn cần human review và clinician review khi content contract yêu cầu.
 
 ## AI Review Summary
 
@@ -150,50 +180,62 @@ Review requirement do project policy quyết định, không do model confidence
 
 ## Structured AI output
 
-AI phải trả structured data có version và pass schema validation trước khi render Markdown:
+AI phải trả structured data có version và pass schema validation trước khi render Markdown. Contract là discriminated union theo `status`: chỉ khi AI thực sự hoàn thành review mới có semantic assessment.
 
 ```ts
-interface EvidenceAIReview {
-  schemaVersion: string;
-  status: "completed" | "unavailable" | "failed";
+type EvidenceAIReview =
+  | {
+      schemaVersion: string;
+      status: "completed";
 
-  semanticAssessment:
-    | "no_meaning_change"
-    | "possible_meaning_change"
-    | "meaning_change"
-    | "uncertain";
+      semanticAssessment:
+        | "no_meaning_change"
+        | "possible_meaning_change"
+        | "meaning_change"
+        | "uncertain";
 
-  summary: string;
+      summary: string;
 
-  changedMeaning?: string[];
-  affectedClaimAssessments?: Array<{
-    claimId: string;
-    assessment: string;
-    recommendedAction:
-      | "no_change"
-      | "verify"
-      | "revise"
-      | "supersede"
-      | "uncertain";
-  }>;
+      changedMeaning?: string[];
+      affectedClaimAssessments?: Array<{
+        claimId: string;
+        assessment: string;
+        recommendedAction:
+          | "no_change"
+          | "verify"
+          | "revise"
+          | "supersede"
+          | "uncertain";
+      }>;
 
-  qualifierChanges?: string[];
-  contradictions?: string[];
-  recommendedActions?: string[];
+      qualifierChanges?: string[];
+      contradictions?: string[];
+      recommendedActions?: string[];
 
-  aiRiskAssessment?:
-    | "low"
-    | "medium"
-    | "high"
-    | "critical";
-}
+      aiRiskAssessment?:
+        | "low"
+        | "medium"
+        | "high"
+        | "critical";
+    }
+  | {
+      schemaVersion: string;
+      status: "unavailable" | "failed";
+      reason?: string;
+    };
 ```
+
+Chỉ variant `completed` mới có `semanticAssessment`, `summary` và các field review optional. Variant `unavailable`/`failed` chỉ có `schemaVersion`, `status` và `reason` optional — một lý do vận hành ngắn gọn (timeout, hết quota, thiếu credential, schema validation fail), không bao giờ là nhận định về nội dung thay đổi của source.
+
+Evidence Watch **không được** bịa `semanticAssessment`, `summary` hay bất kỳ field review nào khi AI unavailable/failed. Một assessment `uncertain` gắn tạm hay một summary sinh thay thế sẽ không phân biệt được với bản AI review thật và làm sai lệch trạng thái review. Việc **không có** semantic assessment chính là tín hiệu đúng.
 
 `affectedClaimAssessments` map theo `claimId` canonical; assessment không map được chỉ có giá trị tham khảo. Policy risk và required review state được tính **ngoài** AI response. AI có thể đề xuất risk cao hơn, nhưng không được hạ deterministic policy risk hay bỏ yêu cầu human/clinical review. Một deterministic renderer chuyển kết quả đã validate thành phần Review Summary trong Draft PR.
 
 ## AI failure fallback
 
-Nếu AI timeout, hết quota, thiếu credential, trả JSON/schema sai hoặc output không dùng được: vẫn phải tạo/cập nhật Draft PR từ deterministic report, và PR phải hiển thị rõ `AI Review: unavailable` hoặc `AI Review: failed` kèm đủ deterministic evidence để maintainer tự review.
+Nếu AI timeout, hết quota, thiếu credential, trả JSON/schema sai hoặc output không dùng được: vẫn phải tạo/cập nhật Draft PR từ deterministic report, và PR phải hiển thị rõ `AI Review: unavailable` hoặc `AI Review: failed` kèm `reason` optional và đủ deterministic evidence để maintainer tự review.
+
+Trạng thái AI chỉ ảnh hưởng phần Review Summary. Mọi field deterministic bắt buộc của Draft PR vẫn render đầy đủ khi `unavailable`/`failed` y như khi `completed`; deterministic renderer không được rút gọn, lược bớt hay bỏ evidence payload chỉ vì AI không trả về gì.
 
 AI failure không được: suppress detected change; đánh dấu source là unchanged; đóng/kết thúc review; auto-approve; chặn việc tạo deterministic review artifact.
 
@@ -236,13 +278,28 @@ Draft PR
 → deploy
 ```
 
-Merge vào `main` — chứ không phải bản thân Evidence Watch — mới là sự kiện đi vào deployment pipeline.
+Merge vào `main` — chứ không phải bản thân Evidence Watch — mới là sự kiện đi vào deployment pipeline. Vì production deploy khi push vào `main`, `main` phải được bảo vệ để merge đã review là con đường duy nhất một evidence change đi vào đó.
 
 ## GitHub Actions: implementation + security
 
 Workflow scheduled/manual có thể chạy adapters, cache fingerprint, tạo/cập nhật Evidence Watch branch, tạo/cập nhật đúng một Draft PR cho mỗi actionable evidence change, tạo/cập nhật Issue **chỉ** cho operational failure, và không cần inbound web service. Phải có concurrency control để run chồng nhau không tạo trùng branch/PR/report.
 
 Security: khai báo `permissions` least-privilege; chỉ cấp quyền đọc repo, tạo/cập nhật Evidence Watch branch, tạo/cập nhật Draft PR và optional operational Issue; AI credential nằm trong GitHub Secrets hoặc secret store đã duyệt; không để secret lọt vào log/report/PR body/committed file; identity của Evidence Watch không được có quyền bypass branch/ruleset review requirement.
+
+### Yêu cầu branch protection / ruleset
+
+Production pipeline deploy khi push vào `main`. Khối `permissions` của workflow không ràng buộc được identity làm gì **ngoài** workflow đó, nên bắt buộc phải có enforcement ở mức repository, không phải hardening tùy chọn.
+
+Phase 9 **phải** cấu hình GitHub Ruleset, branch protection hoặc enforcement tương đương trên `main` sao cho Evidence Watch identity:
+
+- không push được semantic evidence change thẳng vào `main`;
+- không bypass được Draft Pull Request review path;
+- không bypass được required approval hoặc required status check;
+- không tự approve PR evidence của chính nó, không force-push vào `main`, không xóa được protected branch.
+
+Chỉ merge vào `main` sau required review mới được đi vào production pipeline.
+
+Đây là deliverable và gate của Phase 9 (`IMPLEMENTATION_ROADMAP.md`). Không được bật Evidence Watch chạy trên source thật khi `main` vẫn nhận push chưa qua review.
 
 ## Initial corpus review policy
 

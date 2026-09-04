@@ -205,14 +205,14 @@ Flow:
 check source
 → detect change
 → map impacted claims
-→ review-required
+→ derived review signal trên claim phụ thuộc
 → update English
 → update VI
 → validate/build
 → deploy
 ```
 
-AI chỉ optional sau bước deterministic diff.
+Deterministic Evidence Watch phải chạy được khi không có AI. AI Review Summary là capability first-class của Phase 9, chỉ chạy **sau** bước deterministic diff; AI unavailable/failed không làm hỏng Evidence Watch và không được bịa semantic assessment.
 
 ## 13. Monetization
 
@@ -220,7 +220,11 @@ v1 free. Core evidence/safety/source/escalation/methodology/corrections phải f
 
 ## 14. AI
 
-Không live AI medical advice trong v1. Sau này AI có thể hỗ trợ source-diff triage, draft, translation hoặc source-grounded Ask HowToBaby; output AI không tự trở thành canonical.
+Không live AI medical advice trong v1.
+
+Evidence Watch AI Review Summary là capability review first-class của Phase 9: giải thích một source change đã được deterministic detect, bên trong Draft-PR review path bắt buộc. Deterministic Evidence Watch vẫn phải chạy đủ khi AI unavailable/failed (`EVIDENCE_UPDATE_ENGINE.md`).
+
+Capability AI về sau: đề xuất claim mapping và draft canonical EN/VI patch trên Evidence Watch review PR branch có sẵn, hỗ trợ translation kèm parity check, và source-grounded Ask HowToBaby. Output AI không tự trở thành canonical.
 
 ## 15. Documentation ownership
 
@@ -260,7 +264,8 @@ Xem `DOCS_INDEX.md`. Project Profile chỉ giữ product-level contract; detaile
 - Commercial theme code/assets phải tách theo license/redistribution rights.
 - Evidence watcher có thể chạy scheduled bên ngoài runtime.
 - Change detection không cần AI.
-- AI optional cho triage/draft.
+- AI Review Summary là capability first-class của Phase 9, không phải hỗ trợ optional (thay cho wording cũ “AI optional cho triage/draft”); deterministic Evidence Watch vẫn chạy được khi không có AI, và AI unavailable/failed không làm hỏng Evidence Watch cũng không được bịa assessment.
+- AI draft canonical EN/VI patch vẫn là capability về sau/post-v1.
 - Source change không auto-publish semantic medical change.
 - 432 Hz/audio được phép tồn tại dưới dạng utility nhưng không therapeutic claim.
 - Tách specialist docs để tránh Project Profile phình và lặp.

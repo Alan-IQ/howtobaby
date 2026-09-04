@@ -133,7 +133,7 @@ SQLite is introduced early as a **derived, rebuildable read model** for validati
 
 ## Evidence Update Engine
 
-The planned update system is deterministic first; AI is optional.
+The planned update system is deterministic first: detection, classification, impact analysis, and the review artifact never depend on AI.
 
 ```text
 CDC / AAP / FDA / WHO / ...
@@ -155,7 +155,7 @@ CDC / AAP / FDA / WHO / ...
        validate + build
 ```
 
-AI may later help summarize diffs, triage impact, draft proposed English changes, or assist translation. AI output does **not** become canonical guidance automatically.
+Every actionable evidence change is carried by a Draft Pull Request that a human reviews; GitHub Issues are reserved for operational failures. The AI Review Summary is a first-class part of that review path, and an unavailable or failed AI review never suppresses the deterministic Draft Pull Request. AI-drafted canonical English/Vietnamese patches remain a later capability. AI output does **not** become canonical guidance automatically.
 
 ## Theme system
 

@@ -98,7 +98,7 @@ Priority order:
 - Interpret + cite + link is the default reuse mode. Do not republish full third-party works unless license/permission/syndication explicitly permits it.
 - A detected source change marks impact/review state; it does not silently rewrite or auto-publish medical guidance.
 - AI may assist diff triage/drafting/translation/retrieval, but AI output is NEVER canonical without the required source verification/review path.
-- Evidence Watch actionable source changes MUST use the canonical Draft-PR review path. AI Review Summary may assist but cannot override deterministic policy risk, satisfy human/clinical review, approve, merge, or publish. AI failure must never suppress the deterministic review artifact. GitHub Issues are reserved for operational failures or non-change conditions where no evidence-review PR exists.
+- Evidence Watch actionable source changes MUST use the canonical Draft-PR review path. `SOURCE_MOVED` is always an actionable evidence change, never a metadata-only outcome. AI Review Summary may assist but cannot override deterministic policy risk, satisfy human/clinical review, approve, merge, or publish. AI failure must never suppress the deterministic review artifact, and an unavailable/failed AI review must never be rendered as a synthesized semantic assessment. GitHub Issues are reserved for operational failures only. A detected source change produces a derived review signal from `SourceRecord.status`; Evidence Watch must never mutate `Claim.reviewStatus`.
 
 For a health/safety content change, inspect the actual current primary source when tooling/access permits. If a material source cannot be verified, say so and do not fabricate certainty.
 

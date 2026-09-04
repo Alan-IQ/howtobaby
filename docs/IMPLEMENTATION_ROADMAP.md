@@ -237,6 +237,7 @@ Deliverables:
 - AI failure fallback that still creates/updates the deterministic Draft PR with an explicit unavailable/failed status;
 - Pull Request/branch deduplication and workflow concurrency control;
 - least-privilege GitHub Actions permissions and secret handling for the AI provider credential;
+- GitHub Ruleset/branch protection (or equivalent enforcement) on `main` so the Evidence Watch identity cannot push semantic evidence changes directly, bypass the Draft Pull Request review path, bypass required approvals/status checks, or self-approve its own evidence Pull Request (`EVIDENCE_UPDATE_ENGINE.md` §20);
 - human-review/merge boundary tests;
 - scheduled/manual GitHub Actions workflow.
 
@@ -249,6 +250,10 @@ Gate:
 - AI failure or absence never suppresses the deterministic review artifact, and never marks a changed source unchanged;
 - an operational failure never masquerades as an evidence-change Pull Request;
 - AI cannot lower deterministic policy risk, satisfy a required human/clinical review, approve, merge, or publish;
+- `SOURCE_MOVED` is classified as an actionable evidence change and never handled as a metadata-only outcome;
+- an unavailable or failed AI review is reported as such and carries no synthesized semantic assessment or summary;
+- a detected source change never mutates `Claim.reviewStatus`; dependent claims carry only the derived review signal from `SourceRecord.status`;
+- `main` enforcement is configured and verified: the Evidence Watch identity cannot push semantic evidence changes directly to `main`, cannot bypass the Draft PR review path, and cannot bypass required approval/status checks, so only a reviewed merge reaches the production pipeline;
 - semantic changes cannot auto-deploy canonical medical prose and cannot reach production before required human review and merge;
 - changed source preserves prior provenance/history and enters review-required workflow;
 - watcher does not commit full third-party source documents by default.

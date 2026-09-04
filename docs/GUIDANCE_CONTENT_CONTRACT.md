@@ -361,6 +361,8 @@ source superseded
   → claims revised/approved
 ```
 
+`review-required` in that flow is the source-driven review condition derived from `SourceRecord.status` and the source→claim dependency mapping (`EVIDENCE_UPDATE_ENGINE.md` §10). It is not a `reviewStatus` value, and automated monitoring never writes `Claim.reviewStatus`; the claim's own review state changes only in a reviewed canonical content change.
+
 Never keep a known superseded source marked `current`.
 
 Source lifecycle/public status representation is defined in `EVIDENCE_PROVENANCE.md`; automated change detection is defined in `EVIDENCE_UPDATE_ENGINE.md`.

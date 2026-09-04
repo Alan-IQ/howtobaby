@@ -195,6 +195,14 @@ A content change is not automatically a recommendation change.
 
 Each category resolves deterministically into exactly one operational outcome (§11), which decides what the workflow creates.
 
+### Classification boundary: URL change vs moved source
+
+`SOURCE_MOVED` means the source's location actually changed. It is always an actionable evidence change (§11) and never a metadata-only outcome.
+
+A URL difference that an explicitly approved deterministic rule proves is **identity-preserving** — canonical URL normalization, a stable protocol/host redirect, or a tracking-parameter difference — where the same monitored material resolves and source identity and provenance are unchanged, is classified as `METADATA_CHANGED`, not `SOURCE_MOVED`.
+
+The rule runs one way only: a deterministic identity proof keeps a URL difference out of `SOURCE_MOVED`. Nothing may downgrade a `SOURCE_MOVED` result into a metadata-only outcome afterwards. Any doubt about source identity classifies as `SOURCE_MOVED`.
+
 ## 10. Dependency graph
 
 Every canonical claim has structured `ClaimSourceRef` records. Build reverse indexes from those canonical relationships:
@@ -209,10 +217,21 @@ claimId → tools that depend on it
 When a source changes:
 
 ```text
-changed SourceRecord
-  → dependent claims become review-required
+SourceRecord.status = changed-review-required
+  + source→claim dependency mapping
+  → dependent claims carry a derived review-required signal
   → affected pages/tools listed in the review payload
 ```
+
+### What "review-required" means for a dependent claim
+
+`review-required` here is a **derived review signal**, not a canonical field write. It is an unresolved review condition computed from `SourceRecord.status = changed-review-required` plus the source→claim dependency mapping — the same propagation `EVIDENCE_PROVENANCE.md` §16 already defines for validation and public surfaces. It says the claim's support is under review; it does not say the claim's own review state changed.
+
+`Claim.reviewStatus` has no `review-required` value, and this contract does not introduce one.
+
+> **Evidence Watch MUST NOT mutate `Claim.reviewStatus` merely because a source change was detected.**
+
+Canonical `Claim.reviewStatus` is reviewed content state owned by `GUIDANCE_CONTENT_CONTRACT.md`. It changes only inside a reviewed canonical content change, through the existing content/review contract — in practice, in the reviewed result of the Draft PR path (§12, §17, §19), decided by a human. Evidence Watch on its own writes watcher state and the review artifact, and proposes the `SourceRecord` lifecycle transition in §13.
 
 This is the core mechanism that makes the system maintainable without AI.
 
@@ -230,13 +249,16 @@ Every check resolves into exactly one of four operational outcomes. The outcome 
 
 ### Deterministic metadata-only change
 
-A `METADATA_CHANGED` result that an explicitly approved deterministic rule proves does not affect monitored content, medical meaning, or provenance — for example an irrelevant publication timestamp with no monitored-section difference.
+A `METADATA_CHANGED` result that an explicitly approved deterministic rule proves does not affect monitored content, medical meaning, or provenance — for example an irrelevant publication timestamp with no monitored-section difference, or an identity-preserving URL normalization/redirect that satisfies the deterministic rule in §9.
 
 - handle deterministically;
 - do not call AI by default;
+- do not create a Pull Request;
+- do not create an Issue;
 - watcher state may update automatically;
 - canonical source metadata may update automatically only where an explicitly approved deterministic rule permits it, and only through the normal validation gates;
-- must never alter medical meaning.
+- must never alter medical meaning;
+- must never absorb a `SOURCE_MOVED` result.
 
 Any unresolved doubt promotes the change to actionable.
 
@@ -253,6 +275,8 @@ POSSIBLE_SUPERSESSION
 material SourceLocator resolution failure
 material provenance change
 ```
+
+`SOURCE_MOVED` is always actionable, whatever the monitored-section diff shows. A real location change can also mean re-publication, replacement, retirement, or a locator that no longer resolves, and only human review settles which. It is never handled as a deterministic metadata-only change (§9, §13).
 
 An actionable evidence change MUST:
 
@@ -274,6 +298,8 @@ persistent adapter failure
 ```
 
 Operational failures do not represent evidence changes. They MAY fail the workflow and/or create/update a GitHub Issue according to the retry/escalation policy.
+
+GitHub Issues are reserved for operational failures only. No other outcome creates one: `UNCHANGED` and deterministic metadata-only results create no Issue, and an actionable evidence change is carried by the Draft Pull Request, never by an Issue.
 
 They MUST NOT create an evidence-change Pull Request unless an actual evidence/provenance change has also been determined. A transport or parser failure must be distinguished deterministically from a genuine `SOURCE_MISSING`/`SOURCE_MOVED` result before an outcome is chosen.
 
@@ -328,7 +354,9 @@ An actionable detected change transitions the monitored source to:
 current → changed-review-required
 ```
 
-Dependent claims are flagged for review, but their existing approved provenance/history is preserved until review resolves the change. A detected change must never silently remove a citation, replace a source, or invalidate prior provenance.
+Like any other canonical change, that transition is proposed on the Evidence Watch branch and carried by the Draft Pull Request; it reaches `main` only through the review path (§12, §19, §20).
+
+Dependent claims are flagged by the derived review signal defined in §10 — Evidence Watch does not write `Claim.reviewStatus`. Their existing approved provenance/history is preserved until review resolves the change. A detected change must never silently remove a citation, replace a source, or invalidate prior provenance.
 
 After review:
 
@@ -342,13 +370,15 @@ Public UI may surface the simplified state `Reviewing an update` where appropria
 
 ### Low-risk metadata-only
 
-Examples: URL moved with no monitored-section difference, publication timestamp changed with no monitored-section difference.
+Examples: publication timestamp changed with no monitored-section difference; an identity-preserving canonical URL normalization or redirect that satisfies the deterministic rule in §9, with no monitored-section difference.
 
 May update source metadata automatically after validation, under the deterministic rule described in §11.
 
+`SOURCE_MOVED` is not part of this category. A moved source is always an actionable evidence change and always travels the Draft PR review path (§9, §11).
+
 ### Content change with no approved deterministic mapping
 
-Mark dependent claims `review-required`; do not rewrite canonical prose automatically.
+Raise the derived review-required signal on dependent claims (§10); do not rewrite canonical prose automatically and do not write `Claim.reviewStatus`.
 
 ### Structured exact-source data
 
@@ -405,44 +435,56 @@ The effective review requirement is determined by project policy, never by model
 
 AI output MUST use a versioned structured schema and pass schema validation before anything is rendered into Markdown.
 
+The contract is a discriminated union on `status`. A semantic assessment exists only when AI actually completed a review.
+
 Conceptually:
 
 ```ts
-interface EvidenceAIReview {
-  schemaVersion: string;
-  status: "completed" | "unavailable" | "failed";
+type EvidenceAIReview =
+  | {
+      schemaVersion: string;
+      status: "completed";
 
-  semanticAssessment:
-    | "no_meaning_change"
-    | "possible_meaning_change"
-    | "meaning_change"
-    | "uncertain";
+      semanticAssessment:
+        | "no_meaning_change"
+        | "possible_meaning_change"
+        | "meaning_change"
+        | "uncertain";
 
-  summary: string;
+      summary: string;
 
-  changedMeaning?: string[];
-  affectedClaimAssessments?: Array<{
-    claimId: string;
-    assessment: string;
-    recommendedAction:
-      | "no_change"
-      | "verify"
-      | "revise"
-      | "supersede"
-      | "uncertain";
-  }>;
+      changedMeaning?: string[];
+      affectedClaimAssessments?: Array<{
+        claimId: string;
+        assessment: string;
+        recommendedAction:
+          | "no_change"
+          | "verify"
+          | "revise"
+          | "supersede"
+          | "uncertain";
+      }>;
 
-  qualifierChanges?: string[];
-  contradictions?: string[];
-  recommendedActions?: string[];
+      qualifierChanges?: string[];
+      contradictions?: string[];
+      recommendedActions?: string[];
 
-  aiRiskAssessment?:
-    | "low"
-    | "medium"
-    | "high"
-    | "critical";
-}
+      aiRiskAssessment?:
+        | "low"
+        | "medium"
+        | "high"
+        | "critical";
+    }
+  | {
+      schemaVersion: string;
+      status: "unavailable" | "failed";
+      reason?: string;
+    };
 ```
+
+Only the `completed` variant carries `semanticAssessment`, `summary`, and the optional review fields. The `unavailable`/`failed` variant carries nothing beyond `schemaVersion`, `status`, and an optional operational `reason` — a short factual explanation such as a timeout, exhausted quota, a missing credential, or a schema-validation failure. `reason` is never a statement about the source change.
+
+Evidence Watch MUST NOT synthesize `semanticAssessment`, `summary`, or any other review field when AI is unavailable or failed. A placeholder `uncertain` assessment or a generated stand-in summary would be indistinguishable from a real AI review and would misrepresent what was actually reviewed. The absence of a semantic assessment is itself the accurate signal.
 
 `affectedClaimAssessments` entries map to canonical `claimId` values; an assessment that cannot be mapped to a canonical claim is informational only.
 
@@ -470,7 +512,9 @@ or:
 AI Review: failed
 ```
 
-together with enough deterministic evidence for a maintainer to perform the review manually.
+together with the optional `reason`, and enough deterministic evidence for a maintainer to perform the review manually.
+
+AI status changes only the Review Summary section. Every deterministic field required by §12 is rendered in full for `unavailable` and `failed` exactly as for `completed`; the deterministic renderer must not degrade, abbreviate, or omit the evidence payload because AI produced nothing.
 
 AI failure MUST NOT:
 
@@ -542,7 +586,7 @@ Draft PR
   → deploy
 ```
 
-Merge to `main`, not Evidence Watch itself, is the event that may enter the normal deployment pipeline (`REPOSITORY_STRUCTURE.md` §12).
+Merge to `main`, not Evidence Watch itself, is the event that may enter the normal deployment pipeline (`REPOSITORY_STRUCTURE.md` §12). Because production deploys on push to `main`, `main` must be protected so that this reviewed merge is the only way an evidence change can reach it (§20).
 
 ## 20. GitHub Actions implementation and security contract
 
@@ -564,6 +608,21 @@ Security contract:
 - store AI provider credentials in GitHub Secrets or another approved secret store;
 - never expose secrets in workflow logs, generated reports, Pull Request bodies, or committed files;
 - never grant the Evidence Watch identity permission to bypass branch/ruleset review requirements.
+
+### Branch protection and ruleset requirement
+
+The production pipeline deploys on push to `main` (`REPOSITORY_STRUCTURE.md` §12). Workflow `permissions` alone cannot constrain what an identity may do outside that workflow, so repository-level enforcement is required, not optional hardening.
+
+Phase 9 MUST configure a GitHub Ruleset, branch protection, or equivalent enforcement on `main` such that the Evidence Watch identity:
+
+- cannot push semantic evidence changes directly to `main`;
+- cannot bypass the Draft Pull Request review path;
+- cannot bypass required approvals or required status checks;
+- cannot self-approve its own evidence Pull Request, force-push to `main`, or delete the protected branch.
+
+Only a merge into `main` after the required review may enter the production pipeline (§19).
+
+This enforcement is a Phase 9 deliverable and part of the Phase 9 gate (`IMPLEMENTATION_ROADMAP.md`). Evidence Watch MUST NOT be enabled against real sources on a repository where `main` still accepts unreviewed pushes.
 
 Repository locations and cache/state ownership are defined in `REPOSITORY_STRUCTURE.md`. Generated impact indexes should reuse `source-claim-index`/`route-evidence-index` rather than build an unrelated mapping format.
 
