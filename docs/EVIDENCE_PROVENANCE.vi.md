@@ -209,6 +209,10 @@ Public UI:
 
 Mọi trạng thái non-current dùng cùng attention treatment và cùng bộ nhãn trên Evidence Drawer, `/sources`, trang evidence detail và References. `current` vẫn nằm trong `SourceStatus` và canonical model cho validation/lifecycle; chỉ phần presentation là im lặng.
 
+**Ranh giới publication của Phase 9 v1.** Mọi trạng thái tài liệu hiển thị công khai đều render từ canonical content đã deploy, nên `Đang rà soát bản cập nhật` — cũng như mọi nhãn non-current khác — chỉ xuất hiện khi canonical source lifecycle state tương ứng đã vào nội dung đã deploy qua reviewed merge path thông thường.
+
+Một Draft Pull Request của Evidence Watch còn đang chờ review, tự nó, không làm đổi provenance state của production. Trong lúc thay đổi đã phát hiện còn chờ review, Draft PR là tín hiệu pending-review hướng tới maintainer, còn public site vẫn hiển thị trạng thái đã review gần nhất; Evidence Watch không có side channel nào đổi được public source status ngoài canonical Git và deployment pipeline hiện có (`EVIDENCE_UPDATE_ENGINE.md`). Muốn public site nhận pending watcher freshness state trước canonical merge thì đó là capability riêng, cần contract và publication path riêng, không thuộc Phase 9 v1.
+
 Source thay đổi không đồng nghĩa recommendation cũ sai; wording không nên gây hoảng.
 
 ## 11. CI provenance rules

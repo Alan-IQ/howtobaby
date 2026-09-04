@@ -344,7 +344,7 @@ source checked
 
 AI reviews and explains a detected change inside that review path, but it cannot turn a detected source change directly into production medical guidance without the required review gate.
 
-Monitoring state must align with public provenance: a detected material source change can move the source to `changed-review-required` and propagate a derived review signal to its dependent claims, but it must not erase prior provenance, write claim review state, or silently replace the parent-facing claim. Full fetched third-party documents are temporary monitoring inputs by default, not canonical Git content.
+Monitoring state must align with public provenance: a detected material source change can move the source to `changed-review-required` — proposed on the review branch and reaching production only through the reviewed merge — and propagate a derived review signal to its dependent claims, but it must not erase prior provenance, write claim review state, or silently replace the parent-facing claim. Watcher operational state is separate from that canonical state: it may update automatically, while canonical `SourceRecord` metadata never does, and a pending Draft Pull Request alone changes nothing on the public site. Full fetched third-party documents are temporary monitoring inputs by default, not canonical Git content.
 
 Detailed contracts: `EVIDENCE_UPDATE_ENGINE.md` and `EVIDENCE_PROVENANCE.md`.
 

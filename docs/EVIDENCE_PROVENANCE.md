@@ -409,6 +409,10 @@ Every non-current state uses the same semantic attention treatment and the same 
 
 Internal states remain more granular.
 
+**Phase 9 v1 publication boundary.** Every public source state renders from deployed canonical content, so `Reviewing an update` — like every other non-current label — appears only when the corresponding canonical source lifecycle state has reached the deployed content through the normal reviewed merge path.
+
+A pending Evidence Watch Draft Pull Request alone does not mutate production provenance state. While a detected change is still awaiting review, the Draft Pull Request is the maintainer-facing pending-review signal and the public site keeps showing the last reviewed state; Evidence Watch has no side channel that changes public source status outside canonical Git and the existing deployment pipeline (`EVIDENCE_UPDATE_ENGINE.md` §13, §19). Publishing pending watcher freshness state to the public site ahead of canonical merge would be a separate capability with its own contract and publication path, and is not part of Phase 9 v1.
+
 A changed source does not automatically mean the existing recommendation is wrong. Wording should avoid unnecessary alarm.
 
 ### Source date provenance contract

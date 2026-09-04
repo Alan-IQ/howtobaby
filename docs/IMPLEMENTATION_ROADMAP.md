@@ -230,6 +230,7 @@ Deliverables:
 - source-locator resolution/move detection where configured;
 - source→claim reverse dependency index reused from canonical provenance;
 - temporary evidence cache + metadata/fingerprint persistence policy;
+- watcher operational state persistence kept separate from canonical knowledge, so a run refreshes fingerprints/check metadata without writing canonical `SourceRecord` metadata — or any other canonical authored file — to `main` (`EVIDENCE_UPDATE_ENGINE.md` §11, §13);
 - deterministic actionable-change classification separating unchanged, deterministic metadata-only, actionable evidence change, and operational failure;
 - deterministic structured review payload (JSON) + deterministic Markdown renderer;
 - automatic idempotent Draft Pull Request creation/update for every actionable evidence change;
@@ -251,6 +252,9 @@ Gate:
 - an operational failure never masquerades as an evidence-change Pull Request;
 - AI cannot lower deterministic policy risk, satisfy a required human/clinical review, approve, merge, or publish;
 - `SOURCE_MOVED` is classified as an actionable evidence change and never handled as a metadata-only outcome;
+- a deterministic metadata-only result creates no Pull Request, no Issue and no canonical write to `main`: a canonical `SourceRecord` correction it reveals is either left for a maintainer's normal reviewed Pull Request or promoted to an actionable evidence change;
+- watcher operational state and canonical knowledge state stay distinct: nothing held only in watcher state/cache is treated as canonical source metadata or as public provenance;
+- the pending Draft Pull Request is the Phase 9 maintainer-facing pending-review signal; the public production site is not required to reflect pending watcher state before the reviewed merge, and no backend or runtime freshness service is introduced to publish it;
 - an unavailable or failed AI review is reported as such and carries no synthesized semantic assessment or summary;
 - a detected source change never mutates `Claim.reviewStatus`; dependent claims carry only the derived review signal from `SourceRecord.status`;
 - `main` enforcement is configured and verified: the Evidence Watch identity cannot push semantic evidence changes directly to `main`, cannot bypass the Draft PR review path, and cannot bypass required approval/status checks, so only a reviewed merge reaches the production pipeline;

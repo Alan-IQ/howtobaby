@@ -82,15 +82,52 @@ Rule này chỉ chạy một chiều: chứng minh deterministic giữ cho một
 
 Outcome được quyết định deterministic, **trước** mọi lời gọi AI, và nó quyết định workflow tạo ra cái gì.
 
+### Ranh giới sở hữu state: watcher operational state và canonical Git state
+
+Có hai loại state khác nhau, và không outcome nào được phép trộn lẫn:
+
+```text
+watcher operational state
+→ do Evidence Watch sở hữu
+→ ETag, Last-Modified, fingerprint, hash của monitored section,
+  thời điểm check/fetch, normalized fetch metadata, parser version,
+  adapter/cache state, classification deterministic gần nhất
+→ một lần chạy watcher được phép tự cập nhật
+→ không phải canonical product knowledge, cũng không phải phát ngôn evidence công khai
+
+canonical Git knowledge/provenance state
+→ do content/review contract canonical sở hữu
+→ `SourceRecord` và mọi canonical authored file khác
+→ chỉ đổi qua reviewed merge path
+→ Evidence Watch không bao giờ ghi thẳng vào `main`
+```
+
+Nơi lưu watcher operational state được quy định ở `REPOSITORY_STRUCTURE.md` §9. Mọi outcome bên dưới đều được phép refresh state đó, nhưng không outcome nào được hiểu quyền đó thành quyền sửa canonical authored file.
+
 ### `UNCHANGED`
 
-Cập nhật watcher state nếu cần; không gọi AI; không tạo Pull Request; không tạo Issue; không tạo noise cho maintainer.
+Cập nhật watcher operational state nếu cần; không gọi AI; không tạo Pull Request; không tạo Issue; không tạo noise cho maintainer.
 
 ### Deterministic metadata-only change
 
 Là `METADATA_CHANGED` mà một deterministic rule đã được duyệt chứng minh là không ảnh hưởng monitored content, medical meaning hay provenance — ví dụ publication timestamp đổi nhưng monitored section không đổi, hoặc URL normalization/redirect giữ nguyên identity theo rule deterministic ở phần trên.
 
-Xử lý deterministic; mặc định không gọi AI; không tạo Pull Request; không tạo Issue; watcher state có thể tự cập nhật; canonical source metadata chỉ được tự cập nhật khi có deterministic rule đã duyệt cho phép và vẫn đi qua validation gate; tuyệt đối không được đổi medical meaning; tuyệt đối không được dùng nhóm này để nuốt một kết quả `SOURCE_MOVED`. Còn nghi ngờ thì nâng thành actionable.
+Xử lý deterministic; không gọi AI; không tạo Draft Pull Request; không tạo Issue; watcher operational state có thể tự cập nhật; **không được** tự ghi canonical `SourceRecord` metadata — hay bất kỳ canonical authored file nào — vào `main`; tuyệt đối không được đổi medical meaning; tuyệt đối không được dùng nhóm này để nuốt một kết quả `SOURCE_MOVED`. Còn nghi ngờ thì nâng thành actionable.
+
+Khi một detection metadata-only cho thấy chính canonical `SourceRecord` thật sự cần sửa:
+
+```text
+thay đổi canonical metadata không trọng yếu
+→ ghi vào watcher operational state và observability output
+→ để maintainer cập nhật trong một reviewed Pull Request thông thường sau đó
+
+thay đổi trọng yếu về provenance, độ mới hoặc source identity
+→ không còn là metadata-only
+→ nâng thành actionable evidence change
+→ Draft Pull Request
+```
+
+Phase 9 v1 không thêm cơ chế auto-merge metadata Pull Request, cũng không mở bất kỳ đường ghi tự động nào khác vào `main`. Một deterministic rule chỉ có thể giữ một detection nằm ngoài nhóm actionable; nó không bao giờ cấp cho watcher quyền ghi canonical.
 
 ### Actionable evidence change
 
@@ -146,6 +183,21 @@ current → changed-review-required
 
 Giống mọi canonical change khác, transition này được đề xuất trên Evidence Watch branch và do Draft Pull Request mang theo; nó chỉ vào `main` qua review path.
 
+### Pending review và public production state
+
+```text
+Evidence Watch phát hiện actionable change
+→ Draft Pull Request là tín hiệu pending-review canonical hướng tới maintainer
+→ canonical state của production không đổi trước khi merge đã review
+```
+
+`changed-review-required` là canonical source lifecycle state hợp lệ, có thể tồn tại trong reviewed canonical history; nó vẫn nằm trong `SourceStatus` (`EVIDENCE_PROVENANCE.md` §2) và Evidence Watch được phép đề xuất transition đó trên review branch. Cái Phase 9 v1 chốt là *một thay đổi chưa resolve được nhìn thấy ở đâu trước khi đề xuất đó được review*:
+
+- Draft Pull Request là review surface tức thời, và là tín hiệu pending-review duy nhất Phase 9 v1 yêu cầu;
+- Phase 9 v1 **không** yêu cầu public production site phản ánh pending watcher state trước khi Pull Request được merge;
+- public UI không được hứa `Đang rà soát bản cập nhật` theo thời gian thực chỉ vì một lần chạy watcher vừa phát hiện thay đổi. Trạng thái công khai đó render từ canonical content đã deploy, nên chỉ xuất hiện sau khi lifecycle state tương ứng đã vào production qua reviewed merge path (`EVIDENCE_PROVENANCE.md` §14);
+- muốn public site nhận pending operational freshness state trước canonical merge thì đó là một capability riêng, cần contract và publication path riêng. Nó không thuộc Phase 9 v1, và Evidence Watch không có side channel nào cho việc đó.
+
 ### `review-required` của dependent claim nghĩa là gì
 
 ```text
@@ -164,7 +216,7 @@ SourceRecord.status = changed-review-required
 
 Claim phụ thuộc bị flag bằng derived signal đó nhưng provenance/history cũ vẫn giữ cho đến khi review xong. Detected change không được âm thầm xóa citation, thay source hay vô hiệu hóa provenance. Sau review: source không đổi nghĩa → `current` + refresh verification; source đổi nghĩa → sửa claim liên quan + `current`; source bị thay thế → `superseded` + map replacement.
 
-Metadata-only rủi ro thấp (publication timestamp, URL normalization/redirect giữ nguyên identity) có thể tự cập nhật sau validation theo deterministic rule; `SOURCE_MOVED` không thuộc nhóm này và luôn đi qua Draft PR review path. Content change không có mapping đã duyệt → bật derived review-required signal cho claim phụ thuộc, không tự viết lại prose và không ghi `Claim.reviewStatus`. Structured exact-source data chỉ được mirror field non-interpretive theo rule đã duyệt và vẫn đi qua Draft PR + validation gate. Safety-critical/urgent/contraindication luôn cần human review và clinician review khi content contract yêu cầu.
+Metadata-only rủi ro thấp (publication timestamp, URL normalization/redirect giữ nguyên identity) chỉ làm watcher operational state tự refresh theo deterministic rule; canonical `SourceRecord` metadata không được ghi tự động — cần sửa canonical thì maintainer làm trong một reviewed PR thông thường, còn thứ gì trọng yếu về provenance/độ mới/source identity thì nâng thành actionable. `SOURCE_MOVED` không thuộc nhóm này và luôn đi qua Draft PR review path. Content change không có mapping đã duyệt → bật derived review-required signal cho claim phụ thuộc, không tự viết lại prose và không ghi `Claim.reviewStatus`. Structured exact-source data chỉ được mirror field non-interpretive theo rule đã duyệt, và chỉ dưới dạng draft trên review branch — không bao giờ ghi thẳng vào `main` — vẫn qua Draft PR + validation gate. Safety-critical/urgent/contraindication luôn cần human review và clinician review khi content contract yêu cầu.
 
 ## AI Review Summary
 
@@ -280,9 +332,11 @@ Draft PR
 
 Merge vào `main` — chứ không phải bản thân Evidence Watch — mới là sự kiện đi vào deployment pipeline. Vì production deploy khi push vào `main`, `main` phải được bảo vệ để merge đã review là con đường duy nhất một evidence change đi vào đó.
 
+Trước khi merge, nơi nhìn thấy một evidence change chưa resolve là Draft Pull Request, không phải public site. Public provenance state — kể cả mọi nhãn độ mới của tài liệu — chỉ đổi như hệ quả của canonical content đã merge đi qua pipeline này.
+
 ## GitHub Actions: implementation + security
 
-Workflow scheduled/manual có thể chạy adapters, cache fingerprint, tạo/cập nhật Evidence Watch branch, tạo/cập nhật đúng một Draft PR cho mỗi actionable evidence change, tạo/cập nhật Issue **chỉ** cho operational failure, và không cần inbound web service. Phải có concurrency control để run chồng nhau không tạo trùng branch/PR/report.
+Workflow scheduled/manual có thể chạy adapters, persist watcher operational state (fingerprint, metadata của lần check) trong workflow artifact/state store, trên Evidence Watch branch, hoặc ở một vị trí non-canonical mà ruleset của `main` thực sự cho identity đó ghi — không bao giờ trộn vào canonical authored file, tạo/cập nhật Evidence Watch branch, tạo/cập nhật đúng một Draft PR cho mỗi actionable evidence change, tạo/cập nhật Issue **chỉ** cho operational failure, và không cần inbound web service. Phải có concurrency control để run chồng nhau không tạo trùng branch/PR/report.
 
 Security: khai báo `permissions` least-privilege; chỉ cấp quyền đọc repo, tạo/cập nhật Evidence Watch branch, tạo/cập nhật Draft PR và optional operational Issue; AI credential nằm trong GitHub Secrets hoặc secret store đã duyệt; không để secret lọt vào log/report/PR body/committed file; identity của Evidence Watch không được có quyền bypass branch/ruleset review requirement.
 
@@ -295,7 +349,8 @@ Phase 9 **phải** cấu hình GitHub Ruleset, branch protection hoặc enforcem
 - không push được semantic evidence change thẳng vào `main`;
 - không bypass được Draft Pull Request review path;
 - không bypass được required approval hoặc required status check;
-- không tự approve PR evidence của chính nó, không force-push vào `main`, không xóa được protected branch.
+- không tự approve PR evidence của chính nó, không force-push vào `main`, không xóa được protected branch;
+- không ghi được canonical `SourceRecord` metadata hay bất kỳ canonical authored file nào vào `main` ngoài reviewed path, kể cả với kết quả deterministic metadata-only.
 
 Chỉ merge vào `main` sau required review mới được đi vào production pipeline.
 
@@ -321,7 +376,7 @@ Cron chạy không đồng nghĩa gọi AI.
 ```text
 100 monitored sources
   ├─ 97 unchanged        → no AI, no PR
-  ├─ 2 metadata-only     → deterministic, thường no AI
+  ├─ 2 metadata-only     → deterministic, no AI, không ghi canonical vào `main`
   └─ 1 actionable change → impact analysis → Draft PR → AI Review Summary → human review
 ```
 
@@ -335,11 +390,11 @@ Respect robots/terms/license/rate limit/auth; không bypass paywall/anti-bot; ư
 
 ## Observability
 
-Theo dõi: last successful check, consecutive failures, changed/unchanged counts, parser failures, Draft PR đang mở và tuổi của chúng, số AI Review completed/unavailable/failed, source quá hạn review, claim đang bị chặn bởi source changed/superseded, thời gian từ lúc detect đến lúc release.
+Theo dõi: last successful check, consecutive failures, changed/unchanged counts, số kết quả deterministic metadata-only (kể cả những kết quả gợi ý một chỗ cần sửa canonical `SourceRecord` mà maintainer còn phải làm trong reviewed PR thông thường), parser failures, Draft PR đang mở và tuổi của chúng, số AI Review completed/unavailable/failed, source quá hạn review, claim đang bị chặn bởi source changed/superseded, thời gian từ lúc detect đến lúc release.
 
 ## Evidence Watch v1
 
-Registry + adapters + fetch/fingerprint + diff và actionable classification + locator move detection + source→claim impact + deterministic structured payload/Markdown renderer + Draft PR idempotent kèm AI Review Summary (hoặc trạng thái unavailable/failed) + Issue chỉ cho operational failure. **Không** tự viết lại canonical content.
+Registry + adapters + fetch/fingerprint + diff và actionable classification + locator move detection + source→claim impact + deterministic structured payload/Markdown renderer + Draft PR idempotent kèm AI Review Summary (hoặc trạng thái unavailable/failed) + Issue chỉ cho operational failure. **Không** tự viết lại canonical content, **không** tự ghi canonical vào `main` ở bất kỳ outcome nào (một lần chạy watcher chỉ persist operational state và review artifact), và **không** yêu cầu public production site phản ánh pending watcher state trước reviewed merge.
 
 ## Later evolution
 
@@ -364,6 +419,22 @@ Evidence Watch có thể query `packages/knowledge/generated/knowledge.sqlite` �
 Watcher được phép tải HTML/PDF/source body vào ephemeral workspace/cache để parse/diff nhưng mặc định không commit các body này vào Git. Persistent Git state chỉ giữ metadata/URL/locator/hash/timestamp/parser version/change record cần thiết. CI phải bắt accidental source/cache commit theo `REPOSITORY_HEALTH.md`.
 
 ## Invariant cuối
+
+Ba state, không bao giờ được đánh đồng:
+
+```text
+1. watcher operational state
+   → Evidence Watch được tự cập nhật
+   → không phải canonical product knowledge
+
+2. pending Evidence Watch review
+   → thể hiện bằng Draft Pull Request
+   → không phải production state
+
+3. canonical production provenance
+   → reviewed Git/YAML state
+   → chỉ đổi qua reviewed merge + deployment pipeline hiện có
+```
 
 > **Deterministic Evidence Watch detects and scopes the change.
 > AI explains and assists.

@@ -251,7 +251,20 @@ Own utility runtime contracts and individual tools. Guidance-linked tools depend
 
 ### `evidence/*`
 
-Owns scheduled source monitoring, normalization, fingerprinting, diffing, and impact analysis. It may create reports/PRs but must not silently become the canonical medical author.
+Owns scheduled source monitoring, normalization, fingerprinting, diffing, impact analysis, and the watcher operational state that work produces (§9). It may create reports and Draft Pull Requests but must not silently become the canonical medical author.
+
+The ownership boundary is:
+
+```text
+Evidence Watch operational state
+  → owned by evidence/*
+  → may be updated automatically, outside canonical knowledge
+
+canonical SourceRecord / claims / provenance
+  → owned by packages/knowledge
+  → Git-reviewed canonical state
+  → changes only through the reviewed merge path
+```
 
 ## 4. Dependency direction
 
@@ -431,6 +444,8 @@ The monitor may persist:
 - prior normalized fingerprints;
 - change classification.
 
+Everything in that list is **watcher operational state**: Evidence Watch owns it, a watcher run may refresh it automatically, and it is not canonical product knowledge. `evidence/state/` and `evidence/cache/` are therefore never canonical source metadata — canonical `SourceRecord` values live in `packages/knowledge` and change only through the reviewed merge path (`EVIDENCE_UPDATE_ENGINE.md` §11, §13). A watcher run must not write canonical authored files to `main`, and a value that exists only in watcher state is never citable as public provenance.
+
 Do not assume the public Git repository is an appropriate archive for full third-party source documents.
 
 For restricted/copyrighted sources, prefer:
@@ -491,7 +506,7 @@ Behaviour it must implement at Phase 9:
 - every actionable evidence change creates or updates **exactly one** Draft Pull Request, idempotently, carrying the deterministic review payload plus the AI Review Summary or an explicit unavailable/failed status;
 - an operational failure (fetch, parser, authentication, adapter) may fail the workflow and optionally open or update a GitHub Issue;
 - GitHub Issues are for operational failures only — never a substitute for the evidence-review Draft Pull Request, and never created for `UNCHANGED` or deterministic metadata-only results;
-- no canonical medical prose is written by the workflow, and the release review path is never bypassed.
+- no canonical medical prose is written by the workflow, no canonical authored file (including `SourceRecord` metadata) is written to `main` outside the reviewed path, and the release review path is never bypassed.
 
 Only a reviewed merge into `main` enters `pipeline.yml`. The Evidence Watch identity must not be able to push semantic evidence changes to `main` or bypass required review/checks; Phase 9 configures the ruleset/branch protection that enforces this (`EVIDENCE_UPDATE_ENGINE.md` §20).
 

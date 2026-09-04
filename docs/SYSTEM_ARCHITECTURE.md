@@ -273,6 +273,8 @@ Evidence watcher responsibilities:
 
 It must not directly mutate release-approved health guidance in production as a side effect of a detected source change.
 
+Watcher state — fingerprints, check metadata, cache — is its own operational plane. Canonical `SourceRecord`/claim/provenance state changes only through the reviewed merge path, and an unresolved detected change lives in the Draft Pull Request rather than in production (`EVIDENCE_UPDATE_ENGINE.md` §11, §13).
+
 Details: `EVIDENCE_UPDATE_ENGINE.md`.
 
 ## 10. Storage model

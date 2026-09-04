@@ -239,9 +239,31 @@ This is the core mechanism that makes the system maintainable without AI.
 
 Every check resolves into exactly one of four operational outcomes. The outcome is decided deterministically, before any AI call, and it decides what the workflow creates.
 
+### State ownership: watcher operational state vs canonical Git state
+
+Two different kinds of state are involved, and no outcome may blur them:
+
+```text
+watcher operational state
+  → owned by Evidence Watch
+  → ETag, Last-Modified, fingerprints, monitored-section hashes,
+    check/fetch timestamps, normalized fetch metadata, parser version,
+    adapter and cache state, last deterministic classification
+  → may be updated automatically by a watcher run
+  → not canonical product knowledge and never a public evidence statement
+
+canonical Git knowledge/provenance state
+  → owned by the canonical content/review contract
+  → `SourceRecord` and every other canonical authored file
+  → changes only through the reviewed merge path (§19)
+  → Evidence Watch never writes it directly to `main`
+```
+
+Storage for watcher operational state is defined in `REPOSITORY_STRUCTURE.md` §9. Every outcome below may refresh that state; none of them may read that permission as permission to edit canonical authored files.
+
 ### `UNCHANGED`
 
-- update watcher state as needed;
+- update watcher operational state as needed;
 - do not call AI;
 - do not create a Pull Request;
 - do not create an Issue;
@@ -252,15 +274,30 @@ Every check resolves into exactly one of four operational outcomes. The outcome 
 A `METADATA_CHANGED` result that an explicitly approved deterministic rule proves does not affect monitored content, medical meaning, or provenance — for example an irrelevant publication timestamp with no monitored-section difference, or an identity-preserving URL normalization/redirect that satisfies the deterministic rule in §9.
 
 - handle deterministically;
-- do not call AI by default;
-- do not create a Pull Request;
+- do not call AI;
+- do not create a Draft Pull Request;
 - do not create an Issue;
-- watcher state may update automatically;
-- canonical source metadata may update automatically only where an explicitly approved deterministic rule permits it, and only through the normal validation gates;
+- watcher operational state may update automatically;
+- MUST NOT automatically write canonical `SourceRecord` metadata — or any other canonical authored file — to `main`;
 - must never alter medical meaning;
 - must never absorb a `SOURCE_MOVED` result.
 
 Any unresolved doubt promotes the change to actionable.
+
+When a metadata-only detection shows that a canonical `SourceRecord` itself genuinely needs to change:
+
+```text
+non-material canonical metadata change
+  → recorded in watcher operational state and observability output
+  → left for a maintainer to apply in a later normal reviewed Pull Request
+
+material provenance, freshness, or source-identity change
+  → no longer metadata-only
+  → promoted to an actionable evidence change
+  → Draft Pull Request
+```
+
+Phase 9 v1 introduces no auto-merge metadata Pull Request mechanism, and no other automated write path into `main`. A deterministic rule can keep a detection out of the actionable class; it can never grant the watcher canonical write authority.
 
 ### Actionable evidence change
 
@@ -366,13 +403,26 @@ source meaning changed → revise affected claims + current
 source superseded → superseded + replacement source mapping
 ```
 
-Public UI may surface the simplified state `Reviewing an update` where appropriate.
+### Pending review vs public production state
+
+```text
+Evidence Watch detects an actionable change
+  → the Draft Pull Request becomes the canonical maintainer-facing pending-review signal
+  → production canonical state does not change before the reviewed merge
+```
+
+`changed-review-required` is a canonical source lifecycle state that can exist in reviewed canonical history; it stays in `SourceStatus` (`EVIDENCE_PROVENANCE.md` §2) and Evidence Watch may propose the transition into it on the review branch. What Phase 9 v1 fixes is *where an unresolved change is visible before that proposal is reviewed*:
+
+- the Draft Pull Request is the immediate review surface, and the only pending-review signal Phase 9 v1 requires;
+- Phase 9 v1 does NOT require the public production site to reflect pending watcher state before the Pull Request is merged;
+- public UI must not promise a real-time `Reviewing an update` merely because a watcher run detected a change. That public state renders from deployed canonical content, so it appears only after the corresponding lifecycle state reached production through the reviewed merge path (`EVIDENCE_PROVENANCE.md` §14);
+- publishing pending operational freshness state to the public site before canonical merge would be a separate capability needing its own contract and publication path. It is not part of Phase 9 v1, and Evidence Watch has no side channel for it.
 
 ### Low-risk metadata-only
 
 Examples: publication timestamp changed with no monitored-section difference; an identity-preserving canonical URL normalization or redirect that satisfies the deterministic rule in §9, with no monitored-section difference.
 
-May update source metadata automatically after validation, under the deterministic rule described in §11.
+Watcher operational state may refresh automatically under the deterministic rule described in §11. Canonical `SourceRecord` metadata is not written automatically: where the canonical record itself needs correcting, a maintainer applies it in a normal reviewed Pull Request, and anything material to provenance, freshness, or source identity is promoted to an actionable evidence change instead.
 
 `SOURCE_MOVED` is not part of this category. A moved source is always an actionable evidence change and always travels the Draft PR review path (§9, §11).
 
@@ -382,7 +432,7 @@ Raise the derived review-required signal on dependent claims (§10); do not rewr
 
 ### Structured exact-source data
 
-If a source provides machine-readable structured data and HowToBaby merely mirrors a non-interpretive field under an approved rule, automatic draft updates may be allowed. The change still travels the Draft PR review path, and release still runs validation gates.
+If a source provides machine-readable structured data and HowToBaby merely mirrors a non-interpretive field under an approved rule, the watcher may prepare that update automatically **as a draft on the review branch**. It is never written directly to `main`: the change still travels the Draft PR review path, and release still runs validation gates.
 
 ### Safety-critical / urgent / contraindication changes
 
@@ -588,12 +638,14 @@ Draft PR
 
 Merge to `main`, not Evidence Watch itself, is the event that may enter the normal deployment pipeline (`REPOSITORY_STRUCTURE.md` §12). Because production deploys on push to `main`, `main` must be protected so that this reviewed merge is the only way an evidence change can reach it (§20).
 
+Until that merge, the Draft Pull Request — not the public site — is where an unresolved evidence change is visible (§13). Public provenance state, including every source freshness label, changes only as a consequence of merged canonical content passing through this pipeline.
+
 ## 20. GitHub Actions implementation and security contract
 
 A scheduled/manual workflow can:
 
 - run daily/weekly adapters;
-- cache last fingerprints in the repo or workflow artifact/store;
+- persist watcher operational state (last fingerprints, check metadata) in a workflow artifact/state store, on the Evidence Watch branch, or in a non-canonical repository location the `main` ruleset actually permits that identity to write — never mixed into canonical authored files;
 - create/update the Evidence Watch branch for an unresolved change;
 - create/update exactly one Draft Pull Request per actionable evidence change;
 - create/update operational Issues for operational failures only;
@@ -618,7 +670,8 @@ Phase 9 MUST configure a GitHub Ruleset, branch protection, or equivalent enforc
 - cannot push semantic evidence changes directly to `main`;
 - cannot bypass the Draft Pull Request review path;
 - cannot bypass required approvals or required status checks;
-- cannot self-approve its own evidence Pull Request, force-push to `main`, or delete the protected branch.
+- cannot self-approve its own evidence Pull Request, force-push to `main`, or delete the protected branch;
+- cannot write canonical `SourceRecord` metadata or any other canonical authored file to `main` outside that reviewed path, including for a deterministic metadata-only result (§11).
 
 Only a merge into `main` after the required review may enter the production pipeline (§19).
 
@@ -657,7 +710,8 @@ A scheduled run is not an AI run. AI MUST NOT run merely because the workflow ra
   │
   ├─ 2 deterministic metadata-only changes
   │    → deterministic handling
-  │    → normally no AI
+  │    → no AI
+  │    → no canonical write to `main`
   │
   └─ 1 actionable evidence change
        → impact analysis
@@ -702,6 +756,7 @@ Track:
 - last successful check per source;
 - consecutive failures;
 - changed/unchanged counts;
+- deterministic metadata-only results, including any that suggest a canonical `SourceRecord` correction a maintainer still has to apply in a normal reviewed Pull Request (§11);
 - parser failures;
 - open Evidence Watch Draft PRs and their age;
 - AI Review Summary completed/unavailable/failed counts;
@@ -721,7 +776,8 @@ Track:
 6. deterministic structured review payload + Markdown rendering;
 7. automatic idempotent Draft Pull Request per actionable evidence change, carrying the AI Review Summary when AI is available and an explicit unavailable/failed status when it is not;
 8. GitHub Issues for operational failures only;
-9. no automatic semantic rewriting of canonical content.
+9. no automatic semantic rewriting of canonical content, and no automatic canonical write into `main` for any outcome — watcher runs persist operational state and the review artifact only;
+10. no requirement that the public production site reflect pending watcher state before the reviewed merge.
 
 This provides most of the safety/maintenance benefit with much lower complexity than an AI-first crawler.
 
@@ -745,6 +801,22 @@ Evidence Watch SHOULD use the generated SQLite knowledge projection when it mate
 Evidence Watch may fetch large HTML/PDF/source bodies to ephemeral workspace/cache storage for parsing and diffing, but these bodies must not enter canonical Git history by default. Persistent Git state should remain compact metadata such as URLs, locators, timestamps, parser versions, ETag/Last-Modified values, fingerprints, classifications, and reviewed change records. CI repository-health checks must catch accidental cache/source-body commits. See `REPOSITORY_HEALTH.md`.
 
 ## Final invariant
+
+Three states, never interchangeable:
+
+```text
+1. watcher operational state
+   → auto-updatable by Evidence Watch
+   → not canonical product knowledge
+
+2. pending Evidence Watch review
+   → represented by the Draft Pull Request
+   → not production state
+
+3. canonical production provenance
+   → reviewed Git/YAML state
+   → changes only through reviewed merge + the existing deployment pipeline
+```
 
 > **Deterministic Evidence Watch detects and scopes the change.
 > AI explains and assists.

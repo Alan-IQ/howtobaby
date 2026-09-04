@@ -50,7 +50,7 @@ howtobaby/
 - `packages/ui`: component trình bày; không quyết định nội dung nào phù hợp y khoa.
 - `packages/themes`: semantic tokens/theme family.
 - `tools/*`: tính năng tool; guidance-linked tool chỉ tham chiếu claim ID.
-- `evidence/*`: fetch/diff/impact/report; không tự sửa JSX hay auto-publish medical guidance.
+- `evidence/*`: fetch/diff/impact/report và watcher operational state do việc đó sinh ra; không tự sửa JSX hay auto-publish medical guidance. Ranh giới sở hữu: Evidence Watch operational state do `evidence/*` sở hữu và được tự cập nhật bên ngoài canonical knowledge; còn canonical `SourceRecord`/claim/provenance thuộc `packages/knowledge`, là Git-reviewed canonical state, chỉ đổi qua reviewed merge path.
 
 ## 4. Dependency direction
 
@@ -91,7 +91,7 @@ sleep.safe.back_to_sleep
 
 ## 7. Evidence monitor state
 
-Có thể lưu ETag, Last-Modified, hash, section hash, check time, parser version và change classification. Với source có copyright/restricted, ưu tiên:
+Có thể lưu ETag, Last-Modified, hash, section hash, check time, parser version và change classification. Tất cả những thứ đó là **watcher operational state**: do Evidence Watch sở hữu, một lần chạy watcher được tự refresh, và không phải canonical product knowledge. Vì vậy `evidence/state/` và `evidence/cache/` không bao giờ là canonical source metadata — giá trị canonical của `SourceRecord` nằm ở `packages/knowledge` và chỉ đổi qua reviewed merge path (`EVIDENCE_UPDATE_ENGINE.md`). Một lần chạy watcher không được ghi canonical authored file vào `main`, và giá trị chỉ tồn tại trong watcher state không bao giờ được dùng làm provenance công khai. Với source có copyright/restricted, ưu tiên:
 
 ```text
 metadata + URL + locator + hash + temporary cache
@@ -122,7 +122,7 @@ Git history hỗ trợ audit nhưng không thay thế provenance schema.
 - mỗi actionable evidence change tạo hoặc cập nhật **đúng một** Draft Pull Request, idempotent, mang deterministic review payload kèm AI Review Summary hoặc trạng thái unavailable/failed rõ ràng;
 - operational failure (fetch, parser, authentication, adapter) có thể fail workflow và optionally mở/cập nhật GitHub Issue;
 - GitHub Issue **chỉ** dành cho operational failure — không bao giờ thay thế Draft PR review, và không tạo cho `UNCHANGED` hay deterministic metadata-only;
-- workflow không viết canonical medical prose và không bypass release review path.
+- workflow không viết canonical medical prose, không ghi canonical authored file (kể cả `SourceRecord` metadata) vào `main` ngoài reviewed path, và không bypass release review path.
 
 Chỉ merge đã review vào `main` mới đi vào `pipeline.yml`. Evidence Watch identity không được push semantic evidence change vào `main` hay bypass required review/check; Phase 9 cấu hình ruleset/branch protection để enforce điều này.
 
