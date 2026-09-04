@@ -159,15 +159,18 @@ Store compact persistent state when useful:
 - source/section locator;
 - ETag/Last-Modified;
 - document/section fingerprint;
+- source availability, normalized effective URL and locator resolution states;
 - check/review timestamps;
 - parser version;
 - change classification/review record.
 
 Retain full snapshots only when a specific legal/licensing/audit requirement justifies them and place them in an appropriate restricted store rather than assuming public Git is acceptable.
 
+Evidence Watch correctness must not depend on that retention. Its review payload states its own diff basis — `before-after`, `structural-hash-only` or `current-source-vs-canonical` — so a review whose prior source text is legitimately gone reports which deterministic hashes, sections and locators changed, or assesses the current source against current canonical claims, instead of fabricating previous wording (`EVIDENCE_UPDATE_ENGINE.md` §12).
+
 ### Watcher operational state never lands on `main`
 
-Evidence Watch persists that compact state on the dedicated non-canonical `evidence-watch/state` branch, never on `main` (`EVIDENCE_UPDATE_ENGINE.md` §21, `REPOSITORY_STRUCTURE.md` §9). Phase 9 extends the repository-health/baseline gate so populated operational state cannot enter `main` by accident:
+Evidence Watch persists that compact state — including its compact `SourceObservation` records and the observation snapshot a freshness acceptance retains, and never a fetched source body, AI prompt or AI output — on the dedicated non-canonical `evidence-watch/state` branch, never on `main` (`EVIDENCE_UPDATE_ENGINE.md` §21, `REPOSITORY_STRUCTURE.md` §9). Phase 9 extends the repository-health/baseline gate so populated operational state cannot enter `main` by accident:
 
 ```text
 main:

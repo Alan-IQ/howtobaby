@@ -59,11 +59,13 @@ Fixture nhỏ có thể commit nếu cần cho dev/test, license cho phép và n
 
 ## 9. Evidence source
 
-Watcher có thể tải full document tạm thời. Persistent proof là URL + locator + fingerprint + timestamp + parser version + review/change history; không phải bản copy vĩnh viễn của mọi CDC/AAP/WHO/FDA document.
+Watcher có thể tải full document tạm thời. Persistent proof là URL + locator + fingerprint + availability/locator state + timestamp + parser version + review/change history; không phải bản copy vĩnh viễn của mọi CDC/AAP/WHO/FDA document.
+
+Tính đúng đắn của Evidence Watch không được phụ thuộc việc giữ lại đó. Review payload tự nêu diff basis của nó — `before-after`, `structural-hash-only` hoặc `current-source-vs-canonical` — nên một review đã mất hợp lệ văn bản nguồn cũ sẽ báo đúng những hash/section/locator deterministic nào đã đổi, hoặc đối chiếu source hiện tại với canonical claim hiện tại, thay vì bịa lại wording cũ.
 
 ### Watcher operational state không bao giờ nằm trên `main`
 
-Evidence Watch persist state gọn đó trên branch non-canonical `evidence-watch/state`, không bao giờ trên `main`. Phase 9 mở rộng gate repository-health/baseline để state đã có nội dung không lọt vào `main` do sơ suất:
+Evidence Watch persist state gọn đó — gồm cả các bản `SourceObservation` gọn nhẹ và bản observation mà một freshness acceptance giữ lại, và không bao giờ có source body đã fetch, AI prompt hay output của AI — trên branch non-canonical `evidence-watch/state`, không bao giờ trên `main`. Phase 9 mở rộng gate repository-health/baseline để state đã có nội dung không lọt vào `main` do sơ suất:
 
 ```text
 main:

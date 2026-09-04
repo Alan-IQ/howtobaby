@@ -413,6 +413,10 @@ Internal states remain more granular.
 
 A pending Evidence Watch Draft Pull Request alone does not mutate production provenance state. While a detected change is still awaiting review, the Draft Pull Request is the maintainer-facing pending-review signal and the public site keeps showing the last reviewed state; Evidence Watch has no side channel that changes public source status outside canonical Git and the existing deployment pipeline (`EVIDENCE_UPDATE_ENGINE.md` §13, §19). Publishing pending watcher freshness state to the public site ahead of canonical merge would be a separate capability with its own contract and publication path, and is not part of Phase 9 v1.
 
+Nor does an Evidence Watch merge carry the interim state to production. Merging an Evidence Watch review Pull Request means that evidence event has been **resolved**: a required review-resolution check blocks the merge while the same event is still in `changed-review-required`, so a Phase 9 v1 Evidence Watch merge always lands a terminal reviewed source state — `current`, `superseded`, `retired` or `temporarily-unreachable` — together with the claim and review changes the content contract requires (`EVIDENCE_UPDATE_ENGINE.md` §19, §21). `changed-review-required` remains a legitimate canonical state a maintainer may author and merge in a normal reviewed Pull Request, and `Reviewing an update` renders from it in the ordinary way; what Phase 9 v1 forbids is an Evidence Watch review merging its own unresolved event while the watcher advances its baselines.
+
+`temporarily-unreachable` is also the canonical state a reviewed deterministic source absence normally resolves into when the authority is expected to restore the document; `retired` and `superseded` cover the other outcomes. A source that later becomes reachable again re-enters review through `SOURCE_RETURNED` rather than silently returning to `current` (`EVIDENCE_UPDATE_ENGINE.md` §9).
+
 A changed source does not automatically mean the existing recommendation is wrong. Wording should avoid unnecessary alarm.
 
 ### Source date provenance contract

@@ -213,6 +213,10 @@ Mọi trạng thái non-current dùng cùng attention treatment và cùng bộ n
 
 Một Draft Pull Request của Evidence Watch còn đang chờ review, tự nó, không làm đổi provenance state của production. Trong lúc thay đổi đã phát hiện còn chờ review, Draft PR là tín hiệu pending-review hướng tới maintainer, còn public site vẫn hiển thị trạng thái đã review gần nhất; Evidence Watch không có side channel nào đổi được public source status ngoài canonical Git và deployment pipeline hiện có (`EVIDENCE_UPDATE_ENGINE.md`). Muốn public site nhận pending watcher freshness state trước canonical merge thì đó là capability riêng, cần contract và publication path riêng, không thuộc Phase 9 v1.
 
+Lần merge của Evidence Watch cũng không đưa trạng thái trung gian ra production. Merge một review Pull Request của Evidence Watch nghĩa là evidence event đó đã được **resolve**: có một required review-resolution check chặn merge khi chính event đó còn ở `changed-review-required`, nên ở Phase 9 v1 mỗi lần merge của Evidence Watch luôn đưa vào một trạng thái source đã review dứt điểm — `current`, `superseded`, `retired` hoặc `temporarily-unreachable` — kèm những thay đổi claim/review mà content contract yêu cầu (`EVIDENCE_UPDATE_ENGINE.md`). `changed-review-required` vẫn là một canonical state hợp lệ mà maintainer được phép viết và merge trong một reviewed Pull Request thông thường, và `Đang rà soát bản cập nhật` vẫn render từ đó như bình thường; thứ Phase 9 v1 cấm là một review của Evidence Watch merge chính event chưa resolve của nó trong khi watcher advance baseline.
+
+`temporarily-unreachable` cũng là canonical state mà một source absence deterministic đã review thường resolve vào, khi tài liệu nhiều khả năng sẽ được authority khôi phục; `retired` và `superseded` phủ các kết cục còn lại. Một source sau đó truy cập lại được sẽ quay lại review qua `SOURCE_RETURNED`, không tự động trở về `current`.
+
 Source thay đổi không đồng nghĩa recommendation cũ sai; wording không nên gây hoảng.
 
 ## 11. CI provenance rules

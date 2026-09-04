@@ -65,14 +65,19 @@ scheduler
 → adapter.fetch()
 → HTTP cache/conditional request
 → validate response/source identity
-→ canonicalize monitored material
-→ fingerprint
-→ so observed comparisonDigest với comparisonBaseline
+→ resolve các locator đã cấu hình
+→ canonicalize monitored material khi có material
+→ fingerprint khi có material
+→ dựng SourceObservation đầy đủ
+→ so observed sourceObservationDigest với acceptedObservation
+→ so comparisonDigest với comparisonBaseline để lấy diff content/section
 → classify deterministic
 → persist CheckResult / operational state theo state machine
 ```
 
-Pipeline này không so với `"previous fingerprint"`. Phép so sánh duy nhất là `comparisonDigest` quan sát được đối chiếu `comparisonBaseline` mà operational state của source đang giữ.
+Pipeline này không so với `"previous fingerprint"`. Mọi phép so sánh đều gọi tên một baseline đã lưu: `sourceObservationDigest` quan sát được đối chiếu `acceptedObservation`, và — chỉ cho phần content/section — `comparisonDigest` đối chiếu `comparisonBaseline`.
+
+Fetch hỏng không phải là một source condition. `availability = "confirmed-missing"` chỉ dành cho kết quả vắng mặt deterministic ở mục Diff categories; timeout, TLS, authentication, rate-limit và lỗi parser vẫn là operational failure.
 
 Canonicalization loại navigation/script/dynamic noise nhưng không được làm mất qualifier y khoa.
 
@@ -84,7 +89,31 @@ Phase 9 có test cho redirect, từ chối private-network và các giới hạn
 
 ### Comparison identity
 
-`SourceFingerprint` chứa cả observation metadata lẫn phần vật liệu được so sánh, nên equality phải được định nghĩa tường minh. `comparisonDigest` là stable comparison identity đó, và là thứ duy nhất mọi phép so sánh trong contract này dùng.
+`SourceFingerprint` chứa cả observation metadata lẫn phần vật liệu được so sánh, nên equality phải được định nghĩa tường minh. `comparisonDigest` là định nghĩa đó — cho monitored material, và chỉ cho monitored material:
+
+```text
+comparisonDigest là identity duy nhất dùng để xét bằng nhau của
+normalized monitored material.
+
+Nó KHÔNG phải identity của toàn bộ source condition quan sát được.
+```
+
+Vì vậy nó tiếp tục quyết định, và chỉ quyết định: content/material equality, so sánh section/content, và cumulative diff phía content.
+
+Phase 9 còn có những actionable condition không nhất thiết làm đổi monitored material, thậm chí không sinh `SourceFingerprint` nào — `SOURCE_MISSING`, `SOURCE_MOVED`, locator ngừng resolve. Chỉ riêng `comparisonDigest` **không được** quyết định bất kỳ điều nào sau đây:
+
+```text
+SOURCE_MISSING
+SOURCE_MOVED
+SOURCE_RETURNED
+locator-resolution state
+review freshness
+REVIEW_REVERTED_TO_BASELINE
+AI attempt identity
+một review đang mở có cần review generation mới hay không
+```
+
+Tất cả những thứ đó quyết định trên source observation identity đầy đủ, định nghĩa ở cuối mục này.
 
 ```ts
 interface SourceFingerprint {
@@ -105,7 +134,7 @@ interface SourceFingerprint {
 
 `checkedAt` là observation timestamp, không tham gia equality. `ETag`/`Last-Modified` là fetch/change signal; chúng chỉ tham gia comparison identity khi có approved adapter/compare rule quy định rõ, mặc định không tự làm đổi semantic/content digest.
 
-Không phép so sánh nào so serialized `SourceFingerprint` object. Mọi so sánh — phân loại `UNCHANGED`, quyết định rerun AI, identity của cumulative diff cho review chưa resolve, freshness gate trước merge, dịch chuyển baseline — đều chỉ dựa trên `comparisonDigest`.
+Không phép so sánh nào so serialized `SourceFingerprint` hay `SourceObservation` object. Mỗi phép so sánh phải gọi tên digest nó dùng — bảng phân công nằm ở cuối mục này.
 
 ### Thuật toán digest đã chốt — `sha256-v1`
 
@@ -131,7 +160,20 @@ Input được hash là canonical JSON (UTF-8) của:
 
 `material` là normalized compare-relevant payload mà adapter sinh ra theo `compareMode` của monitor.
 
-**Canonical JSON v1**: key của object sắp xếp lexicographic; không có whitespace thừa; array giữ nguyên semantic order do adapter normalization tạo ra; collection dạng set phải được adapter normalize deterministic **trước** khi serialize, để bước serialize không phải tự đoán thứ tự; và trong `material` không có timestamp, workflow run ID, AI state hay Git SHA. Hash là SHA-256, in ra dạng lowercase hex.
+**Canonical JSON v1** là serialization dùng chung cho mọi digest trong contract này — `comparisonDigest`, `monitorConfigHash`, `sourceObservationDigest` và `reviewPayloadDigest` — và không để lại lựa chọn serialization quan trọng nào cho implementation:
+
+- key của object sắp xếp lexicographic;
+- không có whitespace thừa;
+- optional field vắng mặt thì **bỏ hẳn**, không serialize thành `null`;
+- `undefined` không hợp lệ ở bất kỳ đâu trong payload được hash;
+- `null` chỉ xuất hiện đúng chỗ schema/input contract yêu cầu explicit null;
+- array có semantic order thật thì giữ nguyên semantic order đó;
+- array dạng set chứa stable ID phải sort lexicographic **trước** khi serialize, để bước serialize không phải tự đoán thứ tự;
+- vì vậy `claimIds`, `guidanceIds`, route, tool, locator key, key của section đã đổi và mọi review list dạng set đều có thứ tự deterministic;
+- trong `material` không có timestamp, workflow run ID, AI state hay Git SHA;
+- cùng một logical payload bắt buộc sinh ra đúng một byte sequence.
+
+Hash là SHA-256, in ra dạng lowercase hex. `reviewPayloadDigest` dùng đúng bộ quy tắc thứ tự này.
 
 Operational state ghi lại version đã dùng: `comparisonDigestVersion: "sha256-v1"`.
 
@@ -171,15 +213,124 @@ licenseMode
 
 Chúng chỉ vào hash nếu một contract về sau khiến chúng thật sự ảnh hưởng vật liệu fetch/so sánh.
 
-Bất kỳ thay đổi nào ở `monitorConfigHash`, `parserVersion` hoặc `comparisonDigestVersion` khiến baseline đã lưu và fingerprint mới quan sát được không còn so sánh được đều sinh `REBASELINE_REQUIRED` — không bao giờ sinh một evidence diff giả.
+Bất kỳ thay đổi nào ở `monitorConfigHash`, `parserVersion`, `comparisonDigestVersion` hoặc `sourceObservationDigestVersion` khiến baseline đã lưu và quan sát mới không còn so sánh được đều sinh `REBASELINE_REQUIRED` — không bao giờ sinh một evidence diff giả.
+
+### Source observation identity — `SourceObservation`
+
+`comparisonDigest` định danh monitored material. Phase 9 v1 còn cần một identity deterministic cho **toàn bộ source condition** mà một lần chạy quan sát được, vì actionable evidence change không phải lúc nào cũng làm đổi material đó — và đôi khi không có material nào để hash.
+
+`SourceObservation` là bản ghi deterministic gọn nhẹ đó:
+
+```ts
+type SourceAvailability =
+  | "available"
+  | "confirmed-missing";
+
+type LocatorObservationStatus =
+  | "resolved"
+  | "moved"
+  | "missing";
+
+interface SourceObservation {
+  schemaVersion: "1";
+  sourceId: string;
+
+  observedAt: string; // chỉ là observation metadata
+
+  availability: SourceAvailability;
+
+  normalizedEffectiveUrl?: string;
+
+  fingerprint?: SourceFingerprint; // chỉ có khi material available
+
+  locatorStates: Record<string, {
+    status: LocatorObservationStatus;
+    resolvedLocatorDigest?: string;
+  }>;
+
+  classificationSignals: JsonValue;
+
+  sourceObservationDigest: string;
+}
+```
+
+Ngữ nghĩa: `observedAt` là observation metadata và không tham gia equality; `fingerprint` mang `comparisonDigest` hiện tại mỗi khi source material fetch và canonicalize được, **vắng mặt** khi không; `availability = "confirmed-missing"` không cần bịa `SourceFingerprint` lẫn `comparisonDigest`; `normalizedEffectiveUrl` do đúng bộ URL-identity normalization đã duyệt ở mục ranh giới phân loại URL sinh ra; `locatorStates` khóa theo stable locator identity mà canonical `SourceLocator` đã có (`EVIDENCE_PROVENANCE.md`), không theo vị trí trong mảng; `classificationSignals` chỉ chứa các fact deterministic, có giới hạn, đặc thù adapter mà classifier thật sự dùng — không bao giờ chứa source body đã fetch, excerpt dài của bên thứ ba, hay output của AI.
+
+> **Mọi fact phía source được dùng để sinh một evidence-change classification đều PHẢI có mặt trong `SourceObservation`, và do đó trong `sourceObservationDigest`.**
+
+Classifier không được dựa vào một fact phía source mà freshness check và revert logic không tái lập được từ observation. Nếu một tín hiệu đủ quan trọng để đổi classification thì nó thuộc về observation.
+
+### Source-observation digest đã chốt — `sha256-v1`
+
+`sourceObservationDigest` dùng đúng kỷ luật canonical JSON v1 + SHA-256 như `comparisonDigest`, nhưng tách domain để không bao giờ lẫn:
+
+```text
+sourceObservationDigestVersion = "sha256-v1"
+
+sourceObservationDigest = sha256-v1:<lowercase-hex-sha256>
+```
+
+Input được hash là canonical JSON v1 (UTF-8) của:
+
+```text
+{
+  digestType: "source-observation-v1",
+  sourceId,
+  monitorConfigHash,
+  parserVersion,
+  comparisonDigestVersion,
+
+  availability,
+  normalizedEffectiveUrl: <string-or-null>,
+  comparisonDigest: <string-or-null>,
+
+  locatorStates,
+  classificationSignals
+}
+```
+
+`normalizedEffectiveUrl` và `comparisonDigest` là hai vị trí mà canonical JSON v1 yêu cầu **explicit null** thay vì bỏ field: "không resolve được effective URL" và "không có material để so sánh" là điều kiện quan sát được, không phải dữ liệu thiếu.
+
+Không bao giờ hash: `observedAt`, `checkedAt`, retry state, workflow/run ID, AI state, Git SHA, thời gian fetch.
+
+`classificationSignals` và `locatorStates` bắt buộc deterministic. Một tín hiệu khác nhau giữa hai lần chạy trên cùng một source condition thì không thuộc về chúng.
+
+Đổi version của observation digest là đổi **cách HowToBaby đo** source condition, không phải source đã đổi:
+
+```text
+sourceObservationDigestVersion lệch
+→ REBASELINE_REQUIRED
+```
+
+không bao giờ là evidence diff.
+
+### Digest nào quyết định việc gì
+
+```text
+diff content/section                → comparisonDigest
+identity của cumulative content diff → comparisonDigest
+
+phân loại UNCHANGED                 → sourceObservationDigest
+deterministic classification        → sourceObservationDigest
+AI attempt identity                 → sourceObservationDigest
+review generation / bump head SHA   → sourceObservationDigest
+freshness gate trước merge          → sourceObservationDigest
+REVIEW_REVERTED_TO_BASELINE         → sourceObservationDigest
+dịch chuyển baseline                → cả hai, theo state machine
+```
+
+Một observation tự nó cũng chưa nói gì cho tới khi được so với một baseline có tên. Vì vậy mỗi source giữ ba fact riêng biệt — `acceptedObservation` (toàn bộ source condition đã accept), `comparisonBaseline` (monitored material **available** được accept gần nhất) và `lastObservedObservation` (source condition quan sát gần nhất). Chúng không bao giờ tự động được coi là một, và contract này không dùng khái niệm `"previous fingerprint"`.
 
 ## Diff categories
 
-`UNCHANGED`, `METADATA_CHANGED`, `CONTENT_CHANGED`, `SOURCE_MOVED`, `SOURCE_MISSING`, `NEW_EDITION_OR_POLICY`, `POSSIBLE_SUPERSESSION`, `FETCH_ERROR`, `PARSER_ERROR`.
+`UNCHANGED`, `METADATA_CHANGED`, `CONTENT_CHANGED`, `SOURCE_MOVED`, `SOURCE_MISSING`, `SOURCE_RETURNED`, `NEW_EDITION_OR_POLICY`, `POSSIBLE_SUPERSESSION`, `FETCH_ERROR`, `PARSER_ERROR`.
 
 Ngoài ra còn các operational condition không phải kết quả diff: `BOOTSTRAP_REQUIRED`, `STATE_MISSING`, `STATE_CORRUPT`, `STATE_SYNC_ERROR`, `STATE_SCHEMA_MIGRATION_REQUIRED`, `REBASELINE_REQUIRED`, `REVIEW_ARTIFACT_MISSING`, `REVIEW_STATE_MISMATCH`, `REVIEW_BRANCH_CONFLICT`, `REVIEW_CLOSED_UNMERGED`.
 
-`REVIEW_REVERTED_TO_BASELINE` không nằm ở cả hai danh sách: đó là một **review resolution condition** deterministic cho review đang mở mà upstream đã quay lại đúng baseline đã accept — không phải operational failure, cũng không phải diff result.
+Hai condition nữa không nằm ở cả hai danh sách, và không cái nào là phát biểu về nội dung source:
+
+- `REVIEW_REVERTED_TO_BASELINE` là một **review resolution condition** deterministic cho review đang mở mà upstream đã quay lại đúng observation đã accept — không phải operational failure, cũng không phải diff result;
+- `REVIEW_RESOLUTION_INCOMPLETE` là một **review-gate condition**: evidence event mà một Evidence Watch review Pull Request đang mang chưa đạt canonical result dứt điểm, nên merge bị chặn và baseline không dịch chuyển.
 
 Content change không đồng nghĩa recommendation change. Mỗi category phải quy về đúng một trong bốn operational outcome bên dưới. Source có state bị mất, hỏng hoặc không còn so sánh được thì không được phân loại thành kết quả diff nào cả.
 
@@ -190,6 +341,61 @@ Content change không đồng nghĩa recommendation change. Mỗi category phả
 Nếu URL khác nhau nhưng một deterministic rule đã duyệt chứng minh được rằng URL đó **giữ nguyên identity** — canonical URL normalization, redirect protocol/host ổn định, hoặc khác nhau ở tracking parameter — vẫn resolve đúng phần nội dung được monitor, và source identity cùng provenance không đổi, thì phân loại là `METADATA_CHANGED`, không phải `SOURCE_MOVED`.
 
 Rule này chỉ chạy một chiều: chứng minh deterministic giữ cho một khác biệt URL không rơi vào `SOURCE_MOVED`. Không có cơ chế nào được hạ một kết quả `SOURCE_MOVED` xuống metadata-only sau đó. Còn nghi ngờ về source identity thì phân loại là `SOURCE_MOVED`.
+
+Một lần đổi vị trí thật được quyết định trên observation identity, không phải trên content bytes:
+
+```text
+content bytes y hệt
+effective URL cũ → vị trí source thật mới
+→ sourceObservationDigest đổi
+→ SOURCE_MOVED
+```
+
+Monitored material giống hệt không bao giờ chứng minh được rằng source chưa move. Thứ duy nhất giữ một khác biệt URL ra ngoài `SOURCE_MOVED` là rule identity-preserving normalization ở trên, áp lên `normalizedEffectiveUrl`.
+
+### Locator state thuộc về source condition
+
+Một `SourceLocator` đã cấu hình mà ngừng resolve, hoặc resolve sang chỗ khác, là một fact phía source và được ghi trong `SourceObservation.locatorStates`. Vì vậy nó làm đổi `sourceObservationDigest` ngay cả khi content digest y hệt:
+
+```text
+locator resolved → locator missing
+locator resolved → locator moved
+→ sourceObservationDigest đổi
+→ material SourceLocator resolution failure
+→ actionable evidence change
+```
+
+Một locator failure không bao giờ bị nuốt vào metadata-only chỉ vì hash của trang được monitor tình cờ không đổi.
+
+### Vắng mặt deterministic: `SOURCE_MISSING`
+
+`SOURCE_MISSING` **không được** đòi một content digest bịa ra. Nó chỉ được phân loại khi adapter xác nhận **vắng mặt deterministic** theo policy — ví dụ `404`/`410` ổn định, có thẩm quyền, sau khi đã xử lý redirect và retry theo fetch contract.
+
+Các trường hợp sau vẫn là operational failure, không bao giờ là `SOURCE_MISSING`: `timeout`, lỗi DNS, lỗi TLS, `403`/lỗi authentication, `429`, `5xx`, lỗi parser.
+
+Một missing observation có dạng:
+
+```text
+availability     = confirmed-missing
+fingerprint      = vắng mặt
+comparisonDigest = null trong input của observation digest
+```
+
+và vẫn có `sourceObservationDigest` hợp lệ. Draft Pull Request, freshness check trước merge và finalizer sau merge đều hoạt động bình thường với nó.
+
+### `SOURCE_RETURNED`
+
+Khi state đã accept là một vắng mặt đã xác nhận và source available trở lại:
+
+```text
+acceptedObservation.availability = confirmed-missing
+observation hiện tại.availability = available
+→ SOURCE_RETURNED
+```
+
+`SOURCE_RETURNED` là **actionable** evidence change. Canonical source có thể đã được accept là `temporarily-unreachable`, `retired` hoặc `superseded`, và các claim phụ thuộc có thể đã được điều chỉnh trong lần review chấp nhận sự vắng mặt đó, nên một URL trả lời lại được không bao giờ tự động là `UNCHANGED`.
+
+Nếu `comparisonBaseline` cũ vẫn còn, review payload dùng nó để cho maintainer biết material quay lại có khác material available được accept gần nhất hay không.
 
 ## Bốn operational outcome
 
@@ -219,13 +425,13 @@ Watcher operational state được persist trên branch non-canonical dành riê
 
 ### `UNCHANGED`
 
-Cập nhật check timestamp và watcher operational state nếu cần; giữ nguyên `comparisonBaseline` với tư cách meaning baseline; không gọi AI; không tạo Pull Request; không tạo Issue; không tạo noise cho maintainer.
+Cập nhật check timestamp và watcher operational state nếu cần; giữ nguyên `acceptedObservation` và `comparisonBaseline` với tư cách meaning baseline; không gọi AI; không tạo Pull Request; không tạo Issue; không tạo noise cho maintainer. Một confirmed-missing observation y hệt cũng là `UNCHANGED` theo đúng rule này: source đã được accept là vắng mặt thì không dựng lại review mỗi lần cron.
 
 ### Deterministic metadata-only change
 
 Là `METADATA_CHANGED` mà một deterministic rule đã được duyệt chứng minh là không ảnh hưởng monitored content, medical meaning hay provenance — ví dụ publication timestamp đổi nhưng monitored section không đổi, hoặc URL normalization/redirect giữ nguyên identity theo rule deterministic ở phần trên.
 
-Xử lý deterministic; không gọi AI; không tạo Draft Pull Request; không tạo Issue; watcher operational state có thể tự cập nhật và `comparisonBaseline` CÓ THỂ advance ở mức operational với `authority = deterministic-metadata` để cùng một event không lặp lại mỗi lần chạy; **không được** tự ghi canonical `SourceRecord` metadata — hay bất kỳ canonical authored file nào — vào `main`; tuyệt đối không được đổi medical meaning; tuyệt đối không được dùng nhóm này để nuốt một kết quả `SOURCE_MOVED`. Còn nghi ngờ thì nâng thành actionable.
+Xử lý deterministic; không gọi AI; không tạo Draft Pull Request; không tạo Issue; watcher operational state có thể tự cập nhật và `acceptedObservation` CÓ THỂ advance ở mức operational với `authority = deterministic-metadata` để cùng một event không lặp lại mỗi lần chạy, còn `comparisonBaseline` CÓ THỂ advance theo khi comparison material cũng đổi mà rule đã duyệt vẫn chứng minh được là non-actionable; **không được** tự ghi canonical `SourceRecord` metadata — hay bất kỳ canonical authored file nào — vào `main`; tuyệt đối không được đổi medical meaning; tuyệt đối không được dùng nhóm này để nuốt một kết quả `SOURCE_MOVED`. Còn nghi ngờ thì nâng thành actionable.
 
 Khi một detection metadata-only cho thấy chính canonical `SourceRecord` thật sự cần sửa:
 
@@ -250,6 +456,7 @@ Tối thiểu gồm:
 CONTENT_CHANGED
 SOURCE_MOVED
 SOURCE_MISSING
+SOURCE_RETURNED
 NEW_EDITION_OR_POLICY
 POSSIBLE_SUPERSESSION
 material SourceLocator resolution failure
@@ -258,7 +465,7 @@ material provenance change
 
 `SOURCE_MOVED` luôn actionable, bất kể diff của monitored section cho thấy gì. Một thay đổi vị trí thật cũng có thể là re-publication, thay thế, ngừng phát hành, hoặc locator không còn resolve được — chỉ human review mới kết luận được. Nó không bao giờ được xử lý như deterministic metadata-only change.
 
-Bắt buộc: tạo hoặc cập nhật **đúng một** Draft Pull Request cho thay đổi chưa resolve đó; giữ nguyên `comparisonBaseline` trong khi cập nhật `lastObservedFingerprint` và `pendingReview` — phát hiện, phân loại hay báo cáo một actionable change không bao giờ advance baseline; đưa source và các claim phụ thuộc vào trạng thái review-required chưa resolve; giữ nguyên provenance, citation và review history cũ cho đến khi con người xử lý xong.
+Bắt buộc: tạo hoặc cập nhật **đúng một** Draft Pull Request cho thay đổi chưa resolve đó; giữ nguyên **cả** `acceptedObservation` lẫn `comparisonBaseline` trong khi cập nhật `lastObservedObservation` và `pendingReview` — phát hiện, phân loại hay báo cáo một actionable change không bao giờ advance baseline nào; đưa source và các claim phụ thuộc vào trạng thái review-required chưa resolve; giữ nguyên provenance, citation và review history cũ cho đến khi con người xử lý xong.
 
 GitHub Issue không bao giờ thay thế được Draft Pull Request cho actionable evidence change.
 
@@ -266,7 +473,7 @@ GitHub Issue không bao giờ thay thế được Draft Pull Request cho actiona
 
 `BOOTSTRAP_REQUIRED`, `FETCH_ERROR`, `PARSER_ERROR`, `STATE_MISSING`, `STATE_CORRUPT`, `STATE_SYNC_ERROR`, `STATE_SCHEMA_MIGRATION_REQUIRED`, `REBASELINE_REQUIRED`, `REVIEW_ARTIFACT_MISSING`, `REVIEW_STATE_MISMATCH`, `REVIEW_BRANCH_CONFLICT`, `REVIEW_CLOSED_UNMERGED`, authentication/access failure, persistent adapter failure.
 
-Đây không phải evidence change. Không condition nào trong nhóm này advance `comparisonBaseline`, tự lập baseline mới hay báo source là `UNCHANGED`. Có thể fail workflow và/hoặc tạo/cập nhật GitHub Issue theo retry/escalation policy, nhưng **không được** tạo evidence-change Pull Request nếu chưa xác định có evidence/provenance change thật. Phải phân biệt deterministic giữa lỗi transport/parser và `SOURCE_MISSING`/`SOURCE_MOVED` thật trước khi chọn outcome.
+Đây không phải evidence change. Không condition nào trong nhóm này advance `acceptedObservation` hay `comparisonBaseline`, tự lập baseline mới hay báo source là `UNCHANGED`. `REVIEW_RESOLUTION_INCOMPLETE` cũng không thuộc nhóm này: đó là review-gate condition chặn merge trên một review PR đang tồn tại, không phải lỗi của watcher và không phải phân loại nội dung source. Có thể fail workflow và/hoặc tạo/cập nhật GitHub Issue theo retry/escalation policy, nhưng **không được** tạo evidence-change Pull Request nếu chưa xác định có evidence/provenance change thật. Phải phân biệt deterministic giữa lỗi transport/parser và `SOURCE_MISSING`/`SOURCE_MOVED` thật trước khi chọn outcome.
 
 GitHub Issue **chỉ** dành cho operational failure. Không outcome nào khác tạo Issue: `UNCHANGED` và deterministic metadata-only không tạo Issue, còn actionable evidence change do Draft Pull Request gánh, không bao giờ do Issue.
 
@@ -276,7 +483,7 @@ GitHub Issue **chỉ** dành cho operational failure. Không outcome nào khác 
 
 Draft PR là canonical human review surface; machine-readable report (JSON) và bản Markdown render deterministic là payload nó mang theo.
 
-Draft PR phải có: source ID + title; canonical official-source URL; deterministic change classification; fingerprint/metadata cũ và mới khi phù hợp; deterministic diff summary; changed sections/locators; impacted claim IDs; impacted guidance blocks; impacted public routes; impacted Tools; deterministic policy risk; source/review state hiện tại; recommended review action; official-source link để verify; AI Review Summary hoặc trạng thái AI unavailable/failed.
+Draft PR phải có: source ID + title; canonical official-source URL; deterministic change classification; source observation đã accept và source observation quan sát mới nhất, mỗi bên định danh bằng `sourceObservationDigest`, kèm những fact về source condition khác nhau; fingerprint/metadata cũ và mới định danh bằng `comparisonDigest` khi có material; deterministic diff summary kèm diff basis (`diffEvidence`, mục dưới); changed sections, locator state, availability và effective location; impacted claim IDs; impacted guidance blocks; impacted public routes; impacted Tools; deterministic policy risk; source/review state hiện tại; recommended review action; official-source link để verify; AI Review Summary hoặc trạng thái AI unavailable/failed.
 
 Label ổn định nên dùng:
 
@@ -297,7 +504,36 @@ reviewBaseSha: string;
 reviewPayloadDigest: string;
 ```
 
-`reviewBaseSha` là commit `main` mà payload được tính trên đó. `reviewPayloadDigest` là SHA-256 trên canonical JSON v1 của tối thiểu: `sourceId`, `reviewBaseSha`, `baselineComparisonDigest`, `latestObservedComparisonDigest`, deterministic classification, locator/section đã đổi, claim ID bị ảnh hưởng, guidance ID bị ảnh hưởng, route/tool bị ảnh hưởng, deterministic policy risk, `monitorConfigHash`, `parserVersion`, `comparisonDigestVersion`.
+`reviewBaseSha` là commit `main` mà payload được tính trên đó. `reviewPayloadDigest` là SHA-256 trên canonical JSON v1 của tối thiểu:
+
+```text
+sourceId
+reviewBaseSha
+
+baselineSourceObservationDigest
+latestObservedSourceObservationDigest
+
+baselineComparisonDigest          (khi có)
+latestObservedComparisonDigest    (khi có)
+
+deterministic classification
+fact về locator/source condition đã đổi
+fact về section/content đã đổi    (khi có)
+
+impacted claim IDs
+impacted guidance IDs
+impacted routes/tools
+
+deterministic policy risk
+diffEvidence
+
+monitorConfigHash
+parserVersion
+comparisonDigestVersion
+sourceObservationDigestVersion
+```
+
+Mọi list dạng set trong payload đó — claim ID, guidance ID, route, tool, locator key, key của section đã đổi — đều được sort deterministic trước khi serialize theo quy tắc thứ tự của canonical JSON v1.
 
 Nó loại trừ có chủ đích: AI Review Summary, `checkedAt`/fetch timestamp, workflow run ID, và phần Markdown thuần trình bày.
 
@@ -307,14 +543,48 @@ Một **required deterministic review-integrity check**, bind với đúng PR he
 PR head SHA                      == pendingReview.reviewHeadSha
 PR đang current với `main` base bắt buộc
 payload deterministic tính lại   == reviewPayloadDigest
-review identity mới nhất         == pendingReview.latestObservedComparisonDigest
+review identity mới nhất         == pendingReview.latestObservedSourceObservationDigest
 ```
 
-Check này tách khỏi pre-merge source freshness check: review-integrity chứng minh review artifact còn mô tả đúng head này trên `main` hiện tại, còn freshness chứng minh upstream chưa đi quá digest đã review. **Cả hai phải pass trước khi merge.**
+Check này tách khỏi hai required check còn lại: review-integrity chứng minh review artifact còn mô tả đúng head này trên `main` hiện tại, source freshness chứng minh source condition chưa đi quá thứ đã review, còn review-resolution chứng minh canonical result đã dứt điểm cho evidence event này. **Cả ba phải pass trước khi merge.**
 
-Idempotent + concurrency: một source chưa resolve ↔ một review branch `evidence-watch/review/<sourceId>` ↔ một Draft PR; run sau cập nhật branch/PR đã có và tính lại cumulative diff `comparisonBaseline → latest observed fingerprint` thay vì mở PR mới; trước khi tạo gì, run phải tra cứu review theo deterministic identity (`sourceId`, `reviewKey`, branch `evidence-watch/review/<sourceId>`) và adopt thứ đã tồn tại; một run chết giữa lần ghi GitHub và lần ghi state không bao giờ được dẫn tới PR thứ hai — saga reserve-first ở state machine mới là cơ chế resume; run scheduled/manual chồng nhau không được tạo trùng branch/PR; workflow phải có concurrency control, và concurrency chỉ là hỗ trợ scheduling, không phải cơ chế đảm bảo tính transactional.
+Idempotent + concurrency: một source chưa resolve ↔ một review branch `evidence-watch/review/<sourceId>` ↔ một Draft PR; run sau cập nhật branch/PR đã có và tính lại cumulative diff `acceptedObservation → latest observed observation`, cùng diff content `comparisonBaseline → latest observed fingerprint` khi có material, thay vì mở PR mới; trước khi tạo gì, run phải tra cứu review theo deterministic identity (`sourceId`, `reviewKey`, branch `evidence-watch/review/<sourceId>`) và adopt thứ đã tồn tại; một run chết giữa lần ghi GitHub và lần ghi state không bao giờ được dẫn tới PR thứ hai — saga reserve-first ở state machine mới là cơ chế resume; run scheduled/manual chồng nhau không được tạo trùng branch/PR; workflow phải có concurrency control, và concurrency chỉ là hỗ trợ scheduling, không phải cơ chế đảm bảo tính transactional.
 
 Body PR do deterministic renderer sinh ra, không phải do model. Mọi field deterministic bắt buộc phải có kể cả khi không có AI. Credential của Evidence Watch không được phép bypass review path hay publish semantic medical change thẳng lên `main`.
+
+### Source material cũ và diff basis (`diffEvidence`)
+
+Tính đúng đắn của Phase 9 **không được** phụ thuộc vào việc giữ vĩnh viễn toàn văn tài liệu của bên thứ ba. Quy tắc licensing, retention và repository-health vốn đã cấm giữ phần lớn chúng, nên review payload nói rõ cơ sở bằng chứng của chính nó thay vì giả định lúc nào cũng có delta văn bản chính xác:
+
+```text
+diffEvidence:
+  | "before-after"
+  | "structural-hash-only"
+  | "current-source-vs-canonical"
+```
+
+`before-after` — material normalized cũ còn dùng được cả về pháp lý lẫn vận hành:
+
+```text
+→ được phép tính và hiển thị delta nguồn có giới hạn
+```
+
+`structural-hash-only` — chỉ còn hash, section identity và locator state:
+
+```text
+→ báo đúng những hash/section/locator deterministic nào đã đổi
+→ không bao giờ bịa lại wording cũ
+```
+
+`current-source-vs-canonical` — material chính thức hiện tại thì có, nhưng văn bản nguồn cũ thì không:
+
+```text
+→ reviewer và AI được đánh giá xem source HIỆN TẠI còn hỗ trợ
+  canonical claim HIỆN TẠI hay không
+→ nhưng KHÔNG được khẳng định khác biệt wording cũ → mới khi không có bằng chứng
+```
+
+`diffEvidence` là một phần của deterministic payload và được nêu tường minh cho AI reviewer. Không có yêu cầu nào bắt commit full source snapshot chỉ để semantic diff khả thi, và các quy tắc license/cache hiện hành vẫn giữ nguyên hiệu lực.
 
 ## Review workflow và provenance state
 
@@ -355,7 +625,7 @@ SourceRecord.status = changed-review-required
 
 `Claim.reviewStatus` canonical là reviewed content state thuộc sở hữu của `GUIDANCE_CONTENT_CONTRACT.md`. Nó chỉ đổi bên trong một reviewed canonical content change theo content/review contract hiện có — trên thực tế là trong kết quả đã review của Draft PR path, do con người quyết định. Bản thân Evidence Watch chỉ ghi watcher state và review artifact, và đề xuất `SourceRecord` lifecycle transition ở trên.
 
-Claim phụ thuộc bị flag bằng derived signal đó nhưng provenance/history cũ vẫn giữ cho đến khi review xong. Detected change không được âm thầm xóa citation, thay source hay vô hiệu hóa provenance. Sau review: source không đổi nghĩa → `current` + refresh verification; source đổi nghĩa → sửa claim liên quan + `current`; source bị thay thế → `superseded` + map replacement. Kết quả đó được ghi trên review PR rồi merge; chính lần merge đó cũng là thứ advance comparison baseline của watcher, lên đúng fingerprint đã được review.
+Claim phụ thuộc bị flag bằng derived signal đó nhưng provenance/history cũ vẫn giữ cho đến khi review xong. Detected change không được âm thầm xóa citation, thay source hay vô hiệu hóa provenance. Sau review: source không đổi nghĩa → `current` + refresh verification; source đổi nghĩa → sửa claim liên quan + `current`; source bị thay thế → `superseded` + map replacement; source xác nhận đã mất → `retired` hoặc `temporarily-unreachable`; source quay lại → kết quả đã review cho source vừa quay lại. Mỗi kết quả đó là một canonical result **dứt điểm** cho evidence event đang xét, được ghi trên review PR rồi merge; chính lần merge đó mới cho phép finalizer advance baseline của watcher, lên đúng observation đã được review. Một PR định merge trong khi chính event đó còn ở `changed-review-required` thì không phải resolution và không merge được (`REVIEW_RESOLUTION_INCOMPLETE`).
 
 Metadata-only rủi ro thấp (publication timestamp, URL normalization/redirect giữ nguyên identity) chỉ làm watcher operational state tự refresh theo deterministic rule; canonical `SourceRecord` metadata không được ghi tự động — cần sửa canonical thì maintainer làm trong một reviewed PR thông thường, còn thứ gì trọng yếu về provenance/độ mới/source identity thì nâng thành actionable. `SOURCE_MOVED` không thuộc nhóm này và luôn đi qua Draft PR review path. Content change không có mapping đã duyệt → bật derived review-required signal cho claim phụ thuộc, không tự viết lại prose và không ghi `Claim.reviewStatus`. Structured exact-source data chỉ được mirror field non-interpretive theo rule đã duyệt, và chỉ dưới dạng draft trên review branch — không bao giờ ghi thẳng vào `main` — vẫn qua Draft PR + validation gate. Safety-critical/urgent/contraindication luôn cần human review và clinician review khi content contract yêu cầu.
 
@@ -365,18 +635,20 @@ AI Review Summary là capability first-class của Phase 9, không phải tính 
 
 AI chỉ chạy **sau** deterministic diff/classification/impact analysis, trên một review context đã bounded (diff, changed sections, `SourceRecord` metadata, affected claims, locators, canonical guidance liên quan, source đối chiếu/hỗ trợ nếu có).
 
-Với một review đang mở, việc có gọi AI lại hay không là deterministic theo `pendingReview.aiAttempt` — bản ghi gắn mỗi lần thử AI với đúng `comparisonDigest` của nó:
+Với một review đang mở, việc có gọi AI lại hay không là deterministic theo `pendingReview.aiAttempt` — bản ghi gắn mỗi lần thử AI với đúng `sourceObservationDigest` của nó:
 
 ```text
-comparisonDigest mới
+sourceObservationDigest mới
 → TỐI ĐA một lần gọi AI tự động
 
-cùng comparisonDigest + status = completed
+cùng sourceObservationDigest + status = completed
 → không gọi AI
 
-cùng comparisonDigest + status = unavailable | failed
+cùng sourceObservationDigest + status = unavailable | failed
 → KHÔNG tự retry ở các scheduled run sau
 ```
+
+Attempt gắn với observation chứ không với content digest, vì vị trí source, locator state hay availability có thể đổi trong khi monitored material vẫn giống hệt từng byte. Khi đó một bản summary viết cho source condition cũ sẽ bị trình bày như đánh giá cho source condition mới. AI vẫn nhận content diff và các giá trị `comparisonDigest` khi có material.
 
 Một lần thất bại/unavailable vì vậy không bị cron gọi lại mỗi lần chạy. Retry cho digest hiện tại là một thao tác manual tường minh:
 
@@ -386,9 +658,9 @@ workflow_dispatch:
   sourceId = <id>
 ```
 
-Khi upstream digest đổi, một bản summary `completed` trước đó **lập tức trở thành stale** và không được trình bày như đánh giá AI hiện hành: renderer hiển thị status của **digest hiện tại**, và nếu AI failed/unavailable cho digest đó thì PR ghi rõ `AI Review: failed | unavailable for <current comparisonDigest>`. Bản summary thành công trước đó chỉ được giữ lại như historical/stale context có nhãn rõ ràng, không bao giờ như review hiện hành.
+Khi source condition quan sát được đổi, một bản summary `completed` trước đó **lập tức trở thành stale** và không được trình bày như đánh giá AI hiện hành: renderer hiển thị status của **observation hiện tại**, và nếu AI failed/unavailable cho observation đó thì PR ghi rõ `AI Review: failed | unavailable for <current sourceObservationDigest>`. Bản summary thành công trước đó chỉ được giữ lại như historical/stale context có nhãn rõ ràng, không bao giờ như review hiện hành.
 
-Deterministic wrapper quanh lời gọi AI tự ghi `comparisonDigest` đầu vào; không bao giờ hỏi model tự khai nó đã review digest nào.
+Deterministic wrapper quanh lời gọi AI tự ghi `sourceObservationDigest` đầu vào; không bao giờ hỏi model tự khai nó đã review cái gì. Wrapper cũng nêu tường minh `diffEvidence` và các fact deterministic về source condition (availability, normalized effective URL, locator state).
 
 ### Ranh giới source material gửi cho AI (`licenseMode`)
 
@@ -504,16 +776,43 @@ Merge vào `main` — chứ không phải bản thân Evidence Watch — mới l
 
 Trước khi merge, nơi nhìn thấy một evidence change chưa resolve là Draft Pull Request, không phải public site. Public provenance state — kể cả mọi nhãn độ mới của tài liệu — chỉ đổi như hệ quả của canonical content đã merge đi qua pipeline này.
 
-Một reviewed merge cũng phải là merge đúng thứ đã được review. Có **hai** required status check, cả hai bind với đúng PR head SHA:
+Một reviewed merge cũng phải là merge đúng thứ đã được review, bởi một review đã thật sự đi tới kết luận. Có **ba** required status check, cả ba bind với đúng PR head SHA:
 
-- **deterministic review-integrity check**: head đúng như state ghi, branch đang current với `main` base bắt buộc, payload deterministic tính lại vẫn bằng `reviewPayloadDigest`, và review identity vẫn bằng `pendingReview.latestObservedComparisonDigest`;
-- **source freshness check**: refetch và fingerprint lại bằng đúng monitor config, parser version và digest version, rồi chặn merge khi upstream đã đi quá digest mà maintainer vừa review.
+- **deterministic review-integrity check**: head đúng như state ghi, branch đang current với `main` base bắt buộc, payload deterministic tính lại vẫn bằng `reviewPayloadDigest`, và review identity vẫn bằng `pendingReview.latestObservedSourceObservationDigest`;
+- **source freshness check**: quan sát lại source bằng đúng monitor config, parser version và các digest version, dựng lại `SourceObservation` đầy đủ, tính lại `sourceObservationDigest`, rồi chặn merge khi source condition đã đi quá thứ maintainer vừa review;
+- **review-resolution check**: verify rằng canonical result trên branch là một trạng thái đã review dứt điểm cho evidence event này, và chặn merge bằng `REVIEW_RESOLUTION_INCOMPLETE` khi chưa.
 
-Cả hai mất hiệu lực mỗi khi head của review branch thay đổi, vì bất kỳ lý do gì.
+Cả ba mất hiệu lực mỗi khi head của review branch thay đổi, vì bất kỳ lý do gì.
 
 Evidence Watch review PR còn phải **up to date với `main`** trước khi merge, theo enforcement ở mức repository. Một PR có thể mở lâu trong khi canonical claim/dependency trên `main` đã đổi, và impact analysis tính trên base cũ không phải impact analysis của lần merge. Khi `main` tiến lên: sync `main` mới vào review branch một cách non-destructive, giữ nguyên phần maintainer đã sửa, tính lại impact source→claim→route/tool và deterministic review payload, và head mới sinh ra làm mất hiệu lực approval cũ lẫn freshness acceptance cũ.
 
 Required human approval phải áp cho **head reviewable mới nhất**. Enforcement bắt buộc phải dismiss approval cũ khi có commit mới push lên, và/hoặc yêu cầu approval cho lần push reviewable gần nhất; automation identity của Evidence Watch không bao giờ thỏa mãn được approval đó.
+
+### Merge một review của Evidence Watch là một resolution dứt điểm
+
+Merge một Evidence Watch review Pull Request nghĩa là evidence event nó mang theo đã được **resolve**. Phase 9 v1 không có khái niệm merge resolve một nửa.
+
+Phase 9 v1 **không được** merge một review PR để lại chính event chưa resolve đó ở trạng thái trung gian
+
+```text
+SourceRecord.status = changed-review-required
+```
+
+trong khi finalizer vẫn advance baseline. Trước merge, required review-resolution validation phải chứng minh canonical result đã đạt một trạng thái đã review dứt điểm phù hợp với event — ví dụ `current`, `superseded`, `retired`, `temporarily-unreachable` — kèm mọi thay đổi claim/review mà content contract yêu cầu cho kết quả đó.
+
+Nếu source hoặc các claim phụ thuộc còn chưa resolve cho event đó:
+
+```text
+REVIEW_RESOLUTION_INCOMPLETE
+→ chặn merge
+→ baseline không đổi
+```
+
+`REVIEW_RESOLUTION_INCOMPLETE` là review-gate condition — không phải phân loại nội dung source, cũng không phải operational failure. `REVIEW_REVERTED_TO_BASELINE` không bị gate này ảnh hưởng: nó vẫn resolve bằng một lần close hợp lệ của con người, không merge.
+
+Cố ý merge một trạng thái công khai trung gian `Đang rà soát bản cập nhật` rồi tiếp tục review ở một PR khác sẽ là một capability khác, cần contract và publication path riêng. Nó không thuộc Phase 9 v1.
+
+Merge resolve review; còn thứ advance baseline của watcher là một finalizer idempotent riêng, và chỉ sau khi nó verify PR đã merge đối chiếu pending review đã ghi cùng freshness acceptance của nó. Một lần merge mà ghi state thất bại thì canonical merge vẫn nguyên và baseline không advance (`STATE_SYNC_ERROR`).
 
 ## GitHub Actions: implementation + security
 
@@ -529,7 +828,7 @@ workflow_dispatch:
   mode = retry-ai   | sourceId = <id>
 ```
 
-Workflow còn phải reconcile head thật của PR với `pendingReview.reviewHeadSha` ở mọi lần head của Evidence Watch review PR thay đổi — các event tương đương `pull_request` `opened`, `synchronize`, `reopened` — và chạy required review-integrity check bên cạnh freshness check.
+Workflow còn phải reconcile head thật của PR với `pendingReview.reviewHeadSha` ở mọi lần head của Evidence Watch review PR thay đổi — các event tương đương `pull_request` `opened`, `synchronize`, `reopened` — và chạy đủ ba required check: deterministic review-integrity, source freshness và review-resolution validation.
 
 Scheduled run không bao giờ bootstrap hay rebaseline; gặp state thiếu/hỏng/không so sánh được thì báo operational condition. Nó có reconcile các merged review còn tồn đọng trước khi classification bình thường.
 
@@ -546,7 +845,7 @@ Phase 9 **phải** cấu hình GitHub Ruleset, branch protection hoặc enforcem
 - không bypass được required approval hoặc required status check;
 - không tự approve PR evidence của chính nó, không force-push vào `main`, không xóa được protected branch;
 - không ghi được canonical `SourceRecord` metadata hay bất kỳ canonical authored file nào vào `main` ngoài reviewed path, kể cả với kết quả deterministic metadata-only;
-- không merge được Evidence Watch review PR chưa pass **cả hai** required check: deterministic review-integrity và source freshness;
+- không merge được Evidence Watch review PR chưa pass **cả ba** required check: deterministic review-integrity, source freshness và review-resolution validation;
 - không merge được Evidence Watch review PR đang behind `main` base bắt buộc;
 - không merge được nhờ một approval cấp cho head cũ: enforcement dismiss approval cũ khi có commit mới và/hoặc yêu cầu approval cho lần push reviewable gần nhất, nên required human/clinical review luôn áp cho head reviewable mới nhất.
 
@@ -674,12 +973,60 @@ interface EvidenceWatchManifest {
 
     everInitialized: boolean;
     initializedAt?: string;
-    lastStateCommit?: string;
   }>;
 }
 ```
 
 Manifest và mọi per-source state file liên quan phải update **atomically** trong cùng một state commit.
+
+Ở đây **cố ý không có** field `lastStateCommit`. Chính Git commit chứa manifest đã là state revision và identity audit, nên một field SHA nằm trong chính commit đó sẽ tự tham chiếu và không giải được. Phase 9 v1 dựa hẳn vào Git history. Nếu về sau thật sự cần provenance CAS của parent thì phải dùng tên và ngữ nghĩa rõ ràng — ví dụ `basedOnStateHeadSha`, tức head đã **đọc trước** khi mutate — chứ không bao giờ là SHA của commit đang được tạo.
+
+#### Các transition của lifecycle
+
+Lifecycle là một tập transition đóng, không phải nhãn cho implementation tự chọn:
+
+```text
+monitor mới
+→ bootstrap-required
+
+bootstrap thành công
+→ active
+
+active + reserve một review
+→ review-pending
+
+review-pending + resolution đã merge/finalize hợp lệ
+→ active
+  HOẶC inactive nếu canonical monitor registry đã merge không còn
+       schedule source đó
+
+review-pending + close hợp lệ của con người theo REVIEW_REVERTED_TO_BASELINE
+→ active
+
+review-pending + closed-unmerged / REVIEW_BRANCH_CONFLICT /
+                 REVIEW_STATE_MISMATCH / REVIEW_ARTIFACT_MISSING
+→ recovery
+
+recovery hoặc rebaseline tường minh thành công
+→ active
+  HOẶC inactive theo canonical monitor registry
+
+canonical monitor bị gỡ/disable, không còn review chưa resolve
+→ inactive
+
+source inactive được kích hoạt lại
+→ validation/rebaseline tường minh
+→ active
+```
+
+Một canonical monitor biến mất khỏi `main` trong khi một Evidence Watch review còn pending không bao giờ là dọn dẹp âm thầm:
+
+```text
+canonical monitor bị gỡ khi review còn pending
+→ KHÔNG xóa review
+→ REVIEW_STATE_MISMATCH
+→ maintainer xử lý tường minh
+```
 
 **Monitor mới, chưa từng initialized.** Canonical monitor tồn tại nhưng manifest không có entry `everInitialized = true`:
 
@@ -719,7 +1066,8 @@ Kích hoạt lại đúng `sourceId` đã initialized không bao giờ dùng `bo
 
 ```text
 migration deterministic được hỗ trợ
-→ migrate mà không đổi ý nghĩa lẫn digest của comparisonBaseline
+→ migrate mà không đổi ý nghĩa lẫn digest của
+   acceptedObservation và comparisonBaseline
 → append một state-branch commit mới
 
 migration không được hỗ trợ
@@ -741,20 +1089,40 @@ interface EvidenceWatchSourceState {
   monitorConfigHash: string;
   parserVersion: string;
   comparisonDigestVersion: string;
+  sourceObservationDigestVersion: string;
 
-  comparisonBaseline: {
-    fingerprint: SourceFingerprint;
+  // Toàn bộ source condition đã được accept.
+  acceptedObservation: {
+    observation: SourceObservation;
     establishedAt: string;
+
     authority:
       | "bootstrap"
       | "deterministic-metadata"
       | "reviewed-pr"
       | "manual-rebaseline";
+
     canonicalGitSha?: string;
     prNumber?: number;
   };
 
-  lastObservedFingerprint?: SourceFingerprint;
+  // Material AVAILABLE được accept gần nhất.
+  // Có thể giữ nguyên khi acceptedObservation là confirmed-missing.
+  comparisonBaseline: {
+    fingerprint: SourceFingerprint;
+    establishedAt: string;
+
+    authority:
+      | "bootstrap"
+      | "deterministic-metadata"
+      | "reviewed-pr"
+      | "manual-rebaseline";
+
+    canonicalGitSha?: string;
+    prNumber?: number;
+  };
+
+  lastObservedObservation?: SourceObservation;
 
   pendingReview?: {
     reviewKey: string; // deterministic từ sourceId
@@ -770,24 +1138,33 @@ interface EvidenceWatchSourceState {
     reviewBaseSha: string;
     reviewHeadSha?: string;
 
-    baselineComparisonDigest: string;
-    latestObservedComparisonDigest: string;
+    baselineSourceObservationDigest: string;
+    latestObservedSourceObservationDigest: string;
+
+    baselineComparisonDigest?: string;
+    latestObservedComparisonDigest?: string;
 
     reviewPayloadDigest?: string;
 
     aiAttempt?: {
-      comparisonDigest: string;
+      sourceObservationDigest: string;
       status: "completed" | "unavailable" | "failed";
       attemptedAt: string;
     };
 
     freshnessAccepted?: {
       prHeadSha: string;
-      comparisonDigest: string;
+
+      sourceObservation: SourceObservation;
+
+      sourceObservationDigest: string;
       reviewPayloadDigest: string;
+
       monitorConfigHash: string;
       parserVersion: string;
       comparisonDigestVersion: string;
+      sourceObservationDigestVersion: string;
+
       checkedAt: string;
     };
 
@@ -797,7 +1174,11 @@ interface EvidenceWatchSourceState {
 }
 ```
 
-Mọi field digest ở trên là `comparisonDigest` theo định nghĩa ở mục Comparison identity, trừ `reviewPayloadDigest` là digest của deterministic review payload; nên so sánh state không bao giờ phụ thuộc observation metadata hay object fingerprint đã serialize. `reviewKey` suy ra deterministic từ `sourceId`, nên cùng một review chưa resolve luôn địa chỉ hóa được kể cả khi state chưa kịp ghi. `reviewBaseSha` là commit `main` mà payload được tính trên đó; `reviewHeadSha` là head hiện tại của review branch mà PR đang mở mang theo, chỉ vắng mặt khi review còn ở phase `reserved`.
+`baselineComparisonDigest` và `latestObservedComparisonDigest` là optional, vì một actionable condition có thể tồn tại mà không có material nào: một `SOURCE_MISSING` observation không có `SourceFingerprint` nên cũng không có `comparisonDigest`.
+
+Mỗi field digest ở trên đúng là loại digest mà tên nó nói — `comparisonDigest` hoặc `sourceObservationDigest` theo định nghĩa ở mục Comparison identity — trừ `reviewPayloadDigest` là digest của deterministic review payload; nên so sánh state không bao giờ phụ thuộc observation metadata hay object fingerprint/observation đã serialize.
+
+`freshnessAccepted` giữ đúng bản `SourceObservation` gọn nhẹ mà nó đã chấp nhận, không chỉ digest, vì finalizer cài chính observation đó làm `acceptedObservation` mới. Như mọi thứ khác trên branch này, nó vẫn gọn: field vận hành, giá trị status và hash — không bao giờ có source body đã fetch, excerpt dài của bên thứ ba, AI prompt hay output của AI. `reviewKey` suy ra deterministic từ `sourceId`, nên cùng một review chưa resolve luôn địa chỉ hóa được kể cả khi state chưa kịp ghi. `reviewBaseSha` là commit `main` mà payload được tính trên đó; `reviewHeadSha` là head hiện tại của review branch mà PR đang mở mang theo, chỉ vắng mặt khi review còn ở phase `reserved`.
 
 `phase` ghi review đang thực sự ở đâu, để một transition chết giữa chừng còn khôi phục được thay vì mơ hồ:
 
@@ -813,30 +1194,61 @@ recovery                   REVIEW_CLOSED_UNMERGED, REVIEW_ARTIFACT_MISSING,
 
 `lifecycle` của source trong manifest dịch chuyển theo (`review-pending` khi có review mở, `recovery` khi một trong các condition đó còn hiệu lực).
 
-Hai fingerprint là hai sự kiện khác nhau, không bao giờ tự động đồng nhất:
+Các fact được lưu là những sự kiện khác nhau, không bao giờ tự động đồng nhất:
 
 ```text
-comparisonBaseline
-= fingerprint mà watcher được phép dùng làm baseline để xác định
-  canonical evidence đã thay đổi hay chưa.
+acceptedObservation
+= toàn bộ source condition đã accept — availability, effective location,
+  locator state, classification signal, và fingerprint của material đã
+  accept khi lúc đó có material.
 
-lastObservedFingerprint
-= phiên bản source mới nhất watcher thực tế fetch thành công.
+comparisonBaseline
+= monitored material AVAILABLE được accept gần nhất, dùng để so sánh
+  content/section. Nó không dịch chuyển khi accepted observation là một
+  vắng mặt đã xác nhận.
+
+lastObservedObservation
+= source condition đầy đủ mới nhất watcher thực tế quan sát được.
 ```
 
-Contract này không dùng khái niệm mơ hồ `"previous fingerprint"`: mọi so sánh phải gọi tên một trong hai giá trị trên. Diff của một review chưa resolve luôn tính `comparisonBaseline → latest observed fingerprint`, không phải `previous cron observation → current cron observation`, để một thay đổi trải qua nhiều lần chạy không bị cắt vụn thành các mảnh trông vô hại.
+Hai baseline không bao giờ được gộp làm một. `acceptedObservation` trả lời "HowToBaby đã accept source condition nào?"; `comparisonBaseline` trả lời "material available được accept gần nhất là gì?". Một source confirmed-missing có accepted observation không kèm fingerprint, trong khi `comparisonBaseline` vẫn giữ material available cuối cùng — và chính điều đó làm cho một `SOURCE_RETURNED` về sau review được.
+
+Contract này không dùng khái niệm mơ hồ `"previous fingerprint"`: mọi so sánh phải gọi tên một trong các fact trên. Diff của một review chưa resolve luôn tính `acceptedObservation → latest observed observation`, kèm diff phía content `comparisonBaseline → latest observed fingerprint` khi có material — không phải `previous cron observation → current cron observation` — để một thay đổi trải qua nhiều lần chạy không bị cắt vụn thành các mảnh trông vô hại.
+
+### Đầu vào của deterministic classification
+
+Một lần chạy bình thường phân loại từ hai observation đầy đủ, không bao giờ chỉ từ content bytes:
+
+```text
+acceptedObservation.observation
+so với
+lastObservedObservation
+→ deterministic classification
+```
+
+So sánh phía content là câu hỏi thứ hai, hẹp hơn, và chỉ trả lời được khi cả hai phía đều có material:
+
+```text
+comparisonBaseline.fingerprint.comparisonDigest
+so với
+comparisonDigest của observation hiện tại
+→ diff content/section
+```
 
 ### Quy tắc dịch chuyển baseline
 
 `UNCHANGED`:
 
 ```text
-fetch
-→ observed comparisonDigest == comparisonBaseline.fingerprint.comparisonDigest
+observe
+→ sourceObservationDigest hiện tại
+     == acceptedObservation.observation.sourceObservationDigest
 → cập nhật check timestamp và operational metadata
-→ comparisonBaseline không đổi về mặt meaning baseline
+→ acceptedObservation và comparisonBaseline không đổi về mặt meaning baseline
 → no AI / no PR / no Issue
 ```
+
+Một confirmed-missing observation y hệt cũng là `UNCHANGED` theo đúng rule này: source mà HowToBaby đã accept là vắng mặt thì không dựng lại review mỗi lần cron.
 
 `METADATA_CHANGED` deterministic được rule đã duyệt xác nhận non-actionable:
 
@@ -845,8 +1257,10 @@ fetch
 → no PR
 → no Issue
 → canonical Git không đổi
-→ watcher MAY advance comparisonBaseline ở mức operational
+→ watcher MAY advance acceptedObservation ở mức operational
    để không lặp lại cùng một metadata-only event mỗi lần chạy
+→ khi comparison material cũng đổi mà rule đã duyệt vẫn chứng minh được
+   là non-actionable, comparisonBaseline MAY advance theo
 → authority = deterministic-metadata
 ```
 
@@ -855,30 +1269,32 @@ fetch
 Actionable evidence change:
 
 ```text
+acceptedObservation     = GIỮ NGUYÊN
 comparisonBaseline      = GIỮ NGUYÊN
-lastObservedFingerprint = cập nhật lên source mới nhất đã fetch
+lastObservedObservation = cập nhật lên source condition mới nhất quan sát được
 pendingReview           = tạo/cập nhật
 Draft PR                = tạo/cập nhật
 ```
 
-> **Watcher KHÔNG được advance `comparisonBaseline` chỉ vì một actionable change đã được fetch, phân loại hay báo cáo.** Chỉ một resolution hợp lệ mới dịch chuyển nó.
+> **Watcher KHÔNG được advance `acceptedObservation` hay `comparisonBaseline` chỉ vì một actionable change đã được quan sát, phân loại hay báo cáo.** Chỉ một resolution hợp lệ mới dịch chuyển chúng.
 
 ### Source đổi tiếp khi PR còn mở
 
 Phase 9 v1 lấy `sourceId` làm đơn vị review chưa resolve: **một open Evidence Watch review PR cho mỗi `sourceId`**. Một source chưa resolve không sinh nhiều PR song song; nhiều revision upstream quan sát được trước khi resolve đều được gộp vào cùng review đó.
 
 ```text
-comparisonBaseline giữ nguyên
-→ fetch source mới nhất
+acceptedObservation và comparisonBaseline giữ nguyên
+→ quan sát source condition mới nhất
 → tính lại cumulative deterministic diff:
-   comparisonBaseline → newest observed fingerprint
+   acceptedObservation → newest observed observation
+   comparisonBaseline  → newest observed fingerprint (khi có material)
 → cập nhật CÙNG review branch
 → cập nhật CÙNG Draft PR
 ```
 
-Quyết định gọi AI là deterministic, dựa trên `pendingReview.aiAttempt`: cùng digest + `completed` thì không gọi lại; cùng digest + `unavailable`/`failed` thì **không tự retry** ở các run sau (chỉ `retry-ai` manual); digest đổi thì tối đa một lần gọi AI tự động cho digest mới và thay bản tóm tắt trong CÙNG PR, còn bản cũ lập tức stale và không được hiển thị như review hiện hành.
+Quyết định gọi AI là deterministic, dựa trên `pendingReview.aiAttempt`: cùng `sourceObservationDigest` + `completed` thì không gọi lại; cùng `sourceObservationDigest` + `unavailable`/`failed` thì **không tự retry** ở các run sau (chỉ `retry-ai` manual); observation đổi thì tối đa một lần gọi AI tự động cho observation mới và thay bản tóm tắt trong CÙNG PR, còn bản cũ lập tức stale và không được hiển thị như review hiện hành. Một source condition đã đổi mà `comparisonDigest` không đổi vẫn làm attempt hiện tại thành stale.
 
-Mọi lần chạy có cập nhật review đang mở cũng phải cập nhật `latestObservedComparisonDigest`, tính lại `reviewPayloadDigest`, tạo review head mới (mục dưới), ghi `reviewHeadSha` mới và vô hiệu hóa `freshnessAccepted` cũ.
+Mọi lần chạy có cập nhật review đang mở cũng phải cập nhật `latestObservedSourceObservationDigest` — và `latestObservedComparisonDigest` khi có material — tính lại `reviewPayloadDigest`, tạo review head mới (mục dưới), ghi `reviewHeadSha` mới và vô hiệu hóa `freshnessAccepted` cũ.
 
 ### Tạo review: saga reserve-first
 
@@ -933,15 +1349,17 @@ REVIEW_BRANCH_CONFLICT
 
 > **Evidence Watch KHÔNG được reset hay force-push `evidence-watch/review/<sourceId>`.**
 
-### Mỗi upstream digest mới phải sinh review head SHA mới
+### Mỗi source observation mới phải sinh review head SHA mới
 
-Status check và approval của GitHub gắn với commit SHA, nên chỉ đổi body/state của PR là không đủ. Mỗi khi một review đang mở quan sát thấy `latestObservedComparisonDigest` thay đổi thì head của review branch **bắt buộc** phải đổi. Nếu bản refresh không có file change tự nhiên nào để commit, automation tạo một empty review-refresh commit do bot sở hữu:
+Status check và approval của GitHub gắn với commit SHA, nên chỉ đổi body/state của PR là không đủ. Mỗi khi một review đang mở quan sát thấy `latestObservedSourceObservationDigest` thay đổi thì head của review branch **bắt buộc** phải đổi. Đó là observation digest chứ không phải content digest: một source đã move, đã mất, đã quay lại hoặc mất locator trong khi bytes vẫn y hệt cũng phải sinh một thế hệ review mới, để không check/approval/freshness acceptance cũ nào sống sót qua một source condition đã đổi. Nếu bản refresh không có file change tự nhiên nào để commit, automation tạo một empty review-refresh commit do bot sở hữu:
 
 ```text
 chore(evidence-watch): refresh <sourceId> review
 ```
 
 Không được thêm file report vĩnh viễn vào canonical `main` chỉ để ép head đổi. Việc bump head bảo đảm: freshness acceptance cũ không còn hiệu lực; required check cũ không còn gắn với review hiện tại; approval cũ của con người bị vô hiệu; và `reviewHeadSha` định danh đúng thế hệ review. Không dùng force-push để đạt được điều đó.
+
+`reviewPayloadDigest` deterministic cũng có thể đổi vì những lý do không đến từ upstream — `main` base mới, impact mapping đổi, policy risk deterministic đổi, hoặc maintainer sửa canonical làm đổi impact deterministic. Những trường hợp đó vốn đã làm head đổi qua một commit hoặc một lần sync base thật, và required check cùng quy tắc stale approval áp lên head mới đúng như trên.
 
 ### Đồng bộ mọi thay đổi head của PR, kể cả commit của con người
 
@@ -994,7 +1412,18 @@ upstream B → A trước khi review xong
 REVIEW_REVERTED_TO_BASELINE
 ```
 
-nhận diện khi hội đủ: `pendingReview` tồn tại; `comparisonDigest` quan sát mới nhất `== comparisonBaseline.fingerprint.comparisonDigest`; source identity và các locator đã cấu hình vẫn validate.
+nhận diện khi hội đủ:
+
+```text
+pendingReview tồn tại
+
+lastObservedObservation.sourceObservationDigest
+  == acceptedObservation.observation.sourceObservationDigest
+
+VÀ tính lại deterministic classification không còn actionable condition nào
+```
+
+Điều kiện là **toàn bộ observation**, không bao giờ là content equality. Content bytes bằng baseline tự nó không chứng minh được gì, nên không trường hợp nào sau đây bị hiểu nhầm thành revert: `SOURCE_MOVED` với content y hệt, locator failure với content y hệt, source đang mất, hoặc một thay đổi về provenance/source condition.
 
 Hành vi:
 
@@ -1010,6 +1439,7 @@ Hành vi:
 Evidence Watch không bao giờ tự close PR đó. Khi con người close và condition đã được verify:
 
 ```text
+acceptedObservation  không đổi
 comparisonBaseline   không đổi
 pendingReview        được xóa
 canonical Git        không đổi
@@ -1035,17 +1465,21 @@ Bootstrap thành công:
 canonical reviewed monitor config
 → fetch source
 → validate source identity
-→ validate locator/section đã cấu hình khi áp dụng được
+→ resolve locator/section đã cấu hình khi áp dụng được
 → sinh fingerprint đầu tiên
-→ comparisonBaseline = fingerprint
-→ lastObservedFingerprint = fingerprint
+→ dựng SourceObservation đầy đủ đầu tiên
+→ acceptedObservation     = observation đó
+→ comparisonBaseline      = fingerprint của observation đó
+→ lastObservedObservation = observation đó
 → authority = bootstrap
 → ghi canonical `main` SHA + monitorConfigHash + parserVersion
-   + comparisonDigestVersion
+   + comparisonDigestVersion + sourceObservationDigestVersion
 → manifest: everInitialized = true, initializedAt, lifecycle = active
 → no AI
 → no evidence PR
 ```
+
+Bootstrap đòi một source available. Observation đầu tiên mà là một vắng mặt đã xác nhận thì không lập được `comparisonBaseline`, nên bootstrap hủy và maintainer xử lý monitor hoặc source trước khi source được initialized.
 
 Scheduled run gặp một canonical monitor chưa có entry `everInitialized` thì báo `BOOTSTRAP_REQUIRED` và dừng ở đó.
 
@@ -1061,7 +1495,7 @@ Operational state pin `monitorConfigHash` và `parserVersion`. Khi config/select
 REBASELINE_REQUIRED
 → operational condition
 → không phân loại source là UNCHANGED / METADATA_CHANGED / CONTENT_CHANGED
-→ không ghi đè comparisonBaseline cũ
+→ không ghi đè acceptedObservation hay comparisonBaseline cũ
 → không âm thầm rebaseline
 ```
 
@@ -1093,7 +1527,8 @@ Rebaseline thành công ghi `authority = manual-rebaseline` kèm operational aud
   canonicalGitSha: string,
   monitorConfigHash: string,
   parserVersion: string,
-  comparisonDigestVersion: string
+  comparisonDigestVersion: string,
+  sourceObservationDigestVersion: string
 }
 ```
 
@@ -1101,17 +1536,17 @@ Rebaseline thành công ghi `authority = manual-rebaseline` kèm operational aud
 
 ### Resolution và dịch chuyển baseline
 
-Actionable change chỉ advance `comparisonBaseline` sau một resolution hợp lệ.
+Actionable change chỉ advance `acceptedObservation` — và `comparisonBaseline` khi accepted observation có material — sau một resolution hợp lệ.
 
-**Reviewed PR đã merge:** merge là thứ resolve review, nhưng thứ dịch chuyển baseline là một finalizer deterministic riêng (mục dưới), không phải bản thân lần merge. Không được advance baseline lên một observed fingerprint mới hơn mà maintainer chưa review, và cũng không bao giờ lấy `lastObservedFingerprint` chỉ vì đó là thứ mới nhất watcher nhìn thấy.
+**Reviewed PR đã merge:** merge là thứ resolve review, nhưng thứ dịch chuyển baseline là một finalizer deterministic riêng (mục dưới), không phải bản thân lần merge. Không baseline nào được advance lên một source condition mới hơn mà maintainer chưa review, và cũng không bao giờ lấy `lastObservedObservation` chỉ vì đó là thứ mới nhất watcher nhìn thấy.
 
-**Source đổi thật nhưng người review kết luận không đổi nghĩa:** không đơn giản close PR rồi coi là xong. Maintainer phải hoàn tất minimal canonical review result ngay trên PR đó — ví dụ `SourceRecord.status → current`, `lastVerifiedAt` → ngày con người thực sự kiểm chứng, `verifiedBy → maintainer`, và canonical metadata khác chỉ khi phù hợp — rồi merge qua normal reviewed path, để canonical audit trail và watcher baseline có chung một điểm resolution rõ ràng.
+**Source đổi thật nhưng người review kết luận không đổi nghĩa:** không đơn giản close PR rồi coi là xong. Maintainer phải hoàn tất minimal canonical review result ngay trên PR đó — ví dụ `SourceRecord.status → current`, `lastVerifiedAt` → ngày con người thực sự kiểm chứng, `verifiedBy → maintainer`, và canonical metadata khác chỉ khi phù hợp — rồi merge qua normal reviewed path, để canonical audit trail và watcher baseline có chung một điểm resolution rõ ràng. Kết quả ghi lại phải **dứt điểm** cho evidence event đó thì PR mới merge được; nếu không, required review-resolution check chặn merge bằng `REVIEW_RESOLUTION_INCOMPLETE`.
 
 **PR closed không merge:** không phải acceptance — trừ trường hợp close có verified `REVIEW_REVERTED_TO_BASELINE` (mục trên), khi review resolve với baseline không đổi và không vào recovery state.
 
 ```text
 closed + unmerged
-→ comparisonBaseline không đổi
+→ acceptedObservation và comparisonBaseline không đổi
 → không được coi là accepted
 → REVIEW_CLOSED_UNMERGED
 → source vào explicit operational recovery state
@@ -1140,29 +1575,59 @@ merged PR number == pendingReview.prNumber
 merged PR head   == pendingReview.reviewHeadSha
 
 freshnessAccepted.prHeadSha == merged PR head
-freshnessAccepted.comparisonDigest
-                 == pendingReview.latestObservedComparisonDigest
+freshnessAccepted.sourceObservationDigest
+                 == pendingReview.latestObservedSourceObservationDigest
 freshnessAccepted.reviewPayloadDigest
                  == pendingReview.reviewPayloadDigest
 
-required review-integrity check đã pass cho đúng head đó
-required freshness check        đã pass cho đúng head đó
+required review-integrity check   đã pass cho đúng head đó
+required freshness check          đã pass cho đúng head đó
+required review-resolution check  đã pass cho đúng head đó
 ```
 
 Khi đó, và chỉ khi đó:
 
 ```text
-comparisonBaseline = đúng SourceFingerprint có comparisonDigest chính là
-                     digest đã accept, bind với PR head đã được review
-authority          = reviewed-pr
-prNumber           = số PR đã merge
-canonicalGitSha    = canonical merge commit
-pendingReview      = xóa
+acceptedObservation = freshnessAccepted.sourceObservation
+authority           = reviewed-pr
+prNumber            = số PR đã merge
+canonicalGitSha     = canonical merge commit
+pendingReview       = xóa
 ```
 
-Finalizer còn phải cài đặt đúng comparison semantics đã bind với PR đã merge và với freshness acceptance đó: `monitorConfigHash`, `parserVersion`, `comparisonDigestVersion`. Điều này quan trọng nhất khi PR chính là thứ resolve một `SOURCE_MOVED`, một URL/selector mới, một thay đổi canonicalization hay bất kỳ thay đổi monitor config nào khác: một source-move/config change đã review thành công không được lập tức sinh `REBASELINE_REQUIRED` giả ở run kế tiếp chỉ vì operational state còn giữ config hash cũ.
+Accepted observation được cài từ đúng bản snapshot đã giữ, không dựng lại bằng một lần fetch mới: finalizer accept đúng source condition đã pass freshness gate cho head đó.
 
-Thiếu bất kỳ điều kiện nào thì finalizer không advance baseline; nó raise operational condition và giữ nguyên `pendingReview`.
+`comparisonBaseline` đi tiếp thế nào thì tùy accepted observation.
+
+**Accepted observation là `available`:**
+
+```text
+comparisonBaseline = freshnessAccepted.sourceObservation.fingerprint
+authority          = reviewed-pr
+```
+
+và finalizer cài đúng comparison semantics đã review: `monitorConfigHash`, `parserVersion`, `comparisonDigestVersion`, `sourceObservationDigestVersion`. Điều này quan trọng nhất khi PR chính là thứ resolve một `SOURCE_MOVED`, một URL/selector mới, một thay đổi canonicalization hay bất kỳ thay đổi monitor config nào khác: một source-move/config change đã review thành công không được lập tức sinh `REBASELINE_REQUIRED` giả ở run kế tiếp chỉ vì operational state còn giữ config hash cũ.
+
+**Accepted observation là `confirmed-missing`:**
+
+```text
+acceptedObservation advance lên missing observation
+comparisonBaseline  giữ nguyên fingerprint AVAILABLE được accept gần nhất
+```
+
+Finalizer **không** được bịa `SourceFingerprint` cho một source đang mất, và **không** được vứt bỏ fingerprint available cuối cùng. Đó chính là thứ làm hai lần chạy sau đó đúng:
+
+```text
+cùng missing observation ở cron kế tiếp
+→ UNCHANGED
+
+source sau đó quay lại
+→ SOURCE_RETURNED
+→ comparisonBaseline còn giữ vẫn cho một phép so sánh hữu ích với
+  material available được accept gần nhất
+```
+
+Thiếu bất kỳ điều kiện nào thì finalizer không advance baseline nào; nó raise operational condition và giữ nguyên `pendingReview`.
 
 **Ghi state thất bại thì fail closed.** Nếu canonical PR đã merge nhưng cập nhật `evidence-watch/state` thất bại:
 
@@ -1170,7 +1635,7 @@ Thiếu bất kỳ điều kiện nào thì finalizer không advance baseline; n
 STATE_SYNC_ERROR
 ```
 
-Đây là operational failure, và: canonical merge không bao giờ rollback; `comparisonBaseline` không được giả vờ đã advance; `pendingReview` không được âm thầm xóa; scheduled run không được mở evidence PR mới cho cùng revision đã accepted chỉ vì finalization chưa sync; reconciliation phải retry idempotent cho tới khi thành công hoặc maintainer can thiệp.
+Đây là operational failure, và: canonical merge không bao giờ rollback; `acceptedObservation` và `comparisonBaseline` không được giả vờ đã advance; `pendingReview` không được âm thầm xóa; scheduled run không được mở evidence PR mới cho cùng revision đã accepted chỉ vì finalization chưa sync; reconciliation phải retry idempotent cho tới khi thành công hoặc maintainer can thiệp.
 
 Vì vậy mọi scheduled/manual run của Evidence Watch phải reconcile các merged review còn tồn đọng **trước** khi classification bình thường, để một source đã có resolution accepted nhưng chưa sync không bị detect lại thành change mới. Có mode recovery tường minh cho cùng việc đó:
 
@@ -1184,34 +1649,63 @@ workflow_dispatch:
 
 ### Freshness gate trước khi merge
 
-Một Evidence Watch review PR không được merge nếu source đã đổi tiếp sau fingerprint mà maintainer vừa review. Phase 9 yêu cầu một deterministic freshness check là required status check trên Evidence Watch review PR:
+Một Evidence Watch review PR không được merge nếu source condition đã đổi tiếp sau thứ mà maintainer vừa review. Phase 9 yêu cầu một deterministic freshness check là required status check trên Evidence Watch review PR:
 
 ```text
-refetch monitored source
-→ canonicalize bằng đúng config/parser version
-→ comparisonDigest
-→ so với digest mà review payload hiện tại của PR đại diện
+quan sát lại source bằng monitor config đã review
+→ validate source identity
+→ resolve các locator đã cấu hình
+→ canonicalize material khi có material
+→ dựng SourceObservation đầy đủ
+→ tính lại sourceObservationDigest
+→ so với pendingReview.latestObservedSourceObservationDigest
 ```
 
+Gate là **toàn bộ observation**, không bao giờ chỉ content, nên nó hoạt động y hệt cho `CONTENT_CHANGED`, `SOURCE_MOVED`, `SOURCE_MISSING`, `SOURCE_RETURNED`, locator failure và mọi deterministic source-side actionable condition khác. Một review có content source không đổi nhưng availability, effective URL hay locator state đã đổi thì **fail** freshness.
+
 ```text
-giống  → freshness check PASS
-       → ghi freshnessAccepted {
-           prHeadSha, comparisonDigest, reviewPayloadDigest,
-           monitorConfigHash, parserVersion, comparisonDigestVersion,
+giống  → source condition còn khớp thứ đã review
+       → ghi bền freshnessAccepted {
+           prHeadSha,
+           sourceObservation,
+           sourceObservationDigest, reviewPayloadDigest,
+           monitorConfigHash, parserVersion,
+           comparisonDigestVersion, sourceObservationDigestVersion,
            checkedAt
          }
+       → rồi mới báo required check là SUCCESS
 
 khác   → freshness check FAIL
        → refresh CÙNG Draft PR
        → tính lại cumulative diff
-       → chỉ chạy lại AI cho comparisonDigest MỚI,
+       → chỉ chạy lại AI cho sourceObservationDigest MỚI,
          và tối đa một lần tự động
        → cần human review lại
 ```
 
-Một lần PASS được bind với đúng một cặp — PR head SHA nó đã chạy trên đó và `comparisonDigest` nó chấp nhận — và vô giá trị ngoài cặp đó: review branch/head đổi vì bất kỳ lý do gì thì acceptance cũ mất hiệu lực và required check phải chạy lại; scheduled watcher thấy upstream đổi tiếp thì cập nhật cùng review PR, cập nhật `reviewHeadSha` và `latestObservedComparisonDigest`, vô hiệu hóa `freshnessAccepted` cũ, và cần human review + freshness check lại; finalizer sau merge chỉ được dùng `freshnessAccepted` khi `merged PR head SHA == freshnessAccepted.prHeadSha`.
+#### Freshness PASS chỉ được báo success sau khi đã ghi bền
 
-Không hứa tuyệt đối rằng upstream không thể đổi ngay sau lần check; yêu cầu hẹp hơn và enforce được: PR không được merge với một reviewed fingerprint đã biết là stale.
+Thứ tự là một phần của contract, vì một lần success trên GitHub mà không có state đỡ sẽ cho phép merge dựa trên một acceptance mà finalizer không verify được:
+
+```text
+tính ra một SourceObservation khớp
+→ CAS-write freshnessAccepted vào evidence-watch/state
+→ verify lần ghi đã thành công cho đúng PR head đó
+→ RỒI mới báo required freshness status check là SUCCESS
+```
+
+Nếu lần ghi state đó thất bại:
+
+```text
+freshness check FAIL
+→ chặn merge
+```
+
+Check không bao giờ báo success trước rồi mới cố persist acceptance sau.
+
+Một lần PASS được bind với đúng một cặp — PR head SHA nó đã chạy trên đó và `sourceObservationDigest` nó chấp nhận — và vô giá trị ngoài cặp đó: review branch/head đổi vì bất kỳ lý do gì thì acceptance cũ mất hiệu lực và required check phải chạy lại; scheduled watcher thấy upstream đổi tiếp thì cập nhật cùng review PR, cập nhật `reviewHeadSha` và `latestObservedSourceObservationDigest`, vô hiệu hóa `freshnessAccepted` cũ, và cần human review + freshness check lại; finalizer sau merge chỉ được dùng `freshnessAccepted` khi `merged PR head SHA == freshnessAccepted.prHeadSha`.
+
+Không hứa tuyệt đối rằng upstream không thể đổi ngay sau lần check; yêu cầu hẹp hơn và enforce được: PR không được merge với một source condition đã review mà đã biết là stale.
 
 ### Operational condition
 
@@ -1228,8 +1722,9 @@ STATE_SYNC_ERROR                   canonical merge đứng vững, ghi state th�
 STATE_SCHEMA_MIGRATION_REQUIRED    schemaVersion của state không migrate
                                    deterministic được
 REBASELINE_REQUIRED                monitorConfigHash / parserVersion /
-                                   comparisonDigestVersion làm baseline đã lưu
-                                   không còn so sánh được
+                                   comparisonDigestVersion /
+                                   sourceObservationDigestVersion làm các
+                                   baseline đã lưu không còn so sánh được
 REVIEW_ARTIFACT_MISSING            state ghi có review mở nhưng PR biến mất
 REVIEW_STATE_MISMATCH              PR tồn tại nhưng durable state không
                                    reconcile an toàn được với nó
@@ -1243,9 +1738,11 @@ persistent adapter failure
 
 Không condition nào là phát ngôn về **nội dung** của source. Mỗi cái nói một sự thật về watcher, config, state store hay review artifact của nó, và không cái nào được render/báo cáo/phân loại thành evidence content change.
 
-Với tất cả: không advance `comparisonBaseline`; không tự lập baseline mới; không báo source là `UNCHANGED`; không báo diff classification cho lần chạy đó; có thể fail workflow và tạo/cập nhật operational Issue — trừ `BOOTSTRAP_REQUIRED` vốn là điều kiện khởi tạo bình thường, chỉ vào workflow summary/observability chứ không tự tạo Issue; không tạo evidence-change PR giả khi chưa xác định có evidence change thật.
+Với tất cả: không advance `acceptedObservation` hay `comparisonBaseline`; không tự lập baseline mới; không báo source là `UNCHANGED`; không báo diff classification cho lần chạy đó; có thể fail workflow và tạo/cập nhật operational Issue — trừ `BOOTSTRAP_REQUIRED` vốn là điều kiện khởi tạo bình thường, chỉ vào workflow summary/observability chứ không tự tạo Issue; không tạo evidence-change PR giả khi chưa xác định có evidence change thật.
 
 `REVIEW_REVERTED_TO_BASELINE` cố ý **không** nằm trong bộ này: đó là review resolution condition deterministic hợp lệ, không phải operational failure.
+
+`REVIEW_RESOLUTION_INCOMPLETE` cũng không nằm trong bộ này. Đó là review-gate condition chặn merge, do required review-resolution check raise khi một review PR định merge trong lúc chính evidence event đó còn chưa resolve. Nó chặn merge và giữ nguyên cả hai baseline; nó không phải lỗi của watcher và không bao giờ là phát ngôn về nội dung source.
 
 #### Khôi phục state bị mất hoặc hỏng
 
@@ -1304,11 +1801,11 @@ Respect robots/terms/license/rate limit/auth; không bypass paywall/anti-bot; ư
 
 ## Observability
 
-Theo dõi: last successful check, consecutive failures, changed/unchanged counts, source đang chờ bootstrap tường minh (`BOOTSTRAP_REQUIRED`) hoặc rebaseline, lifecycle trong manifest (kể cả monitor `inactive` và source đang kẹt `STATE_SCHEMA_MIGRATION_REQUIRED`), review kẹt ở phase `reserved` cùng số lần `REVIEW_STATE_MISMATCH`/`REVIEW_BRANCH_CONFLICT`, review resolve bằng `REVIEW_REVERTED_TO_BASELINE`, review có branch behind `main` và số lần review-integrity check fail, các lần thử AI `unavailable`/`failed` cho digest hiện tại đang chờ `retry-ai` tường minh, merged review còn chờ reconcile và số lần `STATE_SYNC_ERROR`, source đang nằm trong operational recovery state (`REVIEW_CLOSED_UNMERGED`, `STATE_MISSING`/`STATE_CORRUPT` không recover được), số kết quả deterministic metadata-only (kể cả những kết quả gợi ý một chỗ cần sửa canonical `SourceRecord` mà maintainer còn phải làm trong reviewed PR thông thường), parser failures, Draft PR đang mở và tuổi của chúng, số AI Review completed/unavailable/failed, source quá hạn review, claim đang bị chặn bởi source changed/superseded, thời gian từ lúc detect đến lúc release.
+Theo dõi: last successful check, consecutive failures, changed/unchanged counts, source đang chờ bootstrap tường minh (`BOOTSTRAP_REQUIRED`) hoặc rebaseline, lifecycle trong manifest (kể cả monitor `inactive` và source đang kẹt `STATE_SCHEMA_MIGRATION_REQUIRED`), review kẹt ở phase `reserved` cùng số lần `REVIEW_STATE_MISMATCH`/`REVIEW_BRANCH_CONFLICT`, review resolve bằng `REVIEW_REVERTED_TO_BASELINE`, review có branch behind `main` và số lần review-integrity check fail, các lần thử AI `unavailable`/`failed` cho digest hiện tại đang chờ `retry-ai` tường minh, merged review còn chờ reconcile và số lần `STATE_SYNC_ERROR`, source đang nằm trong operational recovery state (`REVIEW_CLOSED_UNMERGED`, `STATE_MISSING`/`STATE_CORRUPT` không recover được), số kết quả deterministic metadata-only (kể cả những kết quả gợi ý một chỗ cần sửa canonical `SourceRecord` mà maintainer còn phải làm trong reviewed PR thông thường), freshness check fail trên review PR cùng các freshness acceptance không ghi bền được, source có accepted observation là vắng mặt đã xác nhận và các lần `SOURCE_RETURNED`, các thay đổi source condition phát hiện được khi content digest không đổi (move, locator failure) cùng `diffEvidence` mà mỗi review đang mở đang dựa vào, review bị chặn bởi `REVIEW_RESOLUTION_INCOMPLETE`, parser failures, Draft PR đang mở và tuổi của chúng, số AI Review completed/unavailable/failed, source quá hạn review, claim đang bị chặn bởi source changed/superseded, thời gian từ lúc detect đến lúc release.
 
 ## Evidence Watch v1
 
-Registry + adapters + watcher operational state bền trên branch `evidence-watch/state` (`manifest.json` làm registry khởi tạo + state từng source) với các mode manual tường minh `bootstrap`/`rebaseline`/`reconcile`/`retry-ai` + fetch/fingerprint so với `comparisonBaseline` (tách khỏi `lastObservedFingerprint`) + diff và actionable classification + locator move detection + source→claim impact + deterministic structured payload/Markdown renderer + đúng một Draft PR idempotent cho mỗi source chưa resolve, cập nhật tại chỗ khi có revision mới, kèm AI Review Summary (hoặc trạng thái unavailable/failed) + `comparisonDigest` đã chốt ở `sha256-v1` trên canonical JSON v1 và `monitorConfigHash` chỉ phủ config ảnh hưởng comparison/identity + required source freshness check và required deterministic review-integrity check trước merge (cả hai bind với đúng PR head SHA), review branch bắt buộc current với `main` và approval của con người áp cho head reviewable mới nhất + post-merge reconciliation idempotent (advance cả `monitorConfigHash`/`parserVersion`/`comparisonDigestVersion` đã review) + Issue chỉ cho operational failure + fetch security contract và ranh giới `licenseMode` cho material gửi AI + enforcement giữ file `evidence/state/**` có nội dung khỏi `main`. Không advance baseline khi chưa có resolution hợp lệ, không bootstrap/rebaseline âm thầm, không re-bootstrap source đã initialized; write vào `evidence-watch/state` dùng compare-and-swap được serialize, không force-push, branch được protect, state-sync thất bại thì fail closed chứ không nhân đôi review, và saga reserve-first giúp một run chết giữa chừng resume thay vì mở PR thứ hai; review branch giữ nguyên phần canonical maintainer đã sửa (không reset, không force-push, xung đột thì `REVIEW_BRANCH_CONFLICT` fail closed), mỗi upstream digest mới sinh review head SHA mới, và upstream quay lại baseline đi theo path `REVIEW_REVERTED_TO_BASELINE`. **Không** tự viết lại canonical content, **không** tự ghi canonical vào `main` ở bất kỳ outcome nào (một lần chạy watcher chỉ persist operational state và review artifact), và **không** yêu cầu public production site phản ánh pending watcher state trước reviewed merge.
+Registry + adapters + watcher operational state bền trên branch `evidence-watch/state` (`manifest.json` làm registry khởi tạo + state từng source) với các mode manual tường minh `bootstrap`/`rebaseline`/`reconcile`/`retry-ai` + quan sát toàn bộ source condition thành `SourceObservation` gọn nhẹ, định danh bằng `sourceObservationDigest` đã chốt ở `sha256-v1` trên canonical JSON v1 và so với `acceptedObservation`, cùng material so qua `comparisonDigest` với `comparisonBaseline` tách riêng (và `monitorConfigHash` chỉ phủ config ảnh hưởng comparison/identity) + diff và actionable classification, kể cả các condition không phụ thuộc content digest (`SOURCE_MISSING`, `SOURCE_RETURNED`, move, locator failure) + locator move detection + source→claim impact + deterministic structured payload/Markdown renderer kèm `diffEvidence` + đúng một Draft PR idempotent cho mỗi source chưa resolve, cập nhật tại chỗ khi có revision mới, kèm AI Review Summary (hoặc trạng thái unavailable/failed) + ba required check trước merge bind với đúng PR head SHA (deterministic review-integrity, source freshness trên toàn bộ `SourceObservation` chỉ báo PASS sau khi acceptance đã ghi bền, và review-resolution chặn merge khi evidence event còn chưa resolve — `REVIEW_RESOLUTION_INCOMPLETE`), review branch bắt buộc current với `main` và approval của con người áp cho head reviewable mới nhất + post-merge reconciliation idempotent cài đúng accepted observation cùng `monitorConfigHash`/`parserVersion`/`comparisonDigestVersion`/`sourceObservationDigestVersion` đã review, chỉ advance `comparisonBaseline` khi accepted observation có material + Issue chỉ cho operational failure + fetch security contract và ranh giới `licenseMode` cho material gửi AI + enforcement giữ file `evidence/state/**` có nội dung khỏi `main`. Không advance baseline khi chưa có resolution hợp lệ, không bootstrap/rebaseline âm thầm, không re-bootstrap source đã initialized; write vào `evidence-watch/state` dùng compare-and-swap được serialize, không force-push, branch được protect, state-sync thất bại thì fail closed chứ không nhân đôi review, và saga reserve-first giúp một run chết giữa chừng resume thay vì mở PR thứ hai; review branch giữ nguyên phần canonical maintainer đã sửa (không reset, không force-push, xung đột thì `REVIEW_BRANCH_CONFLICT` fail closed), mỗi source observation mới sinh review head SHA mới, và upstream quay lại đúng accepted observation đi theo path `REVIEW_REVERTED_TO_BASELINE`. **Không** tự viết lại canonical content, **không** tự ghi canonical vào `main` ở bất kỳ outcome nào (một lần chạy watcher chỉ persist operational state và review artifact), và **không** yêu cầu public production site phản ánh pending watcher state trước reviewed merge.
 
 ## Later evolution
 
