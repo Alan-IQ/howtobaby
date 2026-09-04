@@ -231,9 +231,11 @@ Deliverables:
 - source→claim reverse dependency index reused from canonical provenance;
 - temporary evidence cache + metadata/fingerprint persistence policy;
 - durable watcher operational state on the dedicated non-canonical `evidence-watch/state` branch (`evidence/state/manifest.json`, `evidence/state/sources/<sourceId>.json`), kept separate from canonical knowledge, so a run refreshes fingerprints/check metadata without writing canonical `SourceRecord` metadata — or any other canonical authored file — to `main` (`EVIDENCE_UPDATE_ENGINE.md` §11, §13, §21);
-- per-source state with a `comparisonBaseline` distinct from `lastObservedFingerprint`, pinned `monitorConfigHash`/`parserVersion`, and `pendingReview` tracking including `lastAiReviewedFingerprintHash`;
-- explicit manual `bootstrap` and `rebaseline` dispatch modes, separate from the scheduled run;
-- a deterministic pre-merge source freshness check wired as a required status check on Evidence Watch review Pull Requests;
+- a deterministic `comparisonDigest` as the single fingerprint comparison identity, computed from normalized compare-relevant material and excluding observation-only fields;
+- per-source state with a `comparisonBaseline` distinct from `lastObservedFingerprint`, pinned `monitorConfigHash`/`parserVersion`, and `pendingReview` tracking `reviewHeadSha`, the baseline/observed/AI-reviewed digests and `freshnessAccepted`;
+- explicit manual `bootstrap`, `rebaseline` and `reconcile` dispatch modes, separate from the scheduled run;
+- a deterministic pre-merge source freshness check wired as a required status check on Evidence Watch review Pull Requests, bound to the exact Pull Request head SHA and digest;
+- an idempotent post-merge reconciliation on the fixed merged-Pull-Request event, plus serialized, never force-pushed writes to a protected `evidence-watch/state` branch;
 - deterministic actionable-change classification separating unchanged, deterministic metadata-only, actionable evidence change, and operational failure;
 - deterministic structured review payload (JSON) + deterministic Markdown renderer;
 - automatic idempotent Draft Pull Request creation/update for every actionable evidence change;
@@ -265,6 +267,13 @@ Gate:
 - exactly one open review Pull Request exists per `sourceId`, repeated upstream revisions update that same Pull Request on the cumulative `comparisonBaseline → latest observed` diff, and an unchanged pending fingerprint triggers no further AI call;
 - a merged reviewed Pull Request advances the baseline only to the fingerprint that was actually reviewed, and a closed-unmerged Pull Request advances nothing;
 - the Evidence Watch Pull Request freshness check blocks a merge against a known stale reviewed fingerprint;
+- `comparisonDigest` semantics are deterministic and exclude observation-only fields, and `checkedAt` never affects fingerprint equality;
+- an initialized source can never be bootstrapped again as a state-recovery mechanism;
+- lost or corrupt state restores from `evidence-watch/state` history, or — when no valid baseline survives — requires explicit maintainer source verification before a rebaseline bound to that canonical merge;
+- post-merge reconciliation is deterministic, idempotent and retryable, and baseline advancement is bound to the exact merged Pull Request head SHA and its freshness-accepted `comparisonDigest`;
+- a state-sync failure fails closed: the canonical merge stands, the baseline does not advance, `pendingReview` is not cleared, and no duplicate evidence review is opened;
+- a closed-unmerged Pull Request advances no baseline and puts the source into an explicit recovery state until the monitor is fixed;
+- writes to `evidence-watch/state` are serialized, atomic per state update and never force-pushed, and the branch is protected against force-push and deletion;
 - an unavailable or failed AI review is reported as such and carries no synthesized semantic assessment or summary;
 - a detected source change never mutates `Claim.reviewStatus`; dependent claims carry only the derived review signal from `SourceRecord.status`;
 - `main` enforcement is configured and verified: the Evidence Watch identity cannot push semantic evidence changes directly to `main`, cannot bypass the Draft PR review path, and cannot bypass required approval/status checks, so only a reviewed merge reaches the production pipeline;

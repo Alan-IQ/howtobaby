@@ -64,11 +64,36 @@ Scheduler → adapter.fetch → conditional request/cache → canonicalize → f
 
 Canonicalization loại navigation/script/dynamic noise nhưng không được làm mất qualifier y khoa.
 
+### Comparison identity
+
+`SourceFingerprint` chứa cả observation metadata lẫn phần vật liệu được so sánh, nên equality phải được định nghĩa tường minh. `comparisonDigest` là stable comparison identity đó, và là thứ duy nhất mọi phép so sánh trong contract này dùng.
+
+```ts
+interface SourceFingerprint {
+  sourceId: string;
+  checkedAt: string;
+
+  etag?: string;
+  lastModified?: string;
+  metadataHash?: string;
+  contentHash?: string;
+  sectionHashes?: Record<string, string>;
+
+  comparisonDigest: string;
+}
+```
+
+`comparisonDigest` bắt buộc: deterministic; tính từ normalized compare-relevant material theo adapter và `compareMode` của monitor; **không** phụ thuộc `checkedAt`, fetch timestamp, retry metadata, workflow run ID, AI state hay Git state; không đổi khi watcher chạy lại trên cùng monitored material; và dùng cùng canonicalization/config/parser semantics cho baseline, observed fingerprint lẫn freshness check.
+
+`checkedAt` là observation timestamp, không tham gia equality. `ETag`/`Last-Modified` là fetch/change signal; chúng chỉ tham gia comparison identity khi có approved adapter/compare rule quy định rõ, mặc định không tự làm đổi semantic/content digest.
+
+Không phép so sánh nào so serialized `SourceFingerprint` object. Mọi so sánh — phân loại `UNCHANGED`, quyết định rerun AI, identity của cumulative diff cho review chưa resolve, freshness gate trước merge, dịch chuyển baseline — đều chỉ dựa trên `comparisonDigest`.
+
 ## Diff categories
 
 `UNCHANGED`, `METADATA_CHANGED`, `CONTENT_CHANGED`, `SOURCE_MOVED`, `SOURCE_MISSING`, `NEW_EDITION_OR_POLICY`, `POSSIBLE_SUPERSESSION`, `FETCH_ERROR`, `PARSER_ERROR`.
 
-Ngoài ra còn các operational condition không phải kết quả diff: `STATE_MISSING`, `STATE_CORRUPT`, `REBASELINE_REQUIRED`, `REVIEW_ARTIFACT_MISSING`.
+Ngoài ra còn các operational condition không phải kết quả diff: `STATE_MISSING`, `STATE_CORRUPT`, `STATE_SYNC_ERROR`, `REBASELINE_REQUIRED`, `REVIEW_ARTIFACT_MISSING`, `REVIEW_CLOSED_UNMERGED`.
 
 Content change không đồng nghĩa recommendation change. Mỗi category phải quy về đúng một trong bốn operational outcome bên dưới. Source có state bị mất, hỏng hoặc không còn so sánh được thì không được phân loại thành kết quả diff nào cả.
 
@@ -153,7 +178,7 @@ GitHub Issue không bao giờ thay thế được Draft Pull Request cho actiona
 
 ### Operational failure
 
-`FETCH_ERROR`, `PARSER_ERROR`, `STATE_MISSING`, `STATE_CORRUPT`, `REBASELINE_REQUIRED`, `REVIEW_ARTIFACT_MISSING`, authentication/access failure, persistent adapter failure.
+`FETCH_ERROR`, `PARSER_ERROR`, `STATE_MISSING`, `STATE_CORRUPT`, `STATE_SYNC_ERROR`, `REBASELINE_REQUIRED`, `REVIEW_ARTIFACT_MISSING`, `REVIEW_CLOSED_UNMERGED`, authentication/access failure, persistent adapter failure.
 
 Đây không phải evidence change. Không condition nào trong nhóm này advance `comparisonBaseline`, tự lập baseline mới hay báo source là `UNCHANGED`. Có thể fail workflow và/hoặc tạo/cập nhật GitHub Issue theo retry/escalation policy, nhưng **không được** tạo evidence-change Pull Request nếu chưa xác định có evidence/provenance change thật. Phải phân biệt deterministic giữa lỗi transport/parser và `SOURCE_MISSING`/`SOURCE_MOVED` thật trước khi chọn outcome.
 
@@ -228,7 +253,7 @@ AI Review Summary là capability first-class của Phase 9, không phải tính 
 
 AI chỉ chạy **sau** deterministic diff/classification/impact analysis, trên một review context đã bounded (diff, changed sections, `SourceRecord` metadata, affected claims, locators, canonical guidance liên quan, source đối chiếu/hỗ trợ nếu có).
 
-Với một review đang mở, việc có gọi AI lại hay không là deterministic theo `pendingReview.lastAiReviewedFingerprintHash`: fingerprint quan sát được không đổi thì không gọi AI; có revision mới thì chạy lại summary trên cumulative diff mới nhất và thay bản cũ trong cùng PR.
+Với một review đang mở, việc có gọi AI lại hay không là deterministic theo `pendingReview.lastAiReviewedComparisonDigest`: `comparisonDigest` quan sát được không đổi thì không gọi AI; có revision mới thì chạy lại summary trên cumulative diff mới nhất và thay bản cũ trong cùng PR.
 
 AI được phép: summarize semantic change; giải thích meaning impact; đánh giá từng affected claim; phát hiện thay đổi qualifier/age boundary/quantity/urgency/contraindication/applicability; phát hiện possible contradiction; chỉ ra claim mà dependency list thuần cấu trúc thể hiện yếu; đề xuất claim cần verify/revise/supersede; đề xuất next action cho maintainer.
 
@@ -307,7 +332,7 @@ AI review
 ≠ release approval
 ```
 
-Maintainer review Draft PR đối chiếu official source và có thể approve, request changes, sửa canonical content, ghi kết quả review ngay trên PR đó rồi merge, yêu cầu review mạnh hơn/clinical review, hoặc merge sau khi mọi gate bắt buộc pass. Close mà không merge chỉ dành cho false positive / monitor defect / invalid detection: một source đổi thật nhưng được kết luận là không đổi nghĩa thì **không** resolve bằng cách close PR, mà phải ghi minimal canonical review result (`SourceRecord.status`, `lastVerifiedAt`, `verifiedBy`, canonical metadata khác khi phù hợp) ngay trên PR đó rồi merge; close-không-merge không phải acceptance và không advance baseline. Content safety-critical/urgent/contraindication/emergency luôn cần human review và clinician review theo `GUIDANCE_CONTENT_CONTRACT.md`. Bot Evidence Watch và AI reviewer không bao giờ thỏa mãn được required human reviewer gate.
+Maintainer review Draft PR đối chiếu official source và có thể approve, request changes, sửa canonical content, ghi kết quả review ngay trên PR đó rồi merge, yêu cầu review mạnh hơn/clinical review, hoặc merge sau khi mọi gate bắt buộc pass. Close mà không merge chỉ dành cho false positive / monitor defect / invalid detection: một source đổi thật nhưng được kết luận là không đổi nghĩa thì **không** resolve bằng cách close PR, mà phải ghi minimal canonical review result (`SourceRecord.status`, `lastVerifiedAt`, `verifiedBy`, canonical metadata khác khi phù hợp) ngay trên PR đó rồi merge; close-không-merge không phải acceptance, không advance baseline, và đưa source vào `REVIEW_CLOSED_UNMERGED` cho tới khi monitor/config được sửa. Content safety-critical/urgent/contraindication/emergency luôn cần human review và clinician review theo `GUIDANCE_CONTENT_CONTRACT.md`. Bot Evidence Watch và AI reviewer không bao giờ thỏa mãn được required human reviewer gate.
 
 ## Canonical mutation boundary
 
@@ -344,7 +369,7 @@ Một reviewed merge cũng phải là merge đúng thứ đã được review: m
 
 ## GitHub Actions: implementation + security
 
-Workflow scheduled/manual có thể chạy adapters, persist watcher operational state trên branch dành riêng `evidence-watch/state` trong `evidence/state/**` (artifact/cache chỉ là transient optimization, không bao giờ là store có thẩm quyền, và không bao giờ trộn vào canonical authored file), tạo/cập nhật branch `evidence-watch/review/<sourceId>`, tạo/cập nhật đúng một Draft PR cho mỗi source chưa resolve, tạo/cập nhật Issue **chỉ** cho operational failure, chạy freshness check trước merge cho PR đang mở, và không cần inbound web service. Phải có concurrency control để run chồng nhau không tạo trùng branch/PR/report.
+Workflow scheduled/manual có thể chạy adapters, persist watcher operational state trên branch dành riêng `evidence-watch/state` trong `evidence/state/**` (artifact/cache chỉ là transient optimization, không bao giờ là store có thẩm quyền, và không bao giờ trộn vào canonical authored file), tạo/cập nhật branch `evidence-watch/review/<sourceId>`, tạo/cập nhật đúng một Draft PR cho mỗi source chưa resolve, tạo/cập nhật Issue **chỉ** cho operational failure, chạy freshness check trước merge cho PR đang mở, reconcile idempotent một review PR đã merge vào watcher state theo post-merge event cố định, và không cần inbound web service. Phải có concurrency control để run chồng nhau không tạo trùng branch/PR/report, và mọi write vào `evidence-watch/state` phải serialize sau một state-writer concurrency group duy nhất; watcher không bao giờ force-push branch đó.
 
 Workflow phải có manual mode tường minh cho khởi tạo và khôi phục, tách khỏi scheduled run:
 
@@ -352,9 +377,10 @@ Workflow phải có manual mode tường minh cho khởi tạo và khôi phục,
 workflow_dispatch:
   mode = bootstrap  | sourceId = <id | all>
   mode = rebaseline | sourceId = <id>
+  mode = reconcile  | sourceId = <id | all>
 ```
 
-Scheduled run không bao giờ bootstrap hay rebaseline; gặp state thiếu/hỏng/không so sánh được thì báo operational condition.
+Scheduled run không bao giờ bootstrap hay rebaseline; gặp state thiếu/hỏng/không so sánh được thì báo operational condition. Nó có reconcile các merged review còn tồn đọng trước khi classification bình thường.
 
 Security: khai báo `permissions` least-privilege; chỉ cấp quyền đọc repo, tạo/cập nhật Evidence Watch branch, tạo/cập nhật Draft PR và optional operational Issue; AI credential nằm trong GitHub Secrets hoặc secret store đã duyệt; không để secret lọt vào log/report/PR body/committed file; identity của Evidence Watch không được có quyền bypass branch/ruleset review requirement.
 
@@ -371,7 +397,7 @@ Phase 9 **phải** cấu hình GitHub Ruleset, branch protection hoặc enforcem
 - không ghi được canonical `SourceRecord` metadata hay bất kỳ canonical authored file nào vào `main` ngoài reviewed path, kể cả với kết quả deterministic metadata-only;
 - không merge được Evidence Watch review PR chưa pass required source freshness check.
 
-`evidence-watch/state` là operational branch non-canonical: không merge vào `main`, không mở thành review PR, không trigger deployment.
+`evidence-watch/state` là operational branch non-canonical: không merge vào `main`, không mở thành review PR, không trigger deployment. Nhưng vì nó là store operational bền có thẩm quyền, Phase 9 còn phải cấu hình ruleset/branch protection riêng cho chính branch đó — chặn force-push, chặn xóa, và giới hạn quyền write cho approved Evidence Watch identity cùng một maintainer recovery path tường minh. Protection này tách biệt với ruleset của `main`.
 
 Chỉ merge vào `main` sau required review mới được đi vào production pipeline.
 
@@ -410,6 +436,45 @@ evidence-watch/review/<sourceId>
 
 Review branch mang một canonical change đang chờ review; nó không bao giờ là persistent watcher state store, và `evidence-watch/state` không bao giờ mang review.
 
+### Ghi vào state branch: serialization và atomicity
+
+`evidence-watch/state` là store bền có thẩm quyền, nên Phase 9 v1 giữ write model đơn giản có chủ đích:
+
+```text
+Mọi write vào evidence-watch/state đều được serialize.
+```
+
+Fetch/diff có thể chạy song song; commit vào state branch thì không. Một state-writer critical section duy nhất — một concurrency group — sở hữu mọi update.
+
+- hai workflow run không bao giờ được race các write non-fast-forward;
+- update state của source này không được mất vì update của source khác;
+- file state của một source và thay đổi liên quan trong `manifest.json` phải commit atomically trong cùng một state update;
+- writer phải đọc head mới nhất của state branch ngay trước khi ghi;
+- write stale thì retry từ head mới nhất, hoặc fail như một operational condition — không bao giờ giải quyết race bằng cách ghi đè.
+
+> **Evidence Watch KHÔNG được force-push `evidence-watch/state`.**
+
+### History và recovery của state branch
+
+Git history của `evidence-watch/state` là recovery history của watcher, nên nó chỉ được append:
+
+- update bình thường là fast-forward commit;
+- không squash, không reset, không force rewrite history state;
+- recovery cho `STATE_MISSING`/`STATE_CORRUPT` bắt đầu từ state commit hợp lệ gần nhất (xem mục Operational condition);
+- một lần restore cũng là một commit mới — không rewrite history để xóa dấu vết sự cố.
+
+History này là operational/audit trail của watcher. Nó không phải canonical medical history và không có gì trong đó được dùng làm provenance.
+
+### Protection cho `evidence-watch/state`
+
+Vì là store operational bền có thẩm quyền, state branch cần protection riêng — khác và nhẹ hơn về mục đích so với ruleset của `main`. Phase 9 phải cấu hình ruleset/branch protection trên `evidence-watch/state` tối thiểu:
+
+- chặn force-push;
+- chặn xóa branch;
+- chỉ approved Evidence Watch automation identity và một maintainer recovery path tường minh được write;
+- không merge branch này vào `main`;
+- không trigger production deploy.
+
 ### Operational state của từng source
 
 ```ts
@@ -437,14 +502,26 @@ interface EvidenceWatchSourceState {
   pendingReview?: {
     prNumber: number;
     branch: string;
+
+    reviewHeadSha: string;
+
+    baselineComparisonDigest: string;
+    latestObservedComparisonDigest: string;
+    lastAiReviewedComparisonDigest?: string;
+
+    freshnessAccepted?: {
+      prHeadSha: string;
+      comparisonDigest: string;
+      checkedAt: string;
+    };
+
     detectedAt: string;
     updatedAt: string;
-    baselineFingerprintHash: string;
-    latestObservedFingerprintHash: string;
-    lastAiReviewedFingerprintHash?: string;
   };
 }
 ```
+
+Mọi field digest ở trên là `comparisonDigest` theo định nghĩa ở mục Comparison identity, nên so sánh state không bao giờ phụ thuộc observation metadata hay object fingerprint đã serialize. `reviewHeadSha` là head hiện tại của review branch mà PR đang mở mang theo.
 
 Hai fingerprint là hai sự kiện khác nhau, không bao giờ tự động đồng nhất:
 
@@ -465,7 +542,7 @@ Contract này không dùng khái niệm mơ hồ `"previous fingerprint"`: mọi
 
 ```text
 fetch
-→ observed == comparisonBaseline
+→ observed comparisonDigest == comparisonBaseline.fingerprint.comparisonDigest
 → cập nhật check timestamp và operational metadata
 → comparisonBaseline không đổi về mặt meaning baseline
 → no AI / no PR / no Issue
@@ -509,7 +586,9 @@ comparisonBaseline giữ nguyên
 → cập nhật CÙNG Draft PR
 ```
 
-Quyết định gọi AI là deterministic, dựa trên `pendingReview.lastAiReviewedFingerprintHash`: fingerprint mới nhất trùng giá trị đó thì **không gọi AI lại**; fingerprint đổi tiếp thì chạy lại AI Review Summary trên cumulative diff mới nhất và thay bản tóm tắt trong CÙNG PR.
+Quyết định gọi AI là deterministic, dựa trên `pendingReview.lastAiReviewedComparisonDigest`: `comparisonDigest` mới nhất trùng giá trị đó thì **không gọi AI lại**; digest đổi tiếp thì chạy lại AI Review Summary trên cumulative diff mới nhất và thay bản tóm tắt trong CÙNG PR.
+
+Mọi lần chạy có cập nhật review đang mở cũng phải cập nhật `reviewHeadSha`, `latestObservedComparisonDigest` và vô hiệu hóa `freshnessAccepted` cũ.
 
 ### Bootstrap
 
@@ -537,7 +616,9 @@ canonical reviewed monitor config
 → no evidence PR
 ```
 
-Bootstrap là initialization, không phải evidence change. Source đã initialized rồi thì scheduled run không bao giờ được bootstrap lại nó. Monitor thêm về sau cũng phải bootstrap tường minh sau khi monitor config đã review/merge.
+Bootstrap là initialization, không phải evidence change, và chỉ áp dụng cho source **chưa từng** initialized. Monitor thêm về sau cũng phải bootstrap tường minh sau khi monitor config đã review/merge.
+
+> **Source đã initialized rồi thì `bootstrap` KHÔNG BAO GIỜ được dùng lại — đặc biệt là không được dùng để thay một baseline bị mất hoặc hỏng.** Khôi phục một source đã initialized đi theo recovery path ở mục Operational condition, không phải lấy baseline mới từ bất kỳ thứ gì upstream đang trả về hôm nay.
 
 ### Rebaseline: đổi monitor config hoặc parser
 
@@ -573,21 +654,76 @@ Rebaseline thành công ghi `authority = manual-rebaseline`.
 
 Actionable change chỉ advance `comparisonBaseline` sau một resolution hợp lệ.
 
-**Reviewed PR đã merge:**
-
-```text
-→ verify PR/fingerprint resolution metadata
-→ comparisonBaseline = đúng fingerprint đã thực sự được review cho PR đã merge đó
-→ authority = reviewed-pr
-→ ghi prNumber
-→ xóa pendingReview
-```
-
-Không được advance baseline lên một observed fingerprint mới hơn mà maintainer chưa review.
+**Reviewed PR đã merge:** merge là thứ resolve review, nhưng thứ dịch chuyển baseline là một finalizer deterministic riêng (mục dưới), không phải bản thân lần merge. Không được advance baseline lên một observed fingerprint mới hơn mà maintainer chưa review, và cũng không bao giờ lấy `lastObservedFingerprint` chỉ vì đó là thứ mới nhất watcher nhìn thấy.
 
 **Source đổi thật nhưng người review kết luận không đổi nghĩa:** không đơn giản close PR rồi coi là xong. Maintainer phải hoàn tất minimal canonical review result ngay trên PR đó — ví dụ `SourceRecord.status → current`, `lastVerifiedAt` → ngày con người thực sự kiểm chứng, `verifiedBy → maintainer`, và canonical metadata khác chỉ khi phù hợp — rồi merge qua normal reviewed path, để canonical audit trail và watcher baseline có chung một điểm resolution rõ ràng.
 
-**PR closed không merge:** không phải acceptance và không advance `comparisonBaseline`. Chỉ dùng khi event là false positive / monitor defect / invalid detection; sau đó phải sửa monitor/config rồi đi qua explicit rebaseline hoặc detection path phù hợp.
+**PR closed không merge:** không phải acceptance.
+
+```text
+closed + unmerged
+→ comparisonBaseline không đổi
+→ không được coi là accepted
+→ REVIEW_CLOSED_UNMERGED
+→ source vào explicit operational recovery state
+```
+
+Không được âm thầm xóa unresolved state rồi chạy tiếp như chưa có gì. Vì close-không-merge chỉ dành cho false positive / monitor defect / invalid detection, source ở nguyên recovery state đó cho tới khi monitor/config thực sự được sửa và một `rebaseline` tường minh hoặc một detection path hợp lệ hoàn tất. Scheduled run tiếp theo không được phản ứng bằng cách mở lại/đóng lại/tạo lại PR liên tục mà không có monitor recovery.
+
+### Reconciliation sau merge
+
+Việc advance baseline sau merge đi theo đúng một path cố định, không để implementation tự chọn:
+
+```text
+pull_request closed
++ merged == true
++ base == main
++ head khớp evidence-watch/review/<sourceId>
+→ Evidence Watch state reconciliation/finalization
+```
+
+Finalizer phải idempotent: chạy lại cho một merge đã reconcile thì không đổi gì và không phải lỗi.
+
+Nó chỉ advance baseline khi verify được tất cả:
+
+```text
+merged PR number         == pendingReview.prNumber
+merged head SHA          == pendingReview.reviewHeadSha
+required freshness check đã pass cho đúng PR head SHA đó
+pendingReview.freshnessAccepted.prHeadSha == merged head SHA
+digest của review payload == freshnessAccepted.comparisonDigest
+```
+
+Khi đó, và chỉ khi đó:
+
+```text
+comparisonBaseline = đúng SourceFingerprint có comparisonDigest bind với
+                     PR head đã được review
+authority          = reviewed-pr
+prNumber           = số PR đã merge
+canonicalGitSha    = canonical merge commit
+pendingReview      = xóa
+```
+
+Thiếu bất kỳ điều kiện nào thì finalizer không advance baseline; nó raise operational condition và giữ nguyên `pendingReview`.
+
+**Ghi state thất bại thì fail closed.** Nếu canonical PR đã merge nhưng cập nhật `evidence-watch/state` thất bại:
+
+```text
+STATE_SYNC_ERROR
+```
+
+Đây là operational failure, và: canonical merge không bao giờ rollback; `comparisonBaseline` không được giả vờ đã advance; `pendingReview` không được âm thầm xóa; scheduled run không được mở evidence PR mới cho cùng revision đã accepted chỉ vì finalization chưa sync; reconciliation phải retry idempotent cho tới khi thành công hoặc maintainer can thiệp.
+
+Vì vậy mọi scheduled/manual run của Evidence Watch phải reconcile các merged review còn tồn đọng **trước** khi classification bình thường, để một source đã có resolution accepted nhưng chưa sync không bị detect lại thành change mới. Có mode recovery tường minh cho cùng việc đó:
+
+```text
+workflow_dispatch:
+  mode = reconcile
+  sourceId = <id | all>
+```
+
+`reconcile` không bao giờ mở review mới; nó chỉ hoàn tất deterministic operational state sync từ một reviewed/merged resolution đã verify được.
 
 ### Freshness gate trước khi merge
 
@@ -596,19 +732,22 @@ Một Evidence Watch review PR không được merge nếu source đã đổi ti
 ```text
 refetch monitored source
 → canonicalize bằng đúng config/parser version
-→ fingerprint
-→ so với fingerprint mà review payload hiện tại của PR đại diện
+→ comparisonDigest
+→ so với digest mà review payload hiện tại của PR đại diện
 ```
 
 ```text
 giống  → freshness check PASS
+       → ghi freshnessAccepted { prHeadSha, comparisonDigest, checkedAt }
 
 khác   → freshness check FAIL
        → refresh CÙNG Draft PR
        → tính lại cumulative diff
-       → chỉ chạy lại AI nếu fingerprint đổi
+       → chỉ chạy lại AI nếu comparisonDigest đổi
        → cần human review lại
 ```
+
+Một lần PASS được bind với đúng một cặp — PR head SHA nó đã chạy trên đó và `comparisonDigest` nó chấp nhận — và vô giá trị ngoài cặp đó: review branch/head đổi vì bất kỳ lý do gì thì acceptance cũ mất hiệu lực và required check phải chạy lại; scheduled watcher thấy upstream đổi tiếp thì cập nhật cùng review PR, cập nhật `reviewHeadSha` và `latestObservedComparisonDigest`, vô hiệu hóa `freshnessAccepted` cũ, và cần human review + freshness check lại; finalizer sau merge chỉ được dùng `freshnessAccepted` khi `merged PR head SHA == freshnessAccepted.prHeadSha`.
 
 Không hứa tuyệt đối rằng upstream không thể đổi ngay sau lần check; yêu cầu hẹp hơn và enforce được: PR không được merge với một reviewed fingerprint đã biết là stale.
 
@@ -621,15 +760,37 @@ FETCH_ERROR
 PARSER_ERROR
 STATE_MISSING
 STATE_CORRUPT
+STATE_SYNC_ERROR
 REBASELINE_REQUIRED
 REVIEW_ARTIFACT_MISSING
+REVIEW_CLOSED_UNMERGED
 authentication/access failure
 persistent adapter failure
 ```
 
 Với tất cả: không advance `comparisonBaseline`; không tự lập baseline mới; không báo source là `UNCHANGED`; có thể fail workflow và tạo/cập nhật operational Issue; không tạo evidence-change PR giả khi chưa xác định có evidence change thật.
 
-`STATE_MISSING`/`STATE_CORRUPT` nghĩa là state của một source đã initialized bị mất hoặc không đọc được. Khôi phục phải tường minh — restore state, hoặc chạy bootstrap/rebaseline tường minh — không bao giờ là một baseline mới âm thầm hay một `UNCHANGED` giả.
+#### Khôi phục state bị mất hoặc hỏng
+
+`STATE_MISSING`/`STATE_CORRUPT` nghĩa là state của một source **đã initialized** bị mất hoặc không đọc được. Khôi phục phải tường minh và theo thứ tự:
+
+1. restore state hợp lệ gần nhất từ Git history của `evidence-watch/state`;
+2. validate bản khôi phục — schema version, `sourceId`, tương thích `monitorConfigHash`/`parserVersion`;
+3. không lập baseline mới từ upstream hiện tại chỉ vì state hiện tại bị mất.
+
+Nếu không còn recover được baseline hợp lệ nào từ history đó:
+
+```text
+→ hard operational recovery condition
+→ không phân loại source như bình thường
+→ no UNCHANGED
+→ no bootstrap
+→ no baseline advancement
+```
+
+Khôi phục khi đó bắt buộc phải có maintainer verify source tường minh. Chỉ sau khi maintainer đã đối chiếu official source hiện tại với canonical content qua normal reviewed path thì một `rebaseline` tường minh mới được lập baseline mới, và baseline đó bind với canonical merge SHA đó (`authority = manual-rebaseline`, có ghi `canonicalGitSha`).
+
+`bootstrap` không bao giờ là cơ chế recovery cho source đã initialized.
 
 ## Initial corpus review policy
 
@@ -666,11 +827,11 @@ Respect robots/terms/license/rate limit/auth; không bypass paywall/anti-bot; ư
 
 ## Observability
 
-Theo dõi: last successful check, consecutive failures, changed/unchanged counts, số kết quả deterministic metadata-only (kể cả những kết quả gợi ý một chỗ cần sửa canonical `SourceRecord` mà maintainer còn phải làm trong reviewed PR thông thường), parser failures, Draft PR đang mở và tuổi của chúng, số AI Review completed/unavailable/failed, source quá hạn review, claim đang bị chặn bởi source changed/superseded, thời gian từ lúc detect đến lúc release.
+Theo dõi: last successful check, consecutive failures, changed/unchanged counts, merged review còn chờ reconcile và số lần `STATE_SYNC_ERROR`, source đang nằm trong operational recovery state (`REVIEW_CLOSED_UNMERGED`, `STATE_MISSING`/`STATE_CORRUPT` không recover được), số kết quả deterministic metadata-only (kể cả những kết quả gợi ý một chỗ cần sửa canonical `SourceRecord` mà maintainer còn phải làm trong reviewed PR thông thường), parser failures, Draft PR đang mở và tuổi của chúng, số AI Review completed/unavailable/failed, source quá hạn review, claim đang bị chặn bởi source changed/superseded, thời gian từ lúc detect đến lúc release.
 
 ## Evidence Watch v1
 
-Registry + adapters + watcher operational state bền trên branch `evidence-watch/state` với bootstrap/rebaseline manual tường minh + fetch/fingerprint so với `comparisonBaseline` (tách khỏi `lastObservedFingerprint`) + diff và actionable classification + locator move detection + source→claim impact + deterministic structured payload/Markdown renderer + đúng một Draft PR idempotent cho mỗi source chưa resolve, cập nhật tại chỗ khi có revision mới, kèm AI Review Summary (hoặc trạng thái unavailable/failed) + required source freshness check trước merge + Issue chỉ cho operational failure. Không advance baseline khi chưa có resolution hợp lệ, không bootstrap/rebaseline âm thầm. **Không** tự viết lại canonical content, **không** tự ghi canonical vào `main` ở bất kỳ outcome nào (một lần chạy watcher chỉ persist operational state và review artifact), và **không** yêu cầu public production site phản ánh pending watcher state trước reviewed merge.
+Registry + adapters + watcher operational state bền trên branch `evidence-watch/state` với bootstrap/rebaseline manual tường minh + fetch/fingerprint so với `comparisonBaseline` (tách khỏi `lastObservedFingerprint`) + diff và actionable classification + locator move detection + source→claim impact + deterministic structured payload/Markdown renderer + đúng một Draft PR idempotent cho mỗi source chưa resolve, cập nhật tại chỗ khi có revision mới, kèm AI Review Summary (hoặc trạng thái unavailable/failed) + required source freshness check trước merge (bind với đúng PR head SHA và `comparisonDigest`) + post-merge reconciliation idempotent + Issue chỉ cho operational failure. Không advance baseline khi chưa có resolution hợp lệ, không bootstrap/rebaseline âm thầm, không re-bootstrap source đã initialized; write vào `evidence-watch/state` được serialize, không force-push, branch được protect, và state-sync thất bại thì fail closed chứ không nhân đôi review. **Không** tự viết lại canonical content, **không** tự ghi canonical vào `main` ở bất kỳ outcome nào (một lần chạy watcher chỉ persist operational state và review artifact), và **không** yêu cầu public production site phản ánh pending watcher state trước reviewed merge.
 
 ## Later evolution
 

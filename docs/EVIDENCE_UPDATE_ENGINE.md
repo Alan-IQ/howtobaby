@@ -165,17 +165,46 @@ Maintain at least:
 interface SourceFingerprint {
   sourceId: string;
   checkedAt: string;
+
   etag?: string;
   lastModified?: string;
   metadataHash?: string;
   contentHash?: string;
   sectionHashes?: Record<string, string>;
+
+  comparisonDigest: string;
 }
 ```
 
 For copyrighted/restricted sources, hashes + metadata + locators may be preferable to storing large source snapshots.
 
-A fingerprint on its own says nothing until it is compared against a named baseline. Every source therefore keeps two distinct fingerprints — the `comparisonBaseline` the watcher is allowed to compare against, and the `lastObservedFingerprint` it most recently fetched. They are never automatically equated, and this contract never says "previous fingerprint". The state schema, its store, and every rule that moves a baseline are defined in §21.
+### Comparison identity
+
+A fingerprint carries both observation metadata and the material being compared, so equality needs one explicit definition. `comparisonDigest` is that stable comparison identity, and it is the only thing any comparison in this contract compares.
+
+`comparisonDigest` MUST:
+
+- be deterministic;
+- be computed from the normalized compare-relevant material selected by the adapter and the monitor's `compareMode` (§4, §7);
+- exclude `checkedAt`, fetch timestamps, retry metadata, workflow run identifiers, AI state, and Git state;
+- stay identical when the watcher re-runs against the same monitored material;
+- use the same canonicalization, monitor configuration and parser semantics for the baseline, the observed fingerprint, and the pre-merge freshness check (§21).
+
+`checkedAt` is an observation timestamp and never participates in equality. `ETag`/`Last-Modified` are fetch and change signals; they enter the comparison identity only where an explicitly approved adapter/compare rule says so, and by default they never move a semantic/content digest on their own.
+
+No comparison ever compares serialized `SourceFingerprint` objects. Every one of
+
+```text
+UNCHANGED classification
+AI re-run decision
+pending-review cumulative diff identity
+pre-merge freshness gate
+baseline advancement
+```
+
+is decided on `comparisonDigest` values alone.
+
+A fingerprint on its own also says nothing until it is compared against a named baseline. Every source therefore keeps two distinct fingerprints — the `comparisonBaseline` the watcher is allowed to compare against, and the `lastObservedFingerprint` it most recently fetched. They are never automatically equated, and this contract never says "previous fingerprint". The state schema, its store, and every rule that moves a baseline are defined in §21.
 
 ## 9. Diff classification
 
@@ -198,8 +227,10 @@ Plus the operational conditions that are not diff results at all:
 ```text
 STATE_MISSING
 STATE_CORRUPT
+STATE_SYNC_ERROR
 REBASELINE_REQUIRED
 REVIEW_ARTIFACT_MISSING
+REVIEW_CLOSED_UNMERGED
 ```
 
 A content change is not automatically a recommendation change.
@@ -345,8 +376,10 @@ FETCH_ERROR
 PARSER_ERROR
 STATE_MISSING
 STATE_CORRUPT
+STATE_SYNC_ERROR
 REBASELINE_REQUIRED
 REVIEW_ARTIFACT_MISSING
+REVIEW_CLOSED_UNMERGED
 authentication/access failure
 persistent adapter failure
 ```
@@ -366,7 +399,7 @@ The Draft Pull Request MUST contain:
 - source ID and source title;
 - canonical official-source URL;
 - deterministic change classification;
-- the `comparisonBaseline` fingerprint and the latest observed fingerprint, with the metadata that differs;
+- the `comparisonBaseline` fingerprint and the latest observed fingerprint, each identified by its `comparisonDigest` (§8), with the metadata that differs;
 - deterministic diff summary;
 - changed sections or locators;
 - impacted claim IDs;
@@ -465,7 +498,7 @@ AI Review Summary is a first-class Phase 9 review capability, not a cosmetic or 
 
 AI MUST run only **after** deterministic diff, classification, and impact analysis have produced a bounded review context. AI never triggers a run, never decides whether a change is actionable, and never widens the scope beyond the detected source change.
 
-Whether a run calls AI again for an already-open review is decided deterministically from `pendingReview.lastAiReviewedFingerprintHash`: an unchanged observed fingerprint calls no AI, and a further upstream revision re-runs the summary on the newest cumulative diff and replaces it in the same Pull Request (§21).
+Whether a run calls AI again for an already-open review is decided deterministically by comparing the newest observed `comparisonDigest` with `pendingReview.lastAiReviewedComparisonDigest`: an unchanged digest calls no AI, and a further upstream revision re-runs the summary on the newest cumulative diff and replaces it in the same Pull Request (§8, §21).
 
 AI SHOULD receive only the material required for review, such as:
 
@@ -666,7 +699,9 @@ Merge to `main`, not Evidence Watch itself, is the event that may enter the norm
 
 Until that merge, the Draft Pull Request — not the public site — is where an unresolved evidence change is visible (§13). Public provenance state, including every source freshness label, changes only as a consequence of merged canonical content passing through this pipeline.
 
-A reviewed merge must also be a merge of what was actually reviewed. A deterministic source freshness check is a required status check on every Evidence Watch review Pull Request: it refetches and re-fingerprints the source with the same monitor config and parser version, and fails the merge when the source has moved past the fingerprint the maintainer reviewed (§21, §20).
+A reviewed merge must also be a merge of what was actually reviewed. A deterministic source freshness check is a required status check on every Evidence Watch review Pull Request: it refetches the source with the same monitor config and parser version, recomputes its `comparisonDigest` (§8), and fails the merge when the source has moved past the digest the maintainer reviewed. A passing check is bound to that exact Pull Request head SHA and digest, and it is invalidated whenever the review branch head moves (§21, §20).
+
+Merging resolves the review; a separate idempotent finalizer then advances the watcher's baseline, only after verifying the merged Pull Request against the recorded pending review and its freshness acceptance. A merge whose state update fails leaves the canonical merge intact and the baseline unadvanced (`STATE_SYNC_ERROR`, §21).
 
 ## 20. GitHub Actions implementation and security contract
 
@@ -678,19 +713,21 @@ A scheduled/manual workflow can:
 - create/update exactly one Draft Pull Request per unresolved source;
 - create/update operational Issues for operational failures only;
 - run the pre-merge source freshness check for an open Evidence Watch review Pull Request (§21);
+- reconcile a merged review Pull Request into watcher state, idempotently, on the fixed post-merge event (§21);
 - expose explicit manual modes for initialization and recovery, separate from the scheduled run:
 
 ```text
 workflow_dispatch:
   mode = bootstrap  | sourceId = <id | all>
   mode = rebaseline | sourceId = <id>
+  mode = reconcile  | sourceId = <id | all>
 ```
 
 - never require an inbound web service.
 
-A scheduled run performs neither bootstrap nor rebaseline: both are manual operations, and a scheduled run that finds missing, corrupt or non-comparable state reports an operational condition instead (§21).
+A scheduled run performs neither bootstrap nor rebaseline: both are manual operations, and a scheduled run that finds missing, corrupt or non-comparable state reports an operational condition instead (§21). It does reconcile outstanding merged reviews before normal classification.
 
-Use concurrency controls so overlapping watcher runs do not create duplicate branches, Pull Requests, or reports.
+Use concurrency controls so overlapping watcher runs do not create duplicate branches, Pull Requests, or reports, and serialize every write to `evidence-watch/state` behind a single state-writer concurrency group; the watcher never force-pushes that branch (§21).
 
 Security contract:
 
@@ -713,7 +750,7 @@ Phase 9 MUST configure a GitHub Ruleset, branch protection, or equivalent enforc
 - cannot write canonical `SourceRecord` metadata or any other canonical authored file to `main` outside that reviewed path, including for a deterministic metadata-only result (§11);
 - cannot merge an Evidence Watch review Pull Request that has not passed the required source freshness check (§21).
 
-`evidence-watch/state` is a non-canonical operational branch: it is never merged into `main`, never opened as a review Pull Request, and never triggers a deployment (§21).
+`evidence-watch/state` is a non-canonical operational branch: it is never merged into `main`, never opened as a review Pull Request, and never triggers a deployment (§21). Because it is nevertheless the authoritative durable operational store, Phase 9 MUST also configure its own ruleset/branch protection on that branch — blocking force-push and deletion, and restricting writes to the approved Evidence Watch identity and an explicit maintainer recovery path. That protection is separate from the `main` ruleset above.
 
 Only a merge into `main` after the required review may enter the production pipeline (§19).
 
@@ -763,6 +800,45 @@ evidence-watch/review/<sourceId>
 
 A review branch carries a proposed canonical change under review; it is never the persistent watcher state store, and `evidence-watch/state` never carries a review.
 
+### State-branch writes: serialization and atomicity
+
+`evidence-watch/state` is the authoritative durable store, so Phase 9 v1 keeps its write model deliberately simple:
+
+```text
+All writes to evidence-watch/state are serialized.
+```
+
+Fetching and diffing may run in parallel; committing to the state branch may not. A single state-writer critical section — one workflow concurrency group — owns every update.
+
+- two workflow runs must never race non-fast-forward writes;
+- no update to one source's state may be lost behind another's;
+- a per-source state file and any related `manifest.json` change commit atomically in the same state update;
+- a writer reads the latest state-branch head immediately before writing;
+- a stale write retries from the latest head, or fails as an operational condition — it never resolves the race by overwriting.
+
+> **Evidence Watch MUST NOT force-push `evidence-watch/state`.**
+
+### State-branch history and recovery
+
+The Git history of `evidence-watch/state` is the watcher's recovery history, so it stays append-only:
+
+- normal updates are fast-forward commits;
+- no squashing, resetting, or force-rewriting of state history;
+- `STATE_MISSING`/`STATE_CORRUPT` recovery starts from the most recent prior valid state commit (see "Operational conditions");
+- a restore is itself a new commit — it never rewrites history to make the loss disappear.
+
+This history is an operational and audit trail for the watcher. It is not canonical medical history, and nothing in it is citable as provenance (§11).
+
+### Branch protection for `evidence-watch/state`
+
+Because it is the authoritative durable operational store, the state branch needs its own protection — separate from, and weaker in purpose than, the `main` ruleset (§20). Phase 9 MUST configure a ruleset/branch protection on `evidence-watch/state` that at least:
+
+- blocks force-push;
+- blocks deletion;
+- restricts write access to the approved Evidence Watch automation identity and an explicit maintainer recovery path;
+- keeps the branch out of `main` (never merged into it);
+- keeps the branch out of the production deployment trigger.
+
 ### Per-source operational state
 
 Every monitored source has at least:
@@ -792,14 +868,26 @@ interface EvidenceWatchSourceState {
   pendingReview?: {
     prNumber: number;
     branch: string;
+
+    reviewHeadSha: string;
+
+    baselineComparisonDigest: string;
+    latestObservedComparisonDigest: string;
+    lastAiReviewedComparisonDigest?: string;
+
+    freshnessAccepted?: {
+      prHeadSha: string;
+      comparisonDigest: string;
+      checkedAt: string;
+    };
+
     detectedAt: string;
     updatedAt: string;
-    baselineFingerprintHash: string;
-    latestObservedFingerprintHash: string;
-    lastAiReviewedFingerprintHash?: string;
   };
 }
 ```
+
+Every digest field above is a `comparisonDigest` as defined in §8, so state comparisons never depend on observation metadata or on serialized fingerprint objects. `reviewHeadSha` is the review branch head the open Pull Request currently carries.
 
 The two fingerprints are distinct facts and are never automatically equated:
 
@@ -832,7 +920,7 @@ so a change detected across several runs is never split into fragments that each
 
 ```text
 fetch
-→ observed == comparisonBaseline
+→ observed comparisonDigest == comparisonBaseline.fingerprint.comparisonDigest
 → update check timestamps and operational metadata
 → comparisonBaseline unchanged as a meaning baseline
 → no AI / no PR / no Issue
@@ -884,16 +972,18 @@ comparisonBaseline stays fixed
 → update the SAME Draft Pull Request
 ```
 
-The AI decision is deterministic, driven by `pendingReview.lastAiReviewedFingerprintHash`:
+The AI decision is deterministic, driven by `pendingReview.lastAiReviewedComparisonDigest`:
 
 ```text
-newest observed fingerprint == lastAiReviewedFingerprintHash
+newest observed comparisonDigest == lastAiReviewedComparisonDigest
    → do not call AI again
 
-newest observed fingerprint changed
+newest observed comparisonDigest changed
    → re-run the AI Review Summary on the newest cumulative diff
    → replace the AI Review Summary in the SAME Pull Request
 ```
+
+Any run that updates the open review also updates `reviewHeadSha` and `latestObservedComparisonDigest`, and invalidates a stale `freshnessAccepted` (below).
 
 Re-running AI never changes the deterministic payload requirements of §12, and a re-run that is unavailable or fails follows §16 without erasing the previous deterministic report.
 
@@ -923,7 +1013,9 @@ canonical reviewed monitor config
 → no evidence Pull Request
 ```
 
-Bootstrap is initialization, not an evidence change. Once a source has been initialized, scheduled runs must never silently bootstrap it again. A monitor added later is bootstrapped explicitly too, after its monitor configuration has been reviewed and merged.
+Bootstrap is initialization, not an evidence change, and it applies only to a source that has never been initialized. A monitor added later is bootstrapped explicitly too, after its monitor configuration has been reviewed and merged.
+
+> **Once a source has been initialized, `bootstrap` MUST NEVER be used again — in particular never to replace a lost or corrupt baseline.** Recovering an initialized source follows the recovery path in "Operational conditions" below, not a fresh baseline taken from whatever upstream happens to serve today.
 
 ### Rebaseline: monitor configuration and parser changes
 
@@ -959,17 +1051,7 @@ A successful manual rebaseline records `authority = manual-rebaseline`.
 
 An actionable change advances `comparisonBaseline` only after a valid resolution.
 
-**Reviewed Pull Request merged.** After the Evidence Watch Pull Request merges:
-
-```text
-→ verify the PR/fingerprint resolution metadata
-→ comparisonBaseline = the exact fingerprint that was actually reviewed for that merged PR
-→ authority = reviewed-pr
-→ record prNumber
-→ clear pendingReview
-```
-
-The baseline is never advanced to a newer observed fingerprint the maintainer did not review.
+**Reviewed Pull Request merged.** The merge is what resolves the review, and a separate deterministic finalizer — not the merge itself — moves the watcher's baseline. That path is fixed below; the baseline is never advanced to a newer observed fingerprint the maintainer did not review, and never to `lastObservedFingerprint` simply because it is the newest thing the watcher has seen.
 
 **A real source change the maintainer judges to carry no meaning change.** This is not resolved by closing the Pull Request. The maintainer completes the minimal canonical review result on that same Pull Request — for example:
 
@@ -982,7 +1064,78 @@ other canonical metadata only where appropriate
 
 and merges it through the normal reviewed path, so the canonical audit trail and the watcher baseline share one explicit resolution point.
 
-**Pull Request closed without merging.** A closed-unmerged Pull Request is not an acceptance and never advances `comparisonBaseline`. Close without merging only when the event was a false positive, a monitor defect, or an invalid detection; then fix the monitor/configuration and continue through an explicit rebaseline or the appropriate detection path.
+**Pull Request closed without merging.** A closed-unmerged Pull Request is not an acceptance:
+
+```text
+closed + unmerged
+→ comparisonBaseline unchanged
+→ not accepted
+→ REVIEW_CLOSED_UNMERGED
+→ the source enters an explicit operational recovery state
+```
+
+The unresolved state is not silently cleared and the watcher does not simply carry on as if nothing had happened. Because closing without merging is reserved for a false positive, a monitor defect, or an invalid detection, the source stays in that recovery state until the monitor/configuration is actually fixed and either an explicit `rebaseline` or a valid detection path completes. A scheduled run must never respond to a closed-unmerged review by reopening, re-closing, or re-creating Pull Requests in a loop without that monitor recovery.
+
+### Post-merge state reconciliation
+
+Baseline advancement after a merge happens in one fixed path, not one the implementation may choose:
+
+```text
+pull_request closed
++ merged == true
++ base == main
++ head matches evidence-watch/review/<sourceId>
+→ Evidence Watch state reconciliation/finalization
+```
+
+The finalizer MUST be idempotent: running it again for an already-reconciled merge changes nothing and is not an error.
+
+It advances the baseline only when it can verify all of:
+
+```text
+merged PR number            == pendingReview.prNumber
+merged head SHA             == pendingReview.reviewHeadSha
+required freshness check    passed for that exact PR head SHA
+pendingReview.freshnessAccepted.prHeadSha == merged head SHA
+review payload digest       == freshnessAccepted.comparisonDigest
+```
+
+Then, and only then:
+
+```text
+comparisonBaseline = the exact SourceFingerprint whose comparisonDigest is
+                     bound to that reviewed PR head
+authority          = reviewed-pr
+prNumber           = merged Pull Request number
+canonicalGitSha    = the canonical merge commit
+pendingReview      = cleared
+```
+
+If any of those checks fails, the finalizer does not advance the baseline; it raises an operational condition and leaves `pendingReview` intact.
+
+**Fail closed when state cannot be written.** If the canonical Pull Request merged but the `evidence-watch/state` update failed:
+
+```text
+STATE_SYNC_ERROR
+```
+
+That is an operational failure, and:
+
+- the canonical merge is never rolled back;
+- `comparisonBaseline` must not pretend to have advanced;
+- `pendingReview` must not be silently cleared;
+- a scheduled run must not open a new evidence Pull Request for the same accepted revision merely because finalization has not synced yet;
+- reconciliation is retried idempotently until it succeeds or a maintainer intervenes.
+
+Every scheduled or manual Evidence Watch run therefore reconciles outstanding merged reviews **before** normal classification, so a source with an unsynced accepted resolution is never re-detected as a fresh change. An explicit recovery mode exists for the same work:
+
+```text
+workflow_dispatch:
+  mode = reconcile
+  sourceId = <id | all>
+```
+
+`reconcile` never starts a new source review. It only completes deterministic operational state synchronisation from a reviewed, merged resolution it has verified.
 
 ### Pre-merge source freshness gate
 
@@ -991,19 +1144,26 @@ An Evidence Watch review Pull Request must not merge when the source has changed
 ```text
 refetch the monitored source
 → canonicalize with the same monitor config and parser version
-→ fingerprint
-→ compare with the fingerprint represented by the Pull Request's current review payload
+→ comparisonDigest
+→ compare with the digest represented by the Pull Request's current review payload
 ```
 
 ```text
-equal    → freshness check PASS
+equal     → freshness check PASS
+          → record freshnessAccepted { prHeadSha, comparisonDigest, checkedAt }
 
 different → freshness check FAIL
           → the SAME Draft Pull Request is refreshed
           → the cumulative diff is recomputed
-          → AI re-runs only if the fingerprint changed
+          → AI re-runs only if the comparisonDigest changed
           → human review is required again
 ```
+
+A PASS is bound to an exact pair — the Pull Request head SHA it ran against and the `comparisonDigest` it accepted — and is worth nothing outside that pair:
+
+- if the review branch head changes for any reason, the recorded acceptance is invalid and the required check must run again;
+- if a scheduled run observes a further upstream revision, it updates the same review Pull Request, updates `reviewHeadSha` and `latestObservedComparisonDigest`, invalidates the old `freshnessAccepted`, and human review plus a fresh freshness check are required again;
+- the post-merge finalizer may use `freshnessAccepted` only when `merged PR head SHA == freshnessAccepted.prHeadSha`.
 
 This does not promise that upstream cannot change a moment after the check. The requirement is narrower and enforceable: a Pull Request must not merge against a known stale reviewed fingerprint.
 
@@ -1016,8 +1176,10 @@ FETCH_ERROR
 PARSER_ERROR
 STATE_MISSING
 STATE_CORRUPT
+STATE_SYNC_ERROR
 REBASELINE_REQUIRED
 REVIEW_ARTIFACT_MISSING
+REVIEW_CLOSED_UNMERGED
 authentication/access failure
 persistent adapter failure
 ```
@@ -1030,7 +1192,27 @@ For every one of them:
 - they MAY fail the workflow and MAY create/update an operational Issue (§11);
 - they never create an evidence-change Pull Request unless a real evidence change has also been determined.
 
-`STATE_MISSING` and `STATE_CORRUPT` mean expected state for an already-initialized source is absent or unreadable. Recovery is explicit — restore the state, or run an explicit bootstrap/rebaseline — never a silent new baseline and never a fabricated `UNCHANGED`.
+#### Recovering missing or corrupt state
+
+`STATE_MISSING` and `STATE_CORRUPT` mean the expected state for an **already-initialized** source is absent or unreadable. Recovery is explicit and ordered:
+
+1. restore the most recent valid state from the Git history of `evidence-watch/state`;
+2. validate the restored record — schema version, `sourceId`, and `monitorConfigHash`/`parserVersion` compatibility;
+3. never derive a new baseline from current upstream merely because the current state was lost.
+
+If no valid baseline can be recovered from that history:
+
+```text
+→ hard operational recovery condition
+→ no normal source classification
+→ no UNCHANGED
+→ no bootstrap
+→ no baseline advancement
+```
+
+Recovery then requires explicit maintainer source verification. Only after the maintainer has verified the current official source against canonical content through the normal reviewed path may an explicit `rebaseline` establish a new baseline, and that baseline is bound to that canonical merge SHA (`authority = manual-rebaseline`, `canonicalGitSha` recorded).
+
+`bootstrap` is never a recovery mechanism for an initialized source.
 
 ## 22. Initial corpus review policy
 
@@ -1113,6 +1295,8 @@ Track:
 - baseline age and `authority` per source, and sources still awaiting an explicit bootstrap or rebaseline;
 - open `pendingReview` entries whose observed fingerprint has moved past the last reviewed one;
 - source freshness check failures on Evidence Watch review Pull Requests;
+- merged reviews still awaiting state reconciliation, and `STATE_SYNC_ERROR` occurrences;
+- sources parked in an operational recovery state (`REVIEW_CLOSED_UNMERGED`, unrecoverable `STATE_MISSING`/`STATE_CORRUPT`);
 - parser failures;
 - open Evidence Watch Draft PRs and their age;
 - AI Review Summary completed/unavailable/failed counts;
@@ -1132,11 +1316,12 @@ Track:
 6. source→claim impact mapping through canonical provenance indexes;
 7. deterministic structured review payload + Markdown rendering;
 8. one idempotent Draft Pull Request per unresolved source, updated in place as further revisions arrive, carrying the AI Review Summary when AI is available and an explicit unavailable/failed status when it is not;
-9. a required pre-merge source freshness check on that Pull Request;
+9. a required pre-merge source freshness check on that Pull Request, bound to its exact head SHA and `comparisonDigest`, plus an idempotent post-merge reconciliation that advances the baseline only against that verified acceptance;
 10. GitHub Issues for operational failures only;
 11. no automatic semantic rewriting of canonical content, and no automatic canonical write into `main` for any outcome — watcher runs persist operational state and the review artifact only;
-12. no baseline advancement without a valid resolution, and no silent bootstrap or rebaseline;
-13. no requirement that the public production site reflect pending watcher state before the reviewed merge.
+12. no baseline advancement without a valid resolution, and no silent bootstrap or rebaseline — an initialized source is never re-bootstrapped, and lost state is recovered from state-branch history or by explicit maintainer verification;
+13. serialized, never force-pushed writes to a protected `evidence-watch/state` branch, with state-sync failure failing closed instead of duplicating a review;
+14. no requirement that the public production site reflect pending watcher state before the reviewed merge.
 
 This provides most of the safety/maintenance benefit with much lower complexity than an AI-first crawler.
 
